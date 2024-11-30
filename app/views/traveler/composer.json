@@ -1,0 +1,10 @@
+{
+    "name": "explorelk/payment-gateway",
+    "description": "A library to handle online payments efficiently, with stripe and other services",
+    "type": "library",
+    "license": "MIT",
+    "minimum-stability": "stable",
+    "require": {
+        "stripe/stripe-php": "^16.3"
+    }
+}

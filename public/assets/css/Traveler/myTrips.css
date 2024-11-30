@@ -1,0 +1,197 @@
+/* Default font size for larger screens */
+html{
+    height: 100%;
+    /* overflow-y: scroll; */
+    overflow-x: hidden;
+    font-size: 62.5%; /* 10px base, 1rem = 10px */
+}
+
+
+/* Adjust font size for tablets */
+@media (max-width: 768px) {
+    html {
+        font-size: 56.25% !important; /* 1rem = 9px */
+    }
+}
+
+
+/* Mobile adjustments */
+@media (max-width: 480px) {
+    html {
+        font-size: 50% !important; /* 1rem = 8px */
+    }
+}
+
+body{
+    font-family: 'Poppins', sans-serif;
+    overflow-x: hidden;
+}
+
+
+.rightPanel{
+    width: 80%;
+    margin-right: 7.5%;
+    color: #000000;
+    margin-top: 0px;
+    margin-left: 27.5%;     /*Methana 27.5 thiyala thiyenne, 20% navbar eka fix karala thiyena nisa ey pramanyath, amathara 7.5% vala ekathuvath samagaya*/
+    padding-bottom: 5%;
+}
+
+.header-container{
+    display: flex;
+    width: 100%;   
+}
+
+.header-container h1{
+    font-size: 4.8rem;
+    margin-top: 6.25%;
+    width: 80%;
+}
+
+.header-container button, .header-container a{
+    width: 20%;
+    box-sizing: border-box;
+    height: 10%;
+    margin-top: 7.75%;
+    text-decoration: none;
+    color: #FFFFFF;
+}
+
+.header-container button i{
+    margin-right: 5%;
+}
+
+.buttonStyle{
+    padding: 1.5rem;
+    box-sizing: border-box;
+    color: #FFFFFF;
+    background-color: #1E7A8F;
+    border: none;
+    border-radius: 1rem;
+    font-size: 1.6rem;
+    cursor: pointer;
+    transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.buttonStyle:hover{
+    background-color: #3DA4BF;
+    transform: scale(1.05);
+}
+
+.bookingContainer{
+    display: flex;
+    width: 100%;
+    height: auto;
+    margin-top: 3.5%;
+    border-radius: 1rem;
+    border: 1px solid #d3d3d3;
+}
+
+.bookingItemImage-Container{
+    width: 30%;
+    border-right: 1px solid #d3d3d3;
+    border-radius: 1rem;
+}
+
+.bookingItemImage-Container img{
+    width: 100%;
+    height: 100%;
+    border-radius: 1rem;
+}
+
+.bookingItemDetails{
+    width: 37.5%;
+    margin-top: 2.5%;
+    margin-left: 7.5%;
+    /* border: 1px solid red; */
+}
+
+.bookingItemDetails h2{
+    margin-top: 13.5%;
+    font-size: 2.4rem;
+}
+
+.bookingKeyInfo-Holder{
+    display: flex;
+    gap: 5%;
+    font-size: 1.6rem;
+}
+
+.bookingKeyInfo-Holder div{
+    width: 45%;
+    margin-bottom: 3.5%;
+}
+
+
+.bookingKeyInfo-Holder i{
+    margin-right: 5%;
+}
+
+
+.bookingKeyInfo-Holder:first-child{
+    margin-right: 5%;
+}
+
+.bookingActionBtn-Holder{
+    display: block;
+    width: 20%;
+    margin-top: 6.75%;
+}
+
+
+.actionButtons{
+    color: #FFFFFF;
+    width: 100%;
+    font-size: 1.6rem;
+    border-radius: 1rem;
+    padding: 1.5rem;
+    box-sizing: border-box;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.2s ease, background-color 0.2s ease;
+    margin-bottom: 7.5%;
+}
+
+.actionButtons i{
+    margin-right: 5%;
+}
+
+#viewBookingBtn{
+    background-color: #03A9F4;
+}
+
+#viewBookingBtn:hover{
+    background-color: #0298E3;
+    transform: scale(1.05);
+}
+
+
+#editBookingBtn{
+    background-color: #0288D1;
+}
+
+
+#editBookingBtn:hover{
+    background-color: #0277C0;
+    transform: scale(1.05);
+}
+
+
+#deleteBookingBtn{
+    background-color: rgb(250, 125, 125);
+    
+}
+
+
+#deleteBookingBtn:hover{
+    background-color: #E53935;
+    transform: scale(1.05);
+}
+
+
+
+
+
+
+
+

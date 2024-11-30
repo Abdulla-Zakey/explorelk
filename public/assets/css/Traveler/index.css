@@ -1,0 +1,199 @@
+body {
+    background-color: #fff;
+    overflow-x: hidden;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* Navbar */
+/* .navbar {
+    top: 0;
+    display: flex;
+    position: fixed;
+    padding: 20px;
+    width: 100%;
+    z-index: 1000;                          
+    color: #fff;
+    background-color: #1E293B;
+    align-items: center;
+    justify-content: space-between;
+    font-family: 'Verdana', sans-serif;
+    box-sizing: border-box;
+} */
+
+/* .logo {
+    display: flex;
+    align-items: center;
+}
+
+.logo img {
+    width: 50px;
+    margin-right: 10px;
+}
+
+.logo span{
+    font-size: 1.5rem;
+}
+
+.nav-links {
+    display: flex;
+    list-style: none;
+}
+
+.nav-links li {
+    margin: 0 20px;
+}
+
+.nav-links a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.nav-links .dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: white;
+    color: black;
+    list-style: none;
+    padding: 10px;
+    box-shadow: 0px 4px 8px rgba(0,0,0,0.1);
+}
+
+.nav-links .dropdown:hover .dropdown-content {
+    display: block;
+}
+
+.nav-links .dropdown-content li {
+    padding: 10px 0;
+}
+
+.nav-links .dropdown-content a {
+    color: #1E293B;
+    text-decoration: none;
+}
+
+.nav-links .dropdown-content a:hover{
+    color: #1E293B;
+    background-color: darkgray;
+}
+
+.login-btn {
+    background-color: darkcyan;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: bold;
+} */
+
+/* Hero Section */
+.hero {
+    background-image: url('../../images/Travelers/index/land.jpeg'); /* You can replace with your image */
+    background-size: cover;
+    background-position: center;
+    height: 100vh;
+    width: 100vw;
+    position: relative;
+    color: #fff;
+    margin-left: -9px;
+}
+
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.hero-content {
+    position: relative;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    width: 70%;
+}
+
+.hero-content h1 {
+    font-size: 3rem;
+    margin-bottom: 20px;
+}
+
+.hero-content p {
+    font-size: 1.5rem;
+    margin-bottom: 40px;
+}
+
+.search-bar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.search-bar input {
+    padding: 10px;
+    font-size: 1rem;
+    width: 300px;
+    border: none;
+    outline: none;
+    border-radius: 5px 0 0 5px;
+}
+
+.search-bar .search-btn {
+    padding: 10px 20px;
+    font-size: 1rem;
+    background-color: darkcyan;
+    border: none;
+    color: white;
+    cursor: pointer;
+    border-radius: 0 5px 5px 0;
+}
+
+/* Dropdown Arrow */
+.arrow.down {
+    border: solid white;
+    border-width: 0 4px 4px 0;
+    display: inline-block;
+    padding: 3px;
+    transform: rotate(45deg);
+    margin-left: 5px;
+}
+
+#aboutContainer{                       /*This is the container for the Aboutus & EnchantedEvents logo and Services*/
+    display: flex;
+    width: 100%;
+    padding-top: 2.5%;
+    padding-right: 2.5%;
+    padding-bottom: 1%;
+    padding-left: 7.5%;
+    box-sizing: border-box;
+}
+  
+  .aboutUs{                                                   /*This is the container for the Aboutus heading & the content of it*/
+    display: block;
+    margin-top: 1%;
+    width: 65%;
+}
+  
+  .aboutUs-heading, #ourService h1{                          /*Defines the 'About Us' heading and the services Headings*/
+    color: black; 
+    font-weight: 900; 
+    font-size: 3rem;
+    margin-bottom: 2.5%;
+  }
+  
+  .aboutUS-content, .services-content{                                           /*Defines the 'About US'content */
+    color: #333;
+    font-size: 1rem;
+  }
+  
+  
+  .logo-container{                                            /*Defines the logo container*/
+    margin-top: 10%;
+    margin-left: 3%;
+    width: 35%;
+  }
+
