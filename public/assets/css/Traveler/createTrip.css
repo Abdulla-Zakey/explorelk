@@ -1,0 +1,141 @@
+/* Default font size for larger screens */
+html{
+    height: 100%;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    font-size: 62.5%; /* 10px base, 1rem = 10px */
+}
+
+
+/* Adjust font size for tablets */
+@media (max-width: 768px) {
+    html {
+        font-size: 56.25% !important; /* 1rem = 9px */
+    }
+}
+
+
+/* Mobile adjustments */
+@media (max-width: 480px) {
+    html {
+        font-size: 50% !important; /* 1rem = 8px */
+    }
+}
+
+body{
+    font-family: 'Poppins', sans-serif;
+    overflow-x: hidden;
+}
+
+#main{
+    min-height: 100vh;
+    overflow: hidden;
+    width: 85%;
+    margin-right: 7.5%;
+    margin-left: 7.5%;
+}
+
+#main h1{
+    font-size: 4.8rem;
+    margin-top: 12.5%;
+    margin-bottom: 0%;
+}
+
+.main-Container{
+    width: 100%;
+    background-image: url(../../images/Travelers/createTrip/createTripBg.jpg);        
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+    /* background-attachment: fixed;  */
+    padding-top: 1.25%;
+    padding-bottom: 1.25%;
+    margin-bottom: 2.5%;
+    border-radius: 1rem;
+    
+}
+
+
+.form-container{
+    width: 80%;
+    margin: 5% 10% 5% 10%;
+    background-color: rgba(255, 255, 255, 0.5);
+    padding-top: 1.25%;
+    padding-bottom: 2.5%;
+    border-radius: 1rem;
+}
+
+.longInputs{
+    width: 80%;
+    margin: 2.5% 10% 1.5% 10%;
+    font-size: 1.8rem;
+    /* border: 1px solid red; */
+}
+
+.leftMediumInput-Conatiner{
+    width: 47.5%;
+    margin-left: 0%;
+    margin-right: 2.5%;
+}
+
+.rightMediumInput-Conatiner{
+    width: 47.5%;
+    margin-left: 2.5%;
+    margin-right: 0%;
+}
+
+
+.longInputs input, .longInputs select{
+    width: 100%;
+    background-color: #EEEEEE;
+    padding: 1rem;
+    box-sizing: border-box;
+    border: none;
+    border-radius: 1rem;
+    box-shadow: 0rem 0rem 1rem rgba(0, 0, 0, 0.5);
+}
+
+select option {
+    background-color: black;    /* Background color of dropdown items */
+    color: white;               /* Text color of the dropdown items */
+  }
+
+
+.itenerary-Conatiner{
+    width: 100%;
+    margin: 0%;
+    padding: 2.5% 7.5% 5% 7.5%;
+    border: 0.25rem solid #FFFFFF;
+    box-sizing: border-box;
+    border-radius: 1rem;
+}
+
+.placeAndActivity-Container{
+    display: flex;
+    margin-top: 3.75%;
+    margin-bottom: 1.5%;
+    /* border: 1px solid red; */
+}
+
+
+.btn{
+    margin-top: 3.5%;
+    width: 100%;
+    padding: 1rem;
+    border-radius: 1rem;
+    color: white;
+    border: none;
+    font-size: 1.6rem;
+    font-family: 'Poppins', sans-serif;
+    cursor: pointer;
+    transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.btn:hover{
+    transform: scale(1.0125);
+}
+
+
+
+
+

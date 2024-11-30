@@ -1,0 +1,192 @@
+/* Default font size for larger screens */
+html{
+    height: 100%;
+    /* overflow-y: scroll; */
+    /* overflow-x: hidden; */
+    overflow: hidden;
+    font-size: 62.5%; /* 10px base, 1rem = 10px */
+}
+
+
+/* Adjust font size for tablets */
+@media (max-width: 768px) {
+    html {
+        font-size: 56.25% !important; /* 1rem = 9px */
+    }
+}
+
+
+/* Mobile adjustments */
+@media (max-width: 480px) {
+    html {
+        font-size: 50% !important; /* 1rem = 8px */
+    }
+}
+
+body{
+    font-family: 'Poppins', sans-serif;
+}
+
+
+.rightPane{
+    display: flex;
+    width: 77.5%;
+    height: 100vh;
+    color: #000000;
+    margin-top: 0%;
+    margin-right: 0%;
+    margin-left: 22.5%;     /*Methana 27.5 thiyala thiyenne, 20% navbar eka fix karala thiyena nisa ey pramanyath, amathara 7.5% vala ekathuvath samagaya*/
+    box-sizing: border-box;
+}
+
+.chats-Conatiner{
+    display: block;
+    width: 40%;
+    height: 100hv;
+    margin: 0%;
+    border-right: 1px solid #d3d3d3;
+    overflow-y: scroll;
+}
+
+.message-Conatiner {
+    display: flex;
+    flex-direction: column;         /* Stack messages and input box */
+    width: 60%;
+    height: 100vh; 
+    overflow: hidden; 
+    position: relative;             /* Needed for positioning child elements */
+}
+
+
+
+.chats-Conatiner h1{
+    margin-top: 13.5%;
+    margin-left: 10%;
+    font-size: 4.8rem;
+    margin-bottom: 7.5%;
+}
+
+.chatImageAndName-Conatiner{
+    display: flex;
+    width: 100%;
+    height: auto;
+    margin: 0%;
+    border-top: 1px solid #d3d3d3;
+}
+
+.chatImageAndName-Conatiner:last-child{
+    border-bottom: 1px solid #d3d3d3;
+}
+
+
+.chatImage-Conatiner{
+    margin-left: 10%;
+    width: 15%;
+    padding: 3.5% 5% 2.5% 0%;
+}
+
+.chatImage-Conatiner img{
+    width: 100%;
+    border-radius: 50%;
+}
+
+.chatName-Conatiner{
+    display: block;
+}
+
+.chatName-Conatiner h2{
+    font-size: 2rem;
+    font-weight: 300;
+    margin-top: 12.5%;
+    margin-bottom: 1.5%;
+}
+
+.chatName-Conatiner span{
+    font-size: 1.6rem;
+}
+
+.chatHeader{
+    display: flex;
+    width: 100%;
+    height: 10%;
+    height: auto;
+    border-bottom: 1px solid #d3d3d3;
+}
+
+.chatHeaderImage-Conatiner{
+    width: 10%;
+    margin: 2.5% 5% 1.5% 5%;
+   
+}
+
+.chatHeaderImage-Conatiner img{
+    width: 100%;
+}
+
+
+.chatHeader h2{
+    margin-top: 10%;
+    font-size: 2.8rem;
+}
+
+.messages {
+    flex-grow: 1;                   /* Allow this container to expand and take up remaining space */
+    overflow-y: auto;               /* Enable vertical scrolling for messages */
+    padding: 1rem 7.5%;
+    box-sizing: border-box;
+    margin-bottom: 1rem;            /* Add spacing for the input box */
+}
+
+.sendMessages, .receiveMessages{
+    border-radius: 2.5rem;
+    border:none;
+    margin-bottom: 1.5%;
+    width: 65%;
+    padding: 1rem 2rem;
+    font-size: 1.5rem;
+    box-sizing: border-box;
+}
+
+.sendMessages{
+    background-color: #4ade80;
+    margin-left: 35%; 
+}
+
+.receiveMessages{
+    background-color: #d3d3d3;
+    margin-left: 0%;
+}
+
+.input-box {
+    display: flex;
+    align-items: center;
+    width: 87.5%;
+    margin: 0 auto;                 /* Center horizontally */
+    padding: 1rem 0;                
+    background-color: white;        
+    border-top: 1px solid #d3d3d3; 
+    position: sticky;               /* Sticky positioning */
+    bottom: 0;                      /* Stick to the bottom of the container */
+    z-index: 10;                    /* Ensure it is above scrolling content */
+}
+
+.input-box input {
+    flex-grow: 1;                   /* Make the input field take most of the width */
+    border: 1px solid #d3d3d3;
+    border-radius: 1rem;
+    padding: 1.5rem;
+    box-sizing: border-box;
+    font-size: 1.5rem;
+    margin-right: 1rem;             /* Add space between input and button */
+}
+
+.input-box button {
+    background-color: #4ade80;  
+    color: white;
+    border: none;
+    border-radius: 1rem;
+    padding: 1rem 2rem;
+    font-size: 1.5rem;
+    cursor: pointer;
+    box-sizing: border-box;
+}
