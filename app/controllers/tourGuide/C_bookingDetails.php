@@ -3,9 +3,8 @@
 /**
  * Booking Details class
  */
-class C_bookingDetails
+class C_bookingDetails extends Controller
 {
-	use Controller;
 
 	public function index()
 	{

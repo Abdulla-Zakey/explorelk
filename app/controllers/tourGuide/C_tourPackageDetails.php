@@ -3,9 +3,8 @@
 /**
  * Tour Package Details class
  */
-class C_tourPackageDetails
+class C_tourPackageDetails extends Controller
 {
-	use Controller;
 
 	public function index()
 	{

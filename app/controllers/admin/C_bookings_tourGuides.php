@@ -3,9 +3,8 @@
 /**
  * Tour Guides Bookings class
  */
-class C_bookings_tourGuides
+class C_bookings_tourGuides extends Controller
 {
-	use Controller;
 
 	public function index()
 	{

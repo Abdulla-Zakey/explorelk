@@ -3,9 +3,8 @@
 /**
  * Content Management Detailed View class
  */
-class C_contentManagementDetailedView
+class C_contentManagementDetailedView extends Controller
 {
-	use Controller;
 
 	public function index()
 	{

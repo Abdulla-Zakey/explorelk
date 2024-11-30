@@ -3,9 +3,8 @@
 /**
  * New Registration Details class
  */
-class C_newRegistrationDetails
+class C_newRegistrationDetails extends Controller
 {
-	use Controller;
 
 	public function index()
 	{

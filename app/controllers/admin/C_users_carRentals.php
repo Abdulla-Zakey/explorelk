@@ -3,9 +3,8 @@
 /**
  * Car Rental users class
  */
-class C_users_carRentals
+class C_users_carRentals extends Controller
 {
-	use Controller;
 
 	public function index()
 	{

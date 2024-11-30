@@ -3,9 +3,8 @@
 /**
  * Hotels & Restaurants Bookings class
  */
-class C_bookings_hotels
+class C_bookings_hotels extends Controller
 {
-	use Controller;
 
 	public function index()
 	{

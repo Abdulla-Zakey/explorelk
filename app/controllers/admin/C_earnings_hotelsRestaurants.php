@@ -3,9 +3,8 @@
 /**
  * Hotels & Restaurants Earnings class
  */
-class C_earnings_hotelsRestaurants
+class C_earnings_hotelsRestaurants extends Controller
 {
-	use Controller;
 
 	public function index()
 	{
