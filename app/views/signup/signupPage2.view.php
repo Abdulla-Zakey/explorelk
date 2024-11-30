@@ -6,7 +6,7 @@
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
   <style>
         body, html  {
-            background-image: url("<?=ROOT?>/assets/images/spbg.jpg");
+            background-image: url("<?=ROOT?>/assets/images/serviceProviders/spbg.jpg");
         background-repeat: no-repeat;
         background-attachment: fixed;
         background-size: cover;
@@ -155,7 +155,7 @@
  </head>
  <body>
   <div class="logo">
-   <img alt="ExploreLK logo" height="200" src="<?=ROOT?>/assets/images/logob.png" width="200"/>
+   <img alt="ExploreLK logo" height="200" src="<?=ROOT?>/assets/images/serviceProviders/logob.png" width="200"/>
   </div>
   <div class="container">
    <div class="form-container">
@@ -213,7 +213,7 @@
 
     </form>
     <div class="image-container">
-     <img alt="Cartoon image of a man and two children" height="400" src="<?=ROOT?>/assets/images/sprovider.png" width="500"/>
+     <img alt="Cartoon image of a man and two children" height="400" src="<?=ROOT?>/assets/images/serviceProviders/sprovider.png" width="500"/>
     </div>
    </div>
   </div>

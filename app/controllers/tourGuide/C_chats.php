@@ -3,9 +3,8 @@
 /**
  * Chats class
  */
-class C_chats
+class C_chats extends Controller
 {
-	use Controller;
 
 	public function index()
 	{

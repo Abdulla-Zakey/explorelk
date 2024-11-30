@@ -3,9 +3,8 @@
 /**
  * Event Organizing Users class
  */
-class C_users_eventOrganizers
+class C_users_eventOrganizers extends Controller
 {
-	use Controller;
 
 	public function index()
 	{

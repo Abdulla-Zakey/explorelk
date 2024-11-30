@@ -1,7 +1,7 @@
 <?php
 
     define('APP', 'http://localhost/explorelkwithmvc/app');
-    define('ROOT', 'http://localhost/explorelkwithmvc/public');
+    define('ROOT', 'http://localhost/gitexplorelk/explorelk/public');
     define('CSS', 'http://localhost/explorelkwithmvc/public/assets/css');
     define('IMAGES', 'http://localhost/explorelkwithmvc/public/assets/images');
     define('APPROOT',dirname(dirname(__FILE__)));

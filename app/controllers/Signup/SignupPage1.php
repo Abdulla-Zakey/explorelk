@@ -1,13 +1,12 @@
 <?php
 
-    class SignupPage2{
+    class SignupPage1 extends Controller{
 
-        use Controller;
         public function index($a = '', $b = '', $c = ''){
 
            
 
-            $this->view('signup/signupPage2');
+            $this->view('signup/signupPage1');
             
         }
     }
