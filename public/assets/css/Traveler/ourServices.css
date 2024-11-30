@@ -1,0 +1,53 @@
+#ourService h1{
+    margin-left: 7.5%;
+}
+
+.row{
+    display: flex;
+    width: 100%;
+    margin-top: 2.5%;
+    margin-bottom: 2.5%;
+    padding-left: 7.5%;
+    padding-right: 7.5%;
+    box-sizing: border-box;
+}
+
+.row:last-child{
+    margin-bottom: 5%;
+}
+
+.left, .middle, .right{
+    width: 30%;
+    padding: 1% 1.5%;
+    box-sizing: border-box;
+    background-color: #f2f2f2;
+    border: 0.5px solid  black;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.25);
+}
+
+.left{
+    margin-right: 5%;
+}
+
+.right{
+    margin-left: 5%;
+}
+
+.left img, .middle img, .right img{
+    text-align: center;
+    align-items: center;
+    width: 20%;
+    height: 25%;
+    padding-left: 37.5%;
+    margin-bottom: 5%;
+}
+
+.left h2, .middle h2, .right h2{
+    margin-top: -5%;
+    text-align: center;
+}
+
+.left p, .middle p, .right p{
+    text-align: left;
+}

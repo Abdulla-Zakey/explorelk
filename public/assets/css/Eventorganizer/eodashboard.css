@@ -1,0 +1,123 @@
+body {
+    font-family: 'Arial', sans-serif;
+    margin-left: 170px;
+    margin-top: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+.user-invite{
+    margin-left: 155px;
+    margin-top: 50px;
+    font-size: x-large;
+    
+}
+
+
+.event-create-container {
+    display: flex;
+    
+    align-items: center;
+    flex-direction: column; /* This ensures elements are stacked vertically */
+    
+    width: 750px;
+    height: 500px;
+    border: 5px solid #E2E5EF;
+    border-radius: 10px;
+    margin-left: 150px;
+    margin-top: 30px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.event-create-img {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    
+    height: 150px;
+    width: 150px;
+    position: relative;
+    margin-top: 100px;
+}
+
+
+
+.round-img {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    
+}
+
+.create-event-btn {
+    margin-top: 100px; /* Space between image and button */
+    background-color: #ffffff;
+    color: black;
+    padding: 10px 20px;
+    font-size: 35px;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+    width: 500px;
+    height: 70px;
+    border: 3px solid #E2E5EF;
+}
+
+.create-event-btn:hover {
+    background-color: #E2E5EF;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border: 3px solid #CACDD6;
+
+}
+
+.event-create-outcontainer{
+    display: flex;
+    align-content: center;
+    
+}
+
+.event-creater-image{
+    height: 500px;
+    width: 200px;
+    margin-top: 60px;
+    margin-left: 25px;
+}
+.event-creater-image img{
+    height: 430px;
+    width: 400px;
+}
+
+/*
+.event-create-container{
+    display: flex;
+    justify-content: center;
+    
+    
+    width: 900px;
+    height: 500px;
+    border: 5px solid #E2E5EF;
+    border-radius: 10px;
+    margin-left: 150px;
+    margin-top: 30px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.event-create-img{
+    margin-top: 100px;
+    position: relative;
+    
+    height: 150px;
+    width: 150px;
+    
+
+}
+
+.round-img {
+    width: 150px; 
+    height: 150px; 
+    object-fit: cover; 
+}*/
+
+
+    
