@@ -1,0 +1,201 @@
+body, html {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;       /* Prevents scrollbars */
+    font-size: 18px;        /* Default font size */
+    font-family: 'Poppins', sans-serif;
+}
+
+body::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    filter: blur(3.5px);    
+    z-index: -1;            
+    background-image: url(../../images/Travelers/signupAndLogin/background.webp);          
+}
+
+.container {
+    display: flex;
+    flex-wrap: wrap;
+    width: 60%;
+    height: 80%;
+    margin-top: 5%;
+    margin-bottom: 10%;
+    margin-left: 20%;
+    margin-right: 20%;
+    filter: brightness(1.125);
+    border-image: fill 0 linear-gradient(rgba(0, 0, 0, 0.15), rgba(255, 255, 255, 0.25), rgba(0, 0, 0, 0.35));
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+}
+
+/* body::before,  */
+.container{
+    background-image: url(../../images/Travelers/signupAndLogin/bgImage.jpg);            /*paths marked for incase of folder changes*/
+}
+
+
+.container, body::before{
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+}
+
+.success-message {
+    color: green;
+    background-color: #e6ffe6;
+    border: 1px solid #b3ffb3;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.leftContainer{
+    display: block;
+    width: 50%;
+    height: 100%;
+    box-sizing: border-box;
+
+}
+
+.logoContainer{
+    width: 25%;
+    height: 25%;
+    margin-left: 2.5%;
+    background-image: url(../images/logos/logoWhite.svg);                  /*paths marked for incase of folder changes*/
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center; 
+    
+}
+
+.textContainer{
+    width: 100%;
+    height: 75%;
+    padding-top: 25%;
+    padding-left: 15%;
+    box-sizing: border-box;
+    /* background-color: #000; */
+    color: #FFFF;
+    font-size: 2.5rem;
+    font-family: 'Times New Roman', Times, serif;
+    font-style: italic;
+    font-weight: 750;
+    justify-content: center;
+    align-items: center;
+    text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.rightContainer{
+    width: 50%;
+    height: 100%;
+    background-color: #ffff;
+    opacity: 0.8;
+    filter: brightness(0.875);
+}
+
+.forrm{
+    margin-left: 10%;
+    /* font-family: Arial, Helvetica, sans-serif; */
+    font-size: 14px;
+    width: 80%;
+}
+
+.error-message {
+    color: red;
+    font-size: 15px;
+    margin-top: 10px;
+    text-shadow: 0px 0px 10px;
+}
+
+
+.heading{
+    margin-top: 25%;
+    margin-bottom: 10%;
+    font-size: 28px;
+    color: black;
+}
+
+.input-container{
+    position: relative;
+    width: 100%;
+}
+
+.input-container i{
+    position: absolute;
+    right: 15px;
+    top: 25%;
+    transform: translateY(-25%);
+    color: white;
+}
+
+input, select{
+    margin-right: 10%;
+    margin-bottom: 7.5%;
+    padding: 2.5%;
+    width: 100%;
+    background-color: darkgray;
+    border: none;
+    border-radius: 10px;
+    box-sizing: border-box;
+}
+
+select option {
+    background-color: black; /* Background color of dropdown items */
+    color: white;  /* Text color of the dropdown items */
+  }
+
+.btn{
+    margin-top: 2.5%;
+    margin-bottom: 1.5%;
+    width: 100%;
+    color: #ffff;
+    background-color: darkcyan;
+    cursor: pointer;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+
+.btn:hover{
+    cursor: pointer;
+    box-shadow: 0px 0px 10px black;
+}
+
+p{
+    font-size: 12px;
+}
+
+a{
+    color: darkcyan;
+    text-decoration: none;
+}
+
+a:hover{
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+  
+@media (max-width: 1080px) {
+    body, html {
+      font-size: 16px; /* Smaller font size for medium screens */
+    }
+}
+  
+@media (max-width: 768px) {
+    body, html{
+      font-size: 14px; /* Smaller font size for mobile screens */
+    }
+  }
+  
+@media (max-width: 480px) {
+    body, html{
+      font-size: 12px; /* Even smaller font size for small devices */
+    }
+  }
+  

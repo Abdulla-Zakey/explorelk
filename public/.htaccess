@@ -1,0 +1,21 @@
+#RewriteEngine On
+    
+#accept loading actual files and directories
+#RewriteCond %{REQUEST_FILENAME} !-f
+#RewriteCond %{REQUEST_FILENAME} !-d
+
+#sen everything else to index.php
+#RewriteRule ^(.*)$ index.php?url=$1 [L,QSA]
+
+RewriteEngine On
+
+# Allow access to existing files and directories
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+# Exclude static files from routing
+RewriteCond %{REQUEST_URI} !\.(css|js|png|jpg|jpeg|gif|ico|woff|woff2|ttf|svg|eot)$ [NC]
+
+# Send everything else to index.php
+RewriteRule ^(.*)$ index.php?url=$1 [L,QSA]
+

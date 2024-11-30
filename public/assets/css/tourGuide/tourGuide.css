@@ -1,0 +1,1446 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins';
+}
+
+body {
+    display: flex;
+    height: 100vh;
+}
+
+.flexContainer {
+    display: flex;
+    width: 100%;
+}
+
+.body-container {
+    width: 76%;
+    margin-right: 2%;
+    margin-left: 22%;
+}
+
+.back_button{
+    margin-top: 2%;
+    font-size: larger;
+    font-weight: bold;
+    text-decoration: none;
+    color: #002D40;
+}
+
+.back_button:hover {
+    text-decoration: underline;
+}
+
+.heading {
+    padding-top: 2%;
+    padding-bottom: 2%;
+}
+
+.sub-heading{
+    padding-top: 2%;
+    padding-bottom: 1%;
+}
+
+.leftPanel{
+    width: 20%;
+    height: 100vh;
+    position: fixed;
+    background-color: #002D40;
+    color: #FFFFFF;
+    display: block;
+    padding-left: 2.5%;
+    padding-right: 2.5%;
+    padding-top: 4%;
+}
+
+
+.logo{
+    display: flex;
+    margin-bottom: 7.5%;
+}
+
+.logo img{
+    width: 25%;
+    height: 25%;
+    margin-right: 2.5%;
+}
+
+.logo h1{
+    margin-top: 5%;
+}
+
+.linkHolder{
+    margin-bottom: 10%;
+    font-size: 18px;
+}
+
+.linkHolder a{
+    margin-left: 5%;
+    color: #FFFFFF;
+    text-decoration: none;
+    cursor: pointer;
+    display: block;
+}
+
+.linkHolder a:hover{
+    background-color: #B3D9FF;
+    border-radius: 5px;
+    padding: 5px;
+    color:#002D40 ;
+}
+
+.linkHolder a.active {
+    background-color: #B3D9FF;
+    border-radius: 5px;
+    padding: 5px;
+    color: #002D40;
+}
+
+.linkHolder i{
+    margin-right: 5%;
+}
+
+/* Dashboard Page CSS */
+.widget{
+    display: flex;
+    justify-content: space-around;
+    text-align: center;
+    height: 15%;
+    color: white;
+}
+
+.card {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 16%;
+    padding: 10px;
+    background: linear-gradient(135deg, #042A3B, #1A4E63);
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Soft shadow */
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    cursor: pointer; /* Changes cursor on hover */
+}
+
+.card h3 {
+    font-size: 1.8rem;
+    color: #FFFFFF; /* Vibrant color for percentage text */
+}
+
+.card h5 {
+    font-size: 1rem;
+    color: #FFFFFF;
+    margin-top: 5px;
+}
+
+/* Hover effect */
+.card:hover {
+    transform: translateY(-5px); /* Slightly elevates on hover */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* Darker shadow on hover */
+}
+
+
+.alerts{
+    display: block;
+}
+
+.alert-box {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 10px 15px;
+    background-color: #f9f9fc; /* Soft background color */
+    border-left: 5px solid #002D40; /* Colored border to indicate importance */
+    border-radius: 8px; /* Rounded corners */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Soft shadow */
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    margin-bottom: 10px;
+}
+
+.alert-box:hover {
+    transform: translateY(-2px); /* Slight elevation on hover */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); /* Darker shadow on hover */
+}
+
+.alert-message {
+    color: #333;
+}
+
+.alert-box a h5 {
+    color: #002D40; /* Link color */
+    font-size: 0.9rem;
+    text-decoration: none;
+}
+
+.alert-box a h5:hover {
+    text-decoration: underline; /* Underline on hover */
+}
+
+
+.service-availability{
+    display: flex;
+    flex-direction: row;
+    height: 5vh;
+    margin-bottom: 2%;
+}
+
+.icon {
+    background-color: #e0e4e9;
+    width: 5vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10%;
+    margin-right: 2%;
+}
+
+.service-info{
+    display: flex;
+    align-items: center;
+}
+
+.activity {
+    display: flex;
+    flex-direction: column;
+}
+
+.activity-info{
+    margin-bottom: 1%;
+}
+
+.activity-info span{
+    font-size: small;
+    color: #5d6164;
+}
+
+/* Container */
+.rating-container {
+    display: flex;
+    align-items: flex-start;
+    gap: 10%;
+    margin-bottom: 2%;
+}
+
+/* Main Rating Display */
+.main-rating {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.star-rating {
+    font-size: 1.2rem;
+    color: #ffbf00; /* Yellow color for stars */
+}
+
+/* Review Count */
+.review-count {
+    font-size: 0.9rem;
+    color: #666;
+}
+
+/* Progress Bar Container */
+.progress-bars {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+/* Individual Rating Row */
+.rating-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.rating-label {
+    font-size: 0.8rem;
+    width: 20px;
+    text-align: right;
+    color: #666;
+}
+
+/* Progress Bar */
+.progress {
+    position: relative;
+    background-color: #e0e0e0;
+    border-radius: 10px;
+    height: 8px;
+    width: 100vh;
+    overflow: hidden;
+}
+
+.progress .progress-bar {
+    height: 100%;
+    background-color: #000;
+    border-radius: 10px;
+}
+
+.progress-value {
+    font-size: 0.8rem;
+    color: #666;
+}
+
+/* Reviews Page CSS */
+.reviews{
+    width: 76%;
+    margin-right: 2%;
+    margin-left: 22%;
+}
+
+/* Container */
+.rating-container {
+    display: flex;
+    align-items: flex-start;
+    gap: 10%;
+    margin-bottom: 2%;
+}
+
+/* Main Rating Display */
+.main-rating {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.star-rating {
+    font-size: 1.2rem;
+    color: #ffbf00; /* Yellow color for stars */
+}
+
+/* Review Count */
+.review-count {
+    font-size: 0.9rem;
+    color: #666;
+}
+
+/* Progress Bar Container */
+.progress-bars {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+/* Individual Rating Row */
+.rating-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.rating-label {
+    font-size: 0.8rem;
+    width: 20px;
+    text-align: right;
+    color: #666;
+}
+
+/* Progress Bar */
+.progress {
+    position: relative;
+    background-color: #e0e0e0;
+    border-radius: 10px;
+    height: 8px;
+    width: 100vh;
+    overflow: hidden;
+}
+
+.progress .progress-bar {
+    height: 100%;
+    background-color: #000;
+    border-radius: 10px;
+}
+
+.progress-value {
+    font-size: 0.8rem;
+    color: #666;
+}
+
+.review {
+    border-top: 1px solid #e0e0e0;
+    padding-top: 1rem;
+    margin-top: 1rem;
+}
+
+.review-header {
+    display: flex;
+    align-items: center;
+    gap: 1%;
+}
+
+.profile-pic {
+    border-radius: 50%;
+    width: 3rem;
+    height: 3rem;
+}
+
+.review-header strong {
+    font-size: 1em;
+    color: #333;
+}
+
+.review-header span {
+    display: block;
+    font-size: 0.9em;
+    color: #777;
+}
+
+.review p {
+    margin: 1% 0;
+    color: #555;
+}
+
+.review-actions {
+    display: flex;
+    gap: 1%;
+    font-size: 1.2em;
+    color: #777;
+}
+
+.review-actions span {
+    cursor: pointer;
+}
+
+.review-actions span:hover {
+    color: #333;
+}
+
+/* Profile Page Css */
+.save-btn {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 10px;
+}
+
+.save-btn button {
+    background-color: #002D40;
+    color: #fff;
+    padding: 1% 1.5%;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.save-btn button:hover{
+    background-color: #005A8C;
+}
+
+.profile-photo {
+    display: block;
+    gap: 1%;
+}
+
+.profile-photo img{
+    height: 15rem;
+    width: auto;
+    border-radius: 10%;
+}
+
+.profile-name {
+    margin-top: 2%;
+}
+
+.profile-name span{
+    color: #4e4a4a;
+}
+
+.profile-info{
+    margin-left: 2%;
+    width: 100%;
+}
+
+.lable-div{
+    display: block;
+}
+
+.lable{
+    font-size: large;
+}
+
+.light-text{
+    color: #4e4a4a;
+}
+
+.edit-option{
+    display: flex;
+}
+
+.profile-icon{
+    display: flex;
+    color: #000;
+}
+
+.profile-icon a{
+    margin-left: 25px;
+    color: #07384E;
+}
+
+.profile-icon button{
+    background-color: #ffffff;
+    border: none;
+}
+
+.languages{
+    display: flex;
+    margin-top: 1%;
+}
+
+.languages input[type="checkbox"]{
+    accent-color: #07384E;
+}
+
+#flex-display{
+    display: flex;
+    gap: 5%;
+    padding-bottom: 3%;
+
+}
+
+/* Earnings Page CSS */
+.tabs {
+    display: flex;
+    gap: 1%;
+    margin-bottom: 2%;
+}
+
+.tab {
+    padding: 1% 1%;
+    background-color: #002D40;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    color: #ffffff;
+}
+
+.tab.active {
+    background-color: #1E7A8F;
+    font-weight: bold;
+}
+
+.dropdown-buttons{
+    display: flex;
+    gap: 2%;
+}
+
+.dropdown-btn {
+    display: flex;
+    justify-items: flex-start;
+    width: fit-content;
+    width: 15%;
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+}
+
+.dropbtn {
+    background-color: #002D40;
+    color: white;
+    padding: 0.5rem 1rem;
+    border: none;
+    cursor: pointer;
+    border-radius: 1rem;
+    font-size: 1em;
+    width: 100%;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #fff;
+    width: 100%;
+}
+
+.dropdown-content a {
+    color: #333;
+    padding: 0.5rem 1rem;
+    border-radius: 2%;
+    text-decoration: none;
+    display: block;
+}
+
+.dropdown-content a:hover {
+    background-color: #f0f0f0;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+.booking-list table {
+    width: 100%;
+    border-collapse: collapse;
+    border-radius: 1rem;
+    overflow: hidden;
+}
+
+.booking-list th, .booking-list td {
+    padding: 0.8rem;
+    text-align: left;
+}
+
+.booking-list thead {
+    background-color: #002D40;
+    color: #FFFFFF;
+}
+
+.booking-list tbody tr {
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.booking-list tbody tr:last-child {
+    border-bottom: none;
+}
+
+.status-pending {
+    background-color: #1e4aa2;
+    padding: 5% 10%;
+    border-radius: 5px;
+    font-size: 0.9em;
+    color: #FFFFFF;
+}
+
+.status-confirmed {
+    background-color: #09af1f;
+    padding: 5% 24%;
+    border-radius: 5px;
+    font-size: 0.9em;
+    color: #FFFFFF;
+}
+
+
+.commission-section {
+    width: 100%;
+    max-width: 500px;
+    padding: 20px;
+}
+
+.commission-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #bcbcbc;
+}
+
+.commission-item .label {
+    font-weight: bold;
+}
+
+.commission-item .value {
+    font-weight: bold;
+}
+
+.report-button {
+    width: 100%;
+    padding: 0.5em 0;
+    background-color: #002D40;
+    color: #ffffff;
+    font-size: 1em;
+    font-weight: bold;
+    border: none;
+    border-radius: 1.5rem;
+    cursor: pointer;
+    margin-top: 1rem;
+    transition: background-color    s ease;
+}
+
+.report-button:hover {
+    background-color: #002d40db;
+}
+
+/* Chats Page CSS */
+.sidebar {
+    width: 30%;
+    padding: 1.25rem;
+    border-right: 1px solid #ddd;
+    overflow-y: auto;
+    padding-left: 0;
+}
+
+.sidebar h2 {
+    font-size: 24px;
+    margin-bottom: 1.25rem;
+    font-weight: bold;
+}
+
+.contact {
+    display: flex;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #ddd;
+    cursor: pointer;
+}
+
+.contact.active {
+    background-color: #e0e0e0;
+}
+
+.contact img {
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    margin-right: 10px;
+}
+
+.contact-info .name {
+    padding-top: 2%;
+    padding-bottom: 1%;
+}
+
+.contact-info .preview {
+    color: #777;
+    font-size: 14px;
+}
+
+.chat {
+    width: 70%;
+    display: flex;
+    flex-direction: column;
+    background-color: #ffffff;
+}
+
+.chat-header {
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    border-bottom: 1px solid #ddd;
+}
+
+.chat-header img {
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    margin-right: 10px;
+}
+
+.chat-header h3 {
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+.chat-messages {
+    flex-grow: 1;
+    padding: 1.2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.message {
+    padding: 0.6rem 0.9rem;
+    background-color: #f0f0f0;
+    border-radius: 1rem;
+    width: fit-content;
+    max-width: 60%;
+    font-size: 0.875rem;
+}
+
+.message.reply {
+    align-self: flex-end;
+}
+
+.chat-input {
+    display: flex;
+    padding: 0.5rem 1rem;
+    border-top: 1px solid #ddd;
+    background-color: #ffffff;
+}
+
+.chat-input input {
+    flex-grow: 1;
+    padding: 0.6rem;
+    border-radius: 25px;
+    border: 1px solid #ddd;
+}
+
+.chat-input button {
+    background-color: #002D40;
+    border: none;
+    color: white;
+    font-size: 1.2rem;
+    padding: 0.625rem 0.9rem;
+    margin-left: 0.5rem;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+/* Bookings Page CSS */
+.search-container {
+    width: 100%;
+    margin-bottom: 2%;
+}
+
+.search-bar {
+    width: 100%;
+    padding: 1.5%;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 1em;
+}
+
+.booking-item {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-left: 1%;
+    padding-right: 1%;
+}
+
+.booking-details {
+    width: 78%;
+}
+
+.status {
+    font-size: 0.9em;
+    color: #888;
+    margin-bottom: 1%;
+}
+
+.title {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 0.5%;
+}
+
+.location {
+    font-size: 0.9em;
+    color: #666;
+    margin-bottom: 1.5%;
+}
+
+.details-button {
+    padding: 1% 3%;
+    background-color: #f2f2f2;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1em;
+    text-decoration: none;
+    color: #002D40;
+}
+
+.booking-image {
+    width: 20%;
+    overflow: hidden;
+    border-radius: 8px;
+    padding-bottom: 1%;
+}
+
+.booking-image img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+/* Booking Requests Page CSS */
+.bookingRequests{
+    width: 76%;
+    margin-top: 1%;
+    margin-right: 2%;
+    margin-left: 22%;
+    padding-left: 1%;
+    padding-right: 1%;
+    padding-bottom: 1%;
+    height: fit-content;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 2rem;
+    background-color: #fff;
+}
+
+.widget{
+    display: flex;
+    justify-content: space-around;
+    text-align: center;
+    height: 15%;
+    color: white;
+}
+
+.card {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 16%;
+    padding: 10px;
+    background: linear-gradient(135deg, #002D40, #1A4E63);
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Soft shadow */
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    cursor: pointer; /* Changes cursor on hover */
+}
+
+.card h3 {
+    font-size: 1.8rem;
+    color: #FFFFFF; /* Vibrant color for percentage text */
+}
+
+.card h5 {
+    font-size: 1rem;
+    color: #FFFFFF;
+    margin-top: 5px;
+}
+
+.table-container {
+    margin-top: 2%;
+}
+
+.booking-list table {
+    width: 100%;
+    border-collapse: collapse;
+    border-radius: 1rem;
+    overflow: hidden;
+}
+
+.booking-list th, .booking-list td {
+    padding: 0.8rem;
+    text-align: left;
+}
+
+.booking-list thead {
+    background-color: #002D40;
+    color: #FFFFFF;
+}
+
+.booking-list tbody tr {
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.booking-list tbody tr:last-child {
+    border-bottom: none;
+}
+
+.status_pending {
+    background-color: #f7e9eb;
+    padding: 2% 10%;
+    border-radius: 5px;
+    font-size: 0.9em;
+    color: #002D40;
+}
+
+.status_confirmed {
+    background-color: #e2dbc5;
+    padding: 2% 7%;
+    border-radius: 5px;
+    font-size: 0.9em;
+    color: #002D40;
+}
+
+.action {
+    color: #002D40;
+    text-decoration: none;
+}
+
+.action.confirm, .action.cancel {
+    font-weight: bold;
+}
+
+/* Booking Details Page CSS */
+.booking-info {
+    display: flex;
+    gap: 5%;
+}
+
+.profile-image {
+    width: 20%;
+    display: flex;
+    flex-direction: column;
+    margin-top: 2%;
+    margin-bottom: 2%;
+    gap: 1%;
+}
+
+.profile-image img{
+    height: 15rem;
+    width: auto;
+    border-radius: 10%;
+}
+
+.profile-image span{
+    color: #4e4a4a;
+}
+
+.details{
+    margin-top: 2%;
+    width: 80%;
+}
+
+.light-text{
+    color: #4e4a4a;
+    padding-top: 1%;
+    margin-bottom: 5%;
+    width: 100%;
+}
+
+.tourist-details{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2%;
+}
+
+.details-div{
+    display: block;
+}
+
+.tourist-info{
+    padding-bottom: 5%;
+    padding-top: 5%;
+    display: flex;
+    border-top: 2px solid #002D40;
+}
+
+.tourist-info p{
+    padding-left: 1rem;
+}
+
+.button-container {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1%;
+    margin-top: 2%;
+}
+
+.contact-button {
+    padding: 1% 3%;
+    background-color: #002D40; /* Green color */
+    color: white;
+    border: none;
+    border-radius: 20px;
+    font-size: 1em;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.cancel-button {
+    background-color: red;
+    border-radius: 20px;
+    padding: 1% 3%;
+    color: #ffffff;
+    border: none;
+    font-size: 1em;
+    cursor: pointer;
+}
+
+.contact-button:hover {
+    background-color: #00090d; /* Darker green on hover */
+}
+
+.cancel-button:hover {
+    text-decoration: underline;
+}
+
+/* Tour Packages Page CSS */
+.tour-package {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+  
+.create-tour-button {
+    background-color: #002D40;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 15px;
+    cursor: pointer;
+}
+  
+.create-tour-button:hover {
+    background-color: #014866;
+}
+  
+/* Search Bar */  
+.search-input {
+    width: 100%;
+    padding: 10px 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+  
+/* Tour List */
+.tour-list {
+    margin-top: 1%;
+}
+  
+.tour-item {
+    display: flex;
+    align-items: center;
+    padding: 1%;
+    border-bottom: 1px solid #ccc;
+}
+  
+.tour-item:last-child {
+    border-bottom: none;
+}
+  
+/* Tour Image */
+.tour-image {
+    width: 10%;
+    height: 10%;
+    border-radius: 5px;
+    object-fit: cover;
+    margin-right: 1%;
+}
+  
+  /* Tour Details */
+.tour-details {
+    flex: 1;
+}
+
+.tour-details a {
+    text-decoration: none;
+    color: #002D40;
+}
+  
+.tour-title {
+    font-size: 18px;
+    font-weight: bold;
+}
+  
+.tour-info {
+    font-size: 14px;
+    color: #555;
+}
+  
+/* Menu Icon */
+.menu-icon {
+    cursor: pointer;
+}
+
+/* Menu Container */
+.menu-container {
+    position: relative;
+  }
+  
+  /* Menu Icon */
+  .menu-icon {
+    font-size: 18px;
+    cursor: pointer;
+    user-select: none;
+  }
+  
+  /* Menu Options */
+  .menu-options {
+    position: absolute;
+    right: 0;
+    top: 25px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    display: none; /* Hidden by default */
+    z-index: 10;
+    width: 150px; /* Default width */
+    transition: width 0.3s ease; /* Smooth transition effect */
+}
+
+.menu-options-expanded {
+    width: 200px; /* Increased width when expanded */
+}
+  
+.menu-option {
+    display: block;
+    width: 100%;
+    padding: 10px 15px;
+    background: none;
+    border: none;
+    text-align: left;
+    font-size: 14px;
+    cursor: pointer;
+}
+  
+.menu-option:hover {
+    background-color: #f5f5f5;
+} 
+
+/* Tour Packages Detailed View CSS */
+#heading {
+    padding-top: 2%;
+    padding-bottom: 1%;
+}
+
+#sub-heading {
+    padding-bottom: 1%;
+}
+
+.packageDetailHead{
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+}
+
+.image-gallery {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin: 20px 0;
+}
+  
+.image-gallery img {
+    width: 20%;
+    border-radius: 8px;
+    object-fit: cover; 
+}
+  
+.package-details {
+    margin-bottom: 20px;
+    font-size: 1.1em;
+}
+  
+.package-details p {
+    margin: 5px 0;
+}
+  
+.description {
+    margin-bottom: 20px;
+}
+  
+.activities {
+    list-style: none;
+    padding: 0;
+    margin: 20px 0;
+}
+  
+.activities li {
+    margin: 5px 0;
+    padding-left: 15px;
+    text-indent: -15px;
+}
+  
+.delete-button {
+    background-color: red;
+    border-radius: 20px;
+    padding: 1% 3%;
+    color: #ffffff;
+    border: none;
+    font-size: 1em;
+    cursor: pointer;
+    margin-bottom: 2%;
+}
+  
+.delete-button:hover {
+    background: #d32f2f;
+}
+
+.package-save-btn {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 10px;
+    width: 10%;
+    margin-top: 2%;
+}
+
+.package-save-btn button {
+    background-color: #07384E;
+    color: #ffffff;
+    height: 2rem;
+    width: 100%;
+    border: none;
+    border-radius: 10px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* Add Tour Page CSS */
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #555;
+}
+
+input, textarea {
+    margin-bottom: 15px;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 100%;
+}
+
+textarea {
+    resize: none;
+}
+
+.add-activity-btn, .submit-btn {
+    padding: 10px;
+    background-color: #002D40;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-bottom: 15px;
+}
+
+.add-activity-btn:hover, .submit-btn:hover {
+    background-color: #002D40;
+}
+
+.upload-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 2px dashed #007BFF;
+    border-radius: 8px;
+    padding: 20px;
+    background-color: #f9f9f9;
+    width: 100%;
+    height: 150px;
+    position: relative;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-bottom: 1%;
+}
+
+.upload-container:hover {
+    background-color: #eef5ff;
+}
+
+.upload-icon {
+    width: 40px;
+    height: 40px;
+    margin-bottom: 10px;
+}
+
+.upload-container p {
+    color: #555;
+    font-size: 14px;
+    text-align: center;
+    margin: 0;
+}
+
+.upload-container input[type="file"] {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+}
+
+input[type="file"] {
+    display: none;
+}
+
+/* Availability Page CSS */
+.form-section {
+    display: flex;
+    gap: 2%;
+    flex-wrap: wrap;
+}
+
+.form-fields {
+    flex: 1;
+    min-width: 300px;
+}
+
+label {
+    font-weight: bold;
+    margin-bottom: 1%;
+    display: block;
+    color: #555;
+}
+
+input[type="date"], input[type="text"] {
+    width: 100%;
+    padding: 1%;
+    margin-bottom: 1%;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.add-period-btn {
+    background-color: #002D40;
+    color: #fff;
+    padding: 1% 1.5%;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.add-period-btn:hover {
+    background-color: #03587d;
+}
+
+.calendar-section {
+    flex: 1;
+    min-width: 300px;
+}
+
+.calendar {
+    border: 1px solid #ccc;
+    border-radius: 0.8%;
+    padding: 1%;
+    background-color: #f9f9f9;
+    text-align: center;
+}
+
+.calendar h3 {
+    margin: 1% 0;
+    color: #333;
+}
+
+.calendar table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.calendar th, .calendar td {
+    padding: 1%;
+    text-align: center;
+    border: 1px solid #eee;
+}
+
+.calendar td.highlight {
+    background-color: #002D40;
+    color: white;
+}
+
+.unavailability-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1%;
+    background-color: #f9f9f9;
+}
+
+.unavailability-table th, .unavailability-table td {
+    padding: 1%;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+.unavailability-table th {
+    background-color: #f1f1f1;
+    font-weight: bold;
+}
+
+.unavailability-table td {
+    background: #FFFFFF;
+}
+
+.delete-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+}
+
+.delete-btn:hover {
+    color: #0056b3;
+}
