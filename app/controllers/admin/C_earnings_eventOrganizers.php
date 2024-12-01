@@ -3,9 +3,8 @@
 /**
  * Event Organizers Earnings class
  */
-class C_earnings_eventOrganizers
+class C_earnings_eventOrganizers extends Controller
 {
-	use Controller;
 
 	public function index()
 	{

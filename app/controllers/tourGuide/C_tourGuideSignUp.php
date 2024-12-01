@@ -3,9 +3,8 @@
 /**
  * Tour Guide Sign Up class
  */
-class C_tourGuideSignUp
+class C_tourGuideSignUp extends Controller
 {
-	use Controller;
 
 	public function index()
 	{

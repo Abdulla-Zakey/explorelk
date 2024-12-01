@@ -3,9 +3,8 @@
 /**
  * Add Tour class
  */
-class C_addTour
+class C_addTour extends Controller
 {
-	use Controller;
 
 	public function index()
 	{

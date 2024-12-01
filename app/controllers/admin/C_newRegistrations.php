@@ -3,9 +3,8 @@
 /**
  * Dashboard class
  */
-class C_newRegistrations
+class C_newRegistrations extends Controller
 {
-	use Controller;
 
 	public function index()
 	{

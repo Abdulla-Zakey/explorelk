@@ -40,7 +40,7 @@
                                 <i class="fa-solid fa-ellipsis-vertical"></i>
                             </div>
                             <div class="menu-options">
-                                <button class="menu-option" onclick="editTour()">Edit</button>
+                                <a href="<?=ROOT?>/tourGuide/C_editTour" style="text-decoration:none"><button class="menu-option">Edit</button></a>
                                 <button class="menu-option" onclick="deleteTour()">Delete</button>
                             </div>
                         </div>
@@ -58,7 +58,7 @@
                                 <i class="fa-solid fa-ellipsis-vertical"></i>
                             </div>
                             <div class="menu-options">
-                                <button class="menu-option" onclick="editTour()">Edit</button>
+                                <a href="<?=ROOT?>/tourGuide/C_editTour" style="text-decoration:none"><button class="menu-option">Edit</button></a>
                                 <button class="menu-option" onclick="deleteTour()">Delete</button>
                             </div>
                         </div>

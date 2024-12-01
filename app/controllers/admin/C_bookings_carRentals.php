@@ -3,9 +3,8 @@
 /**
  * Car Rentals Bookings class
  */
-class C_bookings_carRentals
+class C_bookings_carRentals extends Controller
 {
-	use Controller;
 
 	public function index()
 	{
