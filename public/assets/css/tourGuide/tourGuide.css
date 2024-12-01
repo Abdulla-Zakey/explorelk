@@ -1444,3 +1444,8 @@ input[type="date"], input[type="text"] {
 .delete-btn:hover {
     color: #0056b3;
 }
+
+#image-preview-container img {
+    border: 1px solid #ddd;
+    height: 50px; /* Optional max height */
+}

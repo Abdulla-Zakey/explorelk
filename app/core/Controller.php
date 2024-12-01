@@ -2,16 +2,34 @@
 
     class Controller{
 
-        public function view($name){
-            $fileName = "../app/views/".$name.".view.php";
-            
-            if(file_exists($fileName)){
-                require $fileName;
-            }
-            else{
-                $fileName = "../app/views/404.view.php";
-                require $fileName;
-            }
-        }
+        public function view($name, $data = [])
+	{
+		if(!empty($data))
+			extract($data);
+
+		$filename = "../app/views/".$name.".view.php";
+		if(file_exists($filename))
+		{
+			require $filename;
+		}else{
+
+			$filename = "../app/views/404.view.php";
+			require $filename;
+		}
+	}
+
+        public function loadModel($model)
+	    {
+		$modelPath = "../app/models/" . $model . ".php";
+
+		if (file_exists($modelPath)) {
+			require_once $modelPath;
+
+			// Return an instance of the model class
+			return new $model();
+		} else {
+			die("The model file {$modelPath} does not exist.");
+		}
+	    }
     }
     
