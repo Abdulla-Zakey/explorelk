@@ -4,57 +4,46 @@ class Login extends Controller
 {
     public function index()
     {
+        // Start session at the beginning of login proces
 
-        // Check if there's a success message
-        $successMessage = null;
-        if (isset($_SESSION['success_message'])) {
-            $successMessage = $_SESSION['success_message'];
-            unset($_SESSION['success_message']); // Clear the message after fetching it
+        // Check if the user is already logged in
+        if (isset($_SESSION['traveler_id'])) {
+            $this->view('traveler/registeredTravelerHome');
+            exit();
         }
-
-        //Pass the message to the view
-        // $this->view('traveler/login', ['success' => $successMessage]);
 
         // Check if the form is submitted
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            
+
             // Sanitize and get form data
             $email = htmlspecialchars(trim($_POST['travelerEmail']));
             $password = htmlspecialchars(trim($_POST['travelerPassword']));
-            $userRole = htmlspecialchars(trim($_POST['userRole']));
 
             $data = ['travelerEmail' => $email];
 
-            //Handle login based on user role
-            switch ($userRole) {
-                case 'traveler':
-                    $user = new Traveler;
+            $user = new Traveler;
 
-                    // Query the database for the user
-                    $result = $user->where($data);
+            // Query the database for the user
+            $result = $user->where($data);
 
-                    if (!empty($result)) {
-                        // Verify password
-                        if (password_verify($password, $result[0]->travelerPassword)) {
+            if (!empty($result)) {
+                // Verify password
+                if (password_verify($password, $result[0]->travelerPassword)) {
+                    // Set session variables
+                    $_SESSION['traveler_id'] = $result[0]->traveler_Id;
+                    $_SESSION['username'] = $result[0]->username;
+                    $_SESSION['email'] = $result[0]->travelerEmail;
 
-                            // Redirect to Traveler's dashboard
-                            // header("Location: " .APP. "/views/traveler/registeredTravelerHome.view.php");
-                            $this->view('traveler/registeredTravelerHome');
-                            exit();
-                        } 
-                        else {
-                            // Redirect with error message
-                            $this->redirectWithError("Incorrect password");
-                        }
-                    } else {
-                        // Redirect with error message
-                        $this->redirectWithError("No such email exists");
-                    }
-                    break;
-
-                default:
-                    // Redirect for invalid role
-                    $this->redirectWithError("Invalid role");
+                    // Redirect to Traveler's dashboard
+                    $this->view('traveler/registeredTravelerHome');
+                    exit();
+                } else {
+                    // Redirect with error message
+                    $this->redirectWithError("Incorrect password");
+                }
+            } else {
+                // Redirect with error message
+                $this->redirectWithError("No such email exists");
             }
         } else {
             // Load the login view
@@ -62,10 +51,27 @@ class Login extends Controller
         }
     }
 
+    // Logout method
+    public function logout()
+    {
+        // Start session
+        session_start();
+
+        // Unset all session variables
+        $_SESSION = array();
+
+        // Destroy the session
+        session_destroy();
+
+        // Redirect to login page
+        header("Location: " . ROOT . "/traveler/Home");
+        exit();
+    }
+
     // Helper function for redirection with error
     private function redirectWithError($message)
     {
-        header("Location: " .APP. "/public/login?error=" . urlencode($message));
+        header("Location: " . ROOT . "/traveler/Login?error=" . urlencode($message));
         exit();
     }
 }

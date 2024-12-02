@@ -9,14 +9,24 @@ class TourGuide_M
 	
 	use Model;
 
-	protected $table = 'users';
+	protected $table = 'tourguide';
 
 	protected $allowedColumns = [
 
-		'email',
-		'userName',
-		'password',
-		'confirmPassword',
+		'guide_Id',
+		'guideName',
+		'guideEmail',
+		'guidePassword',
+		'guideMobileNum',
+		'guideAddress',
+		'district',
+		'province',
+		'companyName',
+		'guideBio',
+		'BRNum',
+		'guide_Bio',
+		'languages_Spoken',
+		'yearStarted'
 	];
 
 	public function validate($data)

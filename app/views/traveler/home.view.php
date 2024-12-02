@@ -33,7 +33,7 @@
                     <a href="#">Sign Up <i class="arrow down"></i></a>
                     <ul class="dropdown-content">
                         <li><a href="<?= ROOT ?>/traveler/Signup">Sign Up as a Traveler</a></li>
-                        <li><a href="#">Sign Up as a Service Provider</a></li>
+                        <li><a href="<?= ROOT ?>/signup/Signup">Sign Up as a Service Provider</a></li>
                         <li><a href="../eventorganizer/eosignup">Sign Up as an Event Organizer</a></li>
                     </ul>
                 </li>
