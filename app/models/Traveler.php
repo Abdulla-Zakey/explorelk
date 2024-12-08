@@ -54,7 +54,7 @@
                 $this->errors['confirmPassword'] = "Password and Confirm Password do not match.";
             }
         
-            var_dump($this->empty);
+            //var_dump($this->empty);
             // Return validation result
             return empty($this->errors);
 
