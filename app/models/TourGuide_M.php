@@ -1,62 +1,121 @@
 <?php 
 
-
 /**
- * User class
+ * TourGuide Model for handling tour guide signup and validation
  */
 class TourGuide_M
 {
-	
 	use Model;
 
 	protected $table = 'tourguide';
 
 	protected $allowedColumns = [
-
-		'guide_Id',
-		'guideName',
-		'guideEmail',
-		'guidePassword',
-		'guideMobileNum',
-		'guideAddress',
-		'district',
-		'province',
-		'companyName',
-		'guideBio',
-		'BRNum',
-		'guide_Bio',
-		'languages_Spoken',
-		'yearStarted'
+		'name',
+		'nic',
+		'email',
+		'mobileNum',
+		'username',
+		'password',
+		'licenseNum',
+		'experience',
+		'fieldsOfExpertise',
+		'tourFrequencyPerMonth'
 	];
 
 	public function validate($data)
 	{
 		$this->errors = [];
 
-		if(empty($data['email']))
+		// Name validation
+		if(empty($data['name']) || str_word_count($data['name']) < 2)
 		{
-			$this->errors['email'] = "Email is required";
-		}else
-		if(!filter_var($data['email'],FILTER_VALIDATE_EMAIL))
-		{
-			$this->errors['email'] = "Email is not valid";
+			$this->errors['name'] = "Please enter your full name";
 		}
 
-		if(empty($data['userName']) )
+		// NIC validation
+		$nicRegex = '/^([0-9]{12}|[0-9]{9}[vV])$/';
+		if(empty($data['nic']) || !preg_match($nicRegex, $data['nic']))
 		{
-			$this->errors['userName'] = "User Name is required";
-		}
-		
-		if(empty($data['password']))
-		{
-			$this->errors['password'] = "Password is required";
+			$this->errors['nic'] = "Invalid National Identity Card number";
 		}
 
-		if(empty($data['confirmPassword']))
+		// Mobile number validation
+		$mobileRegex = '/^(\+?94)?(0)?[0-9]{9}$/';
+		if(empty($data['mobileNum']) || !preg_match($mobileRegex, preg_replace('/[^0-9]/', '', $data['mobileNum'])))
 		{
-			$this->errors['confirmPassword'] = "Confirm Password is required";
+			$this->errors['mobileNum'] = "Invalid mobile number";
 		}
-		
+
+		// Email validation
+		if(empty($data['email']) || !filter_var($data['email'], FILTER_VALIDATE_EMAIL))
+		{
+			$this->errors['email'] = "Invalid email address";
+		}
+
+		// License number validation
+		if(empty($data['licenseNum']) || strlen($data['licenseNum']) < 5)
+		{
+			$this->errors['licenseNum'] = "Invalid SLTDA Guide License Number";
+		}
+
+		// Experience validation
+		if(!isset($data['experience']) || $data['experience'] < 0 || $data['experience'] > 50)
+		{
+			$this->errors['experience'] = "Invalid years of experience";
+		}
+
+		// Fields of Expertise validation
+		$validExpertise = [
+			'Hiking', 
+			'Wild Life', 
+			'Religious Pilgrimages', 
+			'Water Sports and Adventure', 
+			'Tea Plantation and Factory Visits'
+		];
+		if(empty($data['fieldsOfExpertise']) || !in_array($data['fieldsOfExpertise'], $validExpertise))
+		{
+			$this->errors['fieldsOfExpertise'] = "Invalid field of expertise";
+		}
+
+		// Tour Frequency validation
+		if(!isset($data['tourFrequencyPerMonth']) || $data['tourFrequencyPerMonth'] < 1 || $data['tourFrequencyPerMonth'] > 30)
+		{
+			$this->errors['tourFrequencyPerMonth'] = "Invalid number of tours per month";
+		}
+
+		// Username validation
+		if(empty($data['username']) || strlen($data['username']) < 4)
+		{
+			$this->errors['username'] = "Username must be at least 4 characters long";
+		}
+
+		// Password validation
+		if(empty($data['password']) || strlen($data['password']) < 8)
+		{
+			$this->errors['password'] = "Password must be at least 8 characters long";
+		}
+
+		// Confirm password validation
+		if($data['password'] !== $data['confirmPassword'])
+		{
+			$this->errors['confirmPassword'] = "Passwords do not match";
+		}
+
+		// Check if username already exists
+		$existingUser = $this->first(['username' => $data['username']]);
+		if($existingUser)
+		{
+			$this->errors['username'] = "Username already exists";
+		}
+
+		// Check if email already exists
+		$existingEmail = $this->first(['email' => $data['email']]);
+		if($existingEmail)
+		{
+			$this->errors['email'] = "Email already registered";
+		}
+
+		// Return validation result
 		if(empty($this->errors))
 		{
 			return true;
@@ -65,9 +124,21 @@ class TourGuide_M
 		return false;
 	}
 
-	public function findall(){
-		$query = "SELECT * FROM $this->table";
-		$data = $this->query($query);
+	// Hash password before inserting
+	public function hashPassword($password)
+	{
+		return password_hash($password, PASSWORD_DEFAULT);
+	}
+
+	// Prepare data for insertion
+	public function prepareSignupData($data)
+	{
+		// Hash the password
+		$data['password'] = $this->hashPassword($data['password']);
+
+		// Remove confirm password field
+		unset($data['confirmPassword']);
+
 		return $data;
 	}
 }

@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap">
     <link rel="stylesheet" href="<?= ROOT ?>/assets/css/Traveler/registeredUser.css">
     <link rel="icon" href="<?= ROOT ?>/assets/images/logos/logoBlack.svg">
-    <title>ExploreLK | Home</title>
+    <title>ExploreLK | Home - Traveler</title>
     <script src="https://kit.fontawesome.com/f35c1c7a11.js" crossorigin="anonymous"></script>
 </head>
 

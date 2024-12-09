@@ -1,8 +1,8 @@
 <?php
 
-    class Hmessages{
+    class Hmessages extends Controller {
 
-        use Controller;
+       
         public function index($a = '', $b = '', $c = ''){
 
            

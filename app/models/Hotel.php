@@ -7,7 +7,7 @@
         protected $table = 'hotel';
 
         protected $allowedColumns = [
-            'hotel_Id'
+            'hotel_Id',
             'hotelName',
             'hotelEmail',
             'hotelPassword',

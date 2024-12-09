@@ -2,37 +2,36 @@
 
     class Controller{
 
-<<<<<<< Updated upstream
-        public function view($name, $data = [])
-	{
-		if(!empty($data))
-			extract($data);
+    //     public function view($name, $data = [])
+	// {
+	// 	if(!empty($data))
+	// 		extract($data);
 
-		$filename = "../app/views/".$name.".view.php";
-		if(file_exists($filename))
-		{
-			require $filename;
-		}else{
+	// 	$filename = "../app/views/".$name.".view.php";
+	// 	if(file_exists($filename))
+	// 	{
+	// 		require $filename;
+	// 	}else{
 
-			$filename = "../app/views/404.view.php";
-			require $filename;
-		}
-	}
+	// 		$filename = "../app/views/404.view.php";
+	// 		require $filename;
+	// 	}
+	// }
 
         public function loadModel($model)
 	    {
-		$modelPath = "../app/models/" . $model . ".php";
+		    $modelPath = "../app/models/" . $model . ".php";
 
-		if (file_exists($modelPath)) {
-			require_once $modelPath;
+		    if (file_exists($modelPath)) {
+			    require_once $modelPath;
 
 			// Return an instance of the model class
 			return new $model();
-		} else {
-			die("The model file {$modelPath} does not exist.");
-		}
+		    } 
+            else {
+			    die("The model file {$modelPath} does not exist.");
+		    }
 	    }
-=======
         public function view($name, $data = []) {
             if (!empty($data)) {
                 if (is_object($data)) {
@@ -53,6 +52,5 @@
                 require $fileName;
             }
         }        
->>>>>>> Stashed changes
     }
     

@@ -5,10 +5,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ExploreLK</title>
+    <link rel = "stylesheet" href = "https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
 
     <style>
         /* Basic resets */
+
+        body {
+            background-color: #fff;
+            overflow-x: hidden;
+            font-family: 'Poppins', sans-serif;
+        }
+
         a{
             text-decoration: none;
         }
@@ -20,9 +28,6 @@
             color: #042A3B;
         }
 
-        
-
-        
         .left-navbar {
             list-style: none;
             width: 250px;
@@ -31,33 +36,30 @@
             padding: 20px;
             display: flex;
             flex-direction: column;
-            
             position: fixed;
             top: 0;
             left: 0;
         }
 
-        
-
-        
-
-        
         .logo {
             align-items: center;
             display: flex;
+            margin-top: 40px;
             margin-bottom: 20px;
         }
 
         .logo-img {
-            width: 80px;
-            height: 80px;
+            margin-top: 12.5px;
+            width: 60px;
+            height: 60px;
             margin-bottom: 20px;
+            margin-right: 7.5px;
         }
 
         .logo h2 {
             color: white;
-            font-size: 24px;
-            margin-bottom: 40px;
+            font-size: 32px;
+            margin-bottom: 30px;
             
         }
         
@@ -104,12 +106,15 @@
         <h2>ExploreLK</h2>
     </div>
     <ul class="nav-menu">
-        <li><a href="Eodashboard"><i class="fas fa-home"></i> Dashboard</a></li>
-        <li><a href="Eoevents"><i class="fa-regular fa-calendar"></i> Events</a></li>
-        <li><a href="Eomyevents"><i class="fa-solid fa-list-ul"></i> My Events</a></li>
-        <li><a href="Eopayments"><i class="fa-solid fa-money-check-dollar"></i> Payments</a></li>
-<!--         <li><a href="message.php"><i class="fas fa-comments"></i> Messages</a></li>
- -->    <li><a href="Eosettings"><i class="fas fa-cog"></i> Settings</a></li>
+        <li><a href = "<?= ROOT ?>/Eventorganizer/Eodashboard"><i class="fas fa-home"></i> Dashboard</a></li>
+        <li><a href = "<?= ROOT ?>/Eventorganizer/Eoevents"><i class="fa-regular fa-calendar"></i> Events</a></li>
+        <li><a href = "<?= ROOT ?>/Eventorganizer/Eomyevents"><i class="fa-solid fa-list-ul"></i> My Events</a></li>
+        <li><a href = "<?= ROOT ?>/Eventorganizer/Eopayments"><i class="fa-solid fa-money-check-dollar"></i> Payments</a></li>
+        <!--
+            <li><a href="message.php"><i class="fas fa-comments"></i> Messages</a></li>
+        -->    
+        <li><a href = "<?= ROOT ?>/Eventorganizer/Eosettings"><i class="fas fa-cog"></i> Settings</a></li>
+        <li><a href = "<?= ROOT ?>/traveler/Login/logout"><i class="fas fa-sign-out-alt"></i> Logout</a></li>"
     </ul>
 </nav>
 
