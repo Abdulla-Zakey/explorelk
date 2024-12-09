@@ -1,8 +1,7 @@
 <?php
 
-    class Hpaymentdetails{
+    class Hpaymentdetails extends Controller {
 
-        use Controller;
         public function index($a = '', $b = '', $c = ''){
 
            

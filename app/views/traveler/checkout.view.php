@@ -19,7 +19,7 @@ else {
 try {
     $checkout_session = \Stripe\Checkout\Session::create([
         "mode" => "payment",
-        "success_url" => "http://localhost/explorelk/success.php",
+        "success_url" => ROOT . "/traveler/PaymentConfirmation",
         "cancel_url" => "http://localhost/explorelk/cancel.php",
         "line_items" => [
             [

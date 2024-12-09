@@ -1,7 +1,6 @@
 <?php
 
-class C_addTour extends Controller
-{
+class C_addTour extends Controller {
 
     public function index()
     {

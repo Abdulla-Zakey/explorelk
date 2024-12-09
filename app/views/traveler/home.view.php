@@ -10,10 +10,53 @@
     <link rel="stylesheet" href="<?php echo ROOT; ?>/assets/css/Traveler/footer.css">
     <link rel="icon" href="<?php echo ROOT; ?>/assets/images/logos/logoBlack.svg">
 
-    
-    
     <title>ExploreLK | Home</title>
     <script src="https://kit.fontawesome.com/f35c1c7a11.js" crossorigin="anonymous"></script>
+
+    <style>
+
+        .navbar {
+            width: 100vw;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .nav-links li {
+            margin: 0 30px;
+            width: auto;
+        }
+
+        .nav-links a {
+            font-size: 1rem;
+            font-weight: bold;
+        }
+
+    
+        .nav-links {
+            border: none;
+        }
+
+        .nav-links .dropdown-content {
+            margin-top: 2.5px;
+            padding: 0px 10px;
+        }
+        
+        .nav-links .dropdown-content li:hover{
+            background-color: darkgray;
+            margin: 0px -10px;
+            padding-left: 40px;
+            padding-right: 40px;
+            box-sizing: border-box;
+        }
+
+        .login-btn {
+            margin-right: 2.5rem;
+            padding: 10px 30px;
+            font-size: 1rem;
+        }
+
+    </style>
+    
 </head>
 <body>
     <header>
@@ -33,7 +76,8 @@
                     <a href="#">Sign Up <i class="arrow down"></i></a>
                     <ul class="dropdown-content">
                         <li><a href="<?= ROOT ?>/traveler/Signup">Sign Up as a Traveler</a></li>
-                        <li><a href="#">Sign Up as a Service Provider</a></li>
+                        <li><a href="<?= ROOT ?>/signup/TourGuideSignup">Sign Up as a Tour Guide</a></li>
+                        <li><a href="<?= ROOT ?>/signup/Signup">Sign Up as a Service Provider</a></li>
                         <li><a href="../eventorganizer/eosignup">Sign Up as an Event Organizer</a></li>
                     </ul>
                 </li>

@@ -53,7 +53,7 @@
     <main>
         <div class="content">
         <div class="image-container">
-            <img alt="Hotel entrance with greenery and lights" src="<?=ROOT?>/assets/images/hotelCover.jpg"/>
+            <img alt="Hotel entrance with greenery and lights" src="<?=ROOT?>/assets/images/serviceProviders/hotelCover.jpg"/>
             <div class="title">
                 CINNAMON GRAND
             </div>

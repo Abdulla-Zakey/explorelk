@@ -1,8 +1,8 @@
 <?php
 
-    class Hguest{
+    class Hguest extends Controller{
 
-        use Controller;
+       
         public function index($a = '', $b = '', $c = ''){
 
            
