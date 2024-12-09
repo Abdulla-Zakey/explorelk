@@ -1,24 +1,22 @@
 body {
-    font-family: 'Arial', sans-serif;
+    font-family: 'Poppins', sans-serif;
     margin-left: 170px;
     margin-top: 0;
     padding: 0;
     background-color: #f4f4f4;
 }
-.user-invite{
-    margin-left: 155px;
-    margin-top: 50px;
-    font-size: x-large;
-    
-}
 
+.user-invite{
+    margin-left: 150px;
+    margin-top: 5px;
+    font-size: x-large;
+}
 
 .event-create-container {
     display: flex;
     
     align-items: center;
     flex-direction: column; /* This ensures elements are stacked vertically */
-    
     width: 750px;
     height: 500px;
     border: 5px solid #E2E5EF;
@@ -38,8 +36,6 @@ body {
     position: relative;
     margin-top: 100px;
 }
-
-
 
 .round-img {
     width: 150px;

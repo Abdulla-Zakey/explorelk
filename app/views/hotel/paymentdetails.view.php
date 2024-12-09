@@ -4,7 +4,7 @@
 ?>
 <main>
     <div class="payment-container">
-        <h2>Payment Details Overview</h2>
+        <h4>Payment Details Overview</h4>
         
         <!-- Payment Summary Cards -->
         <div class="payment-summary">
@@ -146,6 +146,11 @@
 
     h2, h3 {
         color: #002D40;
+    }
+    h4 {
+        color: #002D40;
+        margin-left: 25px;
+        font-size: 24px;
     }
     </style>
 

@@ -81,25 +81,45 @@
 
             /**Remove unwanted data **/
             if(!empty($this->allowedColumns)){
-
+        
                 foreach($data as $key => $value){
-
+        
                     if(!in_array($key, $this->allowedColumns)){
-
+        
                         unset($data[$key]);
                     }
                 }
             }
-
+        
             $keys = array_keys($data);
-
-            $query = "INSERT INTO $this->table(".implode(", ", $keys).") VALUES(:".implode(", :", $keys).")";
-
-            if($this->query($query, $data)){
-                return true;
-            }
             
-            return false;
+        
+            $query = "INSERT INTO $this->table(".implode(", ", $keys).") VALUES(:".implode(", :", $keys).")";
+            
+        
+            // if($this->query($query, $data)){
+            //     return true;
+            // }
+            
+            // return false;
+            try {
+                $result = $this->query($query, $data);
+                
+                // Check if query was successful
+                if ($result !== false) {
+                    return true;
+                } else {
+                    
+                    // Log detailed error information
+                    error_log('Insert query failed. Query: ' . $query);
+                    error_log('Data: ' . print_r($data, true));
+                    return false;
+                }
+            } catch (Exception $e) {
+                // Log any database exceptions
+                error_log('Database exception during insert: ' . $e->getMessage());
+                return false;
+            }
             
         }
 

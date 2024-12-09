@@ -4,34 +4,37 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DashBoard</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap">
     <link rel="stylesheet" href="<?php echo ROOT; ?>/assets/css/Eventorganizer/eodashboard.css">
-
-
+    <link rel="icon" href="<?= ROOT ?>/assets/images/logos/logoBlack.svg">
+    <title>ExploreLK | Home - Traveler</title>
+    <script src="https://kit.fontawesome.com/d11f03c652.js" crossorigin="anonymous"></script>
+    
 </head>
 <body>
-  <div>
+  
     <div class="user-invite">
-    <h1>Hi There, Sangeerth!!!</h1>
+      <h1 style = "margin-top: 77.5px; margin-left: 25px;">Welcome, Event Visionary!</h1>
     </div>
-  </div>
+  
   
   <div class="event-create-outcontainer"> 
-      <div class="event-create-container">
-          <div class="event-create-img">
+      <div class="event-create-container" style = "margin-left: 175px; margin-top: 50px">
+        <div class="event-create-img">
           <img src="<?php echo ROOT; ?>/assets/images/eo/pen-icon.png" alt="" class="round-img">
-          </div>
-          <div>
+        </div>
+        <div>
 <!--           <button id="create-event-btn" class="create-event-btn">Create An Event</button>
- -->          <a href="Eocreateevent">
-          <button class="create-event-btn" type="button">Create An Event</button>
+ -->      <a href="<?= ROOT ?>/Eventorganizer/Eocreateevent">
+            <button class="create-event-btn" type="button">Create An Event</button>
           </a>
-          </div>
+        </div>
       </div>
       
-      <div class="event-creater-image">
+      <div class="event-creater-image" style = "margin-top: 85px; margin-left: 100px;">
         <img src="<?php echo ROOT; ?>/assets/images/eo/event-org-icon.svg" alt="event-org-icon">
       </div>
   </div>

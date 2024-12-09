@@ -1,8 +1,8 @@
 <?php
 
-    class Hnotifications{
+    class Hnotifications extends Controller{
 
-        use Controller;
+
         public function index($a = '', $b = '', $c = ''){
 
            

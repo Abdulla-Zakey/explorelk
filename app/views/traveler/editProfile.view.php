@@ -53,7 +53,9 @@
             </div>
 
             <div class="linkHolder">
-                <a href="<?= ROOT ?>/traveler/Home" class="linkItem"><i class="fas fa-sign-out-alt"></i>Logout</a>
+                <a href="<?= ROOT ?>/traveler/Login/logout" class="linkItem">
+                    <i class="fas fa-sign-out-alt"></i>Logout
+                </a>
             </div>
 
         </div>

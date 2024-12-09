@@ -1,8 +1,8 @@
 <?php
 
-    class Hreports{
+    class Hreports extends Controller {
 
-        use Controller;
+        
         public function index($a = '', $b = '', $c = ''){
 
            
