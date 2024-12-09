@@ -15,7 +15,7 @@
         <nav class="navbar">
 
             <div class="backToHome">
-                <a  href="<?php echo APP;?>/views/traveler/topDistrictsUnreg.view.php">
+                <a  href="<?= ROOT ?>/traveler/topDistrictsUnreg">
                     <i class="fa-solid fa-arrow-left"></i>
                     <span>Back</span>
                 </a>

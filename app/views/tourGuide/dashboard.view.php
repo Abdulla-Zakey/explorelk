@@ -1,11 +1,13 @@
 <html>
     <head>
-        <title>ExploreLK Tour Guide</title>
+        
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="https://kit.fontawesome.com/d11f03c652.js" crossorigin="anonymous"></script>
         <link rel="stylesheet" href="<?= ROOT ?>/assets/css/tourGuide/tourGuide.css?v=1.0">
         <link href='https://fonts.googleapis.com/css?family=Poppins' rel='stylesheet'>
-        <script src="https://kit.fontawesome.com/d11f03c652.js" crossorigin="anonymous"></script>
+        <link rel="icon" href="<?= ROOT ?>/assets/images/logos/logoBlack.svg">
+        <title>ExploreLK | Home - Tour Guide</title>
     </head>
 
     <body>

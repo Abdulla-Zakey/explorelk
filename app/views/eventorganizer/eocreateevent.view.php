@@ -6,7 +6,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create Event</title>
+    <link rel = "icon" href = "<?php echo ROOT; ?>/assets/images/logos/logoBlack.svg">
+    <title>ExploreLK | Create Event</title>
     <link rel="stylesheet" href="<?php echo ROOT; ?>/assets/css/Eventorganizer/createevent.css">
     <!-- Include Google Maps and Places API -->
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBZgc6GQyFZJMGfChxxenQtMmcZyiwryM4&libraries=places&callback=initMap" async defer></script>
@@ -18,100 +19,118 @@
 </head>
 <body>
     
-    <div class="upload-container">
-        <input type="file" id="image-upload" class="upload-input" accept="image/*" required>
-        <label for="image-upload" class="upload-label">
-            <img src="<?php echo ROOT; ?>/assets/images/eo/upload.png" alt="Upload">
-        </label>
-    </div>
-    
-    <div class="event-overview">
-        <h1>Event Description</h1>
-        <h2>Event title</h2>
-        <p>The name of the event, which should be clear and descriptive.</p>
-        <input type="text" class="event-title" placeholder="Enter event title" required>
-        <h2>Event Description</h2>
-        <p>A brief overview of the event, including its purpose, activities, and any important details.</p>
-        <input type="text" class="event-description" placeholder="Enter event description" required>
-    </div>
+    <form action="http://localhost/gitexplorelk/explorelk/public/eventorganizer/Eocreateevent/create" method="post">
+            <div class="upload-container" style = "width: 1000px; margin-left: 20%;">
+                <input type="file" id="image-upload" class="upload-input" accept="image/*" >
+                <label for="image-upload" class="upload-label">
+                    <img src="<?php echo ROOT; ?>/assets/images/eo/upload.png" alt="Upload">
+                </label>
+            </div>
+            
+            <div class="event-overview" style = "width: 1000px; margin-left: 20%;">
+                <h1>Event Description</h1>
+                <h2>Event title</h2>
+                <p>The name of the event, which should be clear and descriptive.</p>
+                <input type="text" name="eventName" class="event-title" placeholder="Enter event title" required>
+                <h2>Event Description</h2>
+                <p>A brief overview of the event, including its purpose, activities, and any important details.</p>
+                <input type="text" name="eventDescription" class="event-description" placeholder="Enter event description" required>
+            </div>
 
-    <div class="about-event">
-        <h1>About Event</h1>
-        <div class="text-editor">
-            <div class="editor-header">
-                <img src="<?php echo ROOT; ?>/assets/images/eo/texteditor.png" alt="Text Editor">
-                <div>
-                    <button onclick="document.execCommand('bold', false, '');"><strong>B</strong></button>
-                    <button onclick="document.execCommand('italic', false, '');"><em>I</em></button>
-                    <button onclick="document.execCommand('underline', false, '');"><u>U</u></button>
+            <div class="about-event" style = "width: 1000px; margin-left: 20%;">
+                <h1>About Event</h1>
+                <div class="text-editor" style = "width: 95%;">
+                    <div class="editor-header">
+                        <img src="<?php echo ROOT; ?>/assets/images/eo/texteditor.png" alt="Text Editor">
+                        <div>
+                            <button onclick="document.execCommand('bold', false, '');"><strong>B</strong></button>
+                            <button onclick="document.execCommand('italic', false, '');"><em>I</em></button>
+                            <button onclick="document.execCommand('underline', false, '');"><u>U</u></button>
+                        </div>
+                    </div>
+                    <hr>
+                    <textarea name="aboutEvent" cols="90" class="editor-content" contenteditable="true" style = "width: 97.5%; border: none; resize: none; border-bottom: 1px solid #d3d3d3;">Start typing here...</textarea>
                 </div>
             </div>
-            <hr>
-            <div class="editor-content" contenteditable="true">
-                Start typing here...
-            </div>
-        </div>
-    </div>
 
-    <div class="date-and-location">
-        <h1>Date and Location</h1>
-        <h2>Date and Time</h2>
-        <form id="event-datetime-form">
-            <div>
-                <label for="event-date">Date:</label>
-                <input type="date" id="event-date" name="event-date" required>
-            </div>
-            <div>
-                <label for="start-time">Start Time:</label>
-                <input type="time" id="start-time" name="start-time" required>
-            </div>
-            <div>
-                <label for="end-time">End Time:</label>
-                <input type="time" id="end-time" name="end-time" required>
-            </div>
-        </form>
-        
-        <div class="location-container">
-            <h2>Location</h2>
-            <form id="location-form">
-                <label for="location-input">Enter Location:</label>
-                <input type="text" id="location-input" name="location-input" placeholder="e.g., Colombo, Sri Lanka" required>
-            </form>
-            <div id="map-container" style="height: 400px; width: 100%;"></div>
-        </div>
-    </div>
-
-    <div class="ticket-container">
-        <h2>Ticketing Information</h2>
-        <form id="ticket-form">
-            <label for="ticket-count">Ticket Count:</label>
-            <input type="number" id="ticket-count" name="ticket-count" placeholder="Enter number" min="0" required>
-        </form>
-        <h2>Ticket Types</h2>
-        <div id="ticket-forms-container">
-            <form class="ticket-form">
-                <div class="ticket-item">
-                    <label for="ticket-type-1">Ticket Type:</label>
-                    <input type="text" id="ticket-type-1" name="ticket-type-1" placeholder="e.g., VIP" required>
+            <div class="date-and-location" style = "width: 1000px; margin-left: 20%;">
+                <h1>Date and Location</h1>
+                <h2>Date and Time</h2>
+                <div id="event-datetime-form" >
+                    <div style = "margin-bottom: 15px;">
+                        <label for="event-date">Date:</label>
+                        <input type="date" id="event-date" name="eventDate" required>
+                    </div>
+                    <div style = "margin-bottom: 15px;">
+                        <label for="start-time">Start Time:</label>
+                        <input type="time" id="start-time" name="eventStartTime" required>
+                    </div>
+                    <div style = "margin-bottom: 15px;">
+                        <label for="end-time">End Time:</label>
+                        <input type="time" id="end-time" name="eventEndTime" required>
+                    </div>
                 </div>
-                <div class="ticket-item">
-                    <label for="price-1">Price:</label>
-                    <input type="number" id="price-1" name="price-1" placeholder="e.g., 50" step="0.01" required>
+                
+                <div class="location-container" style = "width: 100%;">
+                    <h2>Location</h2>
+                    <div id="location-form">
+                        <label for="location-input">Enter Location:</label>
+                        <input type="text" id="location-input" name="eventLocation" placeholder="e.g., Colombo, Sri Lanka" required style = "width: 138.75%;">
+                    </div>
+                    <div id="map-container" style="height: 400px; width: 100%;"></div>
                 </div>
-                <div class="ticket-item">
-                    <label for="count-1">Count:</label>
-                    <input type="number" id="count-1" name="count-1" placeholder="e.g., 100" min="0" required>
+            </div>
+
+            <div class="ticket-container" style = "width: 1000px; margin-left: 20%;">
+                <h2>Ticketing Information</h2>
+                <div id="ticket-form">
+                    <div>
+                        <label for="ticket-count">Ticket Count:</label>
+                    </div>
+
+                    <div style = "width: 500px; margin-bottom: 12.5px;">
+                        <input type="number" id="ticket-count" name="ticketCount" placeholder="Enter number" min="0" required style = "width: 100%;">
+                    </div>
+
+                    
+                    
                 </div>
-            </form>
-        </div>
+                <div id="ticket-form">
+                    <div>
+                        <label for="ticket-price">TicketPrice:</label>
+                    </div>
 
-        <button type="button" class="add-ticket-btn" onclick="addTicketForm()">
-            <img src="<?php echo ROOT; ?>/assets/images/eo/plus.png" alt="Plus Icon" class="plus-icon"> Add More Ticket Types
-        </button>   
-    </div>
+                    <div style = "width: 500px; margin-bottom: 10px;">
+                        <input type="number" id="ticket-price" name="ticketPrice" placeholder="Enter number" min="0" required style = "width: 100%;">
+                    </div>
+                    
+                </div>
+                <!-- <h2>Ticket Types</h2>
+                <div id="ticket-forms-container">
+                    <form class="ticket-form">
+                        <div class="ticket-item">
+                            <label for="ticket-type-1">Ticket Type:</label>
+                            <input type="text" id="ticket-type-1" name="ticket-type-1" placeholder="e.g., VIP" required>
+                        </div>
+                        <div class="ticket-item">
+                            <label for="price-1">Price:</label>
+                            <input type="number" id="price-1" name="price-1" placeholder="e.g., 50" step="0.01" required>
+                        </div>
+                        <div class="ticket-item">
+                            <label for="count-1">Count:</label>
+                            <input type="number" id="count-1" name="count-1" placeholder="e.g., 100" min="0" required>
+                        </div>
+                    </form>
+                </div>
 
-    <button type="button" class="review-publish-btn" onclick="validateForm()">Review and Publish</button>
+                <button type="button" class="add-ticket-btn" onclick="addTicketForm()">
+                    <img src="<?php echo ROOT; ?>/assets/images/eo/plus.png" alt="Plus Icon" class="plus-icon"> Add More Ticket Types
+                </button> -->   
+            </div>
 
+            <button type="submit" class="review-publish-btn" style = "width: 1000px; margin-left: 20%; background-color: #1E7A8F; cursor: pointer; height: 50px; color: white; font-size: 16px;">Review and Publish</button>
+
+    </form>
     <script>
         // Initialize the map, geocoder, and autocomplete
         let map;

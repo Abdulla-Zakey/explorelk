@@ -109,7 +109,7 @@
 <body>
     <div class="sidebar">
         <div class="logo">
-            <img src="<?=ROOT?>/assets/images/logow.png" alt="ExploreLK Logo" class="logo-img">
+            <img src="<?=ROOT?>/assets/images/serviceProviders/logow.png" alt="ExploreLK Logo" class="logo-img">
             <h2>ExploreLK</h2>
         </div>
 
@@ -126,7 +126,7 @@
         </ul>
 
         <div class="logout">
-            <a href="#"><i class="fas fa-sign-out-alt"></i> Log Out</a>
+            <a href="<?= ROOT ?>/traveler/Login/logout"><i class="fas fa-sign-out-alt"></i> Log Out</a>
         </div>
     </div>
 

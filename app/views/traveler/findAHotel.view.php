@@ -132,7 +132,10 @@
     <script>
         function redirectToResults(event) {
             event.preventDefault();  // Prevent the form from submitting
-            window.location.href = "hotelSearchResults.html";  // Redirect to the search result page
+            const rootUrl = "<?= ROOT ?>"; // Get the root URL dynamically
+            window.location.href = `${ROOT}/traveler/HotelSearchResults`;
+            // window.location.href = "hotelSearchResults.html";  // Redirect to the search result page
+            // window.location.href = `${ROOT}/traveler/HotelSearchResults';
         }
     </script>
 

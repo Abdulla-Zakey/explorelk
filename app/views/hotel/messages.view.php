@@ -185,28 +185,28 @@
                 <h2>Messages</h2>
             </div>
             <div class="contact" data-contact="james">
-                <img src="<?=ROOT?>/assets/images/profile.jpg" alt="James Bond">
+                <img src="<?=ROOT?>/assets/images/serviceProviders/profile.jpg" alt="James Bond">
                 <div class="contact-info">
                     <p class="name">James Bond</p>
                     <p class="preview">Thank you! That was very helpful!</p>
                 </div>
             </div>
             <div class="contact" data-contact="kate">
-                <img src="<?=ROOT?>/assets/images/profile1.jpg" alt="Kate Upton">
+                <img src="<?=ROOT?>/assets/images/serviceProviders/profile1.jpg" alt="Kate Upton">
                 <div class="contact-info">
                     <p class="name">Kate Upton</p>
                     <p class="preview">See you at the location.</p>
                 </div>
             </div>
             <div class="contact active" data-contact="beth">
-                <img src="<?=ROOT?>/assets/images/profile2.jpg" alt="Beth Moonie">
+                <img src="<?=ROOT?>/assets/images/serviceProviders/profile2.jpg" alt="Beth Moonie">
                 <div class="contact-info">
                     <p class="name">Beth Moonie</p>
                     <p class="preview">And finish with a visit to the viewpoint for sunset.</p>
                 </div>
             </div>
             <div class="contact" data-contact="will">
-                <img src="<?=ROOT?>/assets/images/profile3.jpg" alt="Will Jacks">
+                <img src="<?=ROOT?>/assets/images/serviceProviders/profile3.jpg" alt="Will Jacks">
                 <div class="contact-info">
                     <p class="name">Will Jacks</p>
                     <p class="preview">We provide refunds, if you cancel prior 3 days to the event.</p>
@@ -215,7 +215,7 @@
         </div>
         <div class="chat">
             <div class="chat-header">
-                <img src="<?=ROOT?>/assets/images/profile2.jpg" alt="Beth Moonie">
+                <img src="<?=ROOT?>/assets/images/serviceProviders/profile2.jpg" alt="Beth Moonie">
                 <h3>Beth Moonie</h3>
             </div>
             <div class="chat-messages" id="chat-messages">

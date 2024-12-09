@@ -1,8 +1,8 @@
 <?php
 
-    class Hsettings{
+    class Hsettings extends Controller {
 
-        use Controller;
+       
         public function index($a = '', $b = '', $c = ''){
 
            

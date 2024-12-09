@@ -1,8 +1,9 @@
-<?php 
-    include_once APPROOT.'/views/hotel/nav.php';
-    include_once APPROOT.'/views/hotel/hotelhead.php';
+<?php
+include_once APPROOT . '/views/hotel/nav.php';
+include_once APPROOT . '/views/hotel/hotelhead.php';
 ?>
 <html>
+
 <head>
     <style>
         body {
@@ -12,12 +13,12 @@
             background-color: #FFFFFF;
             overflow: hidden;
         }
-       
+
         .rooms-container {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background-color: #e0e0e0;
+            background-color: #ffffff;
             padding: 15px;
             margin: 220px;
             border-radius: 10px;
@@ -26,6 +27,7 @@
             left: 55px;
             height: 30vh;
             width: calc(100% - 300px);
+            border: 1px solid #ccc;
         }
 
         .rooms {
@@ -36,30 +38,35 @@
             margin: 0;
             padding-bottom: 10px;
             font-size: 24px;
-            color: #333;
+            color: #002D40;
         }
 
         .room-list {
             display: flex;
             justify-content: space-between;
+            gap: 20px;
             flex-wrap: wrap;
         }
 
         .room {
             background-color: white;
-            border: 1px solid #ccc;
+            border: 1px solid #e0e0e0;
             border-radius: 10px;
-            padding: 10px;
-            width: 15%;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            margin-bottom: 20px;
-            text-align: center;
+            padding: 20px;
+            width: calc(25% - 20px);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s ease;
+        }
+
+        .room:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
         .room h3 {
             margin: 0;
             font-size: 18px;
-            color: #333;
+            color: #002D40;
         }
 
         .room p {
@@ -70,7 +77,8 @@
 
         .room .price {
             font-size: 16px;
-            color: #333;
+            color: #002D40;
+            font-weight: bold;
         }
 
         .create-booking {
@@ -84,12 +92,14 @@
             position: absolute;
             top: 20px;
             right: 20px;
+            transition: all 0.3s ease;
         }
 
         .create-booking:hover {
             background-color: #B3D9FF;
-            color:#002D40;
+            color: #002D40;
         }
+
 
         .popup-form {
             display: none;
@@ -103,12 +113,12 @@
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
             z-index: 1;
         }
-        
+
         .popup-content {
             max-width: 400px;
             margin: 20px auto;
         }
-        
+
         .blur-background {
             display: none;
             position: fixed;
@@ -119,7 +129,7 @@
             background-color: rgba(0, 0, 0, 0.5);
             z-index: 0;
         }
-        
+
         .form-container h2 {
             font-size: 16px;
             margin-bottom: 15px;
@@ -162,7 +172,7 @@
 
         .form-container button:hover {
             background-color: #B3D9FF;
-            color:#002D40;
+            color: #002D40;
         }
 
         .closebutton {
@@ -179,7 +189,7 @@
         .closebutton:hover {
             color: #ff0000;
         }
-        
+
         .calendar-container {
             position: fixed;
             bottom: 10px;
@@ -193,7 +203,7 @@
             margin-top: 450px;
             margin-left: 0px;
             margin-right: 40px;
-            width:59%;
+            width: 59%;
         }
 
         .outer-container {
@@ -255,6 +265,7 @@
         }
     </style>
 </head>
+
 <body>
     <div class="rooms-container">
         <div class="rooms">
@@ -280,11 +291,6 @@
                     <p>2/10</p>
                     <p class="price">Rs.2000/day</p>
                 </div>
-                <div class="room">
-                    <h3>Single Sharing</h3>
-                    <p>2/10</p>
-                    <p class="price">Rs.2000/day</p>
-                </div>
             </div>
         </div>
         <button class="create-booking">Add Rooms</button>
@@ -306,7 +312,7 @@
                         <canvas width="100" height="100"></canvas>
                         <div class="percentage">20%</div>
                     </div>
-                </div>              
+                </div>
                 <div class="card">
                     <h3>Room Availability Status</h3>
                     <div class="circle" data-percentage="60">
@@ -319,84 +325,85 @@
                     <div class="circle" data-percentage="90">
                         <canvas width="100" height="100"></canvas>
                         <div class="percentage">90%</div>
-                    </div>    
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
 
-    <div class="popup-form">
-        <div class="popup-content">
-            <div class="form-container">
-            <a href="#" class="closebutton">×</a>
+        <div class="popup-form">
+            <div class="popup-content">
+                <div class="form-container">
+                    <a href="#" class="closebutton">×</a>
 
-                <h2>Type of the Room</h2>
-                <select>
-                    <option value="single">Single</option>
-                    <option value="double">Double</option>
-                    <option value="suite">Suite</option>
-                </select>
-                <h2>Room No.</h2>
-                <input type="number" placeholder="Value" min="1">
-                <h2>Room Prize</h2>
-                <input type="number" placeholder="Value" min="1" step="0.50">
-                <h2>Room Description</h2>
-                <input type="text" placeholder="Text">
-                <h2>Room photo</h2>
-                <input type="file" placeholder="Upload Photos">
-                <button>Proceed</button>
+                    <h2>Type of the Room</h2>
+                    <select>
+                        <option value="single">Single</option>
+                        <option value="double">Double</option>
+                        <option value="suite">Suite</option>
+                    </select>
+                    <h2>Room No.</h2>
+                    <input type="number" placeholder="Value" min="1">
+                    <h2>Room Prize</h2>
+                    <input type="number" placeholder="Value" min="1" step="0.50">
+                    <h2>Room Description</h2>
+                    <input type="text" placeholder="Text">
+                    <h2>Room photo</h2>
+                    <input type="file" placeholder="Upload Photos">
+                    <button>Proceed</button>
+                </div>
             </div>
         </div>
-    </div>
 
-    <div class="calendar-container">
-        <?php include_once APPROOT.'/views/components/calender.php'; ?>
-    </div>
+        <div class="calendar-container">
+            <?php include_once APPROOT . '/views/components/calender.php'; ?>
+        </div>
 
-    <div class="blur-background"></div>
+        <div class="blur-background"></div>
 
-    <script>
-        const popupForm = document.querySelector('.popup-form');
-        const blurBackground = document.querySelector('.blur-background');
-        const createBookingButton = document.querySelector('.create-booking');
-        const closeButton = document.querySelector('.closebutton');
+        <script>
+            const popupForm = document.querySelector('.popup-form');
+            const blurBackground = document.querySelector('.blur-background');
+            const createBookingButton = document.querySelector('.create-booking');
+            const closeButton = document.querySelector('.closebutton');
 
-        createBookingButton.addEventListener('click', () => {
-            popupForm.style.display = 'block';
-            blurBackground.style.display = 'block';
-        });
+            createBookingButton.addEventListener('click', () => {
+                popupForm.style.display = 'block';
+                blurBackground.style.display = 'block';
+            });
 
-        closeButton.addEventListener('click', () => {
-            popupForm.style.display = 'none';
-            blurBackground.style.display = 'none';
-        });
+            closeButton.addEventListener('click', () => {
+                popupForm.style.display = 'none';
+                blurBackground.style.display = 'none';
+            });
 
-        function drawCircle(canvas, percentage) {
-            const ctx = canvas.getContext('2d');
-            const radius = canvas.width / 2;
-            const lineWidth = 10;
-            const startAngle = -0.5 * Math.PI;
-            const endAngle = (percentage / 100) * 2 * Math.PI + startAngle;
+            function drawCircle(canvas, percentage) {
+                const ctx = canvas.getContext('2d');
+                const radius = canvas.width / 2;
+                const lineWidth = 10;
+                const startAngle = -0.5 * Math.PI;
+                const endAngle = (percentage / 100) * 2 * Math.PI + startAngle;
 
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-            ctx.beginPath();
-            ctx.arc(radius, radius, radius - lineWidth / 2, 0, 2 * Math.PI);
-            ctx.lineWidth = lineWidth;
-            ctx.strokeStyle = '#e0e0e0';
-            ctx.stroke();
+                ctx.beginPath();
+                ctx.arc(radius, radius, radius - lineWidth / 2, 0, 2 * Math.PI);
+                ctx.lineWidth = lineWidth;
+                ctx.strokeStyle = '#e0e0e0';
+                ctx.stroke();
 
-            ctx.beginPath();
-            ctx.arc(radius, radius, radius - lineWidth / 2, startAngle, endAngle);
-            ctx.lineWidth = lineWidth;
-            ctx.strokeStyle = '#002D40';
-            ctx.stroke();
-        }
+                ctx.beginPath();
+                ctx.arc(radius, radius, radius - lineWidth / 2, startAngle, endAngle);
+                ctx.lineWidth = lineWidth;
+                ctx.strokeStyle = '#002D40';
+                ctx.stroke();
+            }
 
-        document.querySelectorAll('.circle').forEach(circle => {
-            const canvas = circle.querySelector('canvas');
-            const percentage = circle.getAttribute('data-percentage');
-            drawCircle(canvas, percentage);
-        });
-    </script>
+            document.querySelectorAll('.circle').forEach(circle => {
+                const canvas = circle.querySelector('canvas');
+                const percentage = circle.getAttribute('data-percentage');
+                drawCircle(canvas, percentage);
+            });
+        </script>
 </body>
+
 </html>

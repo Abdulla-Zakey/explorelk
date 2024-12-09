@@ -4,7 +4,7 @@
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
   <style>
         body, html  {
-        background-image: url("<?php echo ROOT; ?>/assets/images/eo/event-backround.jpg");
+        background-image: url("<?php echo ROOT; ?>/assets/images/eo/eoSignupBg.webp");
         background-repeat: no-repeat;
         background-attachment: fixed;
         background-size: cover;
@@ -168,9 +168,9 @@
    </div>
    <div class="form-container">
     <form>
-     <div class="content">
-      <h1>Get Started!!!</h1>
-      <h2>Explore.LK</h2>
+        <div class="content">
+            <h1>Get Started!!!</h1>
+            <h2>Explore.LK</h2>
       
      <!--  <label for="email">Email</label>
       <input type="email" id="email" name="email" placeholder="Enter your email" />
