@@ -69,7 +69,7 @@ class Login extends Controller
                             $_SESSION['traveler_id'] = $result[0]->traveler_Id;
 
                             // Redirect to Traveler's dashboard
-                            $this->view('traveler/registeredTravelerHome');
+                            redirect('traveler/RegisteredTravelerHome');
                             exit();
 
                         case 'eventOrganizer':
@@ -77,14 +77,14 @@ class Login extends Controller
                             $_SESSION['organizer_id'] = $result[0]->organizer_Id;
     
                             // Redirect to Event Organizer's dashboard
-                            $this->view('eventorganizer/eodashboard');
+                            redirect('Eventorganizer/Eodashboard');
                             exit();
 
                         case 'accommodationSP':
                             $_SESSION['hotel_id'] = $result[0]->hotel_Id;
 
                             // Redirect to Accommodation service provider's dashboard
-                            $this->view('hotel/dashboard');
+                            redirect('Hotel/Hdashboard');
                             exit();
 
 
@@ -93,7 +93,7 @@ class Login extends Controller
                             $_SESSION['guide_id'] = $result[0]->guide_Id;
 
                             // Redirect to Tour Guide's dashboard
-                            $this->view('tourguide/dashboard');
+                            redirect('tourGuide/C_dashboard');
                             exit();
                     }
                 } else {
