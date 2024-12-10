@@ -31,11 +31,6 @@
             font-weight: bold;
         }
 
-    
-        .nav-links {
-            border: none;
-        }
-
         .nav-links .dropdown-content {
             margin-top: 2.5px;
             padding: 0px 10px;
