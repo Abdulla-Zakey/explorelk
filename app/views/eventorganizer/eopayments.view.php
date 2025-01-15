@@ -1,8 +1,6 @@
 <?php
-//session_start(); // Start the session
-
- 
-  include '../app/views/components/eonavbar.php';
+    $title = "ExploreLK | EO - Payments";
+    include '../app/views/components/eonavbar.php';
 
 
 // Fetch saved bank accounts from the session
@@ -14,8 +12,8 @@ $bankAccounts = isset($_SESSION['bank_accounts']) ? $_SESSION['bank_accounts'] :
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bank Accounts - ExploreLk</title>
     <link rel="stylesheet" href="<?php echo ROOT; ?>/assets/css/Eventorganizer/eopayments.css">
+    <title><?= $title ?></title>
 </head>
 <body>
 

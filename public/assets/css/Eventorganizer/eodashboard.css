@@ -1,28 +1,31 @@
 body {
-    font-family: 'Poppins', sans-serif;
-    margin-left: 170px;
+    background-color: #f4f4f4;
     margin-top: 0;
     padding: 0;
-    background-color: #f4f4f4;
+    overflow: hidden;
+    font-family: 'Poppins', sans-serif !important;
+}
+
+.rightContainer{
+    margin-top: 0;
+    margin-left: 22.5%;
+    margin-right: 4.5%;
 }
 
 .user-invite{
-    margin-left: 150px;
-    margin-top: 5px;
-    font-size: x-large;
+    margin-top: 6%;
+    margin-bottom: 4.5%;
+    font-size: 24px;
 }
 
 .event-create-container {
     display: flex;
-    
     align-items: center;
     flex-direction: column; /* This ensures elements are stacked vertically */
-    width: 750px;
-    height: 500px;
+    width: 60%;
+    height: 50%;
     border: 5px solid #E2E5EF;
     border-radius: 10px;
-    margin-left: 150px;
-    margin-top: 30px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
@@ -30,9 +33,7 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    
-    height: 150px;
-    width: 150px;
+    width: 35%;
     position: relative;
     margin-top: 100px;
 }
@@ -45,19 +46,20 @@ body {
 }
 
 .create-event-btn {
-    margin-top: 100px; /* Space between image and button */
+    margin-top: 50px; /* Space between image and button */
+    margin-bottom: 50px;
     background-color: #ffffff;
-    color: black;
+    color: #333;
     padding: 10px 20px;
     font-size: 35px;
     font-weight: bold;
     border: none;
-    border-radius: 5px;
+    border-radius: 10px;
     cursor: pointer;
     text-align: center;
     width: 500px;
-    height: 70px;
-    border: 3px solid #E2E5EF;
+    height: 62.5px;
+    border: 2.5px solid #E2E5EF;
 }
 
 .create-event-btn:hover {
@@ -76,11 +78,11 @@ body {
 .event-creater-image{
     height: 500px;
     width: 200px;
-    margin-top: 60px;
-    margin-left: 25px;
+    margin-top: 25px;
+    margin-left: 50px;
 }
 .event-creater-image img{
-    height: 430px;
+    height: 450px;
     width: 400px;
 }
 

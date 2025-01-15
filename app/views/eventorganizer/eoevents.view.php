@@ -1,5 +1,6 @@
-<<?php 
-  include '../app/views/components/eonavbar.php';
+<?php 
+    $title = "EO - Pending Events";
+    include '../app/views/components/eonavbar.php';
 ?>
 
 <!DOCTYPE html>
@@ -7,8 +8,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ExploreLK - eventlist</title>
-    <link rel="stylesheet" href="<?php echo ROOT; ?>/assets/css/Eventorganizer/eoevents.css">
+    <link rel="stylesheet" href="<?= CSS ?>/Eventorganizer/eoevents.css">
+    <link rel="icon" href="<?= IMAGES ?>/logos/logoBlack.svg">
+    <title><?= $title ?></title>
 </head>
 <body>
 <!-- <div class="my-events-container">
@@ -36,11 +38,11 @@
 </div> -->
 
 <div class="my-events-container">
-    <div>
+    <!-- <div>
         <h2 class="my-events-heading">My Events</h2>
-    </div>
+    </div> -->
     <div>
-        <h2>Pending Events for Admin approval</h2>
+        <h2 class="my-events-heading">Pending Events for Admin approval</h2>
     </div>
     <hr>
     <div class="my-events" id="events-list">
@@ -537,9 +539,6 @@ button:focus {
                     <input type="hidden" id="event-name-${event.id}" value="${event.id}" name="id" readonly>
                     <label for="event-name-${event.id}">Event Name:</label>
                     <input type="text" id="event-name-${event.id}" value="${event.eventName}" name="eventName" readonly>
-
-                    <label for="event-description-${event.id}">Event Description:</label>
-                    <input type="text" id="event-description-${event.id}" value="${event.eventDescription}" name="eventDescription" readonly>
                     
                     <label for="event-description-${event.id}">About Event:</label>
                     <input type="text" id="event-description-${event.id}" value="${event.aboutEvent}" name="aboutEvent" readonly>

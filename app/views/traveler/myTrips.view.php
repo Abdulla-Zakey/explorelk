@@ -14,6 +14,59 @@
         .leftPanel h1 {
             font-size: 3.2rem;
         }
+
+        .no-trips-message{
+            font-size: 1.6rem;
+        }
+
+        /* Pop-up container (initially hidden) */
+        .popup-container {
+            font-size: 1.35rem;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.6); /* Dark transparent overlay */
+        display: none; /* Initially hidden */
+        justify-content: center;
+        align-items: center;
+        z-index: 999; /* Above other content */
+        }
+
+        /* Pop-up content */
+        .popup-content {
+            background: white;
+            padding: 20px 30px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+            max-width: 400px;
+            width: 90%;
+            font-size: 16px;
+        }
+
+        /* Close button */
+        .popup-content button {
+            margin-top: 15px;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .popup-content button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Blur background effect when pop-up is visible */
+        .blur {
+            filter: blur(5px);
+            pointer-events: none;
+        }
     </style>
 </head>
 
@@ -87,13 +140,13 @@
 
             <?php if (empty($data['trips'])): ?>
                 <div class="no-trips-message">
-                    <p style = "font-size: 16px;">You haven't created any trips yet. Start planning your next adventure!</p>
+                    <p>You haven't created any trips yet. Start planning your next adventure!</p>
                 </div>
             <?php else: ?>
                 <?php foreach ($data['trips'] as $trip): ?>
                     <div class="bookingContainer">
                         <div class="bookingItemImage-Container">
-                            <img src="<?= IMAGES ?>/travelers/myTripCoverPics/nuwaraEliyaCoverPic.png" alt="Trip Cover">
+                            <img src="<?= IMAGES ?>/travelers/myTripCoverPics/nuwaraEliyaCoverPic.png" alt="Trip Cover Pic">
                         </div>
 
                         <div class="bookingItemDetails">
@@ -122,14 +175,16 @@
                                 </button>
                             </a>
 
-                            <a href="<?= ROOT ?>/traveler/MyTrips/editTrip/<?= $trip->trip_Id ?>">
+                            <a href="<?= ROOT ?>/traveler/MyTrips/editTrip/<?= $trip->trip_Id ?>?edit=true">
                                 <button id="editBookingBtn" class="actionButtons">
                                     <i class="fas fa-edit"></i>Edit Trip Details
                                 </button>
                             </a>
 
-                            <a href="<?= ROOT ?>/traveler/MyTrips/deleteTrip/<?= $trip->trip_Id ?>"
-                                onclick="return confirm('Are you sure you want to delete this trip?');">
+                            <!-- <a href="<?= ROOT ?>/traveler/MyTrips/deleteTrip/<?= $trip->trip_Id ?>"
+                                onclick = "showPopup('Are you sure you want to delete this trip?');"> -->
+                            <a href="javascript:void(0)" onclick="showPopup('Are you sure you want to delete this trip?', '<?= ROOT ?>/traveler/MyTrips/deleteTrip/<?= $trip->trip_Id ?>')">
+
                                 <button id="deleteBookingBtn" class="actionButtons">
                                     <i class="fas fa-trash"></i>Delete Trip
                                 </button>
@@ -140,6 +195,46 @@
             <?php endif; ?>
         </div>
     </div>
+
+    <div id="popup" class="popup-container">
+        <div class="popup-content">
+            <p id="popup-text"></p>
+            <button id="closePopup">Cancel</button>
+            <button id="confirmDelete">Delete</button>
+        </div>
+    </div>
+
+    <script>
+
+        // Pop-up handling function
+        function showPopup(message, deleteUrl) {
+            const popup = document.getElementById("popup");
+            const popupText = document.getElementById("popup-text");
+            //const mainContainer = document.querySelector(".mainContainer");
+            const leftPanel = document.querySelector(".leftPanel");
+            const rightPanel = document.querySelector(".rightPanel");
+
+            popupText.textContent = message;
+            popup.style.display = "flex";
+            //mainContainer.classList.add("blur");
+            leftPanel.classList.add("blur");
+            rightPanel.classList.add("blur");
+
+            document.getElementById("closePopup").onclick = function() {
+                popup.style.display = "none";
+                //mainContainer.classList.remove("blur");
+                leftPanel.classList.remove("blur");
+                rightPanel.classList.remove("blur");
+            };
+
+            document.getElementById("confirmDelete").onclick = function() {
+                window.location.href = deleteUrl;
+            };
+        }
+
+    </script>
+
 </body>
 
 </html>
+

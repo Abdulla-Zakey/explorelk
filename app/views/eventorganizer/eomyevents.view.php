@@ -1,13 +1,14 @@
-<<?php 
-  include '../app/views/components/eonavbar.php';
+<?php
+    $title = "ExploreLK | EO - My Events";
+    include '../app/views/components/eonavbar.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ExploreLK - My Events</title>
-    <link rel="stylesheet" href="<?php echo ROOT; ?>/assets/css/Eventorganizer/eomyevents.css">
+    <link rel="stylesheet" href="<?= CSS ?>/Eventorganizer/eomyevents.css">
+    <title><?= $title ?></title>
 </head>
 <body>
     

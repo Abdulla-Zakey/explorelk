@@ -1,11 +1,23 @@
 <?php
 
 Trait Database{
+
+    private $connection = null;         /*New changes by Jabir */
+
     private function connect(){
-        $string = "mysql:hostname=".DBHOST.";dbname=".DBNAME;
-        $con = new PDO($string, DBUSER, DBPASS);
-        //$con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        return $con;
+        /*Old method*/
+        // $string = "mysql:hostname=".DBHOST.";dbname=".DBNAME;
+        // $con = new PDO($string, DBUSER, DBPASS);
+        //$con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); This was already commented
+        // return $con;
+
+        /*New method by Jabir */
+        if ($this->connection === null) {
+            $string = "mysql:hostname=".DBHOST.";dbname=".DBNAME;
+            $this->connection = new PDO($string, DBUSER, DBPASS);
+        }
+        return $this->connection;
+
     }
 
     /**This function is used to get the first value from a result set */
@@ -46,6 +58,12 @@ Trait Database{
         }
         return false;
     }
+
+     //This function is used to get the last inserted id
+    public function lastInsertId() {
+        return $this->connect()->lastInsertId();
+    }
+
 }
 
 

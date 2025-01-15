@@ -6,5 +6,6 @@
 
             $this->view('traveler/notifications');
             
+            
         }
     }

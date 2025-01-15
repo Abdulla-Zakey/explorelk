@@ -25,14 +25,14 @@ class Trip
 
         // Validate trip name
         if (empty($data['tripName'])) {
-            $this->errors['tripName'] = "Trip name is required.";
-        } elseif (strlen($data['tripName']) > 100) {
-            $this->errors['tripName'] = "Trip name cannot exceed 100 characters.";
+            $this->errors['tripName'] = "Trip Name is required.";
+        } elseif (strlen($data['tripName']) > 25) {
+            $this->errors['tripName'] = "Trip Name cannot exceed 25 characters.";
         }
 
         // Validate starting location
         if (empty($data['startingLocation'])) {
-            $this->errors['startingLocation'] = "Starting location is required.";
+            $this->errors['startingLocation'] = "Starting Location is required.";
         }
 
         // Validate destination
@@ -60,11 +60,11 @@ class Trip
 
         // Optional validations
         if (!empty($data['numberOfTravelers']) && $data['numberOfTravelers'] <= 0) {
-            $this->errors['numberOfTravelers'] = "Number of travelers must be positive.";
+            $this->errors['numberOfTravelers'] = "No of travelers must be positive.";
         }
 
         if (!empty($data['budgetPerPerson']) && $data['budgetPerPerson'] < 0) {
-            $this->errors['budgetPerPerson'] = "Budget per person cannot be negative.";
+            $this->errors['budgetPerPerson'] = "Budget per person can't be negative.";
         }
 
         return empty($this->errors);

@@ -12,8 +12,9 @@ class Traveler
         'travelerEmail',
         'travelerPassword',
         'travelerMobileNum',
-        'homeDistrict',
         'username',
+        'profilePicture',
+        'bio',
         'created_at',
         'updated_at'
     ];
@@ -23,18 +24,18 @@ class Traveler
         $this->errors = [];
 
         // Validate first name
-        if (empty($data['fName'])) {
-            $this->errors['fName'] = "First name is required.";
-        } elseif (strlen($data['fName']) > 25) {
-            $this->errors['fName'] = "First name cannot exceed 25 characters.";
-        }
+        // if (empty($data['fName'])) {
+        //     $this->errors['fName'] = "First name is required.";
+        // } elseif (strlen($data['fName']) > 25) {
+        //     $this->errors['fName'] = "First name cannot exceed 25 characters.";
+        // }
 
         // Validate last name
-        if (empty($data['lName'])) {
-            $this->errors['lName'] = "Last name is required.";
-        } elseif (strlen($data['lName']) > 25) {
-            $this->errors['lName'] = "Last name cannot exceed 25 characters.";
-        }
+        // if (empty($data['lName'])) {
+        //     $this->errors['lName'] = "Last name is required.";
+        // } elseif (strlen($data['lName']) > 25) {
+        //     $this->errors['lName'] = "Last name cannot exceed 25 characters.";
+        // }
 
         // Validate email
         if (empty($data['travelerEmail'])) {
@@ -48,8 +49,8 @@ class Traveler
         // Validate username
         if (empty($data['username'])) {
             $this->errors['username'] = "Username is required.";
-        } elseif (strlen($data['username']) < 4) {
-            $this->errors['username'] = "Username must be at least 4 characters long.";
+        } elseif (strlen($data['username']) < 5) {
+            $this->errors['username'] = "Username must be at least 5 characters.";
         } elseif (strlen($data['username']) > 50) {
             $this->errors['username'] = "Username cannot exceed 50 characters.";
         } elseif ($this->checkExistingUsername($data['username'])) {

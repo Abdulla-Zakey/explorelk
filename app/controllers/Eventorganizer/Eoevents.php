@@ -9,7 +9,7 @@ include '../app/models/Event.php';
         public function index($a = '', $b = '', $c = ''){
 
            
-            $this->event=$this->model->get_event();
+            $this->event=$this->model->getEventsByOrganizerId();
             $this->view('eventorganizer/eoevents',["eventsdata"=>$this->event]);
             
         }
@@ -45,7 +45,6 @@ include '../app/models/Event.php';
                 redirect("eventorganizer/Eoevents");
             }
         }
-
 
 
     }

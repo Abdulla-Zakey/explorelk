@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,15 +10,14 @@
     <title>ExploreLK | Sign Up</title>
 
     <style>
-        .error-messages {
+
+        .error-message {
             color: red;
-            list-style-type: none;
+            font-size: 13px;
             padding: 0;
+            text-shadow: 0px 0px 10px rgba(0, 0, 0, 1);
         }
 
-        .error-messages li {
-            margin-bottom: 5px;
-        }
     </style>
 </head>
 
@@ -36,41 +34,46 @@
 
         <div class="rightContainer">
             <div class="forrm">
+
                 <h1 class="heading">
                     Create an Account
                 </h1>
-
-                <?php if (!empty($error)): ?>
-                    <ul class="error-messages">
-                        <?php foreach ($error as $field => $message): ?>
-                            <li><?= htmlspecialchars($message) ?></li>
-                        <?php endforeach; ?>
-                    </ul>
-                <?php endif; ?>
 
                 <form method="POST" action='<?= ROOT ?>/traveler/Signup' name="travelerSignupForm">
                     <!-- First Name -->
                     <!-- <br> -->
                     <div class="topInput-container" style="display: none;">
-                        <input type="text" name="firstName" class="topInput" value = "null">
+                        <input type="text" name="firstName" class="topInput" value = "">
                         <i class="fa-solid fa-user"></i>
                     </div>
 
                     <!-- Last Name
                     <br> -->
                     <div class="topInput-container" style="display: none;">
-                        <input type="text" name="lastName" class="topInput" value = "null">
+                        <input type="text" name="lastName" class="topInput" value = "">
                         <i class="fa-solid fa-user"></i>
                     </div>
 
-                    Username
+                    <!--This is to display username related error messages -->
+                    <label for="travelerUserName">
+                        Username 
+                        <span class="error-message">
+                            <?= isset($error['username']) ? "*" . htmlspecialchars($error['username']) : ''; ?>
+                        </span>
+                    </label>
                     <br>
                     <div class="topInput-container">
                         <input type="text" name="travelerUserName" class="topInput" required>
                         <i class="fa-solid fa-user"></i>
                     </div>
 
-                    Email Address
+                    <!--This is to display email related error messages -->
+                    <label for="travelerEmail">
+                        Email Address
+                        <span class="error-message">
+                            <?= isset($error['travelerEmail']) ? "*" . $error['travelerEmail'] : ''; ?>
+                        </span>
+                    </label>
                     <br>
                     <div class="topInput-container">
                         <input type="email" name="travelerEmail" class="topInput" required>
@@ -90,6 +93,16 @@
                         <input type="text" name="travelPreferences" class="topInput" value = "null">
                         <i class="fa-solid fa-compass"></i>
                     </div>
+
+                    <!--This is to display password related error messages -->
+                    <span class="error-message">
+                            <?= isset($error['travelerPassword']) ? "*" . $error['travelerPassword'] : ''; ?>
+                    </span>
+                    
+                    <!--This is to display confirm password related error messages -->
+                    <span class="error-message">
+                            <?= isset($error['confirmPassword']) ? "*" . $error['confirmPassword'] : ''; ?>
+                    </span>
 
                     <div class="splitInputFields">
                         <div class="splitInputFields_left">

@@ -45,16 +45,18 @@ class Signup extends Controller
                     ])[0];
 
                     // Set session variables
-                    $_SESSION['traveler_id'] = $newTraveler->traveler_Id;
-                    $_SESSION['username'] = $newTraveler->username;
-                    $_SESSION['email'] = $newTraveler->travelerEmail;
+                    // $_SESSION['traveler_id'] = $newTraveler->traveler_Id;
+                    // $_SESSION['username'] = $newTraveler->username;
+                    // $_SESSION['email'] = $newTraveler->travelerEmail;
 
                     // Redirect to traveler home page
-                    $this->view('traveler/registeredTravelerHome');
+                    // $this->view('traveler/registeredTravelerHome');
+                    redirect('traveler/Login');
                     exit();
                 } else {
                     //$error['database'] = 'Failed to create account. Please try again later.';
-                    $this->view('traveler/login');
+                    // $this->view('traveler/login');
+                    $this->redirectWithError("Failed to create account. Please try again later.");
                 }
             } else {
                 // Validation failed, get the errors
@@ -68,3 +70,4 @@ class Signup extends Controller
         ]);
     }
 }
+

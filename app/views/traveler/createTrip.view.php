@@ -10,7 +10,20 @@
     <link rel="icon" href="<?= IMAGES ?>/logos/logoBlack.svg">
     <title>ExploreLK | Create Trip</title>
     <script src="https://kit.fontawesome.com/f35c1c7a11.js" crossorigin="anonymous"></script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBZgc6GQyFZJMGfChxxenQtMmcZyiwryM4&libraries=places"></script>
+   
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCFbprhDc_fKXUHl-oYEVGXKD1HciiAsz0&libraries=places"></script>
+
+    <style>
+        .errors{
+            color: red;
+            font-size: 1.2rem;
+        }
+
+        label{
+            color: black;
+            font-size: 1.6rem;
+        }
+    </style>
 
 </head>
 
@@ -41,19 +54,33 @@
 
                     <div class="longInputs">
 
-                        <label>Trip Name:</label>
+                        <div class = "errors">
+                            <label>Trip Name:</label>
+                            <?php echo "\t" . (isset($errors['tripName']) ? "*" . $errors['tripName'] : ''); ?>
+                            
+                        </div>
                         <input type="text" name="tripName" id="tripName" placeholder="Eg. Winter Vacation" required>
 
                     </div>
 
 
                     <div class="longInputs">
-                        <label>Starting Location:</label>
+                        <div class = "errors">
+                            <label>Starting Location:</label>
+                            <?php echo "\t" . (isset($errors['startingLocation']) ? "*" . $errors['startingLocation'] : ''); ?>
+                            
+                        </div>
+                        
                         <input type="text" name="startLocation" id="startLocation" placeholder="Eg. Colombo" required>
                     </div>
 
                     <div class="longInputs">
-                        <label>Destination:</label>
+                        <div class = "errors">
+                            <label>Destination:</label>
+                            <?php echo "\t" . (isset($errors['destination']) ? "*" . $errors['destination'] : ''); ?>
+                            
+                        </div>
+                        
                         <input type="text" name="destination" id="destination" placeholder="Eg. Nuwara Eliya" required>
                     </div>
 
@@ -61,12 +88,22 @@
                     <div class="longInputs" style="display: flex;">
 
                         <div class="leftMediumInput-Conatiner">
-                            <label>Start Date:</label>
+                            <div class = "errors">
+                                <label>Start Date:</label>
+                                <?php echo "\t" . (isset($errors['startDate']) ? "*" . $errors['startDate'] : ''); ?>
+                                
+                            </div>
+                            
                             <input type="date" name="startDate" id="startDate" required>
                         </div>
 
                         <div class="rightMediumInput-Conatiner">
-                            <label>End Date:</label>
+                            <div class = "errors">
+                                <label>End Date:</label>
+                                <?php echo "\t" . (isset($errors['endDate']) ? "*" . $errors['endDate'] : ''); ?>
+                                
+                            </div>
+                            
                             <input type="date" name="endDate" id="endDate" required>
                         </div>
 
@@ -81,7 +118,8 @@
 
                         <div class="rightMediumInput-Conatiner">
                             <label>Mode of Transportation:</label>
-                            <select name="transportation" id="transportation">
+                            <select name="transportation" id="transportation" required>
+                                <option value = "" disabled selected>Select Your Mode of Travel</option>
                                 <option>Car</option>
                                 <option>Van</option>
                                 <option>Bus</option>
@@ -94,12 +132,22 @@
                     <div class="longInputs" style="display: flex;">
 
                         <div class="leftMediumInput-Conatiner">
-                            <label>Number of Travelers:</label>
+                            <div class = "errors">
+                                <label>Number of Travelers:</label>
+                                <?php echo "\t" . (isset($errors['numberOfTravelers']) ? "*" . $errors['numberOfTravelers'] : ''); ?>
+                                
+                            </div>
+                            
                             <input type="number" name="travelersCount" id="travelersCount" placeholder="Eg. 5">
                         </div>
 
                         <div class="rightMediumInput-Conatiner">
-                            <label>Budget per Person</label>
+                            <div class = "errors">
+                                <label>Budget per Person</label>
+                                <?php echo "\t" . (isset($errors['budgetPerPerson']) ? "*" . $errors['budgetPerPerson'] : ''); ?>
+                                
+                            </div>
+                            
                             <input type="number" name="budgetPerPerson" id="budgetPerPerson" placeholder="Eg. 25000">
                         </div>
 

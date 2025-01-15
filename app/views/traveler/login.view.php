@@ -9,6 +9,14 @@
     <script src="https://kit.fontawesome.com/f35c1c7a11.js" crossorigin="anonymous"></script>
     <title>ExploreLK | Login</title>
 
+    <style>
+        .error-message{
+            color: red;
+            font-size: 13px;
+        }
+
+    </style>
+
 </head>
     
 <body>
@@ -41,12 +49,11 @@
                 </h1>
 
                 <form method="POST" name="loginForm" action = "<?= ROOT ?>/traveler/Login">
-
-                    <?php if (isset($_GET['error'])): ?>
-                        <p class="error-message"><?= htmlspecialchars($_GET['error']) ?></p>
-                    <?php endif; ?>
-
+                    
                     Email Address
+                    <span class="error-message">
+                            <?= isset($error['email']) ? "*" . $error['email'] : ''; ?>
+                    </span>
                     <br>
                     <div class = "input-container">
                         <input type="email" name = "travelerEmail" required>
@@ -55,6 +62,9 @@
                     
                     
                     Password
+                    <span class="error-message">
+                            <?= isset($error['password']) ? "*" . $error['password'] : ''; ?>
+                    </span>
                     <br>
                     <div class = "input-container">
                         <input type="password" name = "travelerPassword" required>
@@ -76,11 +86,13 @@
                     </select>
 
                     <input class = "btn" type="submit" name = "submit" value = "Login">
+                    
                 </form>
 
                 <p>
                     Do not have an account? <a href="<?= ROOT ?>/traveler/Signup">SignUp here</a>    <!--paths marked for incase of folder changes-->
                 </p>
+                
             </div>
             
         </div>

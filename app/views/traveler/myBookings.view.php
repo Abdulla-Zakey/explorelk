@@ -13,6 +13,9 @@
     
 
     <style>
+        body{
+            margin: 0px;
+        }
         .leftPanel h1{
             font-size: 3.2rem;
         }
