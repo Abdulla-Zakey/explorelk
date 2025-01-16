@@ -10,6 +10,10 @@
     <title>ExploreLK | View Profile</title>
     <script src="https://kit.fontawesome.com/f35c1c7a11.js" crossorigin="anonymous"></script>
     <style>
+        body{
+            margin: 0px;
+        }
+        
         .leftPanel h1{
             font-size: 3.2rem;
         }
@@ -88,7 +92,10 @@
                 <div class = "main-Container">
 
                     <div class = "profilePic-Holder">
-                        <img src = "<?= IMAGES ?>/travelers/messages/profilePic.jpeg">
+                        <!-- <img src = "<?= ROOT ?>/assets/images/Travelers/viewProfile/defaultUserIcon.png"> -->
+                        <img src = "<?= !empty($data['traveler']->profilePicture) 
+                            ? ROOT . '/assets/images/Travelers/userProfilePics/' . $data['traveler']->profilePicture 
+                            : ROOT . '/assets/images/Travelers/viewProfile/defaultUserIcon.png' ?>">
                     </div>
     
                     <div class="personalInfo">
@@ -103,14 +110,16 @@
                                     First Name:
                                 </label>
                                 
-                                <input type="text" name="firstName" value = "Nihmath" readonly>
+                                <!-- <input type="text" name="firstName" value = "Nihmath" readonly> -->
+                                <input type="text" name="firstName" value = "<?= htmlspecialchars($data['traveler']->fName ?? '') ?>" readonly>
                             </div>
             
                             <div class="rightColumn">
                                 <label>
                                     Last Name:
                                 </label>
-                                <input type="text" name="lastName" value = "Jabir" readonly>
+                                <!-- <input type="text" name="lastName" value = "Jabir" readonly> -->
+                                <input type="text" name="lasstName" value = "<?= htmlspecialchars($data['traveler']->lName ?? '') ?>" readonly>
                             </div>
             
                         </div>
@@ -120,14 +129,16 @@
                             <div class="leftColumn">
                                 Username:
                                 <br>
-                                <input type="text" name="username"  value = "Jabir31" readonly>
+                                <!-- <input type="text" name="username"  value = "Jabir31" readonly> -->
+                                <input type="text" name="username" value = "<?= htmlspecialchars($data['traveler']->username ?? '') ?>" readonly>
         
                             </div>
             
                             <div class="rightColumn">
                                 Password:
                                 <br>
-                                <input type="password" name="password" value = "user@123" readonly>
+                                <!-- <input type="password" name="password" value = "user@123" readonly> -->
+                                <input type="password" name="password" value = "********" readonly>
                             </div>
             
                         </div>
@@ -139,7 +150,8 @@
                                     Email:
                                 </label>
                                 
-                                <input type = "email" name = "email"  value = "jabirmnn@fakemail.com" readonly>
+                                <!-- <input type = "email" name = "email"  value = "jabirmnn@fakemail.com" readonly> -->
+                                <input type = "email" name = "email" value = "<?= htmlspecialchars($data['traveler']->travelerEmail ?? '') ?>" readonly>
         
                             </div>
             
@@ -147,7 +159,8 @@
                                 <label>
                                     Mobile Number:
                                 </label>
-                                <input type="number" name="mobile" value = "0715770109" readonly>
+                                <!-- <input type="number" name="mobile" value = "0715770109" readonly> -->
+                                <input type="text" name="mobile" value = "<?= htmlspecialchars($data['traveler']->travelerMobileNum ?? '') ?>" readonly>
                             </div>
             
                         </div>
@@ -159,8 +172,9 @@
                                 Bio:
                             </label>
                             
-                            <textarea name="bio" readonly>A passionate traveler exploring the wonders of Sri Lanka. Love hiking, photography, and finding hidden gems.</textarea>
-                        </div>
+                            <!-- <textarea name="bio" readonly>A passionate traveler exploring the wonders of Sri Lanka. Love hiking, photography, and finding hidden gems.</textarea>-->
+                            <textarea name="bio" readonly><?= htmlspecialchars($data['traveler']->bio ?? '') ?></textarea>
+                        </div> 
                             
                     </div>
     
@@ -173,21 +187,25 @@
                             <label>
                                 Account Number:
                             </label>
-                            <input type = "number" name = "acNum" value = "200209102877" readonly>
+                            <!-- <input type = "number" name = "acNum" value = "200209102877" readonly> -->
+                            <input type = "text" name="acNum" value = "<?= htmlspecialchars($data['accountDetails']->traveler_accountNum ?? '') ?>" readonly>
                         </div>
     
                         <div>
                             <label>
                                 Bank Name:
                             </label>
-                            <input type = "text" name = "bankName" value = "HNB" readonly>
+                            <!-- <input type = "text" name = "bankName" value = "HNB" readonly> -->
+                            <input type = "text" name="bankName" value = "<?= htmlspecialchars($data['accountDetails']->traveler_bankName ?? '') ?>" readonly>
+                             
                         </div>
     
                         <div>
                             <label>
                                 Bank Branch:
                             </label>
-                            <input type = "text" name = "branch" value = "Maligawatte" readonly>
+                            <!-- <input type = "text" name = "branch" value = "Maligawatte" readonly> -->
+                            <input type = "text" name="branch" value = "<?= htmlspecialchars($data['accountDetails']->traveler_bankBranch ?? '') ?>" readonly>
                         </div>
                     </div>
     

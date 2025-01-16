@@ -2,8 +2,8 @@
 
     define('APP', 'http://localhost/explorelkwithmvc/app');
     define('ROOT', 'http://localhost/gitexplorelk/explorelk/public');
-    define('CSS', 'http://localhost/explorelkwithmvc/public/assets/css');
-    define('IMAGES', 'http://localhost/explorelkwithmvc/public/assets/images');
+    define('CSS', 'http://localhost/gitexplorelk/explorelk/public/assets/css');
+    define('IMAGES', 'http://localhost/gitexplorelk/explorelk/public/assets/images');
     define('APPROOT',dirname(dirname(__FILE__)));
 
 
@@ -18,5 +18,6 @@
     else{
         define('ROOT', 'https://www.explorelk.com');
     }
+    
     
     
