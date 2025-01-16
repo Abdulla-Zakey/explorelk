@@ -114,15 +114,15 @@
         </div>
 
         <ul class="nav-menu">
-            <li><a href="<?=ROOT?>/Hotel/Hdashboard"><i class="fas fa-th-large"></i> Dashboard</a></li>
-            <li><a href="<?=ROOT?>/Hotel/Hmyrooms"><i class="fas fa-bed"></i> My Rooms</a></li>
-            <li><a href="<?=ROOT?>/Hotel/Hguest"><i class="fa-solid fa-users"></i> Guests</a></li>
-            <li><a href="<?=ROOT?>/Hotel/Hnotifications"><i class="fas fa-bell"></i> Notifications</a></li>
-            <li><a href="<?=ROOT?>/Hotel/Hpaymentdetails"><i class="fas fa-credit-card"></i> Payment Details</a></li>
-            <li><a href="<?=ROOT?>/Hotel/Hreviews"><i class="fa-solid fa-star"></i>Reviews</a></li>
-            <li><a href="<?=ROOT?>/Hotel/Hmessages"><i class="fas fa-comments"></i> Messages</a></li>
-            <li><a href="<?=ROOT?>/Hotel/Hreports"><i class="fas fa-file-alt"></i> Reports</a></li>
-            <li><a href="<?=ROOT?>/Hotel/Hsettings"><i class="fas fa-cog"></i> Settings</a></li>
+            <li><a href="<?=ROOT?>/TravelAgent/Tdashboard"><i class="fas fa-th-large"></i> Dashboard</a></li>
+            <li><a href="<?=ROOT?>/TravelAgent/Tmyvehicles"><i class="fas fa-car"></i> My Vechicle</a></li>
+            <li><a href="<?=ROOT?>/TravelAgent/Tcustomer"><i class="fa-solid fa-users"></i> Customers</a></li>
+            <li><a href="<?=ROOT?>/TravelAgent/Tnotifications"><i class="fas fa-bell"></i> Notifications</a></li>
+            <li><a href="<?=ROOT?>/TravelAgent/Tpaymentdetails"><i class="fas fa-credit-card"></i> Payment Details</a></li>
+            <li><a href="<?=ROOT?>/TravelAgent/Treviews"><i class="fa-solid fa-star"></i>Reviews</a></li>
+            <li><a href="<?=ROOT?>/TravelAgent/Tmessages"><i class="fas fa-comments"></i> Messages</a></li>
+            <li><a href="<?=ROOT?>/TravelAgent/Treports"><i class="fas fa-file-alt"></i> Reports</a></li>
+            <li><a href="<?=ROOT?>/TravelAgent/Tsettings"><i class="fas fa-cog"></i> Settings</a></li>
         </ul>
 
         <div class="logout">

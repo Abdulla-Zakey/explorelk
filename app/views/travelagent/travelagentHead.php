@@ -53,9 +53,9 @@
     <main>
         <div class="content">
         <div class="image-container">
-            <img alt="Hotel entrance with greenery and lights" src="<?=ROOT?>/assets/images/serviceProviders/hotelCover.jpg"/>
+            <img alt="Hotel entrance with greenery and lights" src="<?=ROOT?>/assets/images/serviceProviders/travelCover.jpg"/>
             <div class="title">
-                CINNAMON GRAND
+                KANGAROO CABS
             </div>
         </div>
         <div class="date" id="current-date"></div>

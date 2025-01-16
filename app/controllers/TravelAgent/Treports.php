@@ -1,12 +1,13 @@
 <?php
 
-    class Hpaymentdetails extends Controller {
+    class Treports extends Controller{
 
+      
         public function index($a = '', $b = '', $c = ''){
 
            
 
-            $this->view('hotel/paymentdetails');
+            $this->view('travelagent/reports');
             
         }
     }

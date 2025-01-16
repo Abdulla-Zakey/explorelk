@@ -1,6 +1,6 @@
 <?php 
-    include_once APPROOT.'/views/hotel/nav.php';
-    include_once APPROOT.'/views/hotel/hotelhead.php';
+    include_once APPROOT.'/views/travelagent/nav.php';
+    include_once APPROOT.'/views/travelagent/travelagenthead.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">

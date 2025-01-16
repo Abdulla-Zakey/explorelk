@@ -1,6 +1,6 @@
 <?php 
-    include_once APPROOT.'/views/hotel/nav.php';
-    include_once APPROOT.'/views/hotel/hotelhead.php';
+    include_once APPROOT.'/views/travelagent/nav.php';
+    include_once APPROOT.'/views/travelagent/travelagenthead.php';
 ?>
 <main>
     <div class="payment-container">
@@ -30,7 +30,7 @@
                     <tr>
                         <th>Booking ID</th>
                         <th>Guest Name</th>
-                        <th>Room Number</th>
+                        <th>Vehicle Number</th>
                         <th>Amount</th>
                         <th>Payment Date</th>
                         <th>Status</th>
@@ -41,7 +41,7 @@
                     <tr>
                         <td>#BK001</td>
                         <td>John Doe</td>
-                        <td>101</td>
+                        <td>BFB 1101</td>
                         <td>LKR 15,000</td>
                         <td>2023-12-01</td>
                         <td><span class="status-paid">Paid</span></td>
@@ -50,7 +50,7 @@
                     <tr>
                         <td>#BK002</td>
                         <td>Jane Smith</td>
-                        <td>204</td>
+                        <td>BED 4204</td>
                         <td>LKR 25,000</td>
                         <td>2023-12-02</td>
                         <td><span class="status-pending">Pending</span></td>
