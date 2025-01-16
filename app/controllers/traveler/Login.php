@@ -99,7 +99,7 @@ class Login extends Controller
                             $_SESSION['guide_id'] = $result[0]->guide_Id;
 
                             // Redirect to Tour Guide's dashboard
-                            redirect('tourguide/C_dashboard');
+                            $this->view('tourguide/dashboard');
                             exit();
                     }
                 } else {
