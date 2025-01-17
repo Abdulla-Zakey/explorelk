@@ -1,3 +1,7 @@
+<?php
+    // var_dump($data);
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>

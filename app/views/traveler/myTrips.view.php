@@ -67,6 +67,7 @@
             filter: blur(5px);
             pointer-events: none;
         }
+        
     </style>
 </head>
 
@@ -139,9 +140,30 @@
             </div>
 
             <?php if (empty($data['trips'])): ?>
-                <div class="no-trips-message">
-                    <p>You haven't created any trips yet. Start planning your next adventure!</p>
+            
+                <div class="empty-state-container">
+
+                    <div class="empty-state-icon">
+                        <svg class="map-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M3 6l6-3l6 3l6-3v15l-6 3l-6-3l-6 3V6z"></path>
+                            <path d="M9 3v15"></path>
+                            <path d="M15 6v15"></path>
+                        </svg>
+
+                        <svg class="compass-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <path d="M16.24 7.76l-2.12 6.36l-6.36 2.12l2.12-6.36l6.36-2.12z"></path>
+                        </svg>
+                    </div>
+        
+                    <h2 class="empty-state-title">Your Journey Begins Here</h2>
+        
+                    <p class="empty-state-description">
+                        Ready to explore the beauty of Sri Lanka? Start planning your next amazing adventure by creating your first trip!
+                     </p>
+
                 </div>
+
             <?php else: ?>
                 <?php foreach ($data['trips'] as $trip): ?>
                     <div class="bookingContainer">
