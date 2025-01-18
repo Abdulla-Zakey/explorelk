@@ -84,7 +84,8 @@ body{
     box-sizing: border-box;
     border: none;
     border-radius: 1rem;
-    background-color: #007BFF;
+    /* background-color: #007BFF; */
+    background-color: rgba(0, 140, 140, 1);
     color: #fff;
     font-size: 1.8rem;
     font-family: 'Poppins', sans-serif;
@@ -93,7 +94,8 @@ body{
   }
   
   .book-now-button:hover {
-    background-color: #0056b3;
+    /* background-color: #0056b3; */
+    background-color: rgba(0, 139, 139, 0.8);
   }
 
   

@@ -62,8 +62,13 @@ class Event{
           'order_type' => 'ASC',
           'limit' => 3
       ]
-  );
+    );
   
+    return $result;
+  }
+
+  public function getAllAprovedEvents(){
+    $result = $this->where(['eventStatus' => 'approved']);
     return $result;
   }
   

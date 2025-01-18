@@ -35,9 +35,9 @@
         <nav class="navbar">
 
             <div class="backToHome">
-                <a href="<?= ROOT ?>/traveler/RegisteredTravelerHome">
+                <a href="<?= ROOT ?>/traveler/ViewAllEvents">
                     <i class="fa-solid fa-arrow-left"></i>
-                    <span>Back to Home</span>
+                    <span>Back</span>
                 </a>
             </div>
 

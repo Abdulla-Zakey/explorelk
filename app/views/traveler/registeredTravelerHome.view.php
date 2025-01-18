@@ -178,7 +178,7 @@
                 <?php
                             if($counter % 3 == 2){
                                 echo '</div>';
-                                echo '<button class="btn">See More</button>';
+                                echo '<a href=" '. ROOT .'/traveler/ViewAllEvents"><button class="btn">See More</button></a>';
                             }
                                     
                             $counter++;
