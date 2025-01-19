@@ -8,7 +8,7 @@ body {
     background-color: #f8f9fa;
 }
 
-.main-container{
+.main-container {
     margin-top: 10%;
     margin-left: 7.5%;
     margin-right: 7.5%;
@@ -68,8 +68,6 @@ body {
     color: #008b8b;
 }
 
-
-/* Category filters */
 .category-filters {
     display: flex;
     gap: 1rem;
@@ -97,16 +95,19 @@ body {
 }
 
 .events-grid {
-    display: grid;
-    /* margin: 1.5% 7.5% 2.5% 7.5%; */
+    display: flex;
     margin-top: 1.5%;
     margin-bottom: 2.5%;
-    grid-template-columns: repeat(auto-fit, minmax(30rem, 1fr));
     gap: 3rem;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .event-container {
-    width: 100%;
+    flex: 1;
+    min-width: 0;  /* Prevents flex items from growing beyond their container */
+    max-width: calc(33.333% - 2rem);  /* Accounts for gap */
+    height: 45rem;  /* Fixed height for consistency */
     margin: 0;
     border: none;
     border-radius: 2rem;
@@ -114,6 +115,8 @@ body {
     box-shadow: 0 4px 6px rgba(0,0,0,0.1);
     transition: all 0.3s ease;
     overflow: hidden;
+    display: flex;
+    flex-direction: column;
 }
 
 .event-container:hover {
@@ -128,8 +131,8 @@ body {
 .event-banner {
     position: relative;
     overflow: hidden;
-    padding-top: 56.25%; /*16:9 Aspect Ratio*/
-    /* border: 5px solid red; */
+    padding-top: 56.25%;  /* 16:9 Aspect Ratio */
+    flex-shrink: 0;  /* Prevents banner from shrinking */
 }
 
 .event-banner img {
@@ -147,39 +150,46 @@ body {
 }
 
 .event-name {
-    height: 6.5rem;
-    padding: 2rem 2.5rem;
-    font-size: 2.4rem;
+    padding: 1.5rem 2rem;
+    font-size: 2rem;
     font-weight: bold;
     color: #1a1a1a;
     margin: 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    height: 7rem;
 }
 
 .dateAndLocation-container {
-    display: block;
-    flex-wrap: wrap;
-    gap: 2rem;
-    padding: 0 2.5rem;
-    margin-bottom: 2rem;
+    padding: 0 2rem;
+    margin-bottom: 1.5rem;
+    flex-grow: 1;  /* Takes up remaining space */
 }
 
 .eventDate-container, .eventLocation-container {
-    /* height: 2.5rem; */
     display: flex;
     align-items: center;
     font-size: 1.4rem;
     color: #666;
     margin-bottom: 0.5rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .dateAndLocation-container i {
     margin-right: 1rem;
     margin-left: 0.5rem;
     color: #008b8b;
+    flex-shrink: 0;  /* Prevents icon from shrinking */
 }
 
 .btn-container {
-    padding: 0 2.5rem 2.5rem;
+    padding: 0 2rem 2rem;
+    margin-top: auto;  /* Pushes button to bottom */
 }
 
 .btn {
@@ -206,21 +216,34 @@ body {
     transform: translateY(0);
 }
 
+@media (max-width: 1200px) {
+    .events-grid {
+        flex-wrap: wrap;
+    }
+    
+    .event-container {
+        max-width: calc(50% - 1.5rem);
+    }
+}
+
 @media (max-width: 768px) {
     html {
         font-size: 9px;
     }
     
-    body {
-        margin: 0% 5%;
+    .main-container {
+        margin: 15% 5% 5%;
     }
 
+    .event-container {
+        max-width: 100%;
+    }
+    
     .events-grid {
-        grid-template-columns: 1fr;
+        flex-direction: column;
     }
 }
 
-/* Animation for new events */
 @keyframes fadeInUp {
     from {
         opacity: 0;
@@ -231,4 +254,3 @@ body {
         transform: translateY(0);
     }
 }
-

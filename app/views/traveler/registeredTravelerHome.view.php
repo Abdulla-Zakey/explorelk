@@ -176,12 +176,18 @@
                                 </a>
                             </div>
                 <?php
-                            if($counter % 3 == 2){
-                                echo '</div>';
-                                echo '<a href=" '. ROOT .'/traveler/ViewAllEvents"><button class="btn">See More</button></a>';
-                            }
-                                    
+
                             $counter++;
+
+                            if($counter == count($data['eventData'])){
+                                echo '</div>';
+
+                                if($counter % 3 == 0 ){
+                                    echo '<a href=" '. ROOT .'/traveler/ViewAllEvents"><button class="btn">See More</button></a>';
+                                }
+
+                            }
+                            
                         }
 
                     }else{

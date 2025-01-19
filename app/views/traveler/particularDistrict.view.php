@@ -27,7 +27,7 @@
                 <li><a href = "<?= ROOT ?>/traveler/RentACar" target = "_blank">Rent a Car</a></li>
                 <li><a href = "#">Restaurants</a></li>
                 <li><a href = "#">Join a Tour</a></li>
-                <li><a href = "#">Upcoming Events</a></li>
+                <li><a href = "<?= ROOT ?>/traveler/ViewAllEvents" target = "_blank">Upcoming Events</a></li>
             </ul>
         </nav>
     </header>

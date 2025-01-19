@@ -201,7 +201,8 @@ body{
   .ticket span{
     font-size: 1.8rem;
     font-weight: 700;
-    color: #0056b3;
+    /* color: #0056b3; */
+    color: #008b8b;
   }
 
 
