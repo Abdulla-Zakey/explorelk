@@ -9,7 +9,7 @@
     <link rel = "icon" href = "<?= IMAGES ?>/logos/logoBlack.svg">
     <title>ExploreLK | Find a Hotel</title>
     <script src="https://kit.fontawesome.com/f35c1c7a11.js" crossorigin="anonymous"></script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBZgc6GQyFZJMGfChxxenQtMmcZyiwryM4&libraries=places"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCFbprhDc_fKXUHl-oYEVGXKD1HciiAsz0&libraries=places"></script>
     
     <style>
         .searchButton{
