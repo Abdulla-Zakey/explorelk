@@ -1,0 +1,520 @@
+/* Default font size for larger screens */
+html{
+    height: 100%;
+    /* overflow-y: scroll; */
+    overflow-x: hidden;
+    font-size: 62.5%; /* 10px base, 1rem = 10px */
+}
+
+
+/* Adjust font size for tablets */
+@media (max-width: 768px) {
+    html {
+        font-size: 56.25% !important; /* 1rem = 9px */
+    }
+}
+
+
+/* Mobile adjustments */
+@media (max-width: 480px) {
+    html {
+        font-size: 50% !important; /* 1rem = 8px */
+    }
+}
+
+body{
+    font-family: 'Poppins', sans-serif;
+    overflow-x: hidden;
+    background: #f8f9fa;
+}
+
+/* Event Banner Section */
+.event-banner {
+    position: relative;
+    width: 85%;
+    margin: 10% 7.5% 0% 7.5%;
+    height: auto;
+    background-color: #FFF;
+    overflow: visible;                  /* Ensures the .event-info container doesn't get cut off */
+  }
+  
+  .banner-image {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+  }
+
+
+  .event-info {
+    width: 90%;
+    display: block;
+    position: absolute;
+    bottom: -13.5%;                       /* Places half of the container below the bottom edge of the image */
+    left: 50%;
+    transform: translateX(-50%);        /* Center it horizontally and vertically at the overlap */
+    background: #FFF;
+    border: 1px solid #d3d3d3;
+    border-radius: 1rem;
+    padding: 0.5rem 2.5rem;
+    
+    align-items: center;
+    justify-content: space-between;
+  }
+
+
+  .event-details{
+    width: 100%;
+    padding: 0.5% 2.5%;
+    box-sizing: border-box;
+    display: flex;
+  }
+  
+  .event-details h1 {
+    font-size: 3.2rem;
+    color: #222;
+    margin-right: 0%;
+    margin-bottom: 1rem;
+    width: 75%;
+  }
+
+  .book-now-button {
+    width: 25%;
+    margin-top: 0.75%;
+    padding: 0rem 1rem;
+    box-sizing: border-box;
+    border: none;
+    border-radius: 1rem;
+    /* background-color: #007BFF; */
+    background-color: rgba(0, 140, 140, 1);
+    color: #fff;
+    font-size: 1.8rem;
+    font-family: 'Poppins', sans-serif;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .book-now-button:hover {
+    /* background-color: #0056b3; */
+    background-color: rgba(0, 139, 139, 0.8);
+  }
+
+  
+  hr{
+    width: 95%;
+    margin-top: 1.25%;
+  }
+  
+  .event-details div{
+    display: flex;
+    margin-right: 5rem;
+    margin-bottom: 1rem;
+    font-size: 1.8rem;
+    color: #555;
+    align-items: center;
+  }
+
+  .aboutAndMap-Conatiner{
+    width: 100%;
+    display: flex;
+    margin-top: 7.5%;
+  }
+
+  .about-event, .mapHolder{
+    margin-top: 1.25%;
+    margin-bottom: 2.5%;
+    padding: 1.25% 2.5% 6.25% 2.5%;
+    box-sizing: border-box;
+    background-color: #FFF;
+    border: 1px solid #d3d3d3;
+    border-radius: 1rem;
+    
+  }
+
+  .about-event{
+    width: 30%;
+    margin: 1.25% 2.5% 2.5% 10%;
+    text-align: justify;
+  }
+
+  .about-event h1, .mapHolder h1{
+    font-size: 2.4rem;
+  }
+
+  .about-event span{
+    font-size: 1.75rem;
+    line-height: 3.25rem;
+  }
+  
+  .mapHolder{
+    width: 47.5%;
+  }
+
+  .mapHolder iframe{
+    box-shadow: 0rem, 0rem, 10rem, rgba(0, 0, 0, 0.5);
+  }
+  
+
+  .tickets-info, #event-highlights, .TandCPlusConatct-Conatiner{
+    width: 85%;
+    margin: 1.25% 7.5% 2.5% 7.5%;
+    padding: 1.25% 2.5%;
+    box-sizing: border-box;
+  }
+
+  .tickets-info h1, #event-highlights h1{
+    font-size: 2.4rem;
+    text-align: left;
+  }
+
+  .tickets-Container{
+    display: flex;
+    width: 100%;
+    gap: 3.33%;
+  }
+
+  .ticket{
+    width: 33.33%;
+    padding: 1.25%;
+    padding-bottom: 2.5rem;
+    background-color: #FFF;
+    border: 1px solid #d3d3d3;
+    border-radius: 1rem;
+    text-align: center;
+    box-sizing: border-box;
+    box-shadow: 0rem 0rem 1rem rgba(0, 0, 0, 0.25);
+    transition: transform 0.2s ease, background-color 0.3s ease;
+  }
+
+  .ticket:hover{
+    transform: scale(1.05);
+  }
+
+  .ticket h2{
+    font-size: 2rem;
+  }
+
+  .ticket p{
+    height: 6rem;
+    font-size: 1.4rem;
+  }
+
+  .ticket span{
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #0056b3;
+  }
+
+
+
+  .highlights-Conatiner{
+    width: 100%;
+    display: block;
+    font-size: 1.6rem;
+  }
+
+  .highlights-Conatiner i{
+    margin-right: 5%;
+  }
+
+  #highlight1, #highlight2, #highlight3, #highlight4, #highlight5{
+    display: flex;
+    margin-bottom: 1.75%;
+  }
+
+  #highlight1{
+    margin-top: 2.5%;
+  }
+
+  #highlight5{
+    margin-bottom: 0%;
+  }
+
+  .highlight{
+    width: 20%;
+    margin-right: 2.5%;
+    box-sizing: border-box;
+  }
+
+  .description{
+    width: 77.5%;
+  }
+
+  .TandCPlusConatct-Conatiner{
+    display: flex;
+    margin-top: 0;
+  }
+
+
+  .tAndC-Container, .eventOrganizerContact-Container{
+    display: block;
+    background-color: #FFF;
+    border: 1px solid #d3d3d3;
+    border-radius: 1rem;
+    padding: 1.25%;
+    box-sizing: border-box;
+    font-size: 1.6rem;
+  }
+
+
+
+  .tAndC-Container{
+    width: 100%;
+    /* margin-right: 2.5%; */
+  }
+
+  .tAndC-Container h1, .eventOrganizerContact-Container h1{
+    font-size: 2.4rem;
+  }
+
+
+  .eventOrganizerContact-Container{
+    width: 37.5%;
+  }
+
+  
+  .condition-Holder{
+    width: 100%;
+    display: flex;
+    margin-bottom: 1.5%;
+    line-height: 1.75;
+  }
+
+  .icon-holder{
+    margin-top: 0.55%;
+    margin-right: 3%;
+    font-size: 1.6rem;
+  }
+
+  .condition a{
+    text-decoration: none;
+    color: #333;
+    cursor: pointer;
+  }
+
+  .condition a:hover{
+    text-decoration: underline;
+  }
+
+
+  .foot h1{
+    text-align: left;
+    font-size: 2.4rem;
+    margin-left: 12.5%;
+  }
+
+  .footer-Items{
+    display: flex;
+    width: 75%;
+    margin: 1.5% 12.5% 0.125% 12.5%;
+    font-size: 1.6rem;
+    
+    
+  }
+
+  .footer-Items a{
+    color: #fff;
+  }
+
+  .footer-Items .condition-Holder{
+    width: 25%;
+    margin-right: 1.5%;
+  }
+
+  .footer-Items .icon-holder{
+    /* margin: 2.25%; */
+    margin-right: 5%;
+  }
+
+  /*--------Styles for the pop up-------------------------------------------------------------------------------*/
+
+  .container {
+    padding: 2rem;
+    text-align: center;
+}
+
+button {
+    padding: 1rem 2rem;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    background-color: #007BFF;
+    font-size: 1.6rem;
+    cursor: pointer;
+    
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+/* Popup Styles */
+.popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.popup-content {
+    background: white;
+    padding: 2rem;
+    border-radius: 1rem;
+    width: 45%;
+    text-align: center;
+    box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.3);
+}
+
+.popup-content h2 {
+    margin-top: 0;
+    font-size: 2.4rem;
+}
+
+.popup-content .ticket-item {
+    display: flex;
+    justify-content: space-between;
+    text-align: left;
+    align-items: left;
+    margin: 1rem 0;
+    border: 1px solid #ddd;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    font-size: 1.6rem;
+}
+
+.btn-holder {
+    margin-top: 1.25%;
+    gap: 3.5%;
+}
+
+.popup-content button {
+    background-color: #007BFF;
+    border-radius: 5px;
+    color: white;
+}
+
+.popup-content button:hover {
+    background-color: #0056b3;
+}
+
+.popup-content .total {
+    font-size: 1.8rem;
+    font-weight: bold;
+    margin-top: 25px;
+}
+
+.popup-content .proceed,
+.popup-content .cancel {
+    width: 30%;
+    margin-top: 1rem;
+    padding: 1rem 2rem;
+    border: none;
+    border-radius: 0.5rem;
+}
+
+.popup-content .proceed {
+    background-color: #d3d3d3;
+    color: #888;
+    cursor: not-allowed;
+}
+
+.popup-content .cancel {
+    background-color: #FF4C4C;
+    cursor: pointer;
+}
+
+#cancel:hover {
+    background-color: #E63939;
+}
+.ticket-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
+  border-bottom: 1px solid #eee;
+}
+
+.ticket-info {
+  flex-grow: 1;
+}
+
+.ticket-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.control-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 4px;
+  border: none;
+  background-color: #007bff;
+  color: white;
+  font-size: 18px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.control-btn:hover {
+  background-color: #0056b3;
+}
+
+.ticket-count {
+  min-width: 30px;
+  text-align: center;
+  font-size: 16px;
+  font-weight: bold;
+}
+.add-ticket, .remove-ticket {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: none;
+  background-color: #007BFF;
+  color: white;
+  cursor: pointer;
+  font-size: 1.2em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ticket-summary {
+  margin: 1rem 0;
+  padding: 0.5rem 1.5rem;
+  border: 1px solid #ddd;
+  border-radius: 1rem;
+  background-color: #f8f9fa;
+}
+
+.ticket-summary h3{
+  text-align: left;
+  font-size: 1.5rem;
+  margin-top: 0.25rem;
+}
+
+.summary-content {
+  margin-top: 10px;
+}
+
+.summary-item {
+  display: flex;
+  justify-content: space-between;
+  margin: 5px 0;
+}
+
+.summary-item.empty {
+  color: #6c757d;
+  text-align: center;
+}
+
+

@@ -89,29 +89,22 @@ class MyTrips extends Controller
         exit();
     }
 
-    // Method to edit trip
     public function editTrip($trip_Id)
     {
-        // Check if user is logged in
         if (!isset($_SESSION['traveler_id'])) {
             header("Location: " . ROOT . "/traveler/Login");
             exit();
         }
 
         $tripModel = new Trip();
-
-        // Fetch the specific trip
         $trip = $tripModel->first(['trip_Id' => $trip_Id, 'traveler_Id' => $_SESSION['traveler_id']]);
 
         if (!$trip) {
-            // Redirect if trip not found or doesn't belong to the user
             header("Location: " . ROOT . "/traveler/MyTrips");
             exit();
         }
 
-        // Handle form submission for editing
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            // Prepare updated trip data
             $data = [
                 'tripName' => htmlspecialchars(trim($_POST['tripName'])),
                 'startingLocation' => htmlspecialchars(trim($_POST['startLocation'])),
@@ -124,36 +117,23 @@ class MyTrips extends Controller
                 'budgetPerPerson' => !empty($_POST['budgetPerPerson']) ? floatval($_POST['budgetPerPerson']) : null
             ];
 
-            // Validate trip data
             if ($tripModel->validate($data)) {
-                // Update trip in database
                 $result = $tripModel->update($trip_Id, $data, 'trip_Id');
-
+                
                 if ($result) {
-                    // Fetch the updated trip to ensure we have the latest data
-                    $updatedTrip = $tripModel->first(['trip_Id' => $trip_Id, 'traveler_Id' => $_SESSION['traveler_id']]);
-
-                    // Redirect to trips list with success message
-                    header("Location: " . ROOT . "/traveler/MyTrips?success=Trip updated successfully");
+                    header("Location: " . ROOT . "/traveler/MyTrips/viewTrip/" . $trip_Id . "?success=Trip Updated Successfully!");
                     exit();
                 } else {
-                    // Handle update error
-                    $data['error'] = "Failed to update trip. Please try again.";
-                    $data['trip'] = $trip;
-                    $this->view('traveler/viewTrip', $data);
+                    header("Location: " . ROOT . "/traveler/MyTrips/viewTrip/" . $trip_Id . "?error=Failed to Update Trip");
+                    exit();
                 }
             } else {
-                // Validation failed
-                $data['errors'] = $tripModel->errors;
-                $data['trip'] = $trip;
-                $this->view('traveler/viewTrip', $data);
+                $errors = $tripModel->errors;
+                header("Location: " . ROOT . "/traveler/MyTrips/viewTrip/" . $trip_Id . "?error=" . urlencode(implode(', ', $errors)));
+                exit();
             }
-        } else {
-            // Load view trip view with existing trip data
-            $data = [
-                'trip' => $trip
-            ];
-            $this->view('traveler/viewTrip', $data);
         }
+
+        $this->view('traveler/viewTrip', ['trip' => $trip]);
     }
 }

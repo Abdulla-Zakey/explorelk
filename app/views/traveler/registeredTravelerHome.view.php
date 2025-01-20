@@ -1,3 +1,7 @@
+<?php 
+    // var_dump($data);
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -6,7 +10,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap">
     <link rel="stylesheet" href="<?= ROOT ?>/assets/css/Traveler/registeredUser.css">
-    <link rel="icon" href="<?= ROOT ?>/assets/images/logos/logoBlack.svg">
+    <link rel = "stylesheet" href = "<?= ROOT ?>/assets/css/Traveler/currentlyNoEvents.css">
+    <link rel="icon" href="<?= IMAGES ?>/logos/logoBlack.svg">
     <title>ExploreLK | Home - Traveler</title>
     <script src="https://kit.fontawesome.com/f35c1c7a11.js" crossorigin="anonymous"></script>
 </head>
@@ -52,7 +57,6 @@
 
             <div class="linkHolder">
                 <a href="<?= ROOT ?>/traveler/Login/logout" class="linkItem"><i class="fas fa-sign-out-alt"></i>Logout</a>
-
             </div>
 
 
@@ -60,7 +64,7 @@
 
         <div class="rightContainer">
             <h1>
-                Welcome back, ready for another adventure?
+                <?php echo "Welcome back, " . htmlspecialchars($data['userData']->username) . "! Ready for your next adventure?";?>
             </h1>
             <div class="contentContainer">
                 <h2>
@@ -73,7 +77,7 @@
 
                     <div class="leftImg">
 
-                        <a href="<?= ROOT ?>/traveler/NuwaraEliya">
+                        <a href="<?= ROOT ?>/traveler/ParticularDistrict/index/9">
                             <img src="<?= ROOT ?>/assets/images/travelers/dashboard/nuwaraEliya.jpg">
                             <p>
                                 Nuwara Eliya
@@ -83,17 +87,22 @@
                     </div>
 
                     <div class="midImg">
-                        <img src="<?= ROOT ?>/assets/images/travelers/dashboard/galle.jpg">
-                        <p>
-                            Galle
-                        </p>
+                        <a href = "<?= ROOT ?>/traveler/ParticularDistrict/index/1">
+                            <img src="<?= ROOT ?>/assets/images/travelers/dashboard/anuradhapura.jpg">
+                            <p>
+                                Anuradhapura
+                            </p>
+                        </a>
                     </div>
 
                     <div class="rightImg">
-                        <img src="<?= ROOT ?>/assets/images/travelers/dashboard/anuradhapura.jpg">
-                        <p>
-                            Anuradhapura
-                        </p>
+                        <a href = "<?= ROOT ?>/traveler/ParticularDistrict/index/2">
+                            <img src="<?= ROOT ?>/assets/images/travelers/dashboard/badhulla.png">
+                            <p>
+                                Badhulla
+                            </p>
+                        </a>
+                        
                     </div>
 
                 </div>
@@ -147,40 +156,55 @@
                 <h2>
                     Exciting Events Coming Up!
                 </h2>
-                <p>
-                    Join exclusive experiences organized just for you by local experts.
-                </p>
-                <div class="imageContainer">
+                
+                <?php
+                    if(!empty($data['eventData'])){
+                        $counter = 0;
+                        
+                        foreach($data['eventData'] as $event){
+                            if($counter % 3 == 0){
+                                echo '<p>Join exclusive experiences organized just for you by local experts</p>';
+                                echo '<div class="imageContainer">';
+                            }
+                ?>
+                            <div class="<?= ($counter % 3 == 0) ? 'leftImg' : (($counter % 3 == 1) ? 'midImg' : 'rightImg') ?>">    
+                                <a href = "<?= ROOT ?>/traveler/ViewParticularEvent/index/<?= $event->event_Id?>">  
+                                    <img src="<?= IMAGES ?>/events/eventThumbnailPics/<?= $event->eventThumnailPic?>">
+                                    <p>
+                                        <?= $event->eventName ?>
+                                    </p>
+                                </a>
+                            </div>
+                <?php
+                            if($counter % 3 == 2){
+                                echo '</div>';
+                                echo '<a href=" '. ROOT .'/traveler/ViewAllEvents"><button class="btn">See More</button></a>';
+                            }
+                                    
+                            $counter++;
+                        }
 
-                    <div class="leftImg">
+                    }else{
+                        echo '<div class="no-events-container">';
 
-                        <a href="<?= ROOT ?>/traveler/WhimsicalWonderfest">
-                            <img src="<?= ROOT ?>/assets/images/travelers/dashboard/carnival.jpg">
-                            <p>
-                                Whimsical Wonderfest
-                            </p>
-                        </a>
+                            echo '<div class="no-events-content">';
 
-                    </div>
+                                echo '<div class="calendar-icon">';
+                                    echo '<div class="calendar-top"></div>';
+                                    echo '<div class="calendar-body">';
+                                        echo '<div class="cross">×</div>';
+                                    echo '</div>';
+                                echo '</div>';
 
-                    <div class="midImg">
-                        <img src="<?= ROOT ?>/assets/images/travelers/dashboard/horseRace.jpg">
-                        <p>
-                            Thundering Hooves Race
-                        </p>
-                    </div>
-
-                    <div class="rightImg">
-                        <img src="<?= ROOT ?>/assets/images/travelers/dashboard/magicShow.jpg">
-                        <p>
-                            The Great Magic Extravaganza
-                        </p>
-                    </div>
-
-                </div>
-
-                <button class="btn">See More</button>
-
+                                echo '<h3>Currently No Upcoming Events</h3>';
+                                echo '<p class = "para">We are working on bringing exciting new experiences your way. Check back soon!</p>';
+        
+                            echo '</div>';
+                        echo '</div>';
+                    }
+                        
+                ?>
+                    
             </div>
 
             <div class="contentContainer">
