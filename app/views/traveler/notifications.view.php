@@ -12,6 +12,11 @@
     <script src="https://kit.fontawesome.com/f35c1c7a11.js" crossorigin="anonymous"></script>
 
     <style>
+
+        body{
+            margin:0px
+        }
+        
         .leftPanel h1{
             font-size: 3.2rem;
         }
@@ -60,7 +65,9 @@
             </div>
 
             <div class = "linkHolder">
-                <a href = "<?= ROOT ?>/traveler/Home" class = "linkItem"><i class="fas fa-sign-out-alt"></i>Logout</a>
+                <a href="<?= ROOT ?>/traveler/Login/logout" class="linkItem">
+                    <i class="fas fa-sign-out-alt"></i>Logout
+                </a>
             </div>
 
 

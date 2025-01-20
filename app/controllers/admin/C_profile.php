@@ -3,9 +3,8 @@
 /**
  * Profile class
  */
-class C_profile
+class C_profile extends Controller
 {
-	use Controller;
 
 	public function index()
 	{

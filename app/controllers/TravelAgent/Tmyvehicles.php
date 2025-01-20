@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <?php
 
     class Tmyvehicles extends Controller {
@@ -10,4 +11,18 @@
             $this->view('travelagent/myvehicles');
             
         }
+=======
+<?php
+
+    class Tmyvehicles extends Controller {
+
+       
+        public function index($a = '', $b = '', $c = ''){
+
+           
+
+            $this->view('travelagent/myvehicles');
+            
+        }
+>>>>>>> jabir
     }

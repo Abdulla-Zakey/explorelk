@@ -3,9 +3,8 @@
 /**
  * Earnings class
  */
-class C_earnings
+class C_earnings extends Controller
 {
-	use Controller;
 
 	public function index()
 	{

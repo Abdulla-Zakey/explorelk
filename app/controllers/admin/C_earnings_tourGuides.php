@@ -3,9 +3,8 @@
 /**
  * Tour Guides Earnings class
  */
-class C_earnings_tourGuides
+class C_earnings_tourGuides extends Controller
 {
-	use Controller;
 
 	public function index()
 	{

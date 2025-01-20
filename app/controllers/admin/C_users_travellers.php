@@ -3,9 +3,8 @@
 /**
  * Travellers User class
  */
-class C_users_travellers
+class C_users_travellers extends Controller
 {
-	use Controller;
 
 	public function index()
 	{

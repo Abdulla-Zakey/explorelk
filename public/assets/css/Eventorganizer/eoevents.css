@@ -4,7 +4,7 @@ body{
     padding: 0;
     background-color: #f4f4f4;
 }
-.my-events-container{
+/* .my-events-container{
     margin-top: 50px;
     margin-left: 170px;
     margin-right: 150px;
@@ -23,12 +23,12 @@ body{
     
 }
 .my-event{
-    margin-top: 20px;
+     margin-top: 20px;
     margin-bottom: 20px;
     margin-left: 10px;
-    margin-right: 10px;
-    width: 300px;
-    height: 300px;
+    margin-right: 10px; 
+    width: auto;
+    height: auto;
     border: 1px solid black;
     border-radius: 10px;
     box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.75);
@@ -72,7 +72,7 @@ body{
     box-shadow: 0 4px 8px rgba(255, 0, 0, 0.1);
     border: 2px solid #CACDD6;
 }
-
+ */
 /* .create-event-btn {
     margin-top: 100px; 
     background-color: #ffffff;

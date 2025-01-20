@@ -1,5 +1,6 @@
-<<?php 
-  include '../app/views/components/eonavbar.php';
+<?php 
+    $title = "ExploreLK | EO - Settings";
+    include '../app/views/components/eonavbar.php';
 ?>
 
 <!DOCTYPE html>
@@ -7,8 +8,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ExploreLK - Account Information</title>
-    <link rel="stylesheet" href="<?php echo ROOT; ?>/assets/css/Eventorganizer/eosettings.css">
+    <link rel="stylesheet" href="<?= CSS ?>/Eventorganizer/eosettings.css">
+    <title><?= $title ?></title>
 </head>
 <body>
 
@@ -23,12 +24,12 @@
             <h2>Account Information</h2>
             
             <!-- Profile Image Upload -->
-            <div class="profile-image-container">
-                <img src="<?php echo ROOT; ?>/assets/images/eo/profile-placeholder.png" alt="Profile Image" class="profile-img">
+            <!-- <div class="profile-image-container">
+                <img src="<?php //echo ROOT; ?>/assets/images/eo/profile-placeholder.png" alt="Profile Image" class="profile-img">
                 <p>Add a profile image</p>
                 <span>Drag and drop or choose a file to upload</span>
             </div>
-
+ -->
             <!-- Contact Information Section -->
             <h3>Contact Information</h3>
             <div class="form-container">

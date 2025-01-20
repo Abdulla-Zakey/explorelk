@@ -3,9 +3,8 @@
 /**
  * Availability class
  */
-class C_availability
+class C_availability extends Controller
 {
-	use Controller;
 
 	public function index()
 	{

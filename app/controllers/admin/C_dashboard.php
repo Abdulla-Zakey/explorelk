@@ -3,9 +3,8 @@
 /**
  * Dashboard class
  */
-class C_dashboard
+class C_dashboard extends Controller
 {
-	use Controller;
 
 	public function index()
 	{

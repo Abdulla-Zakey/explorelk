@@ -3,9 +3,8 @@
 /**
  * Car Rentals Earnings class
  */
-class C_earnings_carRentals
+class C_earnings_carRentals extends Controller
 {
-	use Controller;
 
 	public function index()
 	{

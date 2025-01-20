@@ -23,6 +23,7 @@ html{
 }
 
 body{
+    margin: 0px;
     font-family: 'Poppins', sans-serif;
     overflow-x: hidden;
 }
@@ -251,3 +252,4 @@ body{
     filter: blur(5px);
     pointer-events: none;
 }
+

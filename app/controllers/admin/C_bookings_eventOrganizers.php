@@ -3,9 +3,8 @@
 /**
  * Evenet Organizers Bookings class
  */
-class C_bookings_eventOrganizers
+class C_bookings_eventOrganizers extends Controller
 {
-	use Controller;
 
 	public function index()
 	{

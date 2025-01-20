@@ -3,9 +3,8 @@
 /**
  * Content Management class
  */
-class C_contentManagement
+class C_contentManagement extends Controller
 {
-	use Controller;
 
 	public function index()
 	{

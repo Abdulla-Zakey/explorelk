@@ -3,9 +3,8 @@
 /**
  * Hotels and Restaurant users class
  */
-class C_users_hotelsRestaurants
+class C_users_hotelsRestaurants extends Controller
 {
-	use Controller;
 
 	public function index()
 	{

@@ -3,9 +3,8 @@
 /**
  * Service Provider details class
  */
-class C_serviceProviderDetails
+class C_serviceProviderDetails extends Controller
 {
-	use Controller;
 
 	public function index()
 	{

@@ -3,9 +3,8 @@
 /**
  * Review class
  */
-class C_reviews
+class C_reviews extends Controller
 {
-	use Controller;
 
 	public function index()
 	{
