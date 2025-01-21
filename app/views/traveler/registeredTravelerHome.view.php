@@ -125,10 +125,12 @@
 
                     <div class="leftImg">
 
-                        <img src="<?= ROOT ?>/assets/images/travelers/dashboard/guidedNatureHikes.jpg">
-                        <p>
-                            Ella Adventure
-                        </p>
+                        <a href = "<?= ROOT ?>/traveler/ViewParticularTour">
+                            <img src="<?= ROOT ?>/assets/images/travelers/dashboard/guidedNatureHikes.jpg">
+                            <p>
+                                Ella Adventure
+                            </p>
+                        </a>
 
                     </div>
 
