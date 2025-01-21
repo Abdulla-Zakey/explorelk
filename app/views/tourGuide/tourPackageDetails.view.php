@@ -36,7 +36,7 @@
                 <div class="image-gallery">
                     <?php if (!empty($data['tourPackage']->images)): ?>
                         <?php foreach ($data['tourPackage']->images as $image): ?>
-                            <img src="<?= ROOT ?>/assets/images/tourGuide/<?= htmlspecialchars($image) ?>" 
+                            <img src="<?= ROOT ?> <?= htmlspecialchars($image) ?>" 
                                 alt="<?= htmlspecialchars($data['tourPackage']->package_name ?? 'Tour Image') ?>">
                         <?php endforeach; ?>
                     <?php else: ?>

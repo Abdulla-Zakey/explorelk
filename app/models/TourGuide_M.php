@@ -19,7 +19,10 @@ class TourGuide_M
 		'licenseNum',
 		'experience',
 		'fieldsOfExpertise',
-		'tourFrequencyPerMonth'
+		'tourFrequencyPerMonth',
+		'guideLocation',
+		'guideBio',
+		'profilePhoto'
 	];
 
 	public function validate($data)
@@ -141,4 +144,39 @@ class TourGuide_M
 
 		return $data;
 	}
+	
+	// public function updateProfilePhoto($guideId, $imageData)
+    // {
+    //     $query = "UPDATE " . $this->table . " SET profilePhoto = ? WHERE guide_id = ?";
+    //     $stmt = $this->connect()->prepare($query);
+    //     return $stmt->execute([$imageData, $guideId]);
+    // }
+
+	// public function updateProfile($guideId, $data)
+	// {
+		
+
+	// 	try {
+	// 		$fields = [];
+	// 		$values = [];
+			
+	// 		foreach ($data as $key => $value) {
+	// 			if (in_array($key, $this->allowedColumns)) {
+	// 				$fields[] = "$key = ?";
+	// 				$values[] = $value;
+	// 			}
+	// 		}
+			
+	// 		// Add guide_id to values array
+	// 		$values[] = $guideId;
+			
+	// 		$query = "UPDATE " . $this->table . " SET " . implode(', ', $fields) . " WHERE guide_id = ?";
+	// 		$stmt = $this->connect()->prepare($query);
+			
+	// 		return $stmt->execute($values);
+	// 	} catch (Exception $e) {
+	// 		// Log error if needed
+	// 		return false;
+	// 	}
+	// }
 }
