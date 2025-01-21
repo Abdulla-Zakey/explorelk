@@ -13,6 +13,8 @@
 
 <body>
     <div class="mainContainer">
+       
+        <div class = "fake"></div>
 
         <div class="leftPanel">
             <div class="logo">
