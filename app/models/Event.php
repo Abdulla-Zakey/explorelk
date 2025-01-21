@@ -55,7 +55,8 @@ class Event{
 
     $result = $this->where(
       [
-          'eventDate>=' => date('Y-m-d')
+          'eventDate>=' => date('Y-m-d'),
+          'eventStatus' => 'approved'
       ],
       [
           'order_by' => 'eventDate',
@@ -68,7 +69,12 @@ class Event{
   }
 
   public function getAllAprovedEvents(){
-    $result = $this->where(['eventStatus' => 'approved']);
+    $result = $this->where(
+      [ 
+        'eventDate>=' => date('Y-m-d'),
+        'eventStatus' => 'approved'
+      ]
+    );
     return $result;
   }
   

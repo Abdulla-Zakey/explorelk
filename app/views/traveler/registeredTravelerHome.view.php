@@ -125,10 +125,12 @@
 
                     <div class="leftImg">
 
-                        <img src="<?= ROOT ?>/assets/images/travelers/dashboard/guidedNatureHikes.jpg">
-                        <p>
-                            Ella Adventure
-                        </p>
+                        <a href = "<?= ROOT ?>/traveler/ViewParticularTour">
+                            <img src="<?= ROOT ?>/assets/images/travelers/dashboard/guidedNatureHikes.jpg">
+                            <p>
+                                Ella Adventure
+                            </p>
+                        </a>
 
                     </div>
 
@@ -176,12 +178,18 @@
                                 </a>
                             </div>
                 <?php
-                            if($counter % 3 == 2){
-                                echo '</div>';
-                                echo '<a href=" '. ROOT .'/traveler/ViewAllEvents"><button class="btn">See More</button></a>';
-                            }
-                                    
+
                             $counter++;
+
+                            if($counter == count($data['eventData'])){
+                                echo '</div>';
+
+                                if($counter % 3 == 0 ){
+                                    echo '<a href=" '. ROOT .'/traveler/ViewAllEvents"><button class="btn">See More</button></a>';
+                                }
+
+                            }
+                            
                         }
 
                     }else{

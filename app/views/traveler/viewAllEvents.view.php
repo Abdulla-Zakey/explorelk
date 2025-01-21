@@ -119,51 +119,83 @@
 
             }
 
+            /*The below part is not necessary, because if there is no upcoming events, we dont show the see more button in the homepage. 
+            But we are giving view upcoming events button in the particular district view as well as particular attractons view. 
+            So for that if there is no upcoming events registered with us. We need this. So dont remove this*/
+
+            else{
+                echo '<div class="no-events-container">';
+
+                    echo '<div class="no-events-content">';
+
+                        echo '<div class="calendar-icon">';
+                            echo '<div class="calendar-top"></div>';
+                            echo '<div class="calendar-body">';
+                                echo '<div class="cross">×</div>';
+                            echo '</div>';
+                        echo '</div>';
+
+                        echo '<h3>Currently No Upcoming Events</h3>';
+                        echo '<p class = "para">We are working on bringing exciting new experiences your way. Check back soon!</p>';
+
+                    echo '</div>';
+
+                echo '</div>';
+            }
+
         ?>
 
     </div>
 
     <!--search functionality-->
     <script>
-document.addEventListener('DOMContentLoaded', function() {
-    const searchInput = document.getElementById('search');
-    const mainContainer = document.querySelector('.main-container');
-    let searchTimeout;
-
-    searchInput.addEventListener('input', function() {
-        clearTimeout(searchTimeout);
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchInput = document.getElementById('search');
+            const mainContainer = document.querySelector('.main-container');
+    
+            // Function to perform search
+            const performSearch = () => {
+                const searchTerm = searchInput.value.trim();
         
-        // Add a small delay to prevent too many requests while typing
-        searchTimeout = setTimeout(() => {
-            const searchTerm = this.value.trim();
-            
-            // Create FormData object
-            const formData = new FormData();
-            formData.append('search', searchTerm);
+                // Only search if there's text
+                if (searchTerm) {
+                    const formData = new FormData();
+                    formData.append('search', searchTerm);
 
-            // Send AJAX request
-            fetch('<?= ROOT ?>/traveler/ViewAllEvents/search', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                // Find the container that holds all events
-                const eventsContainer = mainContainer.querySelector('.events-grid')?.parentElement;
-                if (eventsContainer) {
-                    // Replace existing events with search results
-                    eventsContainer.innerHTML = data.html;
-                    // Reinitialize the intersection observer for animations
-                    observeElements();
+                    // Show loading state if needed
+                    // mainContainer.classList.add('loading');
+
+                    fetch('<?= ROOT ?>/traveler/ViewAllEvents/search', {
+                        method: 'POST',
+                        body: formData
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        const eventsContainer = mainContainer.querySelector('.events-grid')?.parentElement;
+                        if (eventsContainer) {
+                            eventsContainer.innerHTML = data.html;
+                            observeElements();
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    })
+                    .finally(() => {
+                        // Remove loading state if implemented
+                        // mainContainer.classList.remove('loading');
+                    });
                 }
-            })
-            .catch(error => {
-                console.error('Error:', error);
+            };
+
+            // Listen for Enter key press
+            searchInput.addEventListener('keypress', function(event) {
+                if (event.key === 'Enter') {
+                    event.preventDefault(); // Prevent form submission if within a form
+                    performSearch();
+                }
             });
-        }, 300); // 300ms delay
-    });
-});
-</script>
+        });
+    </script>
 
     <script>
         // Category filter functionality
