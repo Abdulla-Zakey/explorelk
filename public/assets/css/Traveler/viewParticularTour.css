@@ -1,0 +1,181 @@
+html{
+    font-size: 10px;
+    font-family: 'Poppins', sans-serif;
+}
+
+body{
+    overflow-x: hidden;
+    margin: 0;
+    background-color: #f8f9fa;
+}
+
+.main-container{
+    margin: 10% 7.5% 3.5% 7.5%;
+    width: 85%;
+}
+
+.hero{
+    display: flex;
+    margin: 0;
+    width: 100%;
+}
+
+.hero-left{
+    width: 60%;
+}
+
+.hero-right{
+    margin-left: 5%;
+    width: 35%;
+}
+
+.hero img{
+    width: 100%;
+    border-radius: 1rem;
+    box-shadow: 0 0 1rem rgba(0, 0, 0, 0.5) ;
+}
+
+.tourName-conatiner{
+    margin-bottom: 2.5%;
+    font-size: 4.8rem;
+    font-weight: 700;
+    /* border: 1px solid red; */
+}
+
+.tourDescription-container{
+    margin-bottom: 1.25%;
+    line-height: 1.8;
+    font-size: 1.8rem;
+    /* color: #333;  */
+    text-align: justify;
+}
+
+.basic-info, .inclusionAndexclusion-container, .itinerary-conatiner, .warning{
+    width: 100%;
+    margin-top: 5rem;
+    box-sizing: border-box;
+    font-size: 1.6rem;
+}
+
+
+.basic-info, .inclusionAndexclusion-container{
+    display: flex;
+}
+
+.basic-info, .inclusions, .exclusions, .itinerary-conatiner{
+    padding: 1.25%;
+    background-color: #fff;
+    border: 1px solid #d3d3d3;
+    border-radius: 1rem;
+}
+
+.basic-info div{
+    width: 25%;
+    margin-top: 1rem;
+}
+
+i{
+    margin-right: 1rem;
+}
+
+.bookNow-btn{
+    width: 17.5%;
+    margin-left: 7.5%;
+    padding: 1.5rem 0;
+    box-sizing: border-box;
+    color: white;
+    background-color: darkcyan;
+    border: none;
+    border-radius: 1rem;
+    font-size: 1.6rem;
+    cursor: pointer;
+}
+
+.bookNow-btn:hover{
+    box-shadow: 0 0 1rem rgba(0, 0, 0, 0.5);
+}
+
+/*this is comes under itinerary-conatiner*/
+.itinerary-conatiner{
+    margin-top: 2.5rem;
+}
+.topic{
+    margin-bottom: 2.5rem;
+    font-size: 2rem;
+    font-weight: 600;
+}
+
+.timeline{
+    margin-top: 2.5rem;
+}
+
+.timeline-item {
+    display: flex;
+    margin-bottom: 2rem;
+    color: #333;
+    font-size: 1.6rem;
+    height: 6.5rem;
+}
+
+.timeline-item i {
+    color: darkcyan;
+    margin-right: 1.5rem;
+    font-size: 1.6rem;
+    margin-top: 0.35rem;
+}
+
+.timeline-item p {
+    margin-top: 0.5rem;
+    color: #666;
+    font-size: 1.4rem;
+}
+
+.timeline-item strong {
+    font-size: 1.6rem;
+    color: darkcyan;
+}
+
+/*This is comes under inclusionAndexclusion-container*/
+.inclusions, .exclusions{
+    width: 49%;
+}
+
+.inclusions{
+    margin-right: 1%;
+   
+}
+
+.exclusions{
+    margin-left: 1%;
+}
+
+
+li{
+    display: flex;
+    height: 5.25rem;
+    margin-bottom: 1.25rem;
+    color: #333;
+}
+
+.inclusions i{
+    color: rgb(45, 227, 45);
+}
+.exclusions i{
+    color: red;
+}
+
+.warning{
+    background-color: #eff6ff;
+    border-radius: 1rem;
+    padding: 1.25%;
+}
+
+.warning .heading-container{
+    display: flex;
+}
+
+.warning li{
+    display: flex;
+    height: 2rem;
+    margin-bottom: 2.5rem;
+}

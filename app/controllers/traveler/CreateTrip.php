@@ -11,6 +11,8 @@ class CreateTrip extends Controller
             exit();
         }
 
+        $data = ['errors' => []];
+
         // Handle form submission
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $trip = new Trip();
@@ -26,7 +28,8 @@ class CreateTrip extends Controller
                 'departureTime' => $_POST['departureTime'],
                 'transportationMode' => $_POST['transportation'],
                 'numberOfTravelers' => !empty($_POST['travelersCount']) ? intval($_POST['travelersCount']) : null,
-                'budgetPerPerson' => !empty($_POST['budgetPerPerson']) ? floatval($_POST['budgetPerPerson']) : null
+                'budgetPerPerson' => !empty($_POST['budgetPerPerson']) ? floatval($_POST['budgetPerPerson']) : null,
+                'errors' => [] 
             ];
 
             // Validate trip data
@@ -50,7 +53,7 @@ class CreateTrip extends Controller
             }
         } else {
             // Load create trip view
-            $this->view('traveler/createTrip');
+            $this->view('traveler/createTrip', $data);
         }
     }
 }

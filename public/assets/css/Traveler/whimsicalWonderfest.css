@@ -25,7 +25,7 @@ html{
 body{
     font-family: 'Poppins', sans-serif;
     overflow-x: hidden;
-    background: #fff;
+    background: #f8f9fa;
 }
 
 /* Event Banner Section */
@@ -34,7 +34,7 @@ body{
     width: 85%;
     margin: 10% 7.5% 0% 7.5%;
     height: auto;
-    background-color: #f2f2f2;
+    background-color: #FFF;
     overflow: visible;                  /* Ensures the .event-info container doesn't get cut off */
   }
   
@@ -52,7 +52,7 @@ body{
     bottom: -13.5%;                       /* Places half of the container below the bottom edge of the image */
     left: 50%;
     transform: translateX(-50%);        /* Center it horizontally and vertically at the overlap */
-    background: #f2f2f2;
+    background: #FFF;
     border: 1px solid #d3d3d3;
     border-radius: 1rem;
     padding: 0.5rem 2.5rem;
@@ -122,7 +122,7 @@ body{
     margin-bottom: 2.5%;
     padding: 1.25% 2.5% 6.25% 2.5%;
     box-sizing: border-box;
-    background-color: #f2f2f2;
+    background-color: #FFF;
     border: 1px solid #d3d3d3;
     border-radius: 1rem;
     
@@ -153,8 +153,8 @@ body{
   
 
   .tickets-info, #event-highlights, .TandCPlusConatct-Conatiner{
-    width: 80%;
-    margin: 1.25% 10% 2.5% 10%;
+    width: 85%;
+    margin: 1.25% 7.5% 2.5% 7.5%;
     padding: 1.25% 2.5%;
     box-sizing: border-box;
   }
@@ -172,11 +172,12 @@ body{
 
   .ticket{
     width: 33.33%;
-    background-color: #f2f2f2;
+    padding: 1.25%;
+    padding-bottom: 2.5rem;
+    background-color: #FFF;
     border: 1px solid #d3d3d3;
     border-radius: 1rem;
     text-align: center;
-    padding: 1.25%;
     box-sizing: border-box;
     box-shadow: 0rem 0rem 1rem rgba(0, 0, 0, 0.25);
     transition: transform 0.2s ease, background-color 0.3s ease;
@@ -191,13 +192,14 @@ body{
   }
 
   .ticket p{
+    height: 4rem;
     font-size: 1.4rem;
   }
 
   .ticket span{
     font-size: 1.8rem;
     font-weight: 700;
-    color: red;
+    color: #0056b3;
   }
 
 
@@ -243,7 +245,7 @@ body{
 
   .tAndC-Container, .eventOrganizerContact-Container{
     display: block;
-    background-color: #f2f2f2;
+    background-color: #FFF;
     border: 1px solid #d3d3d3;
     border-radius: 1rem;
     padding: 1.25%;

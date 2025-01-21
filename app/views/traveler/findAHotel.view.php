@@ -9,8 +9,29 @@
     <link rel = "icon" href = "<?= IMAGES ?>/logos/logoBlack.svg">
     <title>ExploreLK | Find a Hotel</title>
     <script src="https://kit.fontawesome.com/f35c1c7a11.js" crossorigin="anonymous"></script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBZgc6GQyFZJMGfChxxenQtMmcZyiwryM4&libraries=places"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCFbprhDc_fKXUHl-oYEVGXKD1HciiAsz0&libraries=places"></script>
     
+    <style>
+        .searchButton{
+            width: 100%;
+            padding: 0.75rem;
+            box-sizing: border-box;
+            color: white;
+            background-color: #1E7A8F;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+    
+            transition: transform 0.2s ease, background-color 0.2s ease;
+        }
+
+        .searchButton:hover{
+            cursor: pointer;
+            background-color: #3DA4BF;
+            transform: scale(1.05);
+        }
+    </style>
+
 </head>
 <body>
     <header>
@@ -35,18 +56,6 @@
 
             <div class = "form-container">
                 <form name = "findaHotel" method = "POST" onsubmit="redirectToResults(event)">
-
-                    <div class = "longInputs">
-                        Accommodation Type:<br>
-                        <select required>
-                            <option value="" disabled selected>Select the accommodation type</option>
-                            <option value="hotels">Hotels</option>
-                            <option value="resorts">Resorts</option>
-                            <option value="villas">Villas</option>
-                        </select>
-    
-                    </div>
-
 
                     <div class = "longInputs">
                         Where are you going:<br>
@@ -79,31 +88,9 @@
                         
                     </div>
 
-                    
-                    <!-- <div class = "shortInputs-container">
-                        <div class = "shortInput">
-                            Check-in Date:<br>
-                            <input type = "date" name = "check-inDate" required>
-                        </div>
-
-                        <div class = "shortInput">
-                            Time:<br>
-                            <input type = "time" name = "check-inTime" required>
-                        </div>
-
-                        <div class = "shortInput">
-                            Check-out Date:<br>
-                            <input type = "date" name = "check-outDate" required>
-                        </div>
-
-                        <div class = "shortInput">
-                            Time:<br>
-                            <input type = "time" name = "check-outTime">
-                        </div>
-                    </div> -->
-
                     <div class = "searchBtnContainer">
                         <input type = "submit" value = "Search" name = "search">
+                        
                     </div>
                 </form>
             </div>
@@ -131,11 +118,18 @@
 
     <script>
         function redirectToResults(event) {
-            event.preventDefault();  // Prevent the form from submitting
-            const rootUrl = "<?= ROOT ?>"; // Get the root URL dynamically
-            window.location.href = `${ROOT}/traveler/HotelSearchResults`;
-            // window.location.href = "hotelSearchResults.html";  // Redirect to the search result page
-            // window.location.href = `${ROOT}/traveler/HotelSearchResults';
+            event.preventDefault();
+            console.log("Redirect triggered");
+
+            try {
+                const rootUrl = "<?= htmlspecialchars(ROOT, ENT_QUOTES) ?>";
+                console.log("Root URL:", rootUrl);
+                const redirectUrl = encodeURI(`${rootUrl}/traveler/HotelSearchResults`);
+                console.log("Redirect URL:", redirectUrl);
+                window.location.href = redirectUrl;
+            } catch (error) {
+                console.error("Redirect failed:", error);
+            }
         }
     </script>
 

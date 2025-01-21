@@ -6,17 +6,23 @@ class Login extends Controller
     {
         // Check if the user is already logged in
         if (isset($_SESSION['traveler_id'])) {
-            $this->view('traveler/registeredTravelerHome');
+            // $this->view('traveler/registeredTravelerHome');
+            redirect('traveler/RegisteredTravelerHome');
             exit();
         }
         else if(isset($_SESSION['organizer_id'])){
-            $this->view('eventorganizer/eodashboard');
+            redirect('Eventorganizer/Eodashboard');
             exit();
         }
         else if(isset($_SESSION['guide_id'])){
-            $this->view('tourguide/dashboard');
+            redirect('tourguide/C_dashboard');
             exit();
         }
+        else if(isset($_SESSION['hotel_id'])){
+            redirect('Hotel/Hdashboard');
+            exit();
+        }
+
 
         // Check if the form is submitted
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -93,16 +99,25 @@ class Login extends Controller
                             $_SESSION['guide_id'] = $result[0]->guide_Id;
 
                             // Redirect to Tour Guide's dashboard
-                            redirect('tourGuide/C_dashboard');
+                            $this->view('tourguide/dashboard');
                             exit();
                     }
                 } else {
                     // Redirect with error message
-                    $this->redirectWithError("Incorrect password");
+                    // $this->redirectWithError("* Incorrect password");
+                    $error['password'] = "Incorrect password";
+                    $this->view('traveler/Login', [
+                        'error' => $error
+                    ]);
                 }
             } else {
                 // Redirect with error message
-                $this->redirectWithError("No such email exists");
+                // $this->redirectWithError("* No such email exists");
+                $error['email'] = "No such email exists";
+                    $this->view('traveler/Login', [
+                        'error' => $error
+                    ]);
+
             }
         } else {
             // Load the login view

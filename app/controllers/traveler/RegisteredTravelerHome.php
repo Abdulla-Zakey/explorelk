@@ -1,6 +1,13 @@
 <?php
 class RegisteredTravelerHome extends Controller
 {
+
+    private $EventModel;
+
+    public function __construct(){
+        $this->EventModel = new Event();
+    }
+
     public function index()
     {
         // Check if user is logged in
@@ -11,20 +18,18 @@ class RegisteredTravelerHome extends Controller
 
         // Fetch user details
         $traveler = new Traveler();
-        $results = $traveler->where(['traveler_Id' => $_SESSION['traveler_id']]);
+        $user = $traveler->first(['traveler_Id' => $_SESSION['traveler_id']]);
 
-        // Check if user was found
-        /* if (empty($results)) {
-            // Logout user if no matching record found
-            session_destroy();
-            header("Location: " . ROOT . "/traveler/Login");
-            exit();
-        } */
+        $topUpComingEvents = $this->EventModel->getUpcomingEvents();
 
-        // Get the first (and should be only) result
-        $user = $results[0];
+        $data = [
+            'userData' => $user,
+            'eventData' => $topUpComingEvents
+        ];
 
         // Pass user data to the view
-        $this->view('traveler/registeredTravelerHome', $user);
+        $this->view('traveler/registeredTravelerHome', $data);
     }
+
+    
 }

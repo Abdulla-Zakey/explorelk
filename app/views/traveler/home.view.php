@@ -97,10 +97,10 @@
                     Travel with us and make your dream vacation a reality!
                 </p>
 
-                <div class="search-bar">
+                <!-- <div class="search-bar">
                     <input type="text" placeholder="Search a Destination">
                     <button class="search-btn">Search</button>
-                </div>
+                </div> -->
             </div>
         </div>
     </section>
