@@ -12,12 +12,6 @@
     <script src="https://kit.fontawesome.com/f35c1c7a11.js" crossorigin="anonymous"></script>
 
     <style>
-        body{
-            margin: 0px;
-        }
-        .leftPanel h1{
-            font-size: 3.2rem;
-        }
 
         .error-container{
             color: red;
@@ -157,7 +151,7 @@
                     <div class="username-Conatiner">
 
                         <div class="username">
-                            <?= htmlspecialchars($data['traveler']->username ?? '') ?>
+                            <?= htmlspecialchars($data['traveler']->username  ?? '') ?>
                         </div>
 
                         <?= htmlspecialchars($data['traveler']->fName . ' ' ?? '') ?><?= htmlspecialchars($data['traveler']->lName ?? '') ?>

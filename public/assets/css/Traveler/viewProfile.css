@@ -28,8 +28,11 @@ body{
 }
 
 .profileDetails-Container{
-    width: 62.5%;
-    margin-left: 30%;
+    width: 82%;
+    margin-left: 18%;
+    padding-left: 7.5%;
+    padding-right: 7.5%;
+    box-sizing: border-box;
     
 }
 
@@ -41,7 +44,7 @@ body{
 
 .header-container h1{
     font-size: 4.8rem;
-    margin-top: 6.25%;
+    margin-top: 2.5%;
     width: 80%;
 }
 
@@ -49,7 +52,7 @@ body{
     width: 20%;
     box-sizing: border-box;
     height: 10%;
-    margin-top: 7.75%;
+    margin-top: 3.75%;
 }
 
 .header-container button i{

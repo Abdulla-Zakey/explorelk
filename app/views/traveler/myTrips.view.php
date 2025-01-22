@@ -11,9 +11,6 @@
     <title>ExploreLK | My Trips</title>
     <script src="https://kit.fontawesome.com/f35c1c7a11.js" crossorigin="anonymous"></script>
     <style>
-        .leftPanel h1 {
-            font-size: 3.2rem;
-        }
 
         .no-trips-message{
             font-size: 1.6rem;
