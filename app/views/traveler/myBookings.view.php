@@ -10,16 +10,6 @@
     <title>ExploreLK | Home</title>
     <script src="https://kit.fontawesome.com/f35c1c7a11.js" crossorigin="anonymous"></script>
 
-    
-
-    <style>
-        body{
-            margin: 0px;
-        }
-        .leftPanel h1{
-            font-size: 3.2rem;
-        }
-    </style>
 </head>
 <body>
     <div class = "mainContainer">

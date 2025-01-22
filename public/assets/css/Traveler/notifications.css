@@ -28,18 +28,18 @@ body{
 }
 
 .rightPanel{
-    margin-left: 25%;
-    width: 72.5%;
+    margin-left: 18%;
+    width: 82%;
     margin-top: 0;
-    padding-left: 2.5%;
-    padding-right: 2.5%;
+    padding-left: 7.5%;
+    padding-right: 7.5%;
     box-sizing: border-box;
     /* border: 1px solid red; */
 }
 
 .rightPanel h1{
     font-size: 4.8rem;
-    margin-top: 6.25%;
+    margin-top: 2.5%;
     
 }
 
@@ -52,6 +52,7 @@ h2{
 }
 
 .notificationHolder{
+    margin-top: 3.5%;
     margin-bottom: 5%;
 }
 

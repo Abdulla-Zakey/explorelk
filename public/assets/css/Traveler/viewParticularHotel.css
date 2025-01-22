@@ -1,0 +1,366 @@
+/* Default font size for larger screens */
+html{
+    height: 100%;
+    font-size: 62.5%; /* 10px base, 1rem = 10px */
+}
+
+
+/* Adjust font size for tablets */
+@media (max-width: 768px) {
+    html {
+        font-size: 56.25% !important; /* 1rem = 9px */
+    }
+}
+
+
+/* Mobile adjustments */
+@media (max-width: 480px) {
+    html {
+        font-size: 50% !important; /* 1rem = 8px */
+    }
+}
+
+body{
+    font-family: 'Poppins', sans-serif;
+    overflow-x: hidden !important;
+}
+
+.backToHome{
+    font-size: 1.6rem;
+    width: 20%;
+    padding: 2rem;
+}
+
+.backToHome a{
+    color: #ffff;
+    text-decoration: none;
+}
+
+.backToHome a:hover{
+    cursor: pointer;
+}
+
+i{
+    margin-right: 2.5%;
+}
+
+#main{
+    box-sizing: border-box;
+    margin-top: 12.5%;
+}
+
+#main h1{
+    text-align: left;
+    margin-left: 7.5%;
+    font-size: 4.8rem;
+    color: black;
+}
+
+.row{
+    display: flex;
+    width: 100%;
+    padding-bottom: 5rem;
+}
+
+.infoText{
+    margin-left: 7.5%;
+    margin-right: 5%;
+    width: 50%;
+    text-align: justify;
+    font-size: 1.6rem;
+    color: #333;
+    line-height: 1.8;
+}
+
+.mapHolder{
+    margin-right: 7.5%;
+    width: 30%;
+    border: 0.5px solid darkgray;
+}
+
+.mapHolder #directionsMap{
+    width: 100%;
+    height: 100%;
+}
+
+.caption{
+    margin-top: 0.5rem;
+    font-size: 1.2rem;
+    color: #666;
+}
+
+.gallery-container{
+    padding: 2rem;
+    margin-top: 2.5%;
+}
+
+.slider-wrapper{
+    position: relative;
+    max-width: 75rem;
+    margin: auto;
+}
+
+.slider{
+    display: flex;
+    aspect-ratio: 16/9;
+    overflow-x: scroll;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    box-shadow: 0px 0px 10px rgba(0,0,0,0.5);
+    border-radius: 1rem;
+    scrollbar-width: hidden;
+}
+
+/* Hide scrollbar on Webkit browsers (Chrome, Safari) */
+.slider::-webkit-scrollbar {
+    display: none;
+}
+
+/* Hide scrollbar on Firefox */
+.slider {
+    scrollbar-width: none; 
+}
+
+.slider img{
+    flex: 1 0 100%;
+    scroll-snap-align: start;
+    object-fit: cover;
+    max-width: 100%;
+}
+
+.slider-nav{
+    display: flex;
+    column-gap: 1rem;
+    position: absolute;
+    bottom: 1.25rem;
+    left: 50%;
+    transform: translate(-50%);
+    z-index: 100;
+}
+
+.slider-nav a{
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    background-color: white;
+    opacity: 0.5;
+    transition: opacity ease 250ms;
+}
+
+.slider-nav a:hover{
+    opacity: 1;
+}
+
+#roomTypes, #guestReviews{
+    margin-top: 4%;
+    margin-bottom: 3.5%;
+}
+
+#roomTypes h1, #guestReviews h1{
+    font-size: 3.2rem;
+    margin-left: 7.5%;
+}
+
+.container{
+    display: flex;
+    width: 100%;
+    margin-top: 2.5%;
+}
+
+.roomItem{
+    width: 27.55%;
+    margin-right: 1.25%;
+    border: 1px solid #d3d3d3;
+}
+
+.roomItem:first-child{
+    margin-left: 7.5%;
+    margin-right: 1.25%;
+}
+
+.roomItem:last-child{
+    margin-right: 7.5%;
+}
+
+.topic{
+    width: 100%;
+    padding: 2.5%;
+    box-sizing: border-box;
+    color: #FFF;
+    background-color: #1E293B;
+    font-size: 2rem;
+    text-align: center;
+}
+
+.roomItem img{
+    width: 100%; 
+}
+
+.roomItem a{
+    text-decoration: none;
+}
+
+.typeDescription{
+    margin: 2.5% 5% 5% 5%;
+    font-size: 1.6rem;
+    text-align: justify;
+    height: 7.5rem;
+}
+
+.bookNow, .price{
+    margin: 0;
+    text-align: center;
+    width: 100%;
+    padding: 2.5%;
+    box-sizing: border-box;
+}
+
+.bookNow{
+    background-color: rgb(45, 227, 45);
+    color: white;
+    font-size: 1.5rem;
+}
+
+.bookNow:hover{
+    box-shadow: 0 0 1rem rgba(57, 248, 66, 0.5);
+}
+
+.price{
+    background-color: #ddd;
+    font-size: 1.2rem;
+}
+
+.bookNow:hover{
+    cursor: pointer;
+}
+
+#guest-reviews {
+    margin: 0 auto;
+    width: 85%;
+    box-sizing: border-box;
+    padding-bottom: 5%;
+}
+
+#guest-reviews h1 {
+    text-align: left;
+    font-size: 3.2rem;
+    margin-bottom: 2rem;
+}
+
+.reviews-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1.5%;
+}
+
+.review-card {
+    position: relative;
+    width: 49%;
+    box-shadow: 0 0px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 1rem;
+    padding: 1.5rem;
+    background-color: #fff;
+    box-sizing: border-box;
+}
+
+.review-card p {
+    font-size: 1.4rem;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+    height: 10rem;
+
+}
+
+.review-footer {
+    display: flex;
+    align-items: center;
+    margin-top: 1rem;
+}
+
+.review-dp {
+    width: 5rem;
+    height: 5rem;
+    border-radius: 50%;
+    margin-right: 1.2rem;
+}
+
+.user-info {
+    font-size: 1.4rem;
+}
+
+.username {
+    font-weight: bold;
+    display: block;
+}
+
+.posted-date {
+    font-size: 1.2rem;
+    color: #888;
+}
+
+.loadMore-Btn{
+    width: 15%;
+    margin-left: 85%;
+    margin-top: 1.25%;
+    font-size: 1.4rem;
+    cursor: pointer;
+    border: none;
+    border-radius: 1rem;
+    background-color: darkcyan;
+    color: white;
+    padding: 1.5rem 1rem;
+    box-sizing: border-box;
+}
+
+#closeCarousal{
+    color: lightcoral; 
+    font-size: 2rem; 
+    margin-left: 92.5%; 
+    margin-top: 2.5%; 
+    cursor: pointer;
+}
+
+
+.reviewSlide{
+    flex: 1 0 100%;
+    scroll-snap-align: start;
+    object-fit: cover;
+    max-width: 100%;
+    color: #f2f2f2;
+    background-color: #333;
+    overflow-y: hidden;
+}
+
+.profilePic{
+    width: 25%;
+    margin-top: 2.5%;
+    margin-left: 37.5%;
+    margin-bottom: 2.5%;
+    object-fit: cover;
+    border: black;
+}
+
+.profilePic img{
+    border-radius: 50%;
+    height: 100%;
+    width: 100%;
+}
+
+.username{
+    font-size: 1.6rem;
+    text-align: center;
+    font-weight: 750;
+}
+
+.review{
+    font-size: 1.4rem;
+    text-align: justify;
+    margin: 2.5% 7.5% 5% 7.5%;
+    padding-bottom: 2.5%;
+}
+
+
+.foot {
+    font-size: 1.4rem;
+}
