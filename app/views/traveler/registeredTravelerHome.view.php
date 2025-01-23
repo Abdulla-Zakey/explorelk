@@ -14,6 +14,13 @@
     <link rel="icon" href="<?= IMAGES ?>/logos/logoBlack.svg">
     <title>ExploreLK | Home - Traveler</title>
     <script src="https://kit.fontawesome.com/f35c1c7a11.js" crossorigin="anonymous"></script>
+
+    <style>
+        .logo img{
+            border-radius: 50%;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+        }
+    </style>
 </head>
 
 <body>
@@ -21,9 +28,13 @@
 
         <div class="leftPanel">
             <div class="logo">
-                <img src="<?= ROOT ?>/assets/images/logos/logoWhite.svg" alt="Logo">
+                <!-- <img src="<?= ROOT ?>/assets/images/logos/logoWhite.svg" alt="Logo"> -->
+                <img src="<?= !empty($data['userData']->profilePicture) 
+                                ?  ROOT . '/assets/images/Travelers/userProfilePics/' . $data['userData']->profilePicture 
+                                : ROOT . '/assets/images/Travelers/userProfilePics/defaultUserIcon.png' ?>" alt="Logo">
                 <h1>
-                    ExploreLK
+                    <!-- ExploreLK -->
+                     <?= $data['userData']->username ?> 
                 </h1>
             </div>
 
@@ -70,7 +81,7 @@
                 <h2>
                     Your Next Dream Adventure Awaits
                 </h2>
-                <p>
+                <p class = "subHead">
                     We’ve picked some amazing places for you to explore. Curious for more? Let’s keep going!
                 </p>
                 <div class="imageContainer">
@@ -118,7 +129,7 @@
                 <h2>
                     Exciting Tours Just for You
                 </h2>
-                <p>
+                <p class = "subHead">
                     Join expert-led adventures and discover hidden gems across Sri Lanka. Find the perfect tour for your next journey!
                 </p>
                 <div class="imageContainer">
@@ -165,7 +176,7 @@
                         
                         foreach($data['eventData'] as $event){
                             if($counter % 3 == 0){
-                                echo '<p>Join exclusive experiences organized just for you by local experts</p>';
+                                echo '<p class = "subHead">Join exclusive experiences organized just for you by local experts</p>';
                                 echo '<div class="imageContainer">';
                             }
                 ?>
@@ -219,7 +230,7 @@
                 <h2>
                     Find Your Home Away from Home!
                 </h2>
-                <p>
+                <p class = "subHead">
                     Choose from a range of hotels, from budget-friendly stays to luxury resorts.
                 </p>
                 <div class="imageContainer">
@@ -248,7 +259,7 @@
                 <h2>
                     Drive Your Adventure!
                 </h2>
-                <p>
+                <p class = "subHead">
                     Discover your destination at your own pace with our reliable car rentals. Flexible options, great rates!
                 </p>
                 <div class="imageContainer">

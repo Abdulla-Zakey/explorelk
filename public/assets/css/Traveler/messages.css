@@ -31,12 +31,12 @@ body{
 
 .rightPane{
     display: flex;
-    width: 77.5%;
+    width: 82%;
     height: 100vh;
     color: #000000;
     margin-top: 0%;
     margin-right: 0%;
-    margin-left: 22.5%;     /*Methana 27.5 thiyala thiyenne, 20% navbar eka fix karala thiyena nisa ey pramanyath, amathara 7.5% vala ekathuvath samagaya*/
+    margin-left: 18%;     /*Methana 18% thiyala thiyenne, 18% navbar eka fix karala thiyena nisa ey pramanyath, amathara 7.5% vala ekathuvath samagaya*/
     box-sizing: border-box;
 }
 
@@ -61,10 +61,10 @@ body{
 
 
 .chats-Conatiner h1{
-    margin-top: 13.5%;
+    margin-top: 5.625%;
     margin-left: 10%;
     font-size: 4.8rem;
-    margin-bottom: 7.5%;
+    margin-bottom: 2.25%;
 }
 
 .chatImageAndName-Conatiner{

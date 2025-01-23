@@ -81,8 +81,10 @@
         <h2>Places to Stay</h2>
         <div class="imageContainer">
             <div class="leftImg">
-                <img src="<?= IMAGES ?>/travelers/topdistricts/nuwaraEliya/hotels/araliya green hills.jpg">
-                <p>Araliya Green Hills Hotel</p>
+                <a href = "<?= ROOT ?>/traveler/ViewParticularHotel">
+                    <img src="<?= IMAGES ?>/travelers/topdistricts/nuwaraEliya/hotels/araliya green hills.jpg">
+                     <p>Araliya Green Hills Hotel</p>
+                </a>
             </div>
             <div class="midImg">
                 <img src="<?= IMAGES ?>/travelers/topdistricts/nuwaraEliya/hotels/GrandHotelNuwaraEliya.jpg">
