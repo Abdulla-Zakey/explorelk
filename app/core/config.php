@@ -8,6 +8,7 @@
     // define('IMAGES', 'http://localhost/gitexplorelk/explorelk/public/assets/images');
     define('APPROOT',dirname(dirname(__FILE__)));
 
+    //My name is sharma
 
     if($_SERVER['SERVER_NAME'] == 'localhost'){
 
