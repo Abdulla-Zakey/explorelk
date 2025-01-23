@@ -1,4 +1,7 @@
-<html lang="en"></html>
+<html lang="en">
+
+</html>
+
 <head>
     <title>ExploreLK Admin</title>
     <meta charset="UTF-8">
@@ -8,78 +11,61 @@
     <script src="https://kit.fontawesome.com/d11f03c652.js" crossorigin="anonymous"></script>
     <script src="<?= ROOT ?>/assets/js/admin/admin.js?v=1.0"></script>
 </head>
+
 <body>
     <div class="flexContainer">
-        
+
         <?php include_once APPROOT.'\views\inc\adminNavBar.php'; ?>
 
         <div class="body-container">
             <?php include_once APPROOT.'\views\inc\profileLink.php'; ?>
 
             <div>
-                <h1 class="heading">Settings</h1>
-                <h2 class="sub-heading">Edit Admin Profile</h2>
+                <h1 class="heading">Profile</h1>
             </div>
             <div class="traveler-details">
-                <form>
-                    <div class="details-container">
-                        <div class="profile-picture">
-                            <img src="<?=ROOT?>/assets/images/tourGuide/profile.png" alt="Profile Picture">
-                        </div>
-                        <div class="profile-fields">
-                            <div class="field-group">
-                                <label for="first-name">First Name</label>
-                                <input type="text" id="first-name" value="Andrew">
-                            </div>
-                            <div class="field-group">
-                                <label for="last-name">Last Name</label>
-                                <input type="text" id="last-name" value="Star">
-                            </div>
-                            <div class="field-group">
-                                <label for="admin-id">Admin ID</label>
-                                <input type="text" id="admin-id" value="A 052" disabled>
-                            </div>
-                            <div class="field-group">
-                                <label for="gender">Gender</label>
-                                <input type="text" id="gender" value="Male">
-                            </div>
-                            <div class="field-group">
-                                <label for="email">Email Address</label>
-                                <input type="email" id="email" value="andrewtate568@gmail.com" disabled>
-                            </div>
-                            <div class="field-group">
-                                <label for="birth-date">Birth Date</label>
-                                <input type="text" id="birth-date" value="05/02/2000">
-                            </div>
-                            <div class="field-group">
-                                <label for="city">City</label>
-                                <input type="text" id="city" value="Kandy">
-                            </div>
-                            <div class="field-group">
-                                <label for="contact-no">Contact No.</label>
-                                <input type="text" id="contact-no" value="+94 76 14 85 466">
-                            </div>
-                            <div class="field-group">
-                                <label for="address">Address</label>
-                                <input type="text" id="address" value="2A/1, Wellawatta">
-                            </div>
-                            <div class="field-group">
-                                <label for="password">Password</label>
-                                <input type="password" id="password" value="**********">
-                            </div>
-                            <div class="field-group">
-                                <label for="re-password">Re-Enter Password</label>
-                                <input type="password" id="re-password" value="**********">
-                            </div>
-                        </div>
+                <div class="details-container">
+                    <div class="profile-picture">
+                        <img src="<?=ROOT?>/assets/images/tourGuide/profile.png" alt="Profile Picture">
                     </div>
+                    <div class="profile-fields">
+                        <div class="field-group flexContainer">
+                            <h4>First Name :</h4>&nbsp; Nihmath
+                        </div>
+                        <div class="field-group flexContainer">
+                            <h4>Last Name :</h4>&nbsp; Jabir
+                        </div>
+                        <div class="field-group flexContainer">
+                            <h4>Admin ID :</h4>&nbsp; A 052
+                        </div>
+                        <div class="field-group flexContainer">
+                            <h4>Gender :</h4>&nbsp; Male
+                        </div>
+                        <div class="field-group flexContainer">
+                            <h4>Email Address :</h4>&nbsp; andrewtate568@gmail.com
+                        </div>
+                        <div class="field-group flexContainer">
+                            <h4>Birth Date :</h4>&nbsp;05/02/2000
+                        </div>
+                        <div class="field-group flexContainer">
+                            <h4>City :</h4>&nbsp;Kandy
+                        </div>
+                        <div class="field-group flexContainer">
+                            <h4>Contact No : </h4>&nbsp; +94 76 14 85 466
+                        </div>
+                        <div class="field-group flexContainer">
+                            <h4>Address :</h4>&nbsp; 2A/1, Wellawatta
+                        </div>
 
-                    <div class="save-changes-btn">
-                        <button type="submit">Save Changes</button>
                     </div>
-                </form>
+                </div>
+
+                <div class="save-changes-btn">
+                    <button onclick="window.location.href='<?= ROOT ?>/admin/C_editProfile';">Edit Profile</button>
+                </div>
             </div>
         </div>
     </div>
 </body>
+
 </html>
