@@ -68,7 +68,7 @@
     </div>
 
     <div class = "linkHolder">
-        <a href = "<?= ROOT?>/admin/C_adminLogin" class = "linkItem"><i class="fas fa-sign-out-alt"></i>Logout</a>
+        <a href = "<?= ROOT?>/admin/C_adminLogin/logout" class = "linkItem"><i class="fas fa-sign-out-alt"></i>Logout</a>
     </div>
 </div>
 

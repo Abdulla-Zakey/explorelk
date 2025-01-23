@@ -376,7 +376,6 @@ body {
 
 .back-button {
     text-decoration: none;
-    font-size: 1.5em;
     color: #000000;
     display: inline-block;
 }
@@ -664,10 +663,8 @@ input[readonly] {
 
 .back-button {
     text-decoration: none;
-    font-size: 1.5em;
     color: #000000;
     display: inline-block;
-    margin-bottom: 2%;
 }
 
 .booking-details-section h2 {
