@@ -4,6 +4,7 @@ class Login extends Controller
 {
     public function index()
     {
+
         // Check if the user is already logged in
         if (isset($_SESSION['traveler_id'])) {
             // $this->view('traveler/registeredTravelerHome');
@@ -137,6 +138,14 @@ class Login extends Controller
 
         // Destroy the session
         session_destroy();
+
+        if (ini_get("session.use_cookies")) {
+            $params = session_get_cookie_params();
+            setcookie(session_name(), '', time() - 42000,
+                $params["path"], $params["domain"],
+                $params["secure"], $params["httponly"]
+            );
+        }
 
         // Redirect to login page
         header("Location: " . ROOT . "/traveler/Home");
