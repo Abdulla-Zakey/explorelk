@@ -4,8 +4,8 @@
     define('ROOT', 'http://localhost/gitexplorelk/explorelk/public');
     define('CSS', 'http://localhost/gitexplorelk/explorelk/public/assets/css');
     define('IMAGES', 'http://localhost/gitexplorelk/explorelk/public/assets/images');
-    define('CSS', 'http://localhost/gitexplorelk/explorelk/public/assets/css');
-    define('IMAGES', 'http://localhost/gitexplorelk/explorelk/public/assets/images');
+    // define('CSS', 'http://localhost/gitexplorelk/explorelk/public/assets/css');
+    // define('IMAGES', 'http://localhost/gitexplorelk/explorelk/public/assets/images');
     define('APPROOT',dirname(dirname(__FILE__)));
 
 
