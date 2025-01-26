@@ -1,4 +1,7 @@
-<html lang="en"></html>
+<html lang="en">
+
+</html>
+
 <head>
     <title>ExploreLK Admin</title>
     <meta charset="UTF-8">
@@ -8,9 +11,10 @@
     <script src="https://kit.fontawesome.com/d11f03c652.js" crossorigin="anonymous"></script>
     <script src="<?= ROOT ?>/assets/js/admin/admin.js?v=1.0"></script>
 </head>
+
 <body>
     <div class="flexContainer">
-        
+
         <?php include_once APPROOT.'\views\inc\adminNavBar.php'; ?>
 
         <div class="body-container">
@@ -21,56 +25,80 @@
                 <h3><a href="<?= ROOT ?>/admin/C_profile" class="back-button">&larr; Back</a></h3>
                 <h2 class="sub-heading">Edit Profile</h2>
             </div>
+
+            <?php if (!empty($data['errors'])): ?>
+                <div class="error-container">
+                    <?php foreach ($data['errors'] as $field => $error): ?>
+                        <p class="error-message"><?= $error ?></p>
+                    <?php endforeach; ?>
+                </div>
+            <?php endif; ?>
+            
             <div class="traveler-details">
-                <form>
+                <form action="<?= ROOT ?>/admin/C_editProfile/updateProfile" method="POST" enctype="multipart/form-data">
                     <div class="details-container">
-                        <div class="profile-picture">
-                            <img src="<?=ROOT?>/assets/images/tourGuide/profile.png" alt="Profile Picture">
+                        <div class="profile-picture edit-profile-picture">
+                            <img id="profile-image"
+                                src="<?= ROOT ?>/assets/images/admin/adminProfilePhotos/<?= $data['profile_picture'] ?? 'profile.png' ?>"
+                                alt="Profile Picture">
+                            <label class="edit-change-photo-btn" for="file-input">Change Profile Photo</label>
+                            <input type="file" id="file-input" name="profile-image" accept="image/*">
                         </div>
                         <div class="profile-fields">
                             <div class="field-group">
                                 <label for="first-name">First Name</label>
-                                <input type="text" id="first-name" value="Andrew">
+                                <input type="text" id="first-name" name="first-name" value="<?= $data['firstName'] ?>">
                             </div>
                             <div class="field-group">
                                 <label for="last-name">Last Name</label>
-                                <input type="text" id="last-name" value="Star">
+                                <input type="text" id="last-name" name="last-name" value="<?= $data['lastName'] ?>">
                             </div>
                             <div class="field-group">
                                 <label for="admin-id">Admin ID</label>
-                                <input type="text" id="admin-id" value="A 052" disabled>
+                                <input type="text" id="admin-id" value="<?= $data['admin_id']?>" disabled>
                             </div>
                             <div class="field-group">
                                 <label for="gender">Gender</label>
-                                <input type="text" id="gender" value="Male">
+                                <select id="gender" name="gender">
+                                    <option value="Male" <?= $data['gender'] === 'male' ? 'selected' : '' ?>>Male
+                                    </option>
+                                    <option value="Female" <?= $data['gender'] === 'female' ? 'selected' : '' ?>>Female
+                                    </option>
+                                </select>
                             </div>
                             <div class="field-group">
                                 <label for="email">Email Address</label>
-                                <input type="email" id="email" value="andrewtate568@gmail.com" disabled>
+                                <input type="email" id="email" value="<?= $data['email']?>" disabled>
                             </div>
                             <div class="field-group">
                                 <label for="birth-date">Birth Date</label>
-                                <input type="text" id="birth-date" value="05/02/2000">
+                                <input type="date" id="birth-date" name="birth-date" value="<?= $data['dob']?>">
                             </div>
                             <div class="field-group">
                                 <label for="city">City</label>
-                                <input type="text" id="city" value="Kandy">
+                                <input type="text" id="city" name="city" value="<?= $data['city']?>">
                             </div>
                             <div class="field-group">
                                 <label for="contact-no">Contact No.</label>
-                                <input type="text" id="contact-no" value="+94 76 14 85 466">
+                                <input type="text" id="contact-no" name="contact-no" value="<?= $data['phoneNo']?>">
                             </div>
                             <div class="field-group">
                                 <label for="address">Address</label>
-                                <input type="text" id="address" value="2A/1, Wellawatta">
+                                <input type="text" id="address" name="address" value="<?= $data['address']?>">
                             </div>
                             <div class="field-group">
-                                <label for="password">Password</label>
-                                <input type="password" id="password" value="**********">
+                                <label for="nic">NIC</label>
+                                <input type="text" id="nic" name="nic" value="<?= $data['nic']?>">
                             </div>
                             <div class="field-group">
-                                <label for="re-password">Re-Enter Password</label>
-                                <input type="password" id="re-password" value="**********">
+                                <label for="password">New Password</label>
+                                <input type="password" id="password" name="password"
+                                    placeholder="Leave blank if no change">
+                            </div>
+                            <div class="field-group">
+                                <label for="re-password">Re-Enter New Password</label>
+                                <input type="password" id="confirmPassword" name="confirmPassword"
+                                    placeholder="Leave blank if no change">
                             </div>
                         </div>
                     </div>
@@ -81,6 +109,20 @@
                 </form>
             </div>
         </div>
-    </div>
+
+        <script>
+        document.getElementById('file-input').addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const profileImage = document.getElementById('profile-image');
+                    profileImage.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+        </script>
 </body>
+
 </html>
