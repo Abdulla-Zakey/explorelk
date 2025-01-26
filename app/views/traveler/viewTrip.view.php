@@ -108,7 +108,7 @@
                 <div class="imgAndTopic-Container">
 
                     <h1>
-                        <input type = "text" name="tripName" style = "font-size: 4.8rem; font-weight: 750;" class = "coverImage-text" value="<?= htmlspecialchars($data['trip']->tripName) ?>" disabled>
+                        <input type = "text" name="tripName" style = "font-size: 4.8rem; font-weight: 750;" class = "coverImage-text" value = "<?= htmlspecialchars($data['trip']->tripName) ?>" disabled>
                     </h1>
 
                     <div class="dateAndLocationInfo-Conatiner">
@@ -222,7 +222,6 @@
 
                 inputs.forEach(input => {
                     input.removeAttribute('readonly');
-                    input.removeAttribute('disabled');
                 });
 
                 container.classList.add('edit-mode');

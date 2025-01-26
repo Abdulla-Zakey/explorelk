@@ -1,3 +1,7 @@
+<?php
+    // var_dump($data);
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -19,9 +23,9 @@
         <nav class="navbar">
 
             <div class="backToHome">
-                <a href="<?= ROOT ?>/traveler/RegisteredTravelerHome">
+                <a href="<?= ROOT ?>/traveler/ParticularDistrict/index/9">
                     <i class="fa-solid fa-arrow-left"></i>
-                    <span>Back to Home</span>
+                    <span>Back</span>
                 </a>
             </div>
 
@@ -35,18 +39,25 @@
 
         <div class="row">
             <div class="infoText">
-                Nestled in the heart of Nuwara Eliya, Araliya Green Hills Hotel offers a perfect blend of luxury and relaxation. Surrounded by misty hill country landscapes, it provides an ideal retreat for travelers seeking comfort and elegance. Guests can enjoy well-appointed rooms, stunning views of rolling hills and vibrant gardens, and easy access to Nuwara Eliya’s charming attractions, making it a haven for nature lovers and adventurers alike.
-
+                <span class = "subtopic">
+                    A Picturesque Location
+                </span>
+                <br>
+                <?= htmlspecialchars($data['advancedHotelData'][0]->description_para1) ?>
                 <br><br>
 
-                The hotel offers well-appointed rooms with modern amenities, providing a relaxing escape after exploring Nuwara Eliya. Guests can start their day with fresh mountain air and breathtaking views of misty hills and vibrant gardens. On-site dining options cater to diverse palates with a variety of local and international cuisines, while the cozy outdoor seating areas create a serene atmosphere to unwind and take in the stunning scenery.
-
+                <span class = "subtopic">
+                    Exceptional Comfort and Elegance
+                </span>
+                <br>
+                <?= htmlspecialchars($data['advancedHotelData'][0]->description_para2) ?>
                 <br><br>
 
-                Conveniently located near the town’s iconic attractions, Araliya Green Hills Hotel is an ideal base for exploring Gregory Lake, 
-                Hakgala Botanical Garden, and Horton Plains National Park. Whether seeking a romantic escape, a family vacation, 
-                or a peaceful getaway, this luxurious hotel blends warm hospitality with unparalleled comfort, 
-                ensuring a memorable stay in the heart of Sri Lanka’s hill country.
+                <span class = "subtopic">
+                    Explore Nearby Attractions
+                </span>
+                <br>
+                <?= htmlspecialchars($data['advancedHotelData'][0]->description_para3) ?>
             </div>
 
             <div class="mapHolder">
@@ -64,20 +75,19 @@
     </section>
 
     <section class="gallery-container">
+
         <div class="slider-wrapper">
+
             <div class="slider">
-                <img id="slide1" src="<?= IMAGES ?>/Travelers/topDistricts/nuwaraEliya/hotels/araliyaGreenHills/image1.jpg">
-                <img id="slide2" src="<?= IMAGES ?>/Travelers/topDistricts/nuwaraEliya/hotels/araliyaGreenHills/image2.jpg">
-                <img id="slide3" src="<?= IMAGES ?>/Travelers/topDistricts/nuwaraEliya/hotels/araliyaGreenHills/image3.jpg">
-                <img id="slide4" src="<?= IMAGES ?>/Travelers/topDistricts/nuwaraEliya/hotels/araliyaGreenHills/image4.jpg">
-                <img id="slide5" src="<?= IMAGES ?>/Travelers/topDistricts/nuwaraEliya/hotels/araliyaGreenHills/image5.jpg">
+                <?php foreach ($data['hotelPics'] as $index => $pic): ?>
+                    <img id = "slide<?= $index + 1 ?>" src = "<?= IMAGES . '/' . $pic->image_path ?>" alt = "Hotel Picture">
+                <?php endforeach; ?>
 
                 <div class="slider-nav">
-                    <a href="#slide1"></a>
-                    <a href="#slide2"></a>
-                    <a href="#slide3"></a>
-                    <a href="#slide4"></a>
-                    <a href="#slide5"></a>
+                    <?php foreach ($data['hotelPics'] as $index => $pic): ?>
+                        <a herf = "#slide<?= $index + 1 ?>"></a>
+                    <?php endforeach; ?>
+            
                 </div>
 
             </div>
@@ -96,14 +106,14 @@
                     Single Rooms
                 </div>
 
-                <img src="./assets/images/findaHotel/Roomtypes/single-room.jpg">
+                <img src="<?= IMAGES ?>/Travelers/topDistricts/nuwaraEliya/hotels/roomTypes/single-room.jpg">
 
                 <div class="typeDescription">
                     Ideal for solo travelers, this room provides a comfortable and 
                     private retreat with all essential amenities for a relaxing stay.
                 </div>
 
-                <a href="roomDetails.html">
+                <a href = "#">
                     <div class="bookNow">
                         Book Now
                     </div>
@@ -121,13 +131,13 @@
                     Double Rooms
                 </div>
 
-                <img src="./assets/images/findaHotel/Roomtypes/double rooms.jpg">
+                <img src="<?= IMAGES ?>/Travelers/topDistricts/nuwaraEliya/hotels/roomTypes/double rooms.jpg">
 
                 <div class="typeDescription">
                     Perfect for couples or friends, this room provides a cozy space with modern amenities for comfort.
                 </div>
 
-                <a href="roomDetails.html">
+                <a href = "#">
                     <div class="bookNow">
                         Book Now
                     </div>
@@ -144,14 +154,14 @@
                     Family Rooms
                 </div>
 
-                <img src="./assets/images/findaHotel/Roomtypes/family rooms.jpg">
+                <img src="<?= IMAGES ?>/Travelers/topDistricts/nuwaraEliya/hotels/roomTypes/family rooms.jpg">
 
                 <div class="typeDescription">
                     Designed to accommodate families, it offers ample space for children and 
                     additional amenities tailored to their needs.
                 </div>
 
-                <a href="roomDetails.html">
+                <a href = "#">
                     <div class="bookNow">
                         Book Now
                     </div>
@@ -181,7 +191,7 @@
                     Friendly staff gave great hiking tips. Highly recommend for anyone visiting!
                 </p>
                 <div class="review-footer">
-                    <img src="assets/images/findaHotel/reviews/img1.png" alt="Profile Picture" class="review-dp">
+                    <img src="<?= IMAGES ?>/Travelers/userProfilePics/img1.png" alt="Profile Picture" class="review-dp">
                     <div class="user-info">
                         <span class="username">Michel Johnson</span>
                         <span class="posted-date">13 December 2024</span>
@@ -197,7 +207,7 @@
                     It’s a decent choice for a convenient, no-frills stay before the hike.
                 </p>
                 <div class="review-footer">
-                    <img src="assets/images/findaHotel/reviews/img2.png" alt="Profile Picture" class="review-dp">
+                    <img src="<?= IMAGES ?>/Travelers/userProfilePics/img2.png" alt="Profile Picture" class="review-dp">
                     <div class="user-info">
                         <span class="username">Lara Brown</span>
                         <span class="posted-date">19 September 2024</span>
@@ -215,7 +225,7 @@
                     The room was basic but had everything we needed after a long day. Will definitely stay here again!
                 </p>
                 <div class="review-footer">
-                    <img src="assets/images/findaHotel/reviews/img6.jpg" alt="Profile Picture" class="review-dp">
+                    <img src="<?= IMAGES ?>/Travelers/userProfilePics/img4.jpg" alt="Profile Picture" class="review-dp">
                     <div class="user-info">
                         <span class="username">Ammy Jackson</span>
                         <span class="posted-date">06 July 2024</span>
@@ -233,7 +243,7 @@
                     
                 </p>
                 <div class="review-footer">
-                    <img src="assets/images/findaHotel/reviews/img5.jpg" alt="Profile Picture" class="review-dp">
+                    <img src="<?= IMAGES ?>/Travelers/userProfilePics/img5.jpg" alt="Profile Picture" class="review-dp">
                     <div class="user-info">
                         <span class="username">Emma Watson</span>
                         <span class="posted-date">08 June 2024</span>
@@ -258,7 +268,7 @@
                 <i class="fa-solid fa-rectangle-xmark" id ="closeCarousal" ></i>
 
                 <div class="profilePic">
-                    <img src="assets/images/findaHotel/reviews/img1.png">
+                    <img src="<?= IMAGES ?>/Travelers/userProfilePics/img1.png">
                 </div>
 
                 <div class="username">
@@ -277,7 +287,7 @@
                 <i class="fa-solid fa-rectangle-xmark" id ="closeCarousal" ></i>
 
                 <div class="profilePic">
-                    <img src="assets/images/findaHotel/reviews/img2.png">
+                    <img src="<?= IMAGES ?>/Travelers/userProfilePics/img2.png">
                 </div>
 
                 <div class="username">
@@ -296,7 +306,7 @@
                 <i class="fa-solid fa-rectangle-xmark" id ="closeCarousal" ></i>
 
                 <div class="profilePic">
-                    <img src="assets/images/findaHotel/reviews/img6.jpg">
+                    <img src="<?= IMAGES ?>/Travelers/userProfilePics/img4.jpg">
                 </div>
 
                 <div class="username">
@@ -315,11 +325,11 @@
                 <i class="fa-solid fa-rectangle-xmark" id ="closeCarousal" ></i>
 
                 <div class="profilePic">
-                    <img src="assets/images/findaHotel/reviews/img4.png">
+                    <img src="<?= IMAGES ?>/Travelers/userProfilePics/img3.png">
                 </div>
 
                 <div class="username">
-                    Ahmadh Rafeek
+                    Alexandra Green
                 </div>
 
                 <div class="review">
@@ -334,7 +344,7 @@
                 <i class="fa-solid fa-rectangle-xmark" id ="closeCarousal" ></i>
 
                 <div class="profilePic">
-                    <img src="assets/images/findaHotel/reviews/img5.jpg">
+                    <img src="<?= IMAGES ?>/Travelers/userProfilePics/img5.jpg">
                 </div>
 
                 <div class="username">
@@ -353,55 +363,22 @@
 
     </div>
 
-
-
-
     <section id="footer">
         <div class="foot">
             &copy; ExploreLK, 2024 | All Rights Reserved
         </div>
     </section>
 
-    <!-- <script>
-        function initMap() {
-            
-            const map = new google.maps.Map(document.getElementById('directionsMap'), {
-                zoom: 13,
-                center: { lat: 6.9271, lng: 79.8612 }, 
-            });
     
-            
-            const directionsService = new google.maps.DirectionsService();
-            const directionsRenderer = new google.maps.DirectionsRenderer({
-                map: map,
-                panel: document.getElementById('directionsPanel'), 
-            });
-    
-            
-            const request = {
-                origin: 'Nuwara Eliya Town, Sri Lanka', 
-                destination: 'Delhousie Hotel, Nallathanniya, Sri Lanka',
-                travelMode: 'DRIVING', 
-            };
-    
-            
-            directionsService.route(request, (response, status) => {
-                if (status === 'OK') {
-                    directionsRenderer.setDirections(response);
-                } else {
-                    console.error('Directions request failed due to ' + status);
-                }
-            });
-        }
-    </script> -->
     <script>
-        // Static coordinates for the district (e.g., Ratnapura)
-        const districtLatitude = 6.9498308221090515; // Example latitude for Ratnapura
-        const districtLongitude = 80.79124531032397; // Example longitude for Ratnapura
+        // Static coordinates for the district 
+        const districtLatitude = 6.9498308221090515; 
+        const districtLongitude = 80.79124531032397; 
     
-        // Set the destination coordinates (e.g., Delhousie Hotel)
-        const destinationLatitude =  6.967450380543361; // Example latitude for Delhousie,, 
-        const destinationLongitude = 80.76490757322674; // Example longitude for Delhousie
+        // Set the hotel coordinates (e.g., Delhousie Hotel)
+        // const destinationLatitude =  6.967450380543361;
+        const destinationLatitude =  <?= json_encode($data['advancedHotelData'][0]->latitude) ?>;
+        const destinationLongitude = <?= json_encode($data['advancedHotelData'][0]->longitude) ?>;
     
         const mapFrame = document.querySelector('#mapFrame');
         mapFrame.src = `https://www.google.com/maps/embed/v1/directions?key=AIzaSyCFbprhDc_fKXUHl-oYEVGXKD1HciiAsz0&&origin=${districtLatitude},${districtLongitude}&destination=${destinationLatitude},${destinationLongitude}&mode=driving`;
