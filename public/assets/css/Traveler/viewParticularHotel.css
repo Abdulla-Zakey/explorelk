@@ -72,6 +72,14 @@ i{
     line-height: 1.8;
 }
 
+.subtopic{
+    margin-top: 0;
+    margin-bottom: 1rem;
+    font-size: 2rem;
+    font-weight: 700;
+   
+}
+
 .mapHolder{
     margin-right: 7.5%;
     width: 30%;

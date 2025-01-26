@@ -60,7 +60,7 @@
             </div>
 
             <div class="hero-right">
-            <img src="<?= ROOT ?>/assets/images/travelers/dashboard/guidedNatureHikes.jpg" alt = "Tour Image">
+                <img src="<?= ROOT ?>/assets/images/travelers/dashboard/guidedNatureHikes.jpg" alt = "Tour Image">
             </div>
 
         </div>
@@ -82,92 +82,158 @@
 
         </div>
 
-        <div class="itinerary-conatiner">
+        <div class = "itenaryAndAvailableDates-container">
 
-            <span class="topic">Tour Itinerary</span>
+            <div class="itinerary-conatiner">
 
-            <ul type="none" class="timeline">
+                <span class="topic">Tour Itinerary</span>
+    
+                <ul type="none" class="timeline">
+    
+                    <li class="timeline-item">
+                        <div>
+                            <i class="fa fa-clock"></i>
+                        </div>
+                        <div>
+                            <strong>6:00 AM</strong> - Pickup from Ella Railway Station
+                            <p>Meet your guide and fellow travelers</p>
+                        </div>
+                    </li>
+    
+                    <li class="timeline-item">
+                        <div>
+                            <i class="fa fa-clock"></i>
+                        </div>
+                        <div>
+                            <strong>6:30 AM</strong> - Little Adam's Peak Hike
+                            <p>Begin your hike to enjoy stunning sunrise views from the top.</p>
+                        </div>
+                    </li>
+    
+                    <li class="timeline-item">
+                        <div>
+                            <i class="fa fa-clock"></i>
+                        </div>
+                        <div>
+                            <strong>8:30 AM</strong> - Refreshment Break
+                            <p>Enjoy a light snack and bottled water provided by your guide.</p>
+                        </div>
+                    </li>
+    
+                    <li class="timeline-item">
+                        <div>
+                            <i class="fa fa-clock"></i>
+                        </div>
+                        <div>
+                            <strong>9:00 AM </strong> - Visit Nine Arches Bridge
+                            <p>Walk to the iconic bridge, one of Sri Lanka's architectural marvels</p>
+                        </div>
+                    </li>
+    
+                    <li class="timeline-item">
+                        <div>
+                            <i class="fa fa-clock"></i>
+                        </div>
+                        <div>
+                            <strong>11:30 AM</strong> - Ravana Falls
+                            <p>Stop at this majestic waterfall for photos and exploration.</p>
+                        </div>
+                    </li>
+    
+                    <li class="timeline-item">
+                        <div>
+                            <i class="fa fa-clock"></i>
+                        </div>
+                        <div>
+                            <strong>12:30 PM</strong> - Local Lunch
+                            <p>Savor traditional Sri Lankan dishes at a handpicked local restaurant.</p>
+                        </div>
+                    </li>
+    
+                    <li class="timeline-item">
+                        <div>
+                            <i class="fa fa-clock"></i>
+                        </div>
+                        <div>
+                            <strong>2:00 PM</strong> - Ella Rock Hike
+                            <p>Embark on a guided hike to the summit of Ella Rock.</p>
+                        </div>
+                    </li>
+    
+                    <li class="timeline-item">
+                        <div>
+                            <i class="fa fa-clock"></i>
+                        </div>
+                        <div>
+                            <strong>6:00 PM</strong> - Drop-off at Ella Railway Station
+                            <p>End the adventure-packed day with a safe return and Say goodbye to your guide and fellow
+                                travelers.</p>
+                    </li>
+                </ul>
+    
+            </div>
 
-                <li class="timeline-item">
-                    <div>
-                        <i class="fa fa-clock"></i>
-                    </div>
-                    <div>
-                        <strong>6:00 AM</strong> - Pickup from Ella Railway Station
-                        <p>Meet your guide and fellow travelers</p>
-                    </div>
-                </li>
+            <div class = "availableDates-container">
 
-                <li class="timeline-item">
-                    <div>
-                        <i class="fa fa-clock"></i>
-                    </div>
-                    <div>
-                        <strong>6:30 AM</strong> - Little Adam's Peak Hike
-                        <p>Begin your hike to enjoy stunning sunrise views from the top.</p>
-                    </div>
-                </li>
+                <div class = "availableDates">
+                    <span class="topic">Available Dates</span>
 
-                <li class="timeline-item">
-                    <div>
-                        <i class="fa fa-clock"></i>
-                    </div>
-                    <div>
-                        <strong>8:30 AM</strong> - Refreshment Break
-                        <p>Enjoy a light snack and bottled water provided by your guide.</p>
-                    </div>
-                </li>
+                    <ul type = "none">
+                        <li>
+                            <div class = "dateIconHolder">
+                                <i class="fa fa-calendar"></i>
+                            </div>
+                            <div class = "date">
+                                <input type = "date" value = "2025-02-07" readonly>
+                            </div>
+                        </li>
+                        <li>
+                            <div class = "dateIconHolder">
+                                <i class="fa fa-calendar"></i>
+                            </div>
+                            <div class = "date">
+                                <input type = "date" value = "2025-02-14" readonly>
+                            </div>
+                        </li>
+                        <li>
+                            <div class = "dateIconHolder">
+                                <i class="fa fa-calendar"></i>
+                            </div>
+                            <div class = "date">
+                                <input type = "date" value = "2025-02-21" readonly>
+                            </div>
+                        </li>
 
-                <li class="timeline-item">
-                    <div>
-                        <i class="fa fa-clock"></i>
-                    </div>
-                    <div>
-                        <strong>9:00 AM </strong> - Visit Nine Arches Bridge
-                        <p>Walk to the iconic bridge, one of Sri Lanka's architectural marvels</p>
-                    </div>
-                </li>
+                        <li>
+                            <div class = "dateIconHolder">
+                                <i class="fa fa-calendar"></i>
+                            </div>
+                            <div class = "date">
+                                <input type = "date" value = "2025-02-28" readonly>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
 
-                <li class="timeline-item">
-                    <div>
-                        <i class="fa fa-clock"></i>
-                    </div>
-                    <div>
-                        <strong>11:30 AM</strong> - Ravana Falls
-                        <p>Stop at this majestic waterfall for photos and exploration.</p>
-                    </div>
-                </li>
+                <div class = "linkToGuideProfile-container">
 
-                <li class="timeline-item">
-                    <div>
-                        <i class="fa fa-clock"></i>
-                    </div>
-                    <div>
-                        <strong>12:30 PM</strong> - Local Lunch
-                        <p>Savor traditional Sri Lankan dishes at a handpicked local restaurant.</p>
-                    </div>
-                </li>
+                    <span class="topic">Other Tours from this Guide</span>
 
-                <li class="timeline-item">
-                    <div>
-                        <i class="fa fa-clock"></i>
-                    </div>
-                    <div>
-                        <strong>2:00 PM</strong> - Ella Rock Hike
-                        <p>Embark on a guided hike to the summit of Ella Rock.</p>
-                    </div>
-                </li>
+                    <p>
+                        This experienced guide has curated a variety of immersive tours to showcase the best of Sri Lanka. 
+                    </p>
 
-                <li class="timeline-item">
-                    <div>
-                        <i class="fa fa-clock"></i>
-                    </div>
-                    <div>
-                        <strong>6:00 PM</strong> - Drop-off at Ella Railway Station
-                        <p>End the adventure-packed day with a safe return and Say goodbye to your guide and fellow
-                            travelers.</p>
-                </li>
-            </ul>
+                    <center>
+                        <a href = "<?= ROOT ?>/traveler/ViewTourGuideProfile">
+                            <button class = "bookNow-btn" style="width: 60%; margin: auto;">
+                                <i class="fa fa-search"></i> View Guide Profile
+                            </button>
+                        </a>
+    
+                    </center>
+                    
+                </div>
+            </div>
 
         </div>
 
