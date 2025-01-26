@@ -19,42 +19,44 @@
 
         <div class="body-container">
             <?php include_once APPROOT.'\views\inc\profileLink.php'; ?>
-
             <div>
                 <h1 class="heading">Profile</h1>
             </div>
             <div class="traveler-details">
                 <div class="details-container">
                     <div class="profile-picture">
-                        <img src="<?=ROOT?>/assets/images/tourGuide/profile.png" alt="Profile Picture">
+                        <img src="<?= ROOT ?>/assets/images/admin/adminProfilePhotos/<?= $data['profile_picture'] ?? 'profile.png' ?>" alt="Profile Picture">
                     </div>
                     <div class="profile-fields">
                         <div class="field-group flexContainer">
-                            <h4>First Name :</h4>&nbsp; Nihmath
+                            <h4>First Name :</h4>&nbsp; <?= $data['firstName']; ?>
                         </div>
                         <div class="field-group flexContainer">
-                            <h4>Last Name :</h4>&nbsp; Jabir
+                            <h4>Last Name :</h4>&nbsp; <?= $data['lastName']; ?>
                         </div>
                         <div class="field-group flexContainer">
-                            <h4>Admin ID :</h4>&nbsp; A 052
+                            <h4>Admin ID :</h4>&nbsp; <?= $data['admin_id']; ?>
                         </div>
                         <div class="field-group flexContainer">
-                            <h4>Gender :</h4>&nbsp; Male
+                            <h4>Gender :</h4>&nbsp; <?= $data['gender']; ?>
                         </div>
                         <div class="field-group flexContainer">
-                            <h4>Email Address :</h4>&nbsp; andrewtate568@gmail.com
+                            <h4>Email Address :</h4>&nbsp; <?= $data['email']; ?>
                         </div>
                         <div class="field-group flexContainer">
-                            <h4>Birth Date :</h4>&nbsp;05/02/2000
+                            <h4>Birth Date :</h4>&nbsp; <?= $data['dob']; ?>
                         </div>
                         <div class="field-group flexContainer">
-                            <h4>City :</h4>&nbsp;Kandy
+                            <h4>City :</h4>&nbsp; <?= $data['city']; ?>
                         </div>
                         <div class="field-group flexContainer">
-                            <h4>Contact No : </h4>&nbsp; +94 76 14 85 466
+                            <h4>Contact No : </h4>&nbsp; <?= $data['phoneNo']; ?>
                         </div>
                         <div class="field-group flexContainer">
-                            <h4>Address :</h4>&nbsp; 2A/1, Wellawatta
+                            <h4>Address :</h4>&nbsp; <?= $data['address']; ?>
+                        </div>
+                        <div class="field-group flexContainer">
+                            <h4>NIC :</h4>&nbsp; <?= $data['nic']; ?>
                         </div>
 
                     </div>

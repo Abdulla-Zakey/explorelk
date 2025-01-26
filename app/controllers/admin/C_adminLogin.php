@@ -25,7 +25,7 @@ class C_adminLogin extends Controller
 
             $user = new Admin;
             $result = $user->findEmail($email);
-            var_dump($result);
+            // var_dump($result);
 
             if ($result) {
                 if ($password == $result->password) {
