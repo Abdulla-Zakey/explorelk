@@ -27,8 +27,6 @@ body {
     position: fixed;
     color: #FFFFFF;
     background-color: #002D40;
-    border-top-right-radius: 2rem;
-    border-bottom-right-radius: 2rem;
 }
 
 .rightContainer{

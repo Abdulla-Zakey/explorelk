@@ -9,10 +9,11 @@ class C_adminLogin extends Controller
 	public function index()
     {
         // session_start();
-        // if (isset($_SESSION['admin_id'])) {
-        //     $this->view('admin/C_dashboard');
-        //     exit();
-        // }
+        if (isset($_SESSION['admin_id'])) {
+            // var_dump($_SESSION['admin_id']);
+            redirect('admin/C_dashboard');
+            exit();
+        }
 
         // Check if the form is submitted
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -24,11 +25,23 @@ class C_adminLogin extends Controller
 
             $user = new Admin;
             $result = $user->findEmail($email);
+            // var_dump($result);
 
             if ($result) {
                 if ($password == $result->password) {
+                    $_SESSION['admin_id'] = $result->admin_id;
                     redirect('admin/C_dashboard');
+                } else {
+                    $error['password'] = "Incorrect Password";
+                    $this->view('admin/adminLogin', $error);
                 }
+            } else {
+                // Redirect with error message
+                // $this->redirectWithError("* No such email exists");
+                $error['email'] = "No such email exists";
+                $this->view('admin/adminLogin', [
+                    'error' => $error
+                ]);
             }
             
             
@@ -39,22 +52,22 @@ class C_adminLogin extends Controller
         }
     }
 
-    // // Logout method
-    // public function logout()
-    // {
-    //     // Start session
-    //     session_start();
+    // Logout method
+    public function logout()
+    {
+        // Start session
+        session_start();
 
-    //     // Unset all session variables
-    //     $_SESSION = array();
+        // Unset all session variables
+        $_SESSION = array();
 
-    //     // Destroy the session
-    //     session_destroy();
+        // Destroy the session
+        session_destroy();
 
-    //     // Redirect to login page
-    //     header("Location: " . ROOT . "/admin/C_adminLogin");
-    //     exit();
-    // }
+        // Redirect to login page
+        header("Location: " . ROOT . "/admin/C_adminLogin");
+        exit();
+    }
 
     // // Helper function for redirection with error
     // private function redirectWithError($message)
