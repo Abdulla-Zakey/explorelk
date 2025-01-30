@@ -9,19 +9,22 @@
         protected $allowedColumns = [
             'hotel_Id',
             'hotelName',
+            'serviceProviderName',
             'hotelEmail',
             'hotelPassword',
             'hotelMobileNum',
             'hotelAddress',
             'district',
             'province',
+            'hotelLatitude',
+            'hotelLongitude',
+            'description_para1',
+            'description_para2',
+            'description_para3',
             'totalRooms',
-            'hotelDescription',
-            'serviceProviderName',
             'BRNum',
             'yearStarted'
         ];
-
 
         public function validate($data) {
 
@@ -65,6 +68,12 @@
             //var_dump($this->empty);
             // Return validation result
             return empty($this->errors);
+
+        }
+
+        public function getDetailsByHotelId($hotel_Id){
+            $result = $this->where(['hotel_Id' => $hotel_Id]);
+            return $result;
 
         }
 
