@@ -43,21 +43,21 @@
                     A Picturesque Location
                 </span>
                 <br>
-                <?= htmlspecialchars($data['advancedHotelData'][0]->description_para1) ?>
+                <?= htmlspecialchars($data['hotelData'][0]->description_para1) ?>
                 <br><br>
 
                 <span class = "subtopic">
                     Exceptional Comfort and Elegance
                 </span>
                 <br>
-                <?= htmlspecialchars($data['advancedHotelData'][0]->description_para2) ?>
+                <?= htmlspecialchars($data['hotelData'][0]->description_para2) ?>
                 <br><br>
 
                 <span class = "subtopic">
                     Explore Nearby Attractions
                 </span>
                 <br>
-                <?= htmlspecialchars($data['advancedHotelData'][0]->description_para3) ?>
+                <?= htmlspecialchars($data['hotelData'][0]->description_para3) ?>
             </div>
 
             <div class="mapHolder">
@@ -95,7 +95,7 @@
         </div>
     </section>
 
-    <section id="roomTypes">
+    <!-- <section id="roomTypes">
         <h1>
             Available Room Types
         </h1>
@@ -174,6 +174,52 @@
             </div>
         </div>
 
+    </section> -->
+
+    <section id="roomTypes">
+        <h1>
+            Available Room Types
+        </h1>
+        <?php
+            $counter = 0;
+            $index = 0;
+            
+            foreach($data['hotelRoomTypes'] as $roomType){
+                if($counter % 3 == 0){
+                    echo '<div class="container">';
+                }
+                if($counter < 3){
+                    echo    '<div class="roomItem">
+                                <div class="topic">' 
+                                    . $data['hotelRoomTypesNames'][$index]->roomType_name .
+                                '</div>
+                                <img src="' . IMAGES . '/Travelers/topDistricts/nuwaraEliya/hotels/roomTypes/single-room.jpg">
+
+                                <div class="typeDescription">'
+                                    . $roomType->customized_description .
+                                '</div>
+
+                                <a href = "#">
+                                    <div class="bookNow">
+                                        Book Now
+                                    </div>
+                                </a>
+
+                                <div class="price">'
+                                    . $roomType->pricePer_night . ' LKR per day
+                                </div>
+                            </div>';
+                }
+                
+                $counter++;
+                $index++;
+                
+                if($counter % 3 == 0){
+                    echo '</div>';
+                    $counter = 0;
+                }
+            }
+        ?>
     </section>
 
     <section id="guest-reviews">
@@ -377,20 +423,16 @@
     
         // Set the hotel coordinates (e.g., Delhousie Hotel)
         // const destinationLatitude =  6.967450380543361;
-        const destinationLatitude =  <?= json_encode($data['advancedHotelData'][0]->latitude) ?>;
-        const destinationLongitude = <?= json_encode($data['advancedHotelData'][0]->longitude) ?>;
+        const destinationLatitude =  <?= json_encode($data['hotelData'][0]->hotelLatitude) ?>;
+        const destinationLongitude = <?= json_encode($data['hotelData'][0]->hotelLongtitude) ?>;
     
         const mapFrame = document.querySelector('#mapFrame');
-        mapFrame.src = `https://www.google.com/maps/embed/v1/directions?key=AIzaSyCFbprhDc_fKXUHl-oYEVGXKD1HciiAsz0&&origin=${districtLatitude},${districtLongitude}&destination=${destinationLatitude},${destinationLongitude}&mode=driving`;
+        mapFrame.src = `https://www.google.com/maps/embed/v1/directions?key=AIzaSyCFbprhDc_fKXUHl-oYEVGXKD1HciiAsz0&&origin=${districtLatitude},${districtLongitude}&destination=${destinationLatitude},${destinationLongitude}&mode=driving&zoom=13.5`;
     </script>
     
+    <!--myAPIKEYCOMESHERE-->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCFbprhDc_fKXUHl-oYEVGXKD1HciiAsz0&callback=initMap" async defer></script>
     
-    <script async defer
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCFbprhDc_fKXUHl-oYEVGXKD1HciiAsz0&callback=initMap">
-        // myAPIKEYCOMESHERE
-    </script>
-    
-
     <script>
         const loadMoreBtn = document.getElementById('loadMore');
         const reviewCarousel = document.getElementById('reviewCarousal');

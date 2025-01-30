@@ -146,6 +146,7 @@ class Signup extends Controller {
                 $user = new Hotel;
                 
                 $insertData = [
+                    'hotelName' => $data['company_name'],
                     'serviceProviderName' => $data['name'],
                     'hotelEmail' => $data['email'],
                     'hotelPassword' => $data['password'],
@@ -153,7 +154,6 @@ class Signup extends Controller {
                     'hotelAddress' => $data['address'],
                     'district' => $data['district'],
                     'province' => $data['province'],
-                    'hotelName' => $data['company_name'],
                     'BRNum' => $data['BRNum'],
                     'yearStarted' => $data['yearStarted']
                 ];
@@ -177,6 +177,7 @@ class Signup extends Controller {
 
             case 'dining':
                 $user = new Restaurant(); // Create this model
+
                 $isInserted = $user->insert($data);
                 if ($isInserted) {
                     // Add session and redirect logic
