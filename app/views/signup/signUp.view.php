@@ -183,7 +183,7 @@
                 <!-- Global Error Display -->
                 <?php if(!empty($errors['registration'])):?>
                     <div class="error" style="text-align: center; margin-bottom: 15px;">
-                        <?=$errors['registration']?>
+                        <?= $errors['registration'] ?>
                     </div>
                 <?php endif;?>
 
@@ -291,6 +291,7 @@
 
                 <!-- Step 3 -->
                 <div class="form-step">
+
                     <div class="headAndLogo">
                         <div class="logo-container">
                             <img alt="ExploreLK logo" src="<?=ROOT?>/assets/images/serviceProviders/logob.png" class="logo"/>
