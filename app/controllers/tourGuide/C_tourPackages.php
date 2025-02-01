@@ -9,6 +9,11 @@ class C_tourPackages extends Controller
 
     public function index()
     {
+        if (!isset($_SESSION['guide_id'])) {
+            header("Location: " . ROOT . "/traveler/Login");
+            exit();
+        }
+        
         // Load the TourPackageModel
         $tourPackageModel = $this->loadModel('TourPackageModel');
         

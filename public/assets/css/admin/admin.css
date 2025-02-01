@@ -1229,3 +1229,9 @@ strong {
 .cancel-button:hover {
     background-color: rgb(94, 1, 1);
 }
+
+/* error message displaying */
+.error-message{
+    color: red;
+    font-size: 13px;
+}
