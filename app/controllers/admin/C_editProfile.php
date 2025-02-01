@@ -12,7 +12,9 @@ class C_editProfile extends Controller
 		$user = new Admin;
 		$id = $_SESSION['admin_id'];
 
-		$data = $user->findUserById($id);
+		$data = [
+            'userData' => $user->findUserById($id),
+        ];
 
 		$this->view('admin/editProfile' , $data);
 	}
@@ -62,13 +64,13 @@ class C_editProfile extends Controller
 
             if (!$user->validate($data, false)) {
                 // Pass errors to the view
-                $viewData = [
+                $data = [
+                    'userData' => $userData,
                     'errors' => $user->errors,
-                    'formData' => $data  // Optional: pass back form data to repopulate fields
                 ];
     
                 // Render view with errors
-                $this->view('admin/editProfile', $viewData);
+                $this->view('admin/editProfile', $data);
                 exit;
             }
 
@@ -83,6 +85,8 @@ class C_editProfile extends Controller
                         header('Location: ' . ROOT . '/admin/C_editProfile');
                         exit;
                     }
+                } else {
+                    $data['password'] = $userData->password;
                 }
 
                 // Perform update
