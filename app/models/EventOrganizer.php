@@ -2,8 +2,11 @@
 
 class Eventorganizer {
     use Model;
+    //add my me because of the error show
+    private $errors = [];
 
     protected $table = 'event_organizer'; 
+    
 
     protected $allowedColumns = [
         'company_Email',

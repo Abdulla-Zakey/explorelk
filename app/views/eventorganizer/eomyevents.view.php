@@ -11,194 +11,104 @@
     <title><?= $title ?></title>
 </head>
 <body>
-    
-    
-    <div class="container">
-        <div>
-            <h2 class="my-events-heading">My Events</h2>
+<div class="container">
+        <h1>My Events</h1>
+        <div class="header">
+            <div class="search-container">
+                <input type="text" id="searchInput" placeholder="Search Events">
+                <span class="search-icon">🔍</span>
+            </div>
+            <button class="create-btn">Create An Event</button>
         </div>
-        <hr>
-        <!-- Search Bar and Create Event Button -->
-        <div class="search-bar-container">
-            <input type="text" placeholder="Search Events" class="search-bar">
-<!--             <button   class="create-event-btn">Create an Event</button>
- -->            <a href="Eocreateevent">
-                 <button class="create-event-btn" type="button">Create An Event</button>
-            </a>
+        <div class="event-header">
+            <div>Date</div>
+            <div>Event</div>
+            <div>Sold</div>
+            <div>Income</div>
+            <div></div>
         </div>
-
-        <!-- Events List -->
-        <section class="events">
-            <div class="events-header">
-                <span>Date</span>
-                <span>Event</span>
-                <span>Sold</span>
-                <span>Income</span>
-            </div>
-
-            <div class="event-item">
-                <div class="date-box">
-                    <span class="month">Dec</span>
-                    <span class="day">10</span>
-                </div>
-                <div class="event-info">
-                    <img src="<?php echo ROOT; ?>/assets/images/eo/event-image.png" alt="Event" class="event-image">
-                    <div class="event-details">
-                        <h3>Batch Welcome Event</h3>
-                        <p>UCSC, Reid Avenue, Colombo 00700, Sri Lanka</p>
-                        <p>Tuesday, December 10, 2024 at 10.00am to 12.00pm</p>
-                    </div>
-                </div>
-                <div class="event-sold">10/400</div>
-                <div class="event-income">Rs10,000</div>
-                <div class="event-options">
-                    <button class="options-btn">⋮</button>
-                </div>
-            </div>
-
-            <div class="event-item">
-                <div class="date-box">
-                    <span class="month">Dec</span>
-                    <span class="day">10</span>
-                </div>
-                <div class="event-info">
-                    <img src="<?php echo ROOT; ?>/assets/images/eo/event-image.png" alt="Event" class="event-image">
-                    <div class="event-details">
-                        <h3>Batch Welcome Event</h3>
-                        <p>UCSC, Reid Avenue, Colombo 00700, Sri Lanka</p>
-                        <p>Tuesday, December 10, 2024 at 10.00am to 12.00pm</p>
-                    </div>
-                </div>
-                <div class="event-sold">10/400</div>
-                <div class="event-income">Rs10,000</div>
-                <div class="event-options">
-                    <button class="options-btn">⋮</button>
-                </div>
-            </div>
-
-            <div class="event-item">
-                <div class="date-box">
-                    <span class="month">Dec</span>
-                    <span class="day">10</span>
-                </div>
-                <div class="event-info">
-                    <img src="<?php echo ROOT; ?>/assets/images/eo/event-image.png" alt="Event" class="event-image">
-                    <div class="event-details">
-                        <h3>Batch Welcome Event</h3>
-                        <p>UCSC, Reid Avenue, Colombo 00700, Sri Lanka</p>
-                        <p>Tuesday, December 10, 2024 at 10.00am to 12.00pm</p>
-                    </div>
-                </div>
-                <div class="event-sold">10/400</div>
-                <div class="event-income">Rs10,000</div>
-                <div class="event-options">
-                    <button class="options-btn">⋮</button>
-                </div>
-            </div>
-
-            <div class="event-item">
-                <div class="date-box">
-                    <span class="month">Dec</span>
-                    <span class="day">10</span>
-                </div>
-                <div class="event-info">
-                    <img src="<?php echo ROOT; ?>/assets/images/eo/event-image.png" alt="Event" class="event-image">
-                    <div class="event-details">
-                        <h3>Batch Welcome Event</h3>
-                        <p>UCSC, Reid Avenue, Colombo 00700, Sri Lanka</p>
-                        <p>Tuesday, December 10, 2024 at 10.00am to 12.00pm</p>
-                    </div>
-                </div>
-                <div class="event-sold">10/400</div>
-                <div class="event-income">Rs10,000</div>
-                <div class="event-options">
-                    <button class="options-btn">⋮</button>
-                </div>
-            </div>
-
-            <div class="event-item">
-                <div class="date-box">
-                    <span class="month">Dec</span>
-                    <span class="day">10</span>
-                </div>
-                <div class="event-info">
-                    <img src="<?php echo ROOT; ?>/assets/images/eo/event-image.png" alt="Event" class="event-image">
-                    <div class="event-details">
-                        <h3>Batch Welcome Event</h3>
-                        <p>UCSC, Reid Avenue, Colombo 00700, Sri Lanka</p>
-                        <p>Tuesday, December 10, 2024 at 10.00am to 12.00pm</p>
-                    </div>
-                </div>
-                <div class="event-sold">10/400</div>
-                <div class="event-income">Rs10,000</div>
-                <div class="event-options">
-                    <button class="options-btn">⋮</button>
-                </div>
-            </div>
-
-            <div class="event-item">
-                <div class="date-box">
-                    <span class="month">Dec</span>
-                    <span class="day">10</span>
-                </div>
-                <div class="event-info">
-                    <img src="<?php echo ROOT; ?>/assets/images/eo/event-image.png" alt="Event" class="event-image">
-                    <div class="event-details">
-                        <h3>Batch Welcome Event</h3>
-                        <p>UCSC, Reid Avenue, Colombo 00700, Sri Lanka</p>
-                        <p>Tuesday, December 10, 2024 at 10.00am to 12.00pm</p>
-                    </div>
-                </div>
-                <div class="event-sold">10/400</div>
-                <div class="event-income">Rs10,000</div>
-                <div class="event-options">
-                    <button class="options-btn">⋮</button>
-                </div>
-            </div>
-
-            <div class="event-item">
-                <div class="date-box">
-                    <span class="month">Dec</span>
-                    <span class="day">10</span>
-                </div>
-                <div class="event-info">
-                    <img src="<?php echo ROOT; ?>/assets/images/eo/event-image.png" alt="Event" class="event-image">
-                    <div class="event-details">
-                        <h3>Batch Welcome Event</h3>
-                        <p>UCSC, Reid Avenue, Colombo 00700, Sri Lanka</p>
-                        <p>Tuesday, December 10, 2024 at 10.00am to 12.00pm</p>
-                    </div>
-                </div>
-                <div class="event-sold">10/400</div>
-                <div class="event-income">Rs10,000</div>
-                <div class="event-options">
-                    <button class="options-btn">⋮</button>
-                </div>
-            </div>
-
-            <div class="event-item">
-                <div class="date-box">
-                    <span class="month">Dec</span>
-                    <span class="day">10</span>
-                </div>
-                <div class="event-info">
-                    <img src="<?php echo ROOT; ?>/assets/images/eo/event-image" alt="Event" class="event-image">
-                    <div class="event-details">
-                        <h3>Batch Welcome Event</h3>
-                        <p>UCSC, Reid Avenue, Colombo 00700, Sri Lanka</p>
-                        <p>Tuesday, December 10, 2024 at 10.00am to 12.00pm</p>
-                    </div>
-                </div>
-                <div class="event-sold">10/400</div>
-                <div class="event-income">Rs10,000</div>
-                <div class="event-options">
-                    <button class="options-btn">⋮</button>
-                </div>
-            </div>
-
-            <!-- You can repeat the event-item div for more events -->
-
-        </section>
+        <div id="eventsList"></div>
     </div>
+
 </body>
+
+<script>
+        const eventData = [
+            {
+                id: 1,
+                date: { month: 'Dec', day: '10' },
+                title: 'Batch Welcome Event',
+                location: 'UCSC, Reid Avenue, Colombo 00700, Sri Lanka',
+                datetime: 'Tuesday, December 10, 2024 at 10.00am to 12.00pm',
+                sold: '10/400',
+                income: 'Rs10,000',
+                image: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Screenshot%202025-02-02%20153835-Q8BvbhezERC6BCNqfpgG3mE3mS7eVu.png'
+            },
+            {
+                id: 2,
+                date: { month: 'Dec', day: '15' },
+                title: 'Tech Conference 2024',
+                location: 'Bandaranaike Memorial International Conference Hall, Colombo',
+                datetime: 'Sunday, December 15, 2024 at 9.00am to 5.00pm',
+                sold: '250/500',
+                income: 'Rs50,000',
+                image: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Screenshot%202025-02-02%20153835-Q8BvbhezERC6BCNqfpgG3mE3mS7eVu.png'
+            },
+            {
+                id: 3,
+                date: { month: 'Jan', day: '05' },
+                title: 'New Year Networking Mixer',
+                location: 'Cinnamon Grand Hotel, Colombo 03',
+                datetime: 'Friday, January 5, 2025 at 7.00pm to 10.00pm',
+                sold: '75/150',
+                income: 'Rs15,000',
+                image: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Screenshot%202025-02-02%20153835-Q8BvbhezERC6BCNqfpgG3mE3mS7eVu.png'
+            }
+        ];
+
+        function renderEvents(events) {
+            const eventsListElement = document.getElementById('eventsList');
+            eventsListElement.innerHTML = '';
+
+            events.forEach(event => {
+                const eventElement = document.createElement('div');
+                eventElement.className = 'event-card';
+                eventElement.innerHTML = `
+                    <div class="date">
+                        <div class="month">${event.date.month}</div>
+                        <div class="day">${event.date.day}</div>
+                    </div>
+                    <div class="event-details">
+                        <img src="${event.image}" alt="${event.title}">
+                        <div class="event-info">
+                            <h3>${event.title}</h3>
+                            <p>${event.location}</p>
+                            <p>${event.datetime}</p>
+                        </div>
+                    </div>
+                    <div class="sold">${event.sold}</div>
+                    <div class="income">${event.income}</div>
+                    <button class="more-btn">⋮</button>
+                `;
+                eventsListElement.appendChild(eventElement);
+            });
+        }
+
+        function setupSearch() {
+            const searchInput = document.getElementById('searchInput');
+            searchInput.addEventListener('input', (e) => {
+                const searchTerm = e.target.value.toLowerCase();
+                const filteredEvents = eventData.filter(event => 
+                    event.title.toLowerCase().includes(searchTerm) || 
+                    event.location.toLowerCase().includes(searchTerm)
+                );
+                renderEvents(filteredEvents);
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderEvents(eventData);
+            setupSearch();
+        });
+    </script>
 </html>

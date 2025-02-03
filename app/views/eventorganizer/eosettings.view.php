@@ -24,12 +24,12 @@
             <h2>Account Information</h2>
             
             <!-- Profile Image Upload -->
-            <!-- <div class="profile-image-container">
+            <div class="profile-image-container">
                 <img src="<?php //echo ROOT; ?>/assets/images/eo/profile-placeholder.png" alt="Profile Image" class="profile-img">
                 <p>Add a profile image</p>
                 <span>Drag and drop or choose a file to upload</span>
             </div>
- -->
+ 
             <!-- Contact Information Section -->
             <h3>Contact Information</h3>
             <div class="form-container">
