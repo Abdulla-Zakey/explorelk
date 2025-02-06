@@ -79,8 +79,8 @@ class MyTrips extends Controller
         ];
 
         // Load the myTrips view with trip data
-        // $this->view('traveler/myTrips', $data);
-        $this->view('traveler/dummy', $data);
+        $this->view('traveler/myTrips', $data);
+        // $this->view('traveler/dummy', $data);
     }
 
     // Method to view a specific trip details
@@ -96,13 +96,20 @@ class MyTrips extends Controller
         $tripDaysModel = new TripDaysModel();
         $tripPlacesModel = new TripPlacesModel();
         $tripCollaboratorsModel = new TripCollaboratorsModel();
+        $isOwner = '';
+        $isEditor = '';
 
         // Fetch the specific trip
         if(empty($collaborator_Id)){
+            $isOwner = true;
             $trip = $tripModel->first(['trip_Id' => $trip_Id]);
         }
         else{
+            $isOwner = false;
             $collaborator = $tripCollaboratorsModel->first(['collaborator_Id' => $collaborator_Id]);
+            if($collaborator->role == 'editor'){
+                $isEditor = true;
+            }
             $trip = $tripModel->first(['trip_Id' => $collaborator->trip_Id]);
         }
         
@@ -154,7 +161,9 @@ class MyTrips extends Controller
             'trip' => $trip,
             'tripDays' => $tripDays,
             'allTripPlaces' => $allTripPlaces,
-            'collaborators' => $collaboratorsList
+            'collaborators' => $collaboratorsList,
+            'isOwner' => $isOwner,
+            'isEditor' => $isEditor
         ];
 
         $this->view('traveler/viewTrip', $data);
