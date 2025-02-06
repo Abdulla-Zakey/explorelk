@@ -94,4 +94,9 @@ class Traveler
         $result = $this->where(['username' => $username]);
         return !empty($result);
     }
+
+    public function getTravelerByEmail($email){
+        $result = $this->first(['travelerEmail' => $email]);
+        return $result;
+    }
 }

@@ -12,10 +12,7 @@
     <script src="https://kit.fontawesome.com/f35c1c7a11.js" crossorigin="anonymous"></script>
     <style>
 
-        .no-trips-message{
-            font-size: 1.6rem;
-        }
-
+       
         /* Pop-up container (initially hidden) */
         .popup-container {
             font-size: 1.35rem;
@@ -172,18 +169,18 @@
                             <h2><?= htmlspecialchars($trip->tripName) ?></h2>
 
                             <div class="bookingKeyInfo-Holder">
-                                <div><i class="fa-solid fa-location-dot"></i>Main Destination:</div>
-                                <div><?= htmlspecialchars($trip->destination) ?></div>
+                                <div class = "firstKid"><i class="fa-solid fa-location-dot"></i>Main Destination:</div>
+                                <div class = "secondKid"><?= htmlspecialchars($trip->destination) ?></div>
                             </div>
 
                             <div class="bookingKeyInfo-Holder">
-                                <div><i class="fa-regular fa-calendar"></i>Trip Start Date:</div>
-                                <div><?= date('d-m-Y', strtotime($trip->startDate)) ?></div>
+                                <div class = "firstKid"><i class="fa-regular fa-calendar"></i>Trip Start Date:</div>
+                                <div class = "secondKid"><?= date('d-m-Y', strtotime($trip->startDate)) ?></div>
                             </div>
 
                             <div class="bookingKeyInfo-Holder">
-                                <div><i class="fa-regular fa-calendar"></i>Trip End Date:</div>
-                                <div><?= date('d-m-Y', strtotime($trip->endDate)) ?></div>
+                                <div class = "firstKid"><i class="fa-regular fa-calendar"></i>Trip End Date:</div>
+                                <div class = "secondKid"><?= date('d-m-Y', strtotime($trip->endDate)) ?></div>
                             </div>
                         </div>
 
@@ -253,6 +250,7 @@
 
     </script>
 
+    
 </body>
 
 </html>
