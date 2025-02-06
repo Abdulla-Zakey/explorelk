@@ -7,7 +7,7 @@
         //     var_dump($places);
         // }
         // var_dump($data['collaborators'][2]);
-        // var_dump($data['trip']);
+        // var_dump($data['isOwner']);
     ?>
 <head>
     <meta charset="UTF-8">
@@ -141,13 +141,21 @@
                 </a>
             </div>
 
-            <button id="editToggle" class="edit-btn" style = "margin-left: 50%; margin-right: 1rem;">
-                <i class="fa-solid fa-edit"></i> Edit Trip
-            </button>
+            <?php 
+                if($data['isOwner'] == true || $data['isEditor'] == true){
+                    echo    '<button id="editToggle" class="edit-btn" style = "margin-left: 50%; margin-right: 1rem;">
+                                <i class="fa-solid fa-edit"></i> Edit Trip
+                            </button>
+                    ';
+                }
 
-            <button id="inviteBtn" class="edit-btn" style = "width: 20rem;">
-                <i class="fa-solid fa-user-plus"></i> Invite Friends
-            </button>
+                if($data['isOwner'] == true){
+                    echo    '<button id="inviteBtn" class="edit-btn" style = "width: 20rem;">
+                                <i class="fa-solid fa-user-plus"></i> Invite Friends
+                            </button>
+                    ';
+                }
+            ?>
 
         </nav>
     </header>
