@@ -18,11 +18,39 @@
             text-shadow: 0px 0px 10px rgba(0, 0, 0, 1);
         }
 
+        .back-home {
+            display: inline-block;
+            position: absolute;
+            top: 25px;
+            left: 25px;
+            color: white;
+            font-size: 14px;
+            text-decoration: none;
+            padding: 7px 15px;
+            background-color: rgba(0, 0, 0, 0.3);
+            border-radius: 20px;
+            transition: all 0.3s ease;
+        }
+        
+        .back-home:hover {
+            background-color: rgba(0, 0, 0, 0.5);
+            text-decoration: none;
+        }
+        
+        .back-home i {
+            margin-right: 5px;
+        }
+
     </style>
 </head>
 
 <body>
     <div class="container">
+
+        <a href="<?= ROOT ?>" class="back-home">
+            <i class="fa-solid fa-home"></i> Back to Home
+        </a>
+
         <div class="leftContainer">
             <div class="logoContainer"></div>
             <div class="textContainer">
