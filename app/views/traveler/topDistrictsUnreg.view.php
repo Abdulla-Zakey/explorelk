@@ -14,7 +14,7 @@
     <header>
         <nav class="navbar">
             <div class="backToHome">
-                <a href="<?= ROOT ?>/traveler/Home">
+                <a href="<?= ROOT ?>">
                     <i class="fa-solid fa-arrow-left"></i>
                     <span>Back to Home</span>
                 </a>
