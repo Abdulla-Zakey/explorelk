@@ -15,6 +15,29 @@
             font-size: 13px;
         }
 
+        .back-home {
+            display: inline-block;
+            position: absolute;
+            top: 25px;
+            left: 25px;
+            color: white;
+            font-size: 14px;
+            text-decoration: none;
+            padding: 7px 15px;
+            background-color: rgba(0, 0, 0, 0.3);
+            border-radius: 20px;
+            transition: all 0.3s ease;
+        }
+        
+        .back-home:hover {
+            background-color: rgba(0, 0, 0, 0.5);
+            text-decoration: none;
+        }
+        
+        .back-home i {
+            margin-right: 5px;
+        }
+
     </style>
 
 </head>
@@ -23,6 +46,10 @@
     
     <div class = "container">
 
+        <a href="<?= ROOT ?>" class="back-home">
+            <i class="fa-solid fa-home"></i> Back to Home
+        </a>
+
         <?php if (!empty($data['success'])): ?>
             <div class="success-message">
                 <?php echo htmlspecialchars($data['success']); ?>
@@ -30,14 +57,10 @@
         <?php endif; ?>
 
         <div class = "leftContainer">
-            <div class = "logoContainer">
-
-            </div>
-
+            <div class = "logoContainer"></div>
             <div class = "textContainer">
                 Welcome Back!<br>
                 Ready to Explore?
-                
             </div>
         </div>
         

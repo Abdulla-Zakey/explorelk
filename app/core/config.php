@@ -1,13 +1,12 @@
 <?php
 
-    define('APP', 'http://localhost/gitexplorelk/explorelk/app');
+    define('APP', 'http://localhost/gitexplorelk/app');
     define('ROOT', 'http://localhost/gitexplorelk/explorelk/public');
     define('CSS', 'http://localhost/gitexplorelk/explorelk/public/assets/css');
     define('IMAGES', 'http://localhost/gitexplorelk/explorelk/public/assets/images');
     define('APPROOT',dirname(dirname(__FILE__)));
 
-    //My name is sharma
-
+    
     if($_SERVER['SERVER_NAME'] == 'localhost'){
 
         /** database config **/
