@@ -376,7 +376,6 @@ body {
 
 .back-button {
     text-decoration: none;
-    font-size: 1.5em;
     color: #000000;
     display: inline-block;
 }
@@ -664,10 +663,8 @@ input[readonly] {
 
 .back-button {
     text-decoration: none;
-    font-size: 1.5em;
     color: #000000;
     display: inline-block;
-    margin-bottom: 2%;
 }
 
 .booking-details-section h2 {
@@ -823,6 +820,49 @@ input:disabled {
 
 .save-changes-btn button:hover {
     background-color: #004670;
+}
+
+.field-group select{
+    margin-bottom: 15px;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 100%;
+}
+
+.edit-profile-picture {
+    position: relative;
+    overflow: hidden;
+    width: 25%
+}
+
+.edit-profile-picture img {
+    object-fit: cover;
+    width: 75%;
+}
+
+.edit-change-photo-btn {
+    width: 75%;
+    display: block;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.6);
+    color: white;
+    text-align: center;
+    padding: 10px;
+    font-size: 14px;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.edit-profile-picture:hover .edit-change-photo-btn {
+    opacity: 1;
+}
+
+.edit-profile-picture #file-input {
+    display: none;
 }
 
 
@@ -1188,4 +1228,10 @@ strong {
 
 .cancel-button:hover {
     background-color: rgb(94, 1, 1);
+}
+
+/* error message displaying */
+.error-message{
+    color: red;
+    font-size: 13px;
 }

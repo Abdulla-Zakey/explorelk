@@ -32,7 +32,7 @@
                         <h3>Fishing Hut</h3>
                         <p>Uncover the tranquil charm of Fishing Hut, a secluded haven tucked away in the pristine wilderness of Sri Lanka. Located along the banks of a gently flowing river, this serene retreat offers an idyllic escape into nature...</p>
                     </div>
-                    <a href="<?=ROOT?>/admin/C_contentManagementDetailedView.html"><button class="content-detail-btn">Detail &rarr;</button></a>
+                    <a href="<?=ROOT?>/admin/C_contentManagementDetailedView"><button class="content-detail-btn">Detail &rarr;</button></a>
                     
                 </div>
         
@@ -42,7 +42,7 @@
                         <h3>Sandagalathenna</h3>
                         <p>Discover the serene beauty of Sandagalathenna, a picturesque hilltop nestled in the heart of Sri Lanka's rolling landscapes. Perched at an elevation that offers panoramic views of lush valleys and distant mountains...</p>
                     </div>
-                    <a href="<?=ROOT?>/admin/C_contentManagementDetailedView.html"><button class="content-detail-btn">Detail &rarr;</button></a>
+                    <a href="<?=ROOT?>/admin/C_contentManagementDetailedView"><button class="content-detail-btn">Detail &rarr;</button></a>
                 </div>
         
                 <div class="tourist-place">
@@ -51,7 +51,7 @@
                         <h3>Gartmore Falls</h3>
                         <p>Gartmore Falls offers a peaceful retreat where you can relax and immerse yourself in the natural surroundings. The misty spray from the falls, combined with the cool mountain breeze, creates a refreshing atmosphere...</p>
                     </div>
-                    <a href="<?=ROOT?>/admin/C_contentManagementDetailedView.html"><button class="content-detail-btn">Detail &rarr;</button></a>
+                    <a href="<?=ROOT?>/admin/C_contentManagementDetailedView"><button class="content-detail-btn">Detail &rarr;</button></a>
                 </div>
         
                 <div class="tourist-place">
@@ -60,7 +60,7 @@
                         <h3>Moray Falls</h3>
                         <p>Experience the mesmerizing beauty of Moray Falls, a captivating waterfall tucked away in the lush hills of Sri Lanka's central highlands. As the water cascades down from a height of...</p>
                     </div>
-                    <a href="<?=ROOT?>/admin/C_contentManagementDetailedView.html"><button class="content-detail-btn">Detail &rarr;</button></a>
+                    <a href="<?=ROOT?>/admin/C_contentManagementDetailedView"><button class="content-detail-btn">Detail &rarr;</button></a>
                 </div>
             </div>
         </div>

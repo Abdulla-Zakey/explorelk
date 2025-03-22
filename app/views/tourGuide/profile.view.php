@@ -1,124 +1,206 @@
-<html>
-    <head>
-        <title>ExploreLK Tour Guide</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="<?= ROOT ?>/assets/css/tourGuide/tourGuide.css?v=1.0">
-        <link href='https://fonts.googleapis.com/css?family=Poppins' rel='stylesheet'>
-        <script src="https://kit.fontawesome.com/d11f03c652.js" crossorigin="anonymous"></script>
-    </head>
+<html lang="en">
 
-    <body>
-        <div class="flexContainer">
-            
-            <?php include_once APPROOT.'\views\inc\tourGuideNavBar.php'; ?>
+</html>
 
-            <div class="body-container">
-                <div class="heading">
-                    <h1>Personal Information</h1>
+<head>
+    <title>ExploreLK Admin</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="<?= ROOT ?>/assets/css/tourGuide/tourGuide.css?v=1.0">
+    <link href='https://fonts.googleapis.com/css?family=Poppins' rel='stylesheet'>
+    <script src="https://kit.fontawesome.com/d11f03c652.js" crossorigin="anonymous"></script>
+    <script src="<?= ROOT ?>/assets/js/admin/admin.js?v=1.0"></script>
+
+    <style>
+    html {
+        font-size: 10px;
+    }
+    </style>
+</head>
+
+<body>
+    <div class="flexContainer">
+        <?php include_once APPROOT.'\views\inc\tourGuideNavBar.php'; ?>
+
+        <div class="profileDetails-Container">
+            <div class="header-container">
+                <h1>
+                    View Profile
+                </h1>
+
+                </a>
+                <button class="buttonStyle" onclick="window.location.href='<?= ROOT ?>/tourGuide/C_editProfile'">
+                    
+                        <i class="fa-solid fa-user-pen"></i>Edit Profile
+                    
+                </button>
+            </div>
+
+            <div class="main-Container">
+                <div class="profilePic-Holder">
+                    <!-- <img src = "<?= ROOT ?>/assets/images/Travelers/viewProfile/defaultUserIcon.png"> -->
+                    <img src="<?= !empty($data['userData'][0]->profilePhoto) 
+                            ? ROOT . '/assets/images/tourGuide/tourGuideProfilePhotos/' . htmlspecialchars($data['userData'][0]->profilePhoto) 
+                            : ROOT . '/assets/images/Travelers/viewProfile/defaultUserIcon.png' ?>">
                 </div>
 
-                <div class="save-btn">
-                    <button>save</button>
-                </div>
+                <div class="personalInfo">
+                    <h2>
+                        Personal Information
+                    </h2>
 
-                <div class="flexContainer">
-                    <div class="profile-photo">
-                        <div>
-                            <img src="<?=ROOT?>/assets/images/tourGuide/profile.png" alt="Profile Photo">
+                    <div class="row">
+                        <div class="leftColumn">
+                            <label>
+                                First Name:
+                            </label>
+
+                            <!-- <input type="text" name="firstName" value = "Nihmath" readonly> -->
+                            <input type="text" name="firstName" value="<?= htmlspecialchars($data['userData'][0]->firstName); ?>"
+                                readonly>
                         </div>
 
-                        <div class="profile-name">
-                            <h3>Ramesh</h3>
-                            <span><p>Colombo, Western Province</p></span>
+                        <div class="rightColumn">
+                            <label>
+                                Last Name:
+                            </label>
+                            <!-- <input type="text" name="lastName" value = "Jabir" readonly> -->
+                            <input type="text" name="lastName"
+                                value="<?= htmlspecialchars($data['userData'][0]->lastName ?? '') ?>" readonly>
                         </div>
                     </div>
 
-                    <div class="profile-info">
-                        <div class="lable-div">
-                            <div class="lable">
-                                <p>Full Name</p>
-                            </div>
+                    <div class="row">
+                        <div class="leftColumn">
+                            <label>
+                                Username:
+                            </label>
 
-                            <div>
-                                <input type="text" id="name" name="name" placeholder="Ramesh Kepetiyagama">
-                            </div>
+                            <!-- <input type = "email" name = "email"  value = "jabirmnn@fakemail.com" readonly> -->
+                            <input type="text" name="username" value="<?= htmlspecialchars($data['userData'][0]->username ?? '') ?>"
+                                readonly>
                         </div>
 
-                        <div class="lable-div">
-                            <div class="lable">
-                                <p>Email</p>
-                            </div>
+                        <div class="rightColumn">
+                            <label>
+                                Password:
+                            </label>
+                            <!-- <input type="number" name="mobile" value = "0715770109" readonly> -->
+                            <input type="password" name="password" value="********"
+                                readonly>
+                        </div>
+                    </div>
 
-                            <div class="light-text">
-                                <p>ramesh32@gmail.com</p>
-                            </div>
+                    <div class="row">
+                        <div class="leftColumn">
+                            <label>
+                                Email:
+                            </label>
+
+                            <!-- <input type = "email" name = "email"  value = "jabirmnn@fakemail.com" readonly> -->
+                            <input type="email" name="email" value="<?= htmlspecialchars($data['userData'][0]->email ?? '') ?>"
+                                readonly>
                         </div>
 
-                        <div class="lable-div">
-                            <div class="lable">
-                                <p>Phone Number</p>
-                            </div>
-                            
-                            <div class="light-text">
-                                <input type="number" id="phone" name="phone" placeholder="0712345678">
-                            </div>
+                        <div class="rightColumn">
+                            <label>
+                                Mobile Number:
+                            </label>
+                            <!-- <input type="number" name="mobile" value = "0715770109" readonly> -->
+                            <input type="text" name="mobileNum" value="<?= htmlspecialchars($data['userData'][0]->mobileNum ?? '') ?>"
+                                readonly>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="leftColumn">
+                            <label>
+                                NIC:
+                            </label>
+
+                            <!-- <input type = "email" name = "email"  value = "jabirmnn@fakemail.com" readonly> -->
+                            <input type="text" name="nic" value="<?= htmlspecialchars($data['userData'][0]->nic ?? '') ?>"
+                                readonly>
                         </div>
 
-                        <div class="lable-div">
-                            <div class="lable">
-                                <p>Location</p>
-                            </div>
-                            
-                            <div class="light-text">
-                                <input type="text" id="location" name="location" placeholder="Colombo, Western Province">
-                            </div>
+                        <div class="rightColumn">
+                            <label>
+                                License No:
+                            </label>
+                            <!-- <input type="number" name="mobile" value = "0715770109" readonly> -->
+                            <input type="text" name="licenseNum" value="<?= htmlspecialchars($data['userData'][0]->licenseNum ?? '') ?>"
+                                readonly>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="leftColumn">
+                            <label style="font-size: 1.5rem;">
+                                Tour Frequency Per Month :
+                            </label>
+
+                            <!-- <input type = "email" name = "email"  value = "jabirmnn@fakemail.com" readonly> -->
+                            <input type="text" name="tourFrequencyPerMonth"
+                                value="<?= htmlspecialchars($data['userData'][0]->tourFrequencyPerMonth ?? '') ?>" readonly>
                         </div>
 
-                        <div class="lable-div">
-                            <div class="lable">
-                                <p>Bio</p>
-                            </div>
-                            
-                            <div class="light-text">
-                                <textarea name="bio" id="bio" rows="5" cols="70" placeholder="Write a brief introduction about you"></textarea>
-                            </div>
+                        <div class="rightColumn">
+                            <label>
+                                Experience :
+                            </label>
+                            <!-- <input type="number" name="mobile" value = "0715770109" readonly> -->
+                            <input type="text" name="experience" value="<?= htmlspecialchars($data['userData'][0]->experience ?? '') ?>"
+                                readonly>
                         </div>
+                    </div>
 
-                        <div class="lable-div">
-                            <div class="lable">
-                                <p>Languages Spoken</p>
-                            </div>
-                            
-                            <div class="languages">
-                                <p>Sinhala</p><input type="checkbox" name="sinhala" value="sinhala">
-                                <p>English</p><input type="checkbox" name="english" value="english">
-                                <p>Tamil</p><input type="checkbox" name="tamil" value="tamil">
-                            </div>
-                        </div>
+                    <div class="row" style="display: block;">
+                        <label>
+                            Bio:
+                        </label>
+                        <!-- <textarea name="bio" readonly>A passionate traveler exploring the wonders of Sri Lanka. Love hiking, photography, and finding hidden gems.</textarea>-->
+                        <textarea name="bio" readonly><?= htmlspecialchars($data['userData'][0]->guideBio ?? '') ?></textarea>
+                    </div>
+                </div>
 
-                        <div class="lable-div">
-                            <div class="lable">
-                                <p>Social Media</p>
-                            </div>
+                <div class="contactInfo">
+                    <h2>
+                        Payment Information
+                    </h2>
 
-                            <div class="light-text" id="flex-display">
-                                <div class="profile-icon">
-                                    <i class="fa-brands fa-facebook fa-2x"></i>
-                                    <a href="facebook.com">Facebook</a>
-                                </div>
+                    <div>
+                        <label>
+                            Account Number:
+                        </label>
+                        <!-- <input type = "number" name = "acNum" value = "200209102877" readonly> -->
+                        <input type="text" name="tourGuide_accountNum"
+                            value="<?= htmlspecialchars($data['bankDetailsData']['0']->tourGuide_accountNum ?? '') ?>"
+                            readonly>
+                    </div>
 
-                                <div class="profile-icon">
-                                    <i class="fa-brands fa-instagram fa-2x"></i>
-                                    <a href="instagram.com">Instagram</a>
-                                </div>
-                            </div>
-                        </div>
+                    <div>
+                        <label>
+                            Bank Name:
+                        </label>
+                        <!-- <input type = "text" name = "bankName" value = "HNB" readonly> -->
+                        <input type="text" name="tourGuide_bankName"
+                            value="<?= htmlspecialchars($data['bankDetailsData']['0']->tourGuide_bankName ?? '') ?>" readonly>
+                    </div>
+
+                    <div>
+                        <label>
+                            Bank Branch:
+                        </label>
+                        <!-- <input type = "text" name = "branch" value = "Maligawatte" readonly> -->
+                        <input type="text" name="tourGuide_bankBranch"
+                            value="<?= htmlspecialchars($data['bankDetailsData']['0']->tourGuide_bankBranch ?? '') ?>"
+                            readonly>
                     </div>
                 </div>
 
             </div>
-            
         </div>
-    </body>
+    </div>
+</body>
+
 </html>

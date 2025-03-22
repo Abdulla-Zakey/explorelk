@@ -85,7 +85,7 @@
         // Function to delete a tour
         function deleteTour(tourId) {
             alert("Are you sure you want to delete: " + tourId);
-            window.location.href = <?= ROOT ?>/tourGuide/C_tourPackages/deleteTour/${tourId};
+            window.location.href = '<?= ROOT ?>/tourGuide/C_tourPackages/deleteTour/${tourId}';
         }
 
         // Close menu options when clicking outside
