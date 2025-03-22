@@ -433,8 +433,7 @@
 
                                 <!-- <a href="<?= ROOT ?>/traveler/MyTrips/deleteTrip/<?= $trip->trip_Id ?>"
                                     onclick = "showPopup('Are you sure you want to delete this trip?');"> -->
-                                <a href="javascript:void(0)" onclick="showPopup('Are you sure you want to delete this trip?', '<?= ROOT ?>/traveler/MyTrips/deleteTrip/<?= $trip->trip_Id ?>')">
-
+                                <a href="javascript:void(0)" onclick = "showPopup('Are you sure you want to delete this trip?', '<?= ROOT ?>/traveler/MyTrips/deleteTrip/<?= $trip->trip_Id ?>')">
                                     <button id="deleteBookingBtn" class="actionButtons">
                                         <i class="fas fa-trash"></i>Delete Trip
                                     </button>
@@ -671,3 +670,4 @@
 
 </body>
 </html>
+

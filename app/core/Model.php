@@ -254,11 +254,26 @@
             
             $query = "DELETE FROM $this->table WHERE $id_column = :$id_column";
 
-            if($this->query($query, $data)){
-                return true;
-            }
+            // if($this->query($query, $data)){
+            //     return true;
+            // }
 
-            return false;
+            // return false;
+            /*  Commented the above because, it is returning false even though 
+                the query successfully exceuted*/
+            try {
+                $result = $this->query($query, $data);
+                if ($result !== false) {
+                    return true;
+                } else {
+                    error_log('Update query failed. Query: ' . $query);
+                    error_log('Data: ' . print_r($data, true));
+                    return false;
+                }
+            } catch (Exception $e) {
+                error_log('Database exception during update: ' . $e->getMessage());
+                return false;
+            }
             
         }
 

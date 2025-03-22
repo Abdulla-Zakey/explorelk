@@ -72,7 +72,7 @@
         }
 
         public function getDetailsByHotelId($hotel_Id){
-            $result = $this->where(['hotel_Id' => $hotel_Id]);
+            $result = $this->first(['hotel_Id' => $hotel_Id]);
             return $result;
 
         }

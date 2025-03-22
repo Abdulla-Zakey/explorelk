@@ -152,7 +152,7 @@ class Login extends Controller
         }
 
         // Redirect to login page
-        header("Location: " . ROOT . "/traveler/Home");
+        header("Location: " . ROOT . "/Home");
         exit();
     }
 
