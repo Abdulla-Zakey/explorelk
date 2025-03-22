@@ -1,673 +1,1378 @@
 <?php
-    // var_dump($data['sharedTrips']);
-    // show($_SESSION['success']);
+// var_dump($data);
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap">
-    <link rel="stylesheet" href="<?= ROOT ?>/assets/css/Traveler/registeredUser.css">
-    <link rel="stylesheet" href="<?= ROOT ?>/assets/css/Traveler/myTrips.css">
+    <link rel="stylesheet" href="<?= CSS ?>/Traveler/navbar.css">
+    <link rel="stylesheet" href="<?= CSS ?>/Traveler/viewParticularHotel.css">
+    <link rel="stylesheet" href="<?= CSS ?>/Traveler/footer.css">
     <link rel="icon" href="<?= IMAGES ?>/logos/logoBlack.svg">
-    <title>ExploreLK | My Trips</title>
+    <title>ExploreLK | <?= $data['hotelData']->hotelName ?></title>
     <script src="https://kit.fontawesome.com/f35c1c7a11.js" crossorigin="anonymous"></script>
+
     <style>
-        /* Additional styles for tabs and shared trips */
-        .pendingApprovalsNotification {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            background-color: rgba(255, 0, 0, 0.6); 
-            border-radius: 50%;
-            min-width: 2.5rem;
-            height: 2.5rem;
-            padding: 0.2rem;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
-            margin-left: 0.5rem;
-            font-size: 1.5rem;
-            font-weight: 500;
-            animation: pulse 1.5s infinite;
-            transform-origin: center;
-        }
-
-        @keyframes pulse {
-            0% {
-                transform: scale(1);
-                opacity: 1;
-            }
-            50% {
-                transform: scale(1.1);
-                opacity: 0.8;
-            }
-            100% {
-                transform: scale(1);
-                opacity: 1;
-            }
-        }
-
-        .trips-tabs {
-            display: flex;
-            gap: 2rem;
-            margin: 0rem;
-        }
-
-        .trip-tab {
-            font-size: 2rem;
-            padding: 1rem 2rem;
-            background: none;
-            border: none;
-            border-bottom: 3px solid transparent;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            color: #666;
-            font-family: 'poppins';
-        }
-
-        .trip-tab i{
-            margin-right: 0.25rem;
-        }
-
-        .trip-tab.active {
-            color: #1E7A8F;
-            border-bottom: 3px solid #1E7A8F;
-            font-weight: 600;
-        }
-
-        .trip-tab:hover {
-            color: #1E7A8F;
-        }
-
-        .trips-section {
+        /* Modal Styles */
+        .custom-modal {
             display: none;
-        }
-
-        .trips-section.active {
-            display: block;
-        }
-
-        .trip-owner {
-            font-size: 1.4rem;
-            color: #666;
-            margin-top: 0.5rem;
-            margin-left: 2rem;
-        }
-
-        .permission-badge {
-            font-size: 1.2rem;
-            padding: 0.3rem 0.8rem;
-            border-radius: 0.5rem;
-            margin-left: 0.5rem;
-        }
-
-        .permission-badge.editor {
-            background: #E3F2FD;
-            color: #1E88E5;
-        }
-
-        .permission-badge.viewer {
-            background: #E8F5E9;
-            color: #43A047;
-        }
-
-        /* Empty state for shared trips */
-        .empty-shared-trips {
-            text-align: center;
-            padding: 4rem 2rem;
-            background: #f8f9fa;
-            border-radius: 1rem;
-            margin-top: 2rem;
-        }
-
-        .empty-shared-trips i {
-            font-size: 5rem;
-            color: #1E7A8F;
-            margin-bottom: 2rem;
-        }
-
-        .empty-shared-trips h3 {
-            font-size: 2.4rem;
-            color: #333;
-            margin-bottom: 1rem;
-        }
-
-        .empty-shared-trips p {
-            font-size: 1.6rem;
-            color: #666;
-        }
-
-        /* Status indicator for shared trips */
-        .status-indicator {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-size: 1.3rem;
-            margin-left: 1rem;
-        }
-
-        .status-indicator.pending {
-            color: #F57C00;
-        }
-
-        .status-indicator.accepted {
-            color: #43A047;
-        }
-
-        .status-indicator i {
-            font-size: 1.2rem;
-        }
-
-        /* Response buttons for pending invites */
-        .invite-response {
-            display: flex;
-            gap: 1rem;
-            margin-top: 1rem;
-        }
-
-        .invite-response button {
-            padding: 0.8rem 1.6rem;
-            border: none;
-            border-radius: 0.5rem;
-            font-size: 1.4rem;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .accept-invite, .decline-invite{
-            color: #FFFFFF;
-            width: 100%;
-            font-size: 1.3rem;
-            border-radius: 1rem;
-            padding: 1.5rem;
-            box-sizing: border-box;
-            border: none;
-            cursor: pointer;
-            transition: transform 0.2s ease, background-color 0.2s ease;
-            margin-bottom: 7.5%;
-        }
-
-        .accept-invite i, .decline-invite i{
-            margin-right: 5%;
-        }
-        .accept-invite {
-            /* background: #4CAF50; */
-            /* background-color: #4ade80; */
-            /* background-color: rgba(50, 140, 85, 0.75); */
-            background-color: rgb(45, 225, 45);
-            color: white;
-        }
-
-        .decline-invite {
-            background-color: rgba(255, 0, 0, 0.75);
-            /* background: #F44336; */
-            color: white;
-        }
-
-        .accept-invite:hover {
-            background: rgb(25, 225, 25);
-            transform: scale(1.05);
-        }
-
-        .decline-invite:hover {
-            background-color: #E53935;
-            transform: scale(1.05);
-        }
-
-        /* Pop-up container (initially hidden) */
-        .popup-container {
-            font-size: 1.35rem;
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.6); /* Dark transparent overlay */
-            display: none; /* Initially hidden */
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
             justify-content: center;
             align-items: center;
-            z-index: 999; /* Above other content */
+            backdrop-filter: blur(5px);
         }
 
-        /* Pop-up content */
-        .popup-content {
+        .model-container {
+            background-color: #fff;
+            border-radius: 2rem;
+            /* width: 90%; */
+            max-width: 80rem;
+            max-height: 80vh;
+            overflow: hidden;
+            position: relative;
+            animation: modalSlideIn 0.3s ease-out;
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                transform: translateY(2rem);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal-header {
+            background-color: #f8f9fa;
+            padding: 2rem 3rem;
+            border-bottom: 1px solid #e9ecef;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            color: #002D40;
+            font-size: 2.4rem;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .modal-body {
+            padding: 3rem;
+            overflow-y: auto;
+            max-height: calc(85vh - 150px);
+        }
+
+        .closebutton {
+            background: none;
+            border: none;
+            font-size: 2rem;
+            color: #6c757d;
+            cursor: pointer;
+            transition: color 0.3s ease;
+            padding: 0.5rem;
+        }
+
+        .closebutton:hover {
+            color: #dc3545;
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .model-container {
+                width: 95%;
+                margin: 1rem;
+            }
+        }
+
+        .details-tabs {
+            display: flex;
+            gap: 1rem;
+            border-bottom: 1px solid #e9ecef;
+            padding: 0 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .tab-button {
+            padding: 1.2rem 2rem;
+            border: none;
+            background: none;
+            color: #6c757d;
+            cursor: pointer;
+            font-size: 1.8rem;
+            font-family: 'poppins';
+            font-weight: 500;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .tab-button i {
+            margin-right: 0.8rem;
+        }
+
+        .tab-button.active {
+            color: #002D40;
+        }
+
+        .tab-button.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: #002D40;
+        }
+
+        /* Tab Content Styles */
+        .tab-content {
+            display: none;
+            padding: 2rem;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Room Type Details Styles */
+        .room-type-details {
+            display: grid;
+            grid-template-columns: 30rem 1fr;
+            gap: 3rem;
+        }
+
+        .room-image-container {
+            width: 100%;
+            border-radius: 1rem;
+            overflow: hidden;
+        }
+
+        .room-image-container img {
+            width: 100%;
+            height: 25rem;
+            object-fit: cover;
+        }
+
+        .details-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+        }
+
+        .detail-item {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 0.8rem;
+        }
+
+        .detail-item.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .detail-label {
+            display: block;
+            color: #002D40;
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+        }
+
+        .detail-value {
+            color: #6c757d;
+            font-weight: 500;
+            font-size: 1.4rem;
+        }
+
+        /* Amenities List Styles */
+        .amenities-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .amenity-tag {
+            background: #e3f2fd;
+            color: #1976d2;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 1.4rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            width: 45%;
+        }
+
+        .amenity-tag i {
+            font-size: 1rem;
+        }
+
+        /*Availability section */
+        .availability-section {
+            padding: 2rem;
+            font-family: 'poppins';
+        }
+
+        .filter-section,
+        .room-summary {
+            background: #f8f9fa;
+            padding: 2rem;
+            border-radius: 1rem;
+            margin-bottom: 2rem;
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+            flex-wrap: wrap;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+            min-width: 50rem;
+        }
+
+        .date-filter {
+            flex: 1;
+            min-width: 20rem;
+        }
+
+        .date-filter label,
+        .summary-label,
+        .selection-header h3 {
+            display: block;
+            font-size: 1.5rem;
+            color: #4a5568;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .date-input {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.5rem;
+            font-size: 1.4rem;
+            transition: all 0.3s ease;
+            background-color: white;
+            box-sizing: border-box;
+        }
+
+        .date-input:focus {
+            outline: none;
+            border-color: #4299e1;
+            box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.1);
+        }
+
+        .room-summary {
+            /*Declared with .filter-section*/
+        }
+
+        .summary-box {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
             background: white;
-            padding: 20px 30px;
-            border-radius: 10px;
-            text-align: center;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
-            max-width: 400px;
-            width: 90%;
-            font-size: 16px;
+            padding: 1.5rem;
+            border-radius: 1rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+            height: 6rem;
         }
 
-        /* Close button */
-        .popup-content button {
-            margin-top: 15px;
-            padding: 10px 20px;
-            background-color: #007bff;
+        .summary-box i {
+            font-size: 1.5rem;
+            color: #4299e1;
+        }
+
+        .summary-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .summary-label {
+            /*declared with .date-filter label */
+        }
+
+        .summary-value {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #2d3748;
+        }
+
+        .room-selection {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 1rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+        }
+
+        .selection-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .selection-header h3 {
+            /*main styles of this part is declared with .date-filter label */
+            margin: 0;
+        }
+
+        .room-counter {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 1rem;
+            font-size: 1.4rem;
+        }
+
+        .counter-btn {
+            background: white;
+            border: 1px solid #e2e8f0;
+            width: 2rem;
+            height: 2rem;
+            border-radius: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: #4a5568;
+            transition: all 0.2s ease;
+        }
+
+        .counter-btn:hover {
+            background: #4299e1;
+            color: white;
+            border-color: #4299e1;
+        }
+
+        .counter-btn:disabled {
+            background: #edf2f7;
+            color: #a0aec0;
+            cursor: not-allowed;
+            border-color: #edf2f7;
+        }
+
+        #roomCount {
+            font-size: 1.3rem;
+            font-weight: 500;
+            color: #2d3748;
+            min-width: 2rem;
+            text-align: center;
+        }
+
+        .booking-summary {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 0.8rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+        }
+
+        .summary-details {
+            margin-bottom: 1.5rem;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.8rem 0;
+            color: #4a5568;
+            font-size: 1.4rem;
+            font-weight: 500;
+        }
+
+        .summary-row.total {
+            border-top: 1px solid #e2e8f0;
+            margin-top: 0.5rem;
+            padding-top: 1rem;
+            font-weight: 600;
+            color: #4a5568;
+            font-size: 1.5rem;
+        }
+
+        .book-button {
+            width: 100%;
+            background: #4299e1;
             color: white;
             border: none;
-            border-radius: 5px;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            font-size: 1.5rem;
+            font-family: 'poppins';
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
             cursor: pointer;
-            font-size: 14px;
+            transition: all 0.3s ease;
         }
 
-        .popup-content button:hover {
-            background-color: #0056b3;
+        .book-button:hover {
+            background: #3182ce;
+            transform: translateY(-1px);
         }
 
-        /* Blur background effect when pop-up is visible */
-        .blur {
-            filter: blur(5px);
-            pointer-events: none;
+        .book-button:disabled {
+            background: #e2e8f0;
+            cursor: not-allowed;
+            transform: none;
         }
-        
 
+        @media (max-width: 768px) {
+            .filter-section {
+                flex-direction: column;
+            }
+
+            .date-filter {
+                width: 100%;
+            }
+
+            .room-summary {
+                flex-direction: column;
+            }
+
+            .selection-header {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
     </style>
+
 </head>
 
 <body>
-    <div class="mainContainer">
-        <!-- Left Panel (Same as original) -->
-        <div class="leftPanel">
-            <div class="logo">
-                <img src="<?= IMAGES ?>/logos/logoWhite.svg" alt="Logo">
-                <h1>ExploreLK</h1>
-            </div>
+    <header>
+        <nav class="navbar">
 
-            <div class="linkHolder">
-                <a href="<?= ROOT ?>/traveler/RegisteredTravelerHome" class="linkItem">
-                    <i class="fa-solid fa-house"></i>Home
+            <div class="backToHome">
+                <a href="<?= ROOT ?>/traveler/ParticularDistrict/index/9">
+                    <i class="fa-solid fa-arrow-left"></i>
+                    <span>Back</span>
                 </a>
             </div>
 
-            <div id="activeLink" class="linkHolder">
-                <a href="<?= ROOT ?>/traveler/MyTrips" class="linkItem" style="color:#002D40;">
-                    <i class="fa-solid fa-person-walking-luggage"></i>My Trips
-                </a>
+        </nav>
+    </header>
+
+    <section id="main">
+        <h1>
+            <?= htmlspecialchars($data['hotelData']->hotelName) ?>
+        </h1>
+
+        <div class="row">
+            <div class="infoText">
+                <span class="subtopic">
+                    A Picturesque Location
+                </span>
+                <br>
+                <?= htmlspecialchars($data['hotelData']->description_para1) ?>
+                <br><br>
+
+                <span class="subtopic">
+                    Exceptional Comfort and Elegance
+                </span>
+                <br>
+                <?= htmlspecialchars($data['hotelData']->description_para2) ?>
+                <br><br>
+
+                <span class="subtopic">
+                    Explore Nearby Attractions
+                </span>
+                <br>
+                <?= htmlspecialchars($data['hotelData']->description_para3) ?>
             </div>
 
-            <div class="linkHolder">
-                <a href="<?= ROOT ?>/traveler/MyBookings" class="linkItem">
-                    <i class="fa-solid fa-book-open"></i>My Bookings
-                </a>
-            </div>
+            <div class="mapHolder">
 
-            <div class="linkHolder">
-                <a href="<?= ROOT ?>/traveler/Messages" class="linkItem">
-                    <i class="fa-solid fa-message"></i>Messages
-                </a>
-            </div>
+                <iframe id="mapFrame" width="100%" height="100%" frameborder="0" style="border:0;" loading="lazy"
+                    allowfullscreen>
+                </iframe>
 
-            <div class="linkHolder">
-                <a href="<?= ROOT ?>/traveler/Notifications" class="linkItem">
-                    <i class="fa-solid fa-bell"></i>Notifications
-                </a>
-            </div>
+                <center>
+                    <div class="caption">Distance from Nuwara Eliya Town</div>
+                </center>
 
-            <div class="linkHolder">
-                <a href="<?= ROOT ?>/traveler/ViewProfile" class="linkItem">
-                    <i class="fa-solid fa-user"></i>View Profile
-                </a>
-            </div>
-
-            <div class="linkHolder">
-                <a href="<?= ROOT ?>/traveler/EditProfile" class="linkItem">
-                    <i class="fa-solid fa-user-pen"></i>Edit Profile
-                </a>
-            </div>
-
-            <div class="linkHolder">
-                <a href="<?= ROOT ?>/traveler/Login/logout" class="linkItem">
-                    <i class="fas fa-sign-out-alt"></i>Logout
-                </a>
             </div>
         </div>
 
-        <div class="rightPanel">
-            <div class="header-container">
-                <h1>My Trips</h1>
-                <button class="buttonStyle">
-                    <a href="<?= ROOT ?>/traveler/CreateTrip">
-                        <i class="fa-solid fa-plus"></i>Create a New Trip
-                    </a>
-                </button>
+    </section>
+
+    <section class="gallery-container">
+
+        <div class="slider-wrapper">
+
+            <div class="slider">
+                <?php foreach ($data['hotelPics'] as $index => $pic): ?>
+                    <img id="slide<?= $index + 1 ?>" src="<?= ROOT . '/' . $pic->image_path ?>" alt="Hotel Picture">
+                <?php endforeach; ?>
+
+                <div class="slider-nav">
+                    <?php foreach ($data['hotelPics'] as $index => $pic): ?>
+                        <a herf="#slide<?= $index + 1 ?>"></a>
+                    <?php endforeach; ?>
+
+                </div>
+
             </div>
 
-            <!-- Tabs for switching between My Trips and Shared Trips -->
-            <div class="trips-tabs">
-                <button class="trip-tab active" data-tab="my-trips">
-                    <i class="fa-solid fa-person-walking-luggage"></i> My Trips
-                </button>
-                <button class="trip-tab" data-tab="shared-trips">
-                    <i class="fa-solid fa-users"></i> Invited Trips
-                    <?php
-                        $pendingApprovalCount = 0;
-                        if(!empty($data['sharedTrips'])){
-                            foreach($data['sharedTrips'] as $trip){
-                                if($trip->request_status == 'pending'){
-                                    $pendingApprovalCount++;
-                                }
-                            }
-                            if($pendingApprovalCount > 0){
-                                echo '<span class = "pendingApprovalsNotification">'. $pendingApprovalCount .'</span>';
-                            }
-                            else{
-                                echo '';
-                            }
+        </div>
+    </section>
+
+    <section id="roomTypes">
+        <h1>
+            Available Room Types
+        </h1>
+        <div class="carousel-container">
+            <div class="carousel-navigation prev" id="prevBtn">&lt;</div>
+            <div class="carousel-content" id="roomTypesCarousel">
+                <?php
+                $index = 0;
+                $totalRoomTypes = count($data['hotelRoomTypes']);
+
+                foreach ($data['hotelRoomTypes'] as $roomType) {
+                    // Only first 3 items visible initially
+                    $isVisible = $index < 3;
+
+                    echo '<div class="roomItem ' . (!$isVisible ? 'hidden' : '') . '" data-index="' . $index . '">
+                        <div class="topic">'
+                        . $data['hotelRoomTypesNames'][$index]->roomType_name .
+                        '</div>
+                        <img src="' . ROOT . '/' . $roomType->thumbnail_picPath . '">
+
+                        <div class="typeDescription">'
+                        . $roomType->customized_description .
+                        '</div>
+
+                        <div id="bookNowBtn' . ($index + 1) . '" class="bookNow" onclick="showRoomTypeDetails(' . $index . ')">
+                            Book Now             
+                        </div>
+                       
+                        <div class="price">'
+                        . $roomType->pricePer_night . ' LKR per day
+                        </div>
+                    </div>';
+
+                    $index++;
+                }
+                ?>
+            </div>
+            <div class="carousel-navigation next" id="nextBtn">&gt;</div>
+        </div>
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const roomItems = document.querySelectorAll('.roomItem'); // NodeList
+                const prevBtn = document.getElementById('prevBtn');
+                const nextBtn = document.getElementById('nextBtn');
+                const totalItems = roomItems.length;
+
+                // Show carousel only if there are at least 3 room types
+                if (totalItems < 3) {
+                    console.error("Not enough room types for carousel rotation.");
+                    return;
+                }
+
+                // Array to store current visible indices (start with first 3)
+                let visibleIndices = [0, 1, 2];
+
+                // Function to update visibility of room items
+                function updateVisibility() {
+                    roomItems.forEach((item, index) => {
+                        if (visibleIndices.includes(index)) {
+                            item.classList.remove('hidden'); // Show selected items
+                        } else {
+                            item.classList.add('hidden'); // Hide other items
                         }
-                    ?>
-                    
-                </button>
-                
-            </div>
+                    });
+                }
 
-            <!-- My Trips Section -->
-            <div id = "my-trips" class = "trips-section active">
-                <?php if (empty($data['trips'])): ?>
-                    <!-- Empty state for my trips (Keep existing empty state) -->
-                    <div class="empty-state-container">
+                // **Left Rotation: Move first index to the end**
+                function handleLeftNavigation() {
+                    visibleIndices = visibleIndices.map(index => (index - 1 + totalItems) % totalItems);
+                    updateVisibility();
+                }
 
-                        <div class="empty-state-icon">
-                            <svg class="map-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M3 6l6-3l6 3l6-3v15l-6 3l-6-3l-6 3V6z"></path>
-                                <path d="M9 3v15"></path>
-                                <path d="M15 6v15"></path>
-                            </svg>
+                // **Right Rotation: Move last index to the front**
+                function handleRightNavigation() {
+                    visibleIndices = visibleIndices.map(index => (index + 1) % totalItems);
+                    updateVisibility();
+                }
 
-                            <svg class="compass-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <circle cx="12" cy="12" r="10"></circle>
-                                <path d="M16.24 7.76l-2.12 6.36l-6.36 2.12l2.12-6.36l6.36-2.12z"></path>
-                            </svg>
-                        </div>
-        
-                        <h2 class="empty-state-title">Your Journey Begins Here</h2>
-        
-                        <p class="empty-state-description">
-                            Start planning your next amazing adventure by creating your first trip!
-                        </p>
+                // Attach event listeners
+                prevBtn.addEventListener('click', handleLeftNavigation);
+                nextBtn.addEventListener('click', handleRightNavigation);
 
+                // Initial display setup
+                updateVisibility();
+            });
+
+
+        </script>
+    </section>
+
+    <section id="guest-reviews">
+
+        <h1>
+            Guest Reviews
+        </h1>
+
+        <div class="reviews-row">
+            <!-- Review 1 -->
+            <div class="review-card">
+                <p>
+                    Stayed at Delhousie Hotel before climbing Adam’s Peak.
+                    The mountain view is breathtaking, and rooms were clean and comfy.
+                    Friendly staff gave great hiking tips. Highly recommend for anyone visiting!
+                </p>
+                <div class="review-footer">
+                    <img src="<?= IMAGES ?>/Travelers/userProfilePics/img1.png" alt="Profile Picture" class="review-dp">
+                    <div class="user-info">
+                        <span class="username">Michel Johnson</span>
+                        <span class="posted-date">13 December 2024</span>
                     </div>
-
-                <?php else: ?>
-                    <?php foreach ($data['trips'] as $trip): ?>
-                        <div class="bookingContainer">
-                            <div class="bookingItemImage-Container">
-                                <img src="<?= IMAGES ?>/travelers/myTripCoverPics/nuwaraEliyaCoverPic.png" alt="Trip Cover Pic">
-                            </div>
-
-                            <div class="bookingItemDetails">
-                                <h2><?= htmlspecialchars($trip->tripName) ?></h2>
-
-                                <div class="bookingKeyInfo-Holder">
-                                    <div class = "firstKid"><i class="fa-solid fa-location-dot"></i>Main Destination:</div>
-                                    <div class = "secondKid"><?= htmlspecialchars($trip->destination) ?></div>
-                                </div>
-
-                                <div class="bookingKeyInfo-Holder">
-                                    <div class = "firstKid"><i class="fa-regular fa-calendar"></i>Trip Start Date:</div>
-                                    <div class = "secondKid"><?= date('d-m-Y', strtotime($trip->startDate)) ?></div>
-                                </div>
-
-                                <div class="bookingKeyInfo-Holder">
-                                    <div class = "firstKid"><i class="fa-regular fa-calendar"></i>Trip End Date:</div>
-                                    <div class = "secondKid"><?= date('d-m-Y', strtotime($trip->endDate)) ?></div>
-                                </div>
-                            </div>
-
-                            <div class="bookingActionBtn-Holder">
-                                <a href="<?= ROOT ?>/traveler/MyTrips/viewTrip/<?= $trip->trip_Id ?>">
-                                    <button id="viewBookingBtn" class="actionButtons">
-                                        <i class="fas fa-eye"></i>View Trip Details
-                                    </button>
-                                </a>
-
-                                <a href="<?= ROOT ?>/traveler/MyTrips/editTrip/<?= $trip->trip_Id ?>?edit=true">
-                                    <button id="editBookingBtn" class="actionButtons">
-                                        <i class="fas fa-edit"></i>Edit Trip Details
-                                    </button>
-                                </a>
-
-                                <!-- <a href="<?= ROOT ?>/traveler/MyTrips/deleteTrip/<?= $trip->trip_Id ?>"
-                                    onclick = "showPopup('Are you sure you want to delete this trip?');"> -->
-                                <a href="javascript:void(0)" onclick="showPopup('Are you sure you want to delete this trip?', '<?= ROOT ?>/traveler/MyTrips/deleteTrip/<?= $trip->trip_Id ?>')">
-
-                                    <button id="deleteBookingBtn" class="actionButtons">
-                                        <i class="fas fa-trash"></i>Delete Trip
-                                    </button>
-                                </a>
-                            </div>
-                        </div>
-                    <?php endforeach; ?>
-                <?php endif; ?>
+                </div>
             </div>
 
-            <!-- Shared Trips Section -->
-            <div id="shared-trips" class="trips-section">
-                <?php if (empty($data['sharedTrips'])): ?>
-                    <div class="empty-state-container">
-                        <div class="empty-state-icon">
-                            <svg class="map-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M3 6l6-3l6 3l6-3v15l-6 3l-6-3l-6 3V6z"></path>
-                                <path d="M9 3v15"></path>
-                                <path d="M15 6v15"></path>
-                            </svg>
-
-                            <svg class="compass-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <circle cx="12" cy="12" r="10"></circle>
-                                <path d="M16.24 7.76l-2.12 6.36l-6.36 2.12l2.12-6.36l6.36-2.12z"></path>
-                            </svg>
-                        </div>
-
-                        <h2 class="empty-state-title">No Shared Trips Yet</h2>
-
-                        <p class="empty-state-description">
-                            When friends share their trips with you, they'll appear here.
-                        </p>
+            <!-- Review 2 -->
+            <div class="review-card">
+                <p>
+                    Delhousie Hotel is great for Adam’s Peak visitors. The room was basic but met needs.
+                    Staff was polite, though service was sometimes slow.
+                    It’s a decent choice for a convenient, no-frills stay before the hike.
+                </p>
+                <div class="review-footer">
+                    <img src="<?= IMAGES ?>/Travelers/userProfilePics/img2.png" alt="Profile Picture" class="review-dp">
+                    <div class="user-info">
+                        <span class="username">Lara Brown</span>
+                        <span class="posted-date">19 September 2024</span>
                     </div>
-                <?php else: ?>
-                
-                    <?php foreach ($data['sharedTrips'] as $sharedTrip): ?>
-                        <div class="bookingContainer">
-                            <div class="bookingItemImage-Container">
-                                <img src="<?= IMAGES ?>/travelers/myTripCoverPics/nuwaraEliyaCoverPic.png" alt="Trip Cover Pic">
-                            </div>
+                </div>
+            </div>
+        </div>
 
-                            <div class="bookingItemDetails">
-                                <h2>
-                                    <?= htmlspecialchars($sharedTrip->tripName) ?>
-                                   
-                                    <span class="trip-owner">
-                                        <i class="fa-solid fa-user"></i> Created by: <?= htmlspecialchars($sharedTrip->ownerName) ?>
-                                        <span class="permission-badge <?= $sharedTrip->role ?>">
-                                            <?= ucfirst($sharedTrip->role) ?>
-                                        </span>
-                                    </span>
-                                </h2>
-                                
-                               
+        <div class="reviews-row">
+            <!-- Review 1 -->
+            <div class="review-card">
+                <p>
+                    Delhousie Hotel is in the perfect spot for those planning to climb Adam's Peak.
+                    The early breakfast and proximity to the trailhead made everything so convenient.
+                    The room was basic but had everything we needed after a long day. Will definitely stay here again!
+                </p>
+                <div class="review-footer">
+                    <img src="<?= IMAGES ?>/Travelers/userProfilePics/img4.jpg" alt="Profile Picture" class="review-dp">
+                    <div class="user-info">
+                        <span class="username">Ammy Jackson</span>
+                        <span class="posted-date">06 July 2024</span>
+                    </div>
+                </div>
+            </div>
 
-                                <div class="bookingKeyInfo-Holder">
-                                    <div class="firstKid"><i class="fa-solid fa-location-dot"></i>Main Destination:</div>
-                                    <div class="secondKid"><?= htmlspecialchars($sharedTrip->destination) ?></div>
-                                </div>
+            <!-- Review 2 -->
+            <div class="review-card">
+                <p>
+                    I stayed at Delhousie Hotel for its convenient location near Adam’s Peak, which was a plus.
+                    However, the room felt a bit outdated, and the cleanliness could have been improved. The staff was
+                    helpful, but the service was a bit slow.
+                    It’s an okay choice if you're just looking for a place to crash before the hike.
 
-                                <div class="bookingKeyInfo-Holder">
-                                    <div class="firstKid"><i class="fa-regular fa-calendar"></i>Trip Start Date:</div>
-                                    <div class="secondKid"><?= date('d-m-Y', strtotime($sharedTrip->startDate)) ?></div>
-                                </div>
+                </p>
+                <div class="review-footer">
+                    <img src="<?= IMAGES ?>/Travelers/userProfilePics/img5.jpg" alt="Profile Picture" class="review-dp">
+                    <div class="user-info">
+                        <span class="username">Emma Watson</span>
+                        <span class="posted-date">08 June 2024</span>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-                                <div class="bookingKeyInfo-Holder">
-                                    <div class="firstKid"><i class="fa-regular fa-calendar"></i>Trip End Date:</div>
-                                    <div class="secondKid"><?= date('d-m-Y', strtotime($sharedTrip->endDate)) ?></div>
-                                </div>
-                            </div>
+        <button id="loadMore" class="loadMore-Btn">
+            See all reviews
+        </button>
 
-                                <?php if ($sharedTrip->request_status === 'pending'): ?>
-                                   
-                                    <div class="bookingActionBtn-Holder">
-                                        <a href="<?= ROOT ?>/traveler/MyTrips/handleTripInvitations/<?= $sharedTrip->collaborator_Id ?>/accepted">
-                                            <button class="accept-invite">
-                                                <i class="fa-solid fa-check"></i> Accept
-                                            </button>
-                                        </a>
+    </section>
 
-                                        <a href="<?= ROOT ?>/traveler/MyTrips/handleTripInvitations/<?= $sharedTrip->collaborator_Id ?>/declined">
-                                            <button class="decline-invite">
-                                                <i class="fa-solid fa-xmark"></i> Decline
-                                            </button>
-                                        </a>
-                                    </div>
-                                    <?php else: ?>
-                                        <div class="bookingActionBtn-Holder">
-                                             <a href = "<?= ROOT ?>/traveler/MyTrips/viewTrip/<?= $sharedTrip->trip_Id ?>/<?= $sharedTrip->collaborator_Id ?>">
-                                                <button id="viewBookingBtn" class="actionButtons">
-                                                    <i class="fas fa-eye"></i>View Trip Details
-                                                </button>
-                                            </a>
-                                             <?php if ($sharedTrip->role === 'editor'): ?>
-                                                <a href="<?= ROOT ?>/traveler/MyTrips/editTrip/<?= $sharedTrip->trip_Id ?>/<?= $sharedTrip->collaborator_Id ?>?edit=true">
-                                                    <button id="editBookingBtn" class="actionButtons">
-                                                        <i class="fas fa-edit"></i>Edit Trip Details
-                                                    </button>
-                                                </a>
-                                            <?php endif; ?>
-                                    </div>
+    <div class="slider-wrapper" style="display: none;" id="reviewCarousal">
 
-                                <?php endif; ?>
-                    
+
+        <div class="slider">
+
+            <div class="reviewSlide" id="reviewSlide1">
+
+                <i class="fa-solid fa-rectangle-xmark" id="closeCarousal"></i>
+
+                <div class="profilePic">
+                    <img src="<?= IMAGES ?>/Travelers/userProfilePics/img1.png">
+                </div>
+
+                <div class="username">
+                    Michel Johnson
+                </div>
+
+                <div class="review">
+                    Stayed at Delhousie Hotel before climbing Adam’s Peak.
+                    The mountain view is breathtaking, and rooms were clean and comfy.
+                    Friendly staff gave great hiking tips. Highly recommend for anyone visiting!
+                </div>
+            </div>
+
+            <div class="reviewSlide" id="reviewSlide2">
+
+                <i class="fa-solid fa-rectangle-xmark" id="closeCarousal"></i>
+
+                <div class="profilePic">
+                    <img src="<?= IMAGES ?>/Travelers/userProfilePics/img2.png">
+                </div>
+
+                <div class="username">
+                    Lara Brown
+                </div>
+
+                <div class="review">
+                    Delhousie Hotel is great for Adam’s Peak visitors. The room was basic but met needs.
+                    Staff was polite, though service was sometimes slow.
+                    It’s a decent choice for a convenient, no-frills stay before the hike.
+                </div>
+            </div>
+
+            <div class="reviewSlide" id="reviewSlide3">
+
+                <i class="fa-solid fa-rectangle-xmark" id="closeCarousal"></i>
+
+                <div class="profilePic">
+                    <img src="<?= IMAGES ?>/Travelers/userProfilePics/img4.jpg">
+                </div>
+
+                <div class="username">
+                    Ammy Jackson
+                </div>
+
+                <div class="review">
+                    Delhousie Hotel is in the perfect spot for those planning to climb Adam's Peak.
+                    The early breakfast and proximity to the trailhead made everything so convenient.
+                    The room was basic but had everything we needed after a long day. Will definitely stay here again!
+                </div>
+            </div>
+
+            <div class="reviewSlide" id="reviewSlide4">
+
+                <i class="fa-solid fa-rectangle-xmark" id="closeCarousal"></i>
+
+                <div class="profilePic">
+                    <img src="<?= IMAGES ?>/Travelers/userProfilePics/img3.png">
+                </div>
+
+                <div class="username">
+                    Alexandra Green
+                </div>
+
+                <div class="review">
+                    I had a wonderful experience at Delhousie Hotel. The staff were very helpful,
+                    and the views from the hotel were stunning. The rooms were simple but comfortable.
+                    It’s a great budget-friendly option for travelers looking to explore Adam’s Peak.
+                </div>
+            </div>
+
+            <div class="reviewSlide" id="reviewSlide5">
+
+                <i class="fa-solid fa-rectangle-xmark" id="closeCarousal"></i>
+
+                <div class="profilePic">
+                    <img src="<?= IMAGES ?>/Travelers/userProfilePics/img5.jpg">
+                </div>
+
+                <div class="username">
+                    Emma Watson
+                </div>
+
+                <div class="review">
+                    I stayed at Delhousie Hotel for its convenient location near Adam’s Peak, which was a plus.
+                    However, the room felt a bit outdated, and the cleanliness could have been improved. The staff
+                    was helpful, but the service was a bit slow.
+                    It’s an okay choice if you're just looking for a place to crash before the hike.
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!--Room type details popup-->
+    <div class="custom-modal" id="viewDetailsModal">
+        <div class="model-container">
+            <div class="modal-header">
+                <h2 class="modal-title"></h2>
+                <button id="closeBtn" class="closebutton" onclick="closeModal('viewDetailsModal')">&times;</button>
+            </div>
+
+            <div class="modal-body">
+                <!-- Tab Navigation -->
+                <div class="details-tabs">
+                    <button class="tab-button active" onclick="switchTab(event, 'roomTypeInfo')">
+                        <i class="fas fa-info-circle"></i> Room Type Details
+                    </button>
+                    <button class="tab-button" onclick="switchTab(event, 'roomsList')">
+                        <i class="fa-solid fa-hourglass-half"></i> Check Availability
+                    </button>
+                </div>
+
+                <!-- Room Type Details Tab -->
+                <div id="roomTypeInfo" class="tab-content active">
+                    <div class="room-type-details">
+                        <div class="room-image-container">
+                            <img id="roomTypeImage" src="" alt="Room Type Image">
                         </div>
-                    <?php endforeach; ?>
-                <?php endif; ?>
+                        <div class="details-grid">
+
+                            <div class="detail-item">
+                                <span class="detail-label">Price per Night</span>
+                                <span id="detailPrice" class="detail-value"></span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Max Occupancy</span>
+                                <span id="detailOccupancy" class="detail-value"></span>
+                            </div>
+                            <div class="detail-item full-width">
+                                <span class="detail-label">Description</span>
+                                <p id="detailDescription" class="detail-value"></p>
+                            </div>
+                        </div>
+                        <div class="detail-item full-width">
+                            <span class="detail-label">Amenities</span>
+                            <div id="detailAmenities" class="amenities-list"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Room Numbers Tab -->
+                <div id="roomsList" class="tab-content">
+                    <div class="availability-section">
+                        <div class="filter-section">
+                            <div class="date-filter">
+                                <label for="checkIn">Check-in Date</label>
+                                <input type="date" id="checkIn" class="date-input">
+                            </div>
+                            <div class="date-filter">
+                                <label for="checkOut">Check-out Date</label>
+                                <input type="date" id="checkOut" class="date-input">
+                            </div>
+                        </div>
+
+                        <div class="room-summary">
+                            <div class="summary-box">
+                                <i class="fas fa-bed"></i>
+                                <div class="summary-info">
+                                    <span class="summary-label">Available Rooms</span>
+                                    <span class="summary-value"></span>
+                                </div>
+                            </div>
+                            <div class="summary-box">
+                                <i class="fas fa-moon"></i>
+                                <div class="summary-info">
+                                    <span class="summary-label">Price per Night</span>
+                                    <span id="pricePerNightInCheckAvailability" class="summary-value"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="room-selection">
+                            <div class="selection-header">
+                                <h3>Select Number of Rooms</h3>
+                                <div class="room-counter">
+                                    <button class="counter-btn" id="decrementBtn" onclick="decrementRooms()">
+                                        <i class="fas fa-minus"></i>
+                                    </button>
+                                    <span id="roomCount">1</span>
+                                    <button class="counter-btn" id="incrementBtn" onclick="incrementRooms()">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="availability-cards" id="availabilityList">
+                            <!-- Room cards will be generated dynamically -->
+                        </div>
+
+                        <div class="booking-summary">
+                            <div class="summary-details">
+                                <div class="summary-row">
+                                    <span>Selected Rooms</span>
+                                    <span id="selectedRoomCount">1 Room</span>
+                                </div>
+                                <div class="summary-row">
+                                    <span>Total Nights</span>
+                                    <span id="totalNights">0 Nights</span>
+                                </div>
+                                <div class="summary-row total">
+                                    <span>Total Amount</span>
+                                    <span id="totalAmount">0 LKR</span>
+                                </div>
+                            </div>
+                            <button class="book-button" id="bookNowBtn">
+                                <i class="fas fa-check-circle"></i>
+                                Place a Booking Request
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
-    <div id="popupType1" class="popup-container">
-        <div class="popup-content">
-            <p id="popup-textType1"></p>
-            <button id="closePopupType1">OK</button>
-        </div>
-    </div>
 
-    <div id="popup" class="popup-container">
-        <div class="popup-content">
-            <p id="popup-text"></p>
-            <button id="closePopup">Cancel</button>
-            <button id="confirmDelete">Delete</button>
+    <section id="footer">
+        <div class="foot">
+            &copy; ExploreLK, 2024 | All Rights Reserved
         </div>
-    </div>
+    </section>
 
     <script>
-        function showAlert(message) {
-            const popup = document.getElementById("popupType1");
-            const popupText = document.getElementById("popup-textType1");
-            const leftPanel = document.querySelector(".leftPanel");
-            const rightPanel = document.querySelector(".rightPanel");
-    
-            popupText.innerHTML = message;
-    
-            // Show the pop-up
-            popup.style.display = "flex";
-    
-            // Blur the background
-            leftPanel.classList.add("blur");
-            rightPanel.classList.add("blur");
-    
-            // Remove any existing listeners to prevent multiple bindings
-            const closePopup = document.getElementById("closePopupType1");
+        // Static coordinates for the district 
+        const districtLatitude = 6.9498308221090515;
+        const districtLongitude = 80.79124531032397;
 
-            closePopup.onclick = function() {
-                // Hide the pop-up
-                popup.style.display = "none";
-        
-                // Remove the blur effect
-                leftPanel.classList.remove("blur");
-                rightPanel.classList.remove("blur");
-            };
+        // Set the hotel coordinates (e.g., Delhousie Hotel)
+        // const destinationLatitude =  6.967450380543361;
+        const destinationLatitude = <?= json_encode($data['hotelData']->hotelLatitude) ?>;
+        const destinationLongitude = <?= json_encode($data['hotelData']->hotelLongtitude) ?>;
 
-        }
-
+        const mapFrame = document.querySelector('#mapFrame');
+        mapFrame.src = `https://www.google.com/maps/embed/v1/directions?key=AIzaSyCFbprhDc_fKXUHl-oYEVGXKD1HciiAsz0&&origin=${districtLatitude},${districtLongitude}&destination=${destinationLatitude},${destinationLongitude}&mode=driving&zoom=13.5`;
     </script>
 
-    <script>
-        // Create a PHP variable containing the message
-        <?php 
-            $messageToShow = '';
-            if (isset($_SESSION['errors']) && !empty($_SESSION['errors'])) {
-                $messageToShow = implode(', ', $_SESSION['errors']);
-                unset($_SESSION['errors']);
-            }
-            else if(isset($_SESSION['success']) && !empty($_SESSION['success'])) {
-                $messageToShow = implode(', ', $_SESSION['success']);
-                unset($_SESSION['success']); 
-            }
-        ?>
 
-        // passing the PHP message to JavaScript
-        const serverMessage = <?= json_encode($messageToShow) ?>;
-    
-        // Show popup if there's a message
-        if (serverMessage) {
-            showAlert(serverMessage);
-        }
-    </script>
+    <!--myAPIKEYCOMESHERE-->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCFbprhDc_fKXUHl-oYEVGXKD1HciiAsz0&callback=initMap"
+        async defer></script>
 
+
+    <!--Script for switch tabs in the room details popup-->
     <script>
         // Tab switching functionality
-        document.addEventListener('DOMContentLoaded', function() {
-            const tabs = document.querySelectorAll('.trip-tab');
-            const sections = document.querySelectorAll('.trips-section');
+        function switchTab(event, tabId) {
+            // Get all tab buttons and contents
+            const tabButtons = document.querySelectorAll('.tab-button');
+            const tabContents = document.querySelectorAll('.tab-content');
 
-            tabs.forEach(tab => {
-                tab.addEventListener('click', () => {
-                    // Remove active class from all tabs and sections
-                    tabs.forEach(t => t.classList.remove('active'));
-                    sections.forEach(s => s.classList.remove('active'));
-
-                    // Add active class to clicked tab and corresponding section
-                    tab.classList.add('active');
-                    document.getElementById(tab.dataset.tab).classList.add('active');
-                });
+            // Remove active class from all buttons and contents
+            tabButtons.forEach(button => {
+                button.classList.remove('active');
             });
+
+            tabContents.forEach(content => {
+                content.classList.remove('active');
+            });
+
+            // Add active class to clicked button and corresponding content
+            event.currentTarget.classList.add('active');
+            document.getElementById(tabId).classList.add('active');
+        }
+
+    </script>
+
+    <script>
+        let currentRoomCount = 1;
+        let maxAvailableRooms; // This will be dynamically set
+        let numberOfNights = 0; // Variable to store number of nights
+        let pricePerNight = 10000;
+
+        // Initialize date inputs with restrictions
+        document.addEventListener('DOMContentLoaded', function () {
+            const checkInInput = document.getElementById('checkIn');
+            const checkOutInput = document.getElementById('checkOut');
+
+            // Set minimum date as today for check-in
+            const today = new Date();
+            const tomorrow = new Date(today);
+            tomorrow.setDate(tomorrow.getDate() + 1);
+
+            const todayFormatted = today.toISOString().split('T')[0];
+            const tomorrowFormatted = tomorrow.toISOString().split('T')[0];
+
+            checkInInput.min = todayFormatted;
+            checkOutInput.min = tomorrowFormatted;
+
+            // Function to calculate date difference
+            function calculateDateDifference() {
+                if (checkInInput.value && checkOutInput.value) {
+                    const checkIn = new Date(checkInInput.value);
+                    const checkOut = new Date(checkOutInput.value);
+
+                    // Calculate the time difference in milliseconds
+                    const timeDifference = checkOut.getTime() - checkIn.getTime();
+
+                    // Convert to days
+                    numberOfNights = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+
+                    // Update the display
+                    const stayDurationDisplay = document.getElementById('totalNights');
+                    if (stayDurationDisplay) {
+                        stayDurationDisplay.textContent = `${numberOfNights} night${numberOfNights !== 1 ? 's' : ''}`;
+                    }
+
+                    calculateTotalAmount();
+                }
+            }
+
+            // Update check-out minimum date when check-in date changes
+            checkInInput.addEventListener('change', function () {
+                const selectedDate = new Date(this.value);
+                const nextDay = new Date(selectedDate);
+                nextDay.setDate(nextDay.getDate() + 1);
+                checkOutInput.min = nextDay.toISOString().split('T')[0];
+
+                if (checkOutInput.value && new Date(checkOutInput.value) <= new Date(this.value)) {
+                    checkOutInput.value = nextDay.toISOString().split('T')[0];
+                }
+
+                calculateDateDifference();
+                checkAvailability();
+
+            });
+
+            // Calculate difference when check-out date changes
+            checkOutInput.addEventListener('change', function () {
+                calculateDateDifference();
+                checkAvailability();
+            });
+
+            // Initial calculation if both dates are set
+            calculateDateDifference();
+            checkAvailability();
+
         });
+
+        function incrementRooms() {
+            if (currentRoomCount < maxAvailableRooms) {
+                currentRoomCount++;
+                updateRoomCount();
+            }
+        }
+
+        function decrementRooms() {
+            if (currentRoomCount > 1) {
+                currentRoomCount--;
+                updateRoomCount();
+            }
+        }
+
+        function updateRoomCount() {
+            const roomCountElement = document.getElementById('roomCount');
+            const selectedRoomCountDisplayElement = document.getElementById('selectedRoomCount');
+            const decrementBtn = document.getElementById('decrementBtn');
+            const incrementBtn = document.getElementById('incrementBtn');
+
+            roomCountElement.textContent = currentRoomCount;
+            selectedRoomCountDisplayElement.textContent = currentRoomCount + " Room";
+
+            // Update button states
+            decrementBtn.disabled = currentRoomCount <= 1;
+            incrementBtn.disabled = currentRoomCount >= maxAvailableRooms;
+
+            calculateTotalAmount();
+        }
+
+        // Function to Calculate and display total amount
+        function calculateTotalAmount() {
+            const totalPrice = numberOfNights * pricePerNight * currentRoomCount;
+            document.getElementById('totalAmount').textContent = `${totalPrice} LKR`;
+        }
+
+        function submitBooking() {
+            const checkIn = document.getElementById('checkIn').value;
+            const checkOut = document.getElementById('checkOut').value;
+
+            if (!checkIn || !checkOut) {
+                alert('Please select both check-in and check-out dates');
+                return;
+            }
+
+            // Here you can add your booking submission logic
+            const bookingDetails = {
+                checkIn: checkIn,
+                checkOut: checkOut,
+                numberOfRooms: currentRoomCount
+            };
+
+            console.log('Booking details:', bookingDetails);
+            // Add your API call or form submission here
+        }
 
     </script>
 
     <script>
 
-        // Pop-up handling function
-        function showPopup(message, deleteUrl) {
-            const popup = document.getElementById("popup");
-            const popupText = document.getElementById("popup-text");
-            //const mainContainer = document.querySelector(".mainContainer");
-            const leftPanel = document.querySelector(".leftPanel");
-            const rightPanel = document.querySelector(".rightPanel");
+        let currentRoomTypeId;
 
-            popupText.textContent = message;
-            popup.style.display = "flex";
-            //mainContainer.classList.add("blur");
-            leftPanel.classList.add("blur");
-            rightPanel.classList.add("blur");
+        function showRoomTypeDetails(index) {
+            const modal = document.getElementById('viewDetailsModal');
+            const closeBtn = document.getElementById('closeBtn');
 
-            document.getElementById("closePopup").onclick = function() {
-                popup.style.display = "none";
-                //mainContainer.classList.remove("blur");
-                leftPanel.classList.remove("blur");
-                rightPanel.classList.remove("blur");
+            // Create PHP arrays in JavaScript format
+            const roomTypeNames = <?php echo json_encode($data['hotelRoomTypesNames']); ?>;
+            const roomTypes = <?php echo json_encode($data['hotelRoomTypes']); ?>;
+            currentRoomTypeId = roomTypes[index].hotel_roomType_Id;
+            const roomAmenities = <?php echo json_encode($data['hotelRoomTypeAmenityList']); ?>;
+
+            // Set the price per night for the selected room type
+            pricePerNight = parseInt(roomTypes[index].pricePer_night);
+
+            // Update modal content dynamically - Room Type Details Section
+            document.querySelector('.modal-title').innerText = roomTypeNames[index].roomType_name;
+            document.getElementById('roomTypeImage').src = '<?php echo ROOT; ?>/' + roomTypes[index].thumbnail_picPath;
+            document.getElementById('detailDescription').innerText = roomTypes[index].customized_description;
+            document.getElementById('detailPrice').innerText = roomTypes[index].pricePer_night + ' LKR';
+            document.getElementById('detailOccupancy').innerText = roomTypes[index].max_occupancy;
+
+            const amenitiesContainer = document.getElementById('detailAmenities');
+            amenitiesContainer.innerHTML = ''; // Clear existing amenities
+
+            if (roomAmenities[index] && roomAmenities[index].length > 0) {
+                roomAmenities[index].forEach(amenity => {
+                    const amenityDiv = document.createElement('div');
+                    amenityDiv.className = 'amenity-tag';
+                    amenityDiv.innerHTML = `
+                <i class="${amenity.icon_class}"></i>
+                ${amenity.amenity_name}
+            `;
+                    amenitiesContainer.appendChild(amenityDiv);
+                });
+            }
+
+            // Update modal content dynamically - Check Availability Section
+            document.getElementById('pricePerNightInCheckAvailability').innerText = roomTypes[index].pricePer_night + ' LKR';
+
+            // Show modal
+            modal.style.display = 'flex';
+
+            // Close modal functionality
+            closeBtn.onclick = function () {
+
+                document.getElementById('checkIn').value = "";
+                document.getElementById('checkOut').value = "";
+                document.querySelector('.summary-box .summary-value').innerText = "";
+                document.getElementById('totalNights').textContent = "0 Nights";
+
+                // Reset room count to default
+                currentRoomCount = 1;
+                updateRoomCount();
+
+                // Reset availability UI
+                maxAvailableRooms = 0;
+                numberOfNights = 0;
+
+                calculateTotalAmount();
+
+                // Manually add active class to roomTypeInfo tab and its button
+                document.querySelector('.tab-button[onclick*="roomTypeInfo"]').classList.add('active');
+                document.getElementById('roomTypeInfo').classList.add('active');
+                document.getElementById('roomsList').classList.remove('active');
+                document.querySelector('.tab-button[onclick*="roomsList"]').classList.remove('active');
+
+                modal.style.display = 'none';
+
             };
 
-            document.getElementById("confirmDelete").onclick = function() {
-                window.location.href = deleteUrl;
+            // Close when clicking outside the modal
+            window.onclick = function (event) {
+                if (event.target === modal) {
+                    modal.style.display = 'none';
+                }
             };
+        }
+
+        function checkAvailability() {
+            const checkIn = document.getElementById('checkIn').value;
+            const checkOut = document.getElementById('checkOut').value;
+
+            if (!checkIn || !checkOut) {
+                return;
+            }
+
+            // Make AJAX call to check availability
+            fetch(`<?= ROOT ?>/traveler/RoomBookingController/checkAvailability/${currentRoomTypeId}/${checkIn}/${checkOut}`)
+                .then(response => response.json())
+                .then(data => {
+                    updateAvailabilityUI(data);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+
+        function updateAvailabilityUI(data) {
+            // Update available rooms count
+            const availableRoomsElement = document.querySelector('.summary-box .summary-value');
+            availableRoomsElement.textContent = `${data.available_rooms} of ${data.total_rooms}`;
+
+            // Update max available rooms for selection
+            maxAvailableRooms = data.available_rooms;
+
+            // Reset room count if current selection exceeds availability
+            if (currentRoomCount > maxAvailableRooms) {
+                currentRoomCount = maxAvailableRooms;
+                updateRoomCount();
+            }
+
+            // Update increment button state
+            document.getElementById('incrementBtn').disabled = currentRoomCount >= maxAvailableRooms;
+
+            // Enable/disable booking button based on availability
+            const bookButton = document.getElementById('bookNowBtn');
+            bookButton.disabled = !data.available;
+
+            if (!data.available) {
+                bookButton.textContent = 'No Rooms Available';
+            } else {
+                bookButton.textContent = 'Place a Booking Request';
+            }
         }
 
     </script>
 
-    
+
+    <!--This is script is to load all the user reviews and its carousal view-->
+    <script>
+        const loadMoreBtn = document.getElementById('loadMore');
+        const reviewCarousel = document.getElementById('reviewCarousal');
+        const body = document.body;
+        const slider = document.querySelector('.slider');
+        const reviews = document.querySelectorAll('.reviewSlide');
+        const closeCarousal = document.getElementById('closeCarousal');
+
+        let currentIndex = 0;
+        const showReviews = () => {
+            reviewCarousel.style.display = 'flex';
+            reviewCarousel.style.justifyContent = 'center';
+            reviewCarousel.style.alignItems = 'center';
+            reviewCarousel.style.position = 'fixed';
+            reviewCarousel.style.top = '0';
+            reviewCarousel.style.left = '25%';
+            reviewCarousel.style.width = '100%';
+            reviewCarousel.style.height = '100%';
+            reviewCarousel.style.zIndex = '1000';
+
+            // Blur everything except the carousel
+            Array.from(document.body.children).forEach(child => {
+                if (child !== reviewCarousel) {
+                    child.style.filter = 'blur(5px)';
+
+                }
+            });
+
+            body.style.overflow = 'hidden';
+            showSlide(currentIndex);
+        };
+
+        const hideReviews = () => {
+            reviewCarousel.style.display = 'none';
+            Array.from(document.body.children).forEach(child => {
+                child.style.filter = 'none';
+            });
+            body.style.overflow = 'auto';
+        };
+
+        const showSlide = (index) => {
+            reviews.forEach((review, i) => {
+                review.style.display = i === index ? 'block' : 'none';
+            });
+        };
+
+        const nextSlide = () => {
+            currentIndex = (currentIndex + 1) % reviews.length;
+            showSlide(currentIndex);
+        };
+
+        const prevSlide = () => {
+            currentIndex = (currentIndex - 1 + reviews.length) % reviews.length;
+            showSlide(currentIndex);
+        };
+
+        // Event Listeners
+        loadMoreBtn.addEventListener('click', showReviews);
+        reviewCarousel.addEventListener('click', (e) => {
+            if (e.target === reviewCarousel) {
+                hideReviews();
+            }
+        });
+
+        // Add keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (reviewCarousel.style.display === 'flex') {
+                if (e.key === 'ArrowRight') {
+                    nextSlide();
+                } else if (e.key === 'ArrowLeft') {
+                    prevSlide();
+                } else if (e.key === 'Escape') {
+                    hideReviews();
+                }
+            }
+        });
+
+        // Add navigation buttons
+        const addNavigationButtons = () => {
+            const prevButton = document.createElement('button');
+            const nextButton = document.createElement('button');
+
+            prevButton.innerHTML = '&#10094;';
+            nextButton.innerHTML = '&#10095;';
+
+            const buttonStyle = `
+                position: absolute;
+                top: 50%;
+                transform: translateY(-50%);
+                background: rgba(0, 0, 0, 0.5);
+                color: white;
+                border: none;
+                padding: 16px;
+                cursor: pointer;
+                font-size: 18px;
+                border-radius: 50%;
+            `;
+
+            prevButton.style.cssText = buttonStyle + 'left: 20px;';
+            nextButton.style.cssText = buttonStyle + 'right: 20px;';
+
+            prevButton.addEventListener('click', (e) => {
+                e.stopPropagation();
+                prevSlide();
+            });
+
+            nextButton.addEventListener('click', (e) => {
+                e.stopPropagation();
+                nextSlide();
+            });
+
+            reviewCarousel.appendChild(prevButton);
+            reviewCarousel.appendChild(nextButton);
+        };
+
+        addNavigationButtons();
+
+        closeCarousal.addEventListener('click', () => {
+            hideReviews();
+        });
+
+
+    </script>
+
+
 
 </body>
+
 </html>
