@@ -1,5 +1,5 @@
 <?php
-// var_dump($data);
+// var_dump($data['districtData']);
 ?>
 
 <!DOCTYPE html>
@@ -456,7 +456,7 @@
 
         /* Guest Information Section Styles */
         .guest-information {
-            margin-top: 2rem;
+            /* margin-top: 2rem; */
             padding: 1rem 1.5rem;
         }
 
@@ -616,7 +616,7 @@
                 </iframe>
 
                 <center>
-                    <div class="caption">Distance from Nuwara Eliya Town</div>
+                    <div class="caption">Distance from <?= $data['districtData'][0]->district_name ?> Town</div>
                 </center>
 
             </div>
@@ -1089,13 +1089,12 @@
 
                            
 
-                            <button class="book-button" id="bookNowBtn" style="margin-bottom: 2rem;">
-                            <i class="fas fa-check-circle"></i>
+                            <button class="book-button" id="bookNowBtn" style="margin-bottom: 1.5rem;">
+                                <i class="fas fa-check-circle"></i>
                                 Continue                   
                             </button>
 
                             <button class="confirm-button" id="confirmBookingBtn" style="display: none;">
-                                <!-- <i class="fas fa-check-circle"></i> -->
                                 <i class="fa-solid fa-thumbs-up"></i>
                                 Confirm Booking Request
                             </button>
@@ -1114,12 +1113,11 @@
     </section>
 
     <script>
-        // Static coordinates for the district 
-        const districtLatitude = 6.9498308221090515;
-        const districtLongitude = 80.79124531032397;
+        //Coordinates for the district 
+        const districtLatitude = <?= $data['districtData'][0]->districtLatitude ?>;
+        const districtLongitude = <?= $data['districtData'][0]->districtLongitude ?>;
 
-        // Set the hotel coordinates (e.g., Delhousie Hotel)
-        // const destinationLatitude =  6.967450380543361;
+        //Coordinates for the hotel
         const destinationLatitude = <?= json_encode($data['hotelData']->hotelLatitude) ?>;
         const destinationLongitude = <?= json_encode($data['hotelData']->hotelLongtitude) ?>;
 
@@ -1129,8 +1127,7 @@
 
 
     <!--myAPIKEYCOMESHERE-->
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCFbprhDc_fKXUHl-oYEVGXKD1HciiAsz0&callback=initMap"
-        async defer></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCFbprhDc_fKXUHl-oYEVGXKD1HciiAsz0&callback=initMap" async defer></script>
 
 
     <!--Script for switch tabs in the room details popup-->
@@ -1424,13 +1421,43 @@
     </script>
 
     <script>
-        // Add this to your existing JavaScript code
-
         // Flag to track if guest info section is visible
         let guestInfoVisible = false;
 
         // Function to handle click on the Continue button
         function showGuestInformation() {
+
+            const checkInInput = document.getElementById('checkIn');
+            const checkOutInput = document.getElementById('checkOut');
+
+            const checkIn = checkInInput.value;
+            const checkOut = checkOutInput.value;
+
+            // Clear any existing error messages
+            document.querySelectorAll('.error-message').forEach(element => {
+                element.remove();
+            });
+
+            if(checkIn === "" && checkOut === ""){
+                showValidationError(checkInInput, 'Please select a Check-In date');
+                showValidationError(checkOutInput, 'Please select a Check-Out date');
+                scrollToElement(checkInInput);
+                return;
+            }
+
+            if(checkIn === ""){
+                showValidationError(checkInInput, 'Please select a check-in date first');
+                scrollToElement(checkInInput);
+                return;
+            }
+
+            if(checkOut === ""){
+                showValidationError(checkOutInput, 'Please select a check-out date');
+                checkOutInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                scrollToElement(checkOutInput);
+                return;
+            }
+           
             // Get elements
             const guestInfoSection = document.getElementById('guestInformationSection');
             const continueButton = document.getElementById('bookNowBtn');
@@ -1445,7 +1472,25 @@
             guestInfoVisible = true;
 
             // Scroll to the guest information section
-            guestInfoSection.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            scrollToElement(guestInfoSection);
+        }
+
+        function scrollToElement(element) {
+            // Find the modal content container
+            const modalBody = document.querySelector('.modal-body');
+    
+            if (modalBody) {
+                // Calculate the scroll position
+                const elementTop = element.getBoundingClientRect().top;
+                const modalBodyTop = modalBody.getBoundingClientRect().top;
+                const scrollOffset = elementTop - modalBodyTop - 60; // 50px offset for better visibility
+        
+                // Scroll the modal body container
+                modalBody.scrollBy({
+                    top: scrollOffset,
+                    behavior: 'smooth'
+                });
+            }
         }
 
         // Function to handle click on Confirm Booking Request button
@@ -1478,6 +1523,7 @@
             const fullName = document.getElementById('guestFullName');
             if (!fullName.value.trim()) {
                 showValidationError(fullName, 'Full name is required');
+                scrollToElement(fullName);
                 isValid = false;
             }
 
@@ -1485,9 +1531,11 @@
             const email = document.getElementById('guestEmail');
             if (!email.value.trim()) {
                 showValidationError(email, 'Email address is required');
+                scrollToElement(email);
                 isValid = false;
             } else if (!isValidEmail(email.value)) {
                 showValidationError(email, 'Please enter a valid email address');
+                scrollToElement(email);
                 isValid = false;
             }
 
@@ -1495,6 +1543,7 @@
             const phone = document.getElementById('guestPhone');
             if (!phone.value.trim()) {
                 showValidationError(phone, 'Phone number is required');
+                scrollToElement(phone);
                 isValid = false;
             }
 
@@ -1502,6 +1551,7 @@
             const nic = document.getElementById('guestNIC');
             if (!nic.value.trim()) {
                 showValidationError(nic, 'NIC or passport number is required');
+                scrollToElement(nic);
                 isValid = false;
             }
 
@@ -1617,7 +1667,13 @@
                 document.querySelectorAll('.error-message').forEach(element => {
                     element.remove();
                 });
+
+                // Reset all input borders
+                document.querySelectorAll('.guest-input').forEach(input => {
+                    input.classList.remove('error');
+                });
             }
+
 
             // Hide modal
             modal.style.display = 'none';

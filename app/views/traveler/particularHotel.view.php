@@ -1,5 +1,5 @@
 <?php
-// var_dump($data);
+// var_dump($data['districtData']);
 ?>
 
 <!DOCTYPE html>
@@ -69,6 +69,7 @@
             font-size: 2.4rem;
             font-weight: 600;
             margin: 0;
+            padding-top: 0.5rem;
         }
 
         .modal-body {
@@ -452,7 +453,168 @@
             }
         }
 
-        /*Room Types Styles */
+
+        /* Guest Information Section Styles */
+        .guest-information {
+            /* margin-top: 2rem; */
+            padding: 1rem 1.5rem;
+        }
+
+        .guest-info-title {
+            font-size: 1.8rem;
+            color: #002D40;
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+        }
+
+        .guest-form {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group.full-width {
+            grid-column: span 2;
+        }
+
+        .form-group label {
+            font-size: 1.4rem;
+            color: #4a5568;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .guest-input {
+            margin-bottom: 1rem;
+            padding: 1rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.5rem;
+            font-size: 1.4rem;
+            font-family: 'poppins', sans-serif;
+            transition: all 0.3s ease;
+        }
+
+        .guest-input:focus {
+            outline: none;
+            border-color: #4299e1;
+            box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.1);
+        }
+
+        textarea.guest-input {
+            resize: vertical;
+            min-height: 8rem;
+        }
+
+        .confirm-button {
+            width: 100%;
+            /* background: #38a169; */
+            background: darkcyan;
+            color: white;
+            border: none;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            font-size: 1.5rem;
+            font-family: 'poppins';
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+        }
+
+        .confirm-button:hover {
+            background: #007777;
+            transform: translateY(-1px);
+        }
+
+        .confirm-button:disabled {
+            background: #e2e8f0;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Form validation styles */
+        .guest-input.error {
+            border-color: #e53e3e;
+        }
+
+        .error-message {
+            color: #e53e3e;
+            font-size: 1.2rem;
+            margin-top: 0.5rem;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .guest-form {
+                grid-template-columns: 1fr;
+            }
+
+            .form-group.full-width {
+                grid-column: span 1;
+            }
+        }
+
+        /* Pop-up container (initially hidden) to show successfull or failed booking requests */
+        .popup-container {
+            font-size: 1.35rem;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            /* Dark transparent overlay */
+            display: none;
+            /* Initially hidden */
+            justify-content: center;
+            align-items: center;
+            z-index: 999;
+            /* Above other content */
+        }
+
+        /* Pop-up content */
+        .popup-content {
+            background: white;
+            padding: 20px 30px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+            max-width: 400px;
+            width: 90%;
+            font-size: 16px;
+        }
+
+        /* Close button */
+        .popup-content button {
+            margin-top: 15px;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .popup-content button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Blur background effect when pop-up is visible */
+        .blur {
+            filter: blur(5px);
+            pointer-events: none;
+        }
     </style>
 
 </head>
@@ -506,7 +668,7 @@
                 </iframe>
 
                 <center>
-                    <div class="caption">Distance from Nuwara Eliya Town</div>
+                    <div class="caption">Distance from <?= $data['districtData'][0]->district_name ?> Town</div>
                 </center>
 
             </div>
@@ -540,12 +702,12 @@
             Available Room Types
         </h1>
         <?php
-            $index = 0;
-            $totalRoomTypes = count($data['hotelRoomTypes']);
-            if($totalRoomTypes <= 3){
-                echo '<div class="container">';
-                    foreach ($data['hotelRoomTypes'] as $roomType){
-                        echo '
+        $index = 0;
+        $totalRoomTypes = count($data['hotelRoomTypes']);
+        if ($totalRoomTypes <= 3) {
+            echo '<div class="container">';
+            foreach ($data['hotelRoomTypes'] as $roomType) {
+                echo '
                                 <div class="roomItem">
                                     <div class="topic">' . $data['hotelRoomTypesNames'][$index]->roomType_name . '</div>
                                     <img src="' . ROOT . '/' . $roomType->thumbnail_picPath . '">
@@ -559,20 +721,18 @@
                                     <div class="price">' . $roomType->pricePer_night . ' LKR per day </div>
                                 </div>
                         ';
-                        $index++;
-                    }
-                echo '</div>';
+                $index++;
             }
-            
-            else if($totalRoomTypes > 3){
-                $isVisible = $index < 3;
-                echo '
+            echo '</div>';
+        } else if ($totalRoomTypes > 3) {
+            $isVisible = $index < 3;
+            echo '
                         <div class="carousel-container">
                             <div class="carousel-navigation prev" id="prevBtn">&lt;</div>
                             <div class="carousel-content" id="roomTypesCarousel">
                 ';
-                                foreach ($data['hotelRoomTypes'] as $roomType){
-                                    echo'
+            foreach ($data['hotelRoomTypes'] as $roomType) {
+                echo '
                                         <div class="roomItem ' . (!$isVisible ? 'hidden' : '') . '" data-index="' . $index . '">
                                             <div class="topic">' . $data['hotelRoomTypesNames'][$index]->roomType_name . '</div>
                                             <img src="' . ROOT . '/' . $roomType->thumbnail_picPath . '">
@@ -587,15 +747,15 @@
                                         </div>
                                     ';
 
-                                    $index++;
-                                }
-                echo '
+                $index++;
+            }
+            echo '
                             </div>
                             <div class="carousel-navigation next" id="nextBtn">&gt;</div>
                         </div>
 
                 ';
-            }
+        }
 
 
         ?>
@@ -884,7 +1044,7 @@
                     </div>
                 </div>
 
-                <!-- Room Numbers Tab -->
+                <!-- Rooms selection and proceed to booking Tab -->
                 <div id="roomsList" class="tab-content">
                     <div class="availability-section">
                         <div class="filter-section">
@@ -922,12 +1082,48 @@
                                     <button class="counter-btn" id="decrementBtn" onclick="decrementRooms()">
                                         <i class="fas fa-minus"></i>
                                     </button>
-                                    <span id="roomCount">1</span>
+                                    <span id="roomCount">0</span>
                                     <button class="counter-btn" id="incrementBtn" onclick="incrementRooms()">
                                         <i class="fas fa-plus"></i>
                                     </button>
                                 </div>
                             </div>
+                        </div>
+
+                        <!-- Hidden content to collect booking person's details -->
+                        <div class="guest-information" id="guestInformationSection" style="display: none;">
+                            <h3 class="guest-info-title">Guest Information</h3>
+                            <div class="guest-form">
+                                <div class="form-group">
+                                    <label for="guestFullName">Full Name</label>
+                                    <input type="text" id="guestFullName" class="guest-input"
+                                        placeholder="Enter your full name"
+                                        value="<?= $data['userData']->fName . ' ' . $data['userData']->lName ?>">
+                                </div>
+                                <div class="form-group">
+                                    <label for="guestEmail">Email Address</label>
+                                    <input type="email" id="guestEmail" class="guest-input"
+                                        placeholder="Enter your email address"
+                                        value="<?= $data['userData']->travelerEmail ?>">
+                                </div>
+                                <div class="form-group">
+                                    <label for="guestPhone">Phone Number</label>
+                                    <input type="tel" id="guestPhone" class="guest-input"
+                                        placeholder="Enter your phone number"
+                                        value="<?= $data['userData']->travelerMobileNum ?>">
+                                </div>
+                                <div class="form-group">
+                                    <label for="guestNIC">NIC / Passport Number</label>
+                                    <input type="text" id="guestNIC" class="guest-input"
+                                        placeholder="Enter your NIC or passport num">
+                                </div>
+                                <div class="form-group full-width">
+                                    <label for="specialRequests">Special Requests (Optional)</label>
+                                    <textarea id="specialRequests" class="guest-input" rows="3" style="resize: none;"
+                                        placeholder="Any special requests or notes for your stay"></textarea>
+                                </div>
+                            </div>
+
                         </div>
 
                         <div class="availability-cards" id="availabilityList">
@@ -938,7 +1134,7 @@
                             <div class="summary-details">
                                 <div class="summary-row">
                                     <span>Selected Rooms</span>
-                                    <span id="selectedRoomCount">1 Room</span>
+                                    <span id="selectedRoomCount">0 Room</span>
                                 </div>
                                 <div class="summary-row">
                                     <span>Total Nights</span>
@@ -949,9 +1145,18 @@
                                     <span id="totalAmount">0 LKR</span>
                                 </div>
                             </div>
-                            <button class="book-button" id="bookNowBtn">
+
+
+
+                            <button class="book-button" id="bookNowBtn" style="margin-bottom: 1.5rem;">
                                 <i class="fas fa-check-circle"></i>
-                                Place a Booking Request
+                                Continue
+                            </button>
+
+                            <button class="confirm-button" id="confirmBookingBtn" style="display: none;"
+                                onclick="prepareBookingRequest()">
+                                <i class="fa-solid fa-thumbs-up"></i>
+                                Confirm Booking Request
                             </button>
                         </div>
                     </div>
@@ -960,7 +1165,55 @@
         </div>
     </div>
 
+    <form method="POST" action="<?= ROOT ?>/traveler/ViewParticularHotel/recordBookingRequest">
+        <input type="hidden" name="hotelId" id="hotel_Id" value="<?= $data['hotelData']->hotel_Id ?>">
+        <input type="hidden" name="hotelRoomTypeId" id="hotel_roomType_id" value="">
+        <input type="hidden" name="finalCheckInDate" id="final_checkIn_date" value="">
+        <input type="hidden" name="finalCheckOutDate" id="final_checkOut_date" value="">
+        <input type="hidden" name="bookedRoomCount" id="booked_room_count" value="">
+        <input type="hidden" name="totalAmount" id="total_amount" value="">
 
+        <!--Guest Details-->
+        <input type="hidden" name="guestFullName" id="geust_full_name" value="">
+        <input type="hidden" name="guestEmail" id="geust_email" value="">
+        <input type="hidden" name="guestMobileNum" id="geust_mobile_num" value="">
+        <input type="hidden" name="guestNIC" id="geust_nic" value="">
+        <input type="hidden" name="guestSpecialRequests" id="geust_special_requests" value="">
+    </form>
+
+    <script>
+        function prepareBookingRequest() {
+
+            validateGuestInformation();
+
+            document.getElementById("hotel_roomType_id").value = currentRoomTypeId;
+            document.getElementById("final_checkIn_date").value = document.getElementById("checkIn").value;
+            document.getElementById("final_checkOut_date").value = document.getElementById("checkOut").value;
+            document.getElementById("booked_room_count").value = document.getElementById("selectedRoomCount").innerText;
+            document.getElementById("total_amount").value = document.getElementById("totalAmount").innerText;
+
+            document.getElementById("geust_full_name").value = document.getElementById("guestFullName").value;
+            document.getElementById("geust_email").value = document.getElementById("guestEmail").value;
+            document.getElementById("geust_mobile_num").value = document.getElementById("guestPhone").value;
+            document.getElementById("geust_nic").value = document.getElementById("guestNIC").value;
+            document.getElementById("geust_special_requests").value = document.getElementById("specialRequests").value;
+
+            // Submit the form
+            document.querySelector('form').submit();
+        }
+    </script>
+
+    <!-- Pop-Up Message ------------------------------------------------------------------------------------>
+    <div id="popup" class="popup-container">
+
+        <div class="popup-content">
+            <p id="popup-text"></p>
+            <button id="closePopup">Ok</button>
+        </div>
+
+    </div>
+
+    <!-- Footer -------------------------------------------->
     <section id="footer">
         <div class="foot">
             &copy; ExploreLK, 2024 | All Rights Reserved
@@ -968,12 +1221,11 @@
     </section>
 
     <script>
-        // Static coordinates for the district 
-        const districtLatitude = 6.9498308221090515;
-        const districtLongitude = 80.79124531032397;
+        //Coordinates for the district 
+        const districtLatitude = <?= $data['districtData'][0]->districtLatitude ?>;
+        const districtLongitude = <?= $data['districtData'][0]->districtLongitude ?>;
 
-        // Set the hotel coordinates (e.g., Delhousie Hotel)
-        // const destinationLatitude =  6.967450380543361;
+        //Coordinates for the hotel
         const destinationLatitude = <?= json_encode($data['hotelData']->hotelLatitude) ?>;
         const destinationLongitude = <?= json_encode($data['hotelData']->hotelLongtitude) ?>;
 
@@ -983,7 +1235,9 @@
 
 
     <!--myAPIKEYCOMESHERE-->
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCFbprhDc_fKXUHl-oYEVGXKD1HciiAsz0&callback=initMap" async defer></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCFbprhDc_fKXUHl-oYEVGXKD1HciiAsz0&callback=initMap"
+        async defer></script>
+
 
     <!--Script for switch tabs in the room details popup-->
     <script>
@@ -1010,7 +1264,7 @@
     </script>
 
     <script>
-        let currentRoomCount = 1;
+        let currentRoomCount = 0;
         let maxAvailableRooms; // This will be dynamically set
         let numberOfNights = 0; // Variable to store number of nights
         let pricePerNight = 10000;
@@ -1089,7 +1343,7 @@
         }
 
         function decrementRooms() {
-            if (currentRoomCount > 1) {
+            if (currentRoomCount > 0) {
                 currentRoomCount--;
                 updateRoomCount();
             }
@@ -1105,7 +1359,7 @@
             selectedRoomCountDisplayElement.textContent = currentRoomCount + " Room";
 
             // Update button states
-            decrementBtn.disabled = currentRoomCount <= 1;
+            decrementBtn.disabled = currentRoomCount <= 0;
             incrementBtn.disabled = currentRoomCount >= maxAvailableRooms;
 
             calculateTotalAmount();
@@ -1209,15 +1463,20 @@
                 document.querySelector('.tab-button[onclick*="roomsList"]').classList.remove('active');
 
                 modal.style.display = 'none';
-
+                document.getElementById('guestInformationSection').style.display = 'none';
+                document.getElementById('confirmBookingBtn').style.display = 'none';
+                document.getElementById('bookNowBtn').style.display = 'block';
             };
 
             // Close when clicking outside the modal
             window.onclick = function (event) {
                 if (event.target === modal) {
                     modal.style.display = 'none';
+                    document.getElementById('guestInformationSection').style.display = 'none';
                 }
             };
+
+            checkAvailability();
         }
 
         function checkAvailability() {
@@ -1263,10 +1522,205 @@
             if (!data.available) {
                 bookButton.textContent = 'No Rooms Available';
             } else {
-                bookButton.textContent = 'Place a Booking Request';
+                // bookButton.textContent = '<i class="fas fa-check-circle"></i> Continue';
+                bookButton.innerHTML = '<i class="fas fa-check-circle"></i> Continue';
             }
         }
 
+    </script>
+
+    <script>
+        // Flag to track if guest info section is visible
+        let guestInfoVisible = false;
+
+        // Function to handle click on the Continue button
+        function showGuestInformation() {
+
+            const checkInInput = document.getElementById('checkIn');
+            const checkOutInput = document.getElementById('checkOut');
+
+            const checkIn = checkInInput.value;
+            const checkOut = checkOutInput.value;
+
+            // Clear any existing error messages
+            document.querySelectorAll('.error-message').forEach(element => {
+                element.remove();
+            });
+
+            if (checkIn === "" && checkOut === "") {
+                showValidationError(checkInInput, 'Please select a Check-In date');
+                showValidationError(checkOutInput, 'Please select a Check-Out date');
+                scrollToElement(checkInInput);
+                return;
+            }
+
+            if (checkIn === "") {
+                showValidationError(checkInInput, 'Please select a check-in date first');
+                scrollToElement(checkInInput);
+                return;
+            }
+
+            if (checkOut === "") {
+                showValidationError(checkOutInput, 'Please select a check-out date');
+                checkOutInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                scrollToElement(checkOutInput);
+                return;
+            }
+
+            // Get elements
+            const guestInfoSection = document.getElementById('guestInformationSection');
+            const continueButton = document.getElementById('bookNowBtn');
+            const confirmBookingBtn = document.getElementById('confirmBookingBtn');
+
+            // Show guest information section and hide continue button
+            guestInfoSection.style.display = 'block';
+            confirmBookingBtn.style.display = 'block';
+            continueButton.style.display = 'none';
+
+            // Set flag to true
+            guestInfoVisible = true;
+
+            // Scroll to the guest information section
+            scrollToElement(guestInfoSection);
+        }
+
+        function scrollToElement(element) {
+            // Find the modal content container
+            const modalBody = document.querySelector('.modal-body');
+
+            if (modalBody) {
+                // Calculate the scroll position
+                const elementTop = element.getBoundingClientRect().top;
+                const modalBodyTop = modalBody.getBoundingClientRect().top;
+                const scrollOffset = elementTop - modalBodyTop - 60; // 50px offset for better visibility
+
+                // Scroll the modal body container
+                modalBody.scrollBy({
+                    top: scrollOffset,
+                    behavior: 'smooth'
+                });
+            }
+        }
+
+        // Function to validate guest information
+        function validateGuestInformation() {
+            let isValid = true;
+
+            // Clear all previous error messages
+            document.querySelectorAll('.error-message').forEach(element => {
+                element.remove();
+            });
+
+            // Reset all input borders
+            document.querySelectorAll('.guest-input').forEach(input => {
+                input.classList.remove('error');
+            });
+
+            // Validate full name
+            const fullName = document.getElementById('guestFullName');
+            if (!fullName.value.trim()) {
+                showValidationError(fullName, 'Full name is required');
+                scrollToElement(fullName);
+                isValid = false;
+            }
+
+            // Validate email
+            const email = document.getElementById('guestEmail');
+            if (!email.value.trim()) {
+                showValidationError(email, 'Email address is required');
+                scrollToElement(email);
+                isValid = false;
+            } else if (!isValidEmail(email.value)) {
+                showValidationError(email, 'Please enter a valid email address');
+                scrollToElement(email);
+                isValid = false;
+            }
+
+            // Validate phone
+            const phone = document.getElementById('guestPhone');
+            if (!phone.value.trim()) {
+                showValidationError(phone, 'Phone number is required');
+                scrollToElement(phone);
+                isValid = false;
+            }
+
+            // Validate NIC/Passport
+            const nic = document.getElementById('guestNIC');
+            if (!nic.value.trim()) {
+                showValidationError(nic, 'NIC or passport number is required');
+                scrollToElement(nic);
+                isValid = false;
+            }
+
+            return isValid;
+        }
+
+        // Helper function to show validation errors
+        function showValidationError(inputElement, message) {
+            inputElement.classList.add('error');
+
+            const errorMessage = document.createElement('div');
+            errorMessage.className = 'error-message';
+            errorMessage.innerText = message;
+
+            inputElement.parentNode.appendChild(errorMessage);
+        }
+
+        // Helper function to validate email format
+        function isValidEmail(email) {
+            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return emailPattern.test(email);
+        }
+
+
+        // Add these event listeners in your DOMContentLoaded or initialization function
+        document.addEventListener('DOMContentLoaded', function () {
+            // ... your existing code ...
+
+            // Add event listener for Continue button
+            const bookNowBtn = document.getElementById('bookNowBtn');
+            if (bookNowBtn) {
+                bookNowBtn.addEventListener('click', showGuestInformation);
+            }
+
+            // Add event listener for Confirm Booking Request button
+            const confirmBookingBtn = document.getElementById('confirmBookingBtn');
+            if (confirmBookingBtn) {
+                confirmBookingBtn.addEventListener('click', confirmBookingRequest);
+            }
+        });
+
+        // Update the closeModal function to reset the guest information section
+        function closeModal(modalId) {
+            const modal = document.getElementById(modalId);
+
+            // Reset guest information section
+            if (guestInfoVisible) {
+                document.getElementById('guestInformationSection').style.display = 'none';
+                document.getElementById('bookNowBtn').style.display = 'flex';
+                guestInfoVisible = false;
+
+                // Clear all inputs
+                document.querySelectorAll('.guest-input').forEach(input => {
+                    input.value = '';
+                    input.classList.remove('error');
+                });
+
+                // Remove all error messages
+                document.querySelectorAll('.error-message').forEach(element => {
+                    element.remove();
+                });
+
+                // Reset all input borders
+                document.querySelectorAll('.guest-input').forEach(input => {
+                    input.classList.remove('error');
+                });
+            }
+
+
+            // Hide modal
+            modal.style.display = 'none';
+        }
     </script>
 
 
@@ -1394,6 +1848,110 @@
 
 
     </script>
+
+    <!-- Below script is used to check the url detect the success
+    or error message display messages accordingly while placing 
+    room booking reuqests -->
+    <script>
+
+        function showPopup(message, bookingId = null) {
+            const popup = document.getElementById("popup");
+            const popupText = document.getElementById("popup-text");
+            const container = document.querySelector("#main");
+
+            popupText.innerHTML = message;
+
+            // Show the pop-up
+            popup.style.display = "flex";
+
+            // Blur the background
+            container.classList.add("blur");
+
+            // Remove any existing listeners to prevent multiple bindings
+            const closePopup = document.getElementById("closePopup");
+
+            // Remove any existing "View Details" button if present
+            const existingViewDetailsBtn = document.getElementById("viewDetailsBtn");
+            if (existingViewDetailsBtn) {
+                existingViewDetailsBtn.remove();
+            }
+
+            if (bookingId) {
+                const viewDetailsBtn = document.createElement("a");
+                viewDetailsBtn.id = "viewDetailsBtn";
+                viewDetailsBtn.href = "<?= ROOT ?>/traveler/MyBookings?booking_id=" + bookingId; // Change to your actual details page
+                viewDetailsBtn.innerText = "View";
+                viewDetailsBtn.style.background = "#007bff";
+                viewDetailsBtn.style.color = "white";
+                viewDetailsBtn.style.padding = "8.625px 20px";
+                viewDetailsBtn.style.marginRight = "10px";
+                viewDetailsBtn.style.border = "none";
+                viewDetailsBtn.style.cursor = "pointer";
+                viewDetailsBtn.style.textDecoration = "none";
+                viewDetailsBtn.style.borderRadius = "5px";
+                viewDetailsBtn.style.fontSize = "14px";
+
+                viewDetailsBtn.addEventListener("mouseover", function () {
+                    viewDetailsBtn.style.backgroundColor = "#0056b3"; // Change background on hover
+                });
+
+                viewDetailsBtn.addEventListener("mouseout", function () {
+                    viewDetailsBtn.style.backgroundColor = "#007bff"; // Reset background when not hovering
+                });
+
+
+                // closePopup.appendChild(viewDetailsBtn);
+                popupContent = document.querySelector('.popup-content');
+                popupContent.insertBefore(viewDetailsBtn, closePopup);
+
+                closePopup.innerText = "Close";
+            }
+            else{
+                closePopup.innerText = "Ok";
+            }
+
+            closePopup.onclick = function () {
+                // Hide the pop-up
+                popup.style.display = "none";
+
+                // Remove the blur effect
+                container.classList.remove("blur");
+            };
+        }
+
+        // Check for URL parameters on page load
+        document.addEventListener('DOMContentLoaded', function () {
+            // Function to get URL parameters
+            function getUrlParameter(name) {
+                name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+                var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+                var results = regex.exec(location.search);
+                return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+            }
+
+            var successMsg = getUrlParameter('success');    // Check for success message
+            var bookingId = getUrlParameter('booking_id');  // Get booking ID if available
+            var errorMsg = getUrlParameter('error');        // Check for error message
+
+            if (successMsg === 'booking_request_submitted') {
+                showPopup('<span style="color: #4CAF50; font-weight: bold;"><i class="fa fa-check-circle"></i></span>Your booking request has been successfully recorded!', bookingId);
+
+                // Remove the success parameter from URL
+                var url = window.location.href.split('?')[0];
+                window.history.replaceState({}, document.title, url);
+            }
+
+            if (errorMsg === 'booking_request_failed') {
+                showPopup('<span style="color: #F44336; font-weight: bold;"><i class="fa fa-times-circle"></i></span> There was an error processing your booking request. Please try again later!');
+
+                // Remove the error parameter from URL
+                var url = window.location.href.split('?')[0];
+                window.history.replaceState({}, document.title, url);
+            }
+        });
+    </script>
+
+
 
 </body>
 
