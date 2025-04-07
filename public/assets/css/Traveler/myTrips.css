@@ -123,6 +123,15 @@ body{
     margin-bottom: 3.5%;
 }
 
+.bookingKeyInfo-Holder .firstKid{
+    width: 35%;
+}
+
+
+.bookingKeyInfo-Holder .secondKid{
+    width: 60%;
+}
+
 
 .bookingKeyInfo-Holder i{
     margin-right: 5%;
@@ -130,7 +139,7 @@ body{
 
 
 .bookingKeyInfo-Holder:first-child{
-    margin-right: 5%;
+    margin-right: 2.5%;
 }
 
 .bookingActionBtn-Holder{
@@ -223,21 +232,6 @@ body{
     height: 8rem;
     color: #1E7A8F;
     animation: pulse 2s infinite;
-}
-
-@keyframes pulse {
-    0% {
-        transform: scale(1);
-        opacity: 1;
-    }
-    50% {
-        transform: scale(1.1);
-        opacity: 0.8;
-    }
-    100% {
-        transform: scale(1);
-        opacity: 1;
-    }
 }
 
 .empty-state-title {

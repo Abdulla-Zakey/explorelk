@@ -158,88 +158,185 @@ i{
 .slider-nav a:hover{
     opacity: 1;
 }
-
-#roomTypes, #guestReviews{
+/* Keep all your existing CSS */
+#roomTypes,
+#guestReviews {
     margin-top: 4%;
     margin-bottom: 3.5%;
-}
-
-#roomTypes h1, #guestReviews h1{
-    font-size: 3.2rem;
+    width: 85%;
     margin-left: 7.5%;
 }
 
-.container{
+#roomTypes h1,
+#guestReviews h1 {
+    font-size: 3.2rem;
+    /* margin-left: 7.5%; */
+    margin-left: 0;
+}
+
+.container {
     display: flex;
+    width: 100%;
+    margin-top: 2.5%;
+    padding-left: 2.5%;
+    padding-right: 2.5%;
+    /* border: 1px solid red; */
+    box-sizing: border-box;
+}
+
+.roomItem {
+    width: 33%;
+    margin-right: 1.25%;
+    border-radius: 1rem;
+    border: 1px solid #d3d3d3;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 1rem rgba(0, 0, 0, 0.1);
+
+}
+
+.topic {
+    width: 100%;
+    padding: 1rem;
+    box-sizing: border-box;
+    color: #FFF;
+    background-color: #1A5F7A;
+    font-size: 2rem;
+    text-align: center;
+    border-top-right-radius: 1rem;
+    border-top-left-radius: 1rem;
+}
+
+.roomItem img {
+    width: 100%;
+    object-fit: cover;
+}
+
+.roomItem a {
+    text-decoration: none;
+}
+
+.typeDescription {
+    padding: 1rem 2rem;
+    font-size: 1.3rem;
+    line-height: 1.6;
+    text-align: center;
+    /* height: 8rem; */
+    min-height: 10rem;
+}
+
+.bookNow,
+.price {
+    width: 100%;
+    margin: 0;
+    text-align: center;
+    padding: 1rem;
+    box-sizing: border-box;
+}
+
+.bookNow {
+    background-color: #159895;
+    color: white;
+    font-size: 1.5rem;
+    border: none;
+}
+
+.bookNow:hover {
+    box-shadow: #57C5B6;
+    cursor: pointer;
+    box-shadow: 0 0 1rem rgba(0, 0, 0, 0.2);
+}
+
+.price {
+    background-color: #F8F9FA;
+    color: #1A5F7A;
+    font-size: 1.2rem;
+    border-bottom-right-radius: 1rem;
+    border-bottom-left-radius: 1rem;
+}
+
+/* Enhanced carousel CSS */
+.carousel-container {
+    position: relative;
+    display: flex;
+    align-items: center;
     width: 100%;
     margin-top: 2.5%;
 }
 
-.roomItem{
-    width: 27.55%;
-    margin-right: 1.25%;
-    border: 1px solid #d3d3d3;
+.carousel-content {
+    display: flex;
+    width: 85%;
+    margin: 0 auto;
+    transition: transform 0.5s ease;
+    overflow: hidden;
 }
 
-.roomItem:first-child{
-    margin-left: 7.5%;
-    margin-right: 1.25%;
-}
-
-.roomItem:last-child{
-    margin-right: 7.5%;
-}
-
-.topic{
-    width: 100%;
-    padding: 2.5%;
-    box-sizing: border-box;
-    color: #FFF;
-    background-color: #1E293B;
-    font-size: 2rem;
-    text-align: center;
-}
-
-.roomItem img{
-    width: 100%; 
-}
-
-.roomItem a{
-    text-decoration: none;
-}
-
-.typeDescription{
-    margin: 2.5% 5% 5% 5%;
-    font-size: 1.6rem;
-    text-align: justify;
-    height: 7.5rem;
-}
-
-.bookNow, .price{
-    margin: 0;
-    text-align: center;
-    width: 100%;
-    padding: 2.5%;
-    box-sizing: border-box;
-}
-
-.bookNow{
-    background-color: rgb(45, 227, 45);
+.carousel-navigation {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    background-color: #002D40;
     color: white;
+    border-radius: 50%;
     font-size: 1.5rem;
-}
-
-.bookNow:hover{
-    box-shadow: 0 0 1rem rgba(57, 248, 66, 0.5);
-}
-
-.price{
-    background-color: #ddd;
-    font-size: 1.2rem;
-}
-
-.bookNow:hover{
     cursor: pointer;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+    transition: all 0.3s ease;
+}
+
+.carousel-navigation:hover {
+    background-color: #003b54;
+    box-shadow: 0 0 10px rgba(0, 45, 64, 0.5);
+}
+
+.carousel-navigation.prev {
+    left: 2%;
+}
+
+.carousel-navigation.next {
+    right: 2%;
+}
+
+/* Hidden state with transition effect */
+.roomItem.hidden {
+    display: none;
+    opacity: 0;
+}
+
+/* Make sure the items are spaced properly in carousel view */
+.carousel-content .roomItem:first-child {
+    margin-left: 0;
+}
+
+.carousel-content .roomItem:last-child {
+    margin-right: 0;
+}
+
+.carousel-content .roomItem {
+    flex: 0 0 32%;
+    margin: 0 0.66%;
+}
+
+/* Animation for smoother transitions */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+
+.roomItem:not(.hidden) {
+    animation: fadeIn 0.3s ease;
+    
 }
 
 #guest-reviews {

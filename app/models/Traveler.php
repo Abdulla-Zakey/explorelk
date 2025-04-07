@@ -16,7 +16,8 @@ class Traveler
         'profilePicture',
         'bio',
         'created_at',
-        'updated_at'
+        'updated_at',
+        'status'
     ];
 
     public function validate($data)
@@ -93,5 +94,10 @@ class Traveler
     {
         $result = $this->where(['username' => $username]);
         return !empty($result);
+    }
+
+    public function getTravelerByEmail($email){
+        $result = $this->first(['travelerEmail' => $email]);
+        return $result;
     }
 }

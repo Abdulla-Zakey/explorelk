@@ -23,7 +23,8 @@
             'description_para3',
             'totalRooms',
             'BRNum',
-            'yearStarted'
+            'yearStarted',
+            'status'
         ];
 
         public function validate($data) {
@@ -72,7 +73,7 @@
         }
 
         public function getDetailsByHotelId($hotel_Id){
-            $result = $this->where(['hotel_Id' => $hotel_Id]);
+            $result = $this->first(['hotel_Id' => $hotel_Id]);
             return $result;
 
         }
