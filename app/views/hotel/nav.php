@@ -115,7 +115,7 @@
 
         <ul class="nav-menu">
             <li><a href="<?=ROOT?>/Hotel/Hdashboard"><i class="fas fa-th-large"></i> Dashboard</a></li>
-            <li><a href="<?=ROOT?>/Hotel/Hmyrooms"><i class="fas fa-bed"></i> My Rooms</a></li>
+            <li><a href="<?=ROOT?>/Hotel/Test"><i class="fas fa-bed"></i> My Rooms</a></li>
             <li><a href="<?=ROOT?>/Hotel/Hguest"><i class="fa-solid fa-users"></i> Guests</a></li>
             <li><a href="<?=ROOT?>/Hotel/Hnotifications"><i class="fas fa-bell"></i> Notifications</a></li>
             <li><a href="<?=ROOT?>/Hotel/Hpaymentdetails"><i class="fas fa-credit-card"></i> Payment Details</a></li>
