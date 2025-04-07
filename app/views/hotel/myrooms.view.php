@@ -1012,7 +1012,7 @@
                 <button class="closebutton" onclick="closeModal('addTypeModal')">&times;</button>
             </div>
 
-            <form action="<?= ROOT ?>/Hotel/Test/addRoomType" method="POST" enctype="multipart/form-data">
+            <form action="<?= ROOT ?>/Hotel/Hmyrooms/addRoomType" method="POST" enctype="multipart/form-data">
                 <div class="modal-body">
                     <div class="form-grid">
                         <!-- Basic Room Type Information -->
@@ -1142,7 +1142,7 @@
                 <button class="closebutton" onclick="closeModal('addRoomModal')">&times;</button>
             </div>
 
-            <form action = "<?= ROOT ?>/Hotel/Test/addRooms" method="POST">
+            <form action = "<?= ROOT ?>/Hotel/Hmyrooms/addRooms" method="POST">
                 <input type = "hidden" id="hotelRoomTypeId" name = "hotel_roomType_Id">
                 
                 <div class="modal-body">
@@ -1294,7 +1294,7 @@
 
         function proceedDeleteRoomType() {
             if (currentRoomTypeToDelete) {
-                window.location.href = `<?= ROOT ?>/Hotel/Test/deleteRoomType/${currentRoomTypeToDelete}`;
+                window.location.href = `<?= ROOT ?>/Hotel/Hmyrooms/deleteRoomType/${currentRoomTypeToDelete}`;
             }
         }
     </script>
@@ -1372,7 +1372,7 @@
 
     <script>
         function showRoomDetails(hotelRoomTypeId) {
-            fetch(`<?= ROOT ?>/Hotel/Test/getRoomTypeDetails/${hotelRoomTypeId}`)
+            fetch(`<?= ROOT ?>/Hotel/Hmyrooms/getRoomTypeDetails/${hotelRoomTypeId}`)
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Network response was not ok');

@@ -37,7 +37,7 @@ class Hmyrooms extends Controller {
             $i++;
         }
 
-        $this->view('hotel/test', $data);
+        $this->view('hotel/myrooms', $data);
     }
 
     public function addRoomType() {
@@ -111,7 +111,7 @@ class Hmyrooms extends Controller {
             }
         }
     
-        redirect('Hotel/Test');
+        redirect('Hotel/Hmyrooms');
     }
 
     private function handleRoomTypeImageUpload($hotel_Id) {
@@ -221,7 +221,7 @@ class Hmyrooms extends Controller {
             $_SESSION['errors'] = $errors;
         }
     
-        redirect('Hotel/Test');
+        redirect('Hotel/Hmyrooms');
     }
     
 
@@ -334,6 +334,6 @@ class Hmyrooms extends Controller {
             $_SESSION['errors'] = "Error occurred while deleting room type: " . $e->getMessage();
         }
     
-        redirect('Hotel/Test');
+        redirect('Hotel/Hmyrooms');
     }
 }
