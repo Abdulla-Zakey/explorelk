@@ -8,7 +8,9 @@ class TopDistrictsModel {
     protected $allowedColumns = [
         'district_name',
         'about_the_district',
-        'coverPic'
+        'coverPic',
+        'districtLatitude',
+        'districtLongtitude'
     ];
 
     public function getDistrictByAttractionName($attractionName) {
