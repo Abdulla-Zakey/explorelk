@@ -16,7 +16,8 @@ class Traveler
         'profilePicture',
         'bio',
         'created_at',
-        'updated_at'
+        'updated_at',
+        'status'
     ];
 
     public function validate($data)

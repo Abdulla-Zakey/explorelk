@@ -105,22 +105,31 @@ class C_editProfile extends Controller
 			$bank = new GuideBankAccount();
 
 			$bankData = [
+				'guide_Id' => $id, // Add the guide_id to the bank data
 				'tourGuide_accountNum' => $_POST['tourGuide_accountNum'] ?? '',
 				'tourGuide_bankName' => $_POST['tourGuide_bankName'] ?? '',
 				'tourGuide_bankBranch' => $_POST['tourGuide_bankBranch'] ?? '',
 			];
-
+			// show($bankData = [
+			// 	'guide_id' => $id]);
 			$bankUpdated = true;
-			if(!$bank->validate($bankData)){
+			if(!$bank->validate($bankData)) {
 				$bankErrors = $bank->errors;
-				// show($bankErrors);
 			} else {
-				if ($bank->checkExistingACNum($bankData['tourGuide_accountNum'])) {
-					$bankResult = $bank->update($id, $bankData, 'guide_Id');
+				// Check if this guide already has bank details
+				$existingBankDetails = $bank->where(['guide_id' => $id]);
+				
+				if (!empty($existingBankDetails)) {
+					// Update existing bank details
+					$bankResult = $bank->update($id, $bankData, 'guide_id');
 				} else {
-					$bankResult = $bank->insert($bankData); // Assuming you have an insert() method
+					// Insert new bank details
+					$bankResult = $bank->insert($bankData);
 				}
 				
+				if (!$bankResult) {
+					$bankUpdated = false;
+				}
 			}
 
 			$userData = $guide->where(['guide_id' => $_SESSION['guide_id']]);

@@ -23,7 +23,8 @@
             'description_para3',
             'totalRooms',
             'BRNum',
-            'yearStarted'
+            'yearStarted',
+            'status'
         ];
 
         public function validate($data) {

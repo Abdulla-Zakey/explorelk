@@ -10,7 +10,8 @@ class Eventorganizer {
         'company_Password',
         'company_MobileNum',
         'company_Name',
-        'company_Address' 
+        'company_Address',
+        'status'
     ];
 
     public function validate($data)
