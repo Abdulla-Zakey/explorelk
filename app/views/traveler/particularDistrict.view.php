@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap">
     <link rel="stylesheet" href="<?= ROOT ?>/assets/css/Traveler/navbar.css">
-    <link rel="stylesheet" href="<?= ROOT ?>/assets/css/Traveler/nuwaraEliya.css">
+    <link rel="stylesheet" href="<?= ROOT ?>/assets/css/Traveler/viewParticularDistrict.css">
     <link rel="icon" href="<?= ROOT ?>/assets/images/logos/logoBlack.svg">
     <title>ExploreLK | About <?= htmlspecialchars($data['district']->district_name) ?></title>
     <script src="https://kit.fontawesome.com/f35c1c7a11.js" crossorigin="anonymous"></script>

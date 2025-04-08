@@ -32,4 +32,12 @@ class Rooms {
         $success = $this->delete($id);
         return $success;
     }
+
+    public function insert_room_type($data)
+    {
+        return $this->create([
+            'room_type' => $data['room_type'],
+            // Add other relevant fields
+        ]);
+    }
 }

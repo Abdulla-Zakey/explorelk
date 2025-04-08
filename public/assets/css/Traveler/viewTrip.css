@@ -105,7 +105,7 @@ body{
     border-radius: 1rem;
     /* border: 1px solid #d3d3d3; */
     box-sizing: border-box;
-    background-color: rgba(255, 255, 255, 0.5);
+    background-color: rgba(255, 255, 255, 0.6);
 }
 
 .tripDetails-Conatiner h2{
@@ -130,6 +130,7 @@ body{
     padding: 1rem;
     box-sizing: border-box;
     border: 0.5px solid #dddddd;
+    font-family: 'poppins';
 }
 
 .preferences-Container{
@@ -156,46 +157,218 @@ body{
     background-color: #f2f2f2;
     padding: 1rem;
     box-sizing: border-box;
-    
+    font-family: 'poppins';
 }
 
-.table-Conatiner{
-    background-color: rgba(255, 255, 255, 0.5);
-    margin-top: 2.5%;
-    padding: 2.5%;
-    border-radius: 1rem;
-    
-}
+/*this is comes under itinerary-conatiner*/
 
-.table-Conatiner h2{
-    font-size: 2.4rem;
-}
-
-.itinerary-table {
+.itinerary-container {
     width: 100%;
-    margin: 2.5% 0% 5% 0%;
-    border-collapse: collapse;
+    margin-top: 1.25%;
+    padding: 2.5%;
+    box-sizing: border-box;
+    border-radius: 1rem;
+    background-color: rgba(255, 255, 255, 0.8);
+}
+
+.topic {
+    margin-bottom: 2.5rem;
+    font-size: 2.4rem;
+    font-weight: 700;
+}
+
+.day-tabs {
+    display: flex;
+    gap: 1rem;
+    margin: 2rem 0;
+}
+
+.day-tab {
+    padding: 1rem 2rem;
+    border: none;
+    border-radius: 0.8rem;
+    background-color: #f1f1f1;
+    color: darkcyan;
     font-size: 1.6rem;
-    background-color: #ffffff;
-    border: 1px solid #dddddd;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: 'poppins';
 }
 
-.itinerary-table th,
-.itinerary-table td {
+.day-tab:hover {
+    background-color: #e0e0e0;
+}
+
+.day-tab.active {
+    background-color: darkcyan;
+    color: white;
+}
+
+.timeline {
+    margin-top: 2.5rem;
+}
+
+.timeline-item {
+    display: flex;
+    margin-bottom: 2rem;
+    color: #333;
+    font-size: 1.6rem;
+}
+
+.timeline-item i {
+    color: darkcyan;
+    margin-right: 1.5rem;
+    font-size: 1.6rem;
+    margin-top: 0.35rem;
+}
+
+.timeline-item p {
+    margin-top: 0.5rem;
+    color: #666;
+    font-size: 1.4rem;
+}
+
+.timeline-item strong {
+    font-size: 1.6rem;
+    color: darkcyan;
+}
+
+.day-content {
+    display: none;
+}
+
+.day-content.active {
+    display: block;
+}
+
+
+/*Styles to add collaborators to the trip*/
+
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+    width: 50%;
+    max-width: 60rem;
+    margin: 10% auto;
+    padding: 2rem 2.5rem;
+    box-sizing: border-box;
+    border: none;
+    border-radius: 1rem;
+    background-color: #fff;
+}
+
+
+.inviteHeadingHolder{
+    font-size: 2.4rem;
+    display: flex;
+    font-weight: 600;
+    margin-bottom: 2.5rem;
+}
+
+.modal-content .close{
+    margin-left: 35%;
+    margin-top: 0.5rem;
+    font-size: 1.6rem;
+    color: red;
+    cursor: pointer;
+}
+
+
+.invite-input-group {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.invite-input-group input,
+.invite-input-group select {
+    width: 50%;
+    padding: 1rem 1.5rem;
+    box-sizing: border-box;
+    border: 1px solid #ddd;
+    border-radius: 1rem;
+}
+
+.invite-submit-btn {
+    width: 100%;
     padding: 1rem;
-    text-align: left;
-    vertical-align: top;
-    border: 1px solid #dddddd;
+    /* background-color: seagreen; */
+    background-color: darkcyan;
+    color: white;
+    border: none;
+    border-radius: 1rem;
+    cursor: pointer;
+    font-family: 'poppins';
 }
 
-.itinerary-table th {
-    background-color: #f2f2f2;
-    font-weight: bold;
+.collaborators-list {
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid #ddd;
 }
 
-.itinerary-table td {
-    line-height: 3;
+.collaborators-list span{
+    font-size: 1.8rem;
+    font-weight: 550;
+}
+.collaborator-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    border-bottom: 1px solid #eee;
 }
 
+.collaborator-info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
 
+.collaborator-mail{
+    font-size: 1.5rem;
+    font-weight: 300;
+}
 
+.status-badge {
+    padding: 0.5rem 1.5rem;
+    border-radius: 2rem;
+    font-size: 1.2rem;
+}
+
+.status-pending { background-color: #FFF3CD; color: #856404; }
+.status-accepted { background-color: #D4EDDA; color: #155724; }
+.status-declined { background-color: #F8D7DA; color: #721C24; }
+
+.empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 3rem 0;
+    text-align: center;
+}
+
+.empty-state i {
+    font-size: 4rem;
+    color: #ccc;
+    margin-bottom: 1.5rem;
+}
+
+.empty-state p {
+    font-size: 1.8rem;
+    color: #666;
+    margin: 0 0 0.5rem 0;
+}
+
+.empty-state span {
+    font-size: 1.4rem;
+    color: #999;
+}

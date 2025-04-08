@@ -13,7 +13,7 @@
         }
 
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'poppins';
             background-color: #f0f0f0;
         }
 
