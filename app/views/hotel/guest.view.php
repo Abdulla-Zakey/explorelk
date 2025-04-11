@@ -8,11 +8,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registrations</title>
+    <title>Guests</title>
     <style>
         /* Ensure no changes in hotelhead or other primary layout */
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'poppins';
             background-color: #f9f9f9;
             margin: 0;
             padding: 0;

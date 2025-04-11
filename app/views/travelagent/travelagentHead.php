@@ -2,7 +2,7 @@
  <head>
    <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'poppins';
             margin: 0;
             padding: 0;
             background-color: #f8f8f8;

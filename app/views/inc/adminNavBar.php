@@ -30,7 +30,7 @@
     </div>
 
     <div class="linkHolder">
-        <a id="earningsLink" class="linkItem">
+        <a href="<?= ROOT?>/admin/C_commissions" id="earningsLink" class="linkItem">
             <i class="fas fa-dollar-sign"></i>Earnings
         </a>
         <div class="submenu" id="earningsSubmenu">

@@ -1,9 +1,9 @@
 <?php
 
-    class HotelRoomTypesModel{
-        use Model;
+class HotelRoomTypesModel {
+    use Model;
 
-        protected $table = 'hotel_room_types';
+    protected $table = 'hotel_room_types';
 
         protected $allowedColumns = [
             'hotel_roomType_Id',
