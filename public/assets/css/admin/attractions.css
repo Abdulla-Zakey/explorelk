@@ -1,16 +1,16 @@
 /* manageAttractions.css */
-
+body {
+    background-color: #f5f7fa;
+}
 /* Main Container Styles */
 .admin-container {
     display: flex;
     width: 100%;
-    min-height: 100vh;
 }
 
 .main-content {
     flex-grow: 1;
     padding: 2%;
-    background-color: #f5f7fa;
     margin-left: 20%;
 }
 
