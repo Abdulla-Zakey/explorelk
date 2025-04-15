@@ -1,102 +1,81 @@
+<?php
+    $tourPackages = $data['tourPackages'];
+    $tourPackageImages = $data['tourPackageImages'];
+    // show($tourPackages);
+    // show($tourPackageImages);
+?>
+
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tour Packages</title>
-    <link rel="stylesheet" href="<?= ROOT ?>/assets/css/tourGuide/tourGuide.css?v=1.0">
-    <link href="https://fonts.googleapis.com/css?family=Poppins" rel="stylesheet">
-    <script src="https://kit.fontawesome.com/d11f03c652.js" crossorigin="anonymous"></script>
+    <title>ExploreLK Tour Guide</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap">
+    <link rel="stylesheet" href="<?= ROOT ?>/assets/css/tourGuide/tourGuide.css">
+    <link rel="stylesheet" href="<?= ROOT ?>/assets/css/tourGuide/tourPackages.css">
+    <link rel="icon" href="<?= IMAGES ?>/logos/logoWhite.svg">
+    <script src="https://kit.fontawesome.com/f35c1c7a11.js" crossorigin="anonymous"></script>
 </head>
+
 <body>
     <div class="flexContainer">
         <?php include_once APPROOT . '\views\inc\tourGuideNavBar.php'; ?>
 
-        <!-- Main Content -->
-        <div class="body-container">
-            <!-- Header -->
-            <div class="tour-package">
-                <h1 class="heading">Your Tours</h1>
-                <a href="<?= ROOT ?>/tourGuide/C_addTour"><button class="create-tour-button">Create New Tour</button></a>
+        <div class="main-container">
+            <div class="page-header">
+                <div>
+                    <h1>Your Tour Packages</h1>
+                </div>
+                <a href="<?= ROOT ?>/tourGuide/C_addTour" class="add-tour-btn">
+                    <i class="fas fa-plus"></i> Add Tour Package
+                </a>
             </div>
 
-            <!-- Search Bar -->
-            <div>
-                <input type="text" class="search-input" placeholder="Search by name">
-            </div>
-            
-            <!-- Tour List -->
-            <div class="tour-list">
-                <?php if (!empty($data['tourPackages'])): ?>
-                    <?php foreach ($data['tourPackages'] as $tour): ?>
+            <div class="tour-packages-grid">
+                <!-- Tour Package Card 1 -->
+                <?php foreach ($tourPackages as $tourPackage): ?>
+                <?php 
+                    // show($tourPackage); 
+                    // Find images for this specific tour package
+                    $packageImages = array_filter($tourPackageImages, function($image) use ($tourPackage) {
+                        return $image->package_id == $tourPackage->package_id;
+                    });
 
-                        <div class="tour-item">
-                        <img src="<?= ROOT ?><?= htmlspecialchars($tour->images) ?>" alt="<?= htmlspecialchars($tour->package_name) ?> Tour" class="tour-image">
-
-                            <div class="tour-details">
-                            <a href="<?= ROOT ?>/tourGuide/C_tourPackageDetails/index/<?= $tour->id ?>">
-                                <h2 class="tour-title"><?= htmlspecialchars($tour->package_name) ?></h2>
-                            </a>
-                                <p class="tour-info"><?= htmlspecialchars($tour->duration) ?> &bull; Max <?= htmlspecialchars($tour->number_of_people) ?> people</p>
-                            </div>
-                            <div class="menu-container">
-                                <div class="menu-icon" onclick="toggleMenu(this)">
-                                    <i class="fa-solid fa-ellipsis-vertical"></i>
-                                </div>
-                                <div class="menu-options">
-                                    <a href="<?= ROOT ?>/tourGuide/C_tourPackages/editTour/<?= $tour->id ?>" class="menu-option">Edit</a>
-                                    <button class="menu-option" onclick="deleteTour(<?= $tour->id ?>)">Delete</button>
-                                </div>
-                            </div>
+                    $displayImage = !empty($packageImages) ? reset($packageImages) : null;
+                    // show($packageImages);
+                    // show($tourPackage);
+                ?>
+                <div class="tour-card">
+                    <div class="tourPackage-image">
+                        <img src= "<?= ROOT . $displayImage->image_path ?>" alt="Ella Adventure">
+                        <div class="tour-duration"><i class="far fa-clock"></i> 1 Day</div>
+                    </div>
+                    <div class="tour-content">
+                        <h3><?= $tourPackage->name ?></h3>
+                        <div class="tour-highlights">
+                            <span><i class="fa fa-map-marker"></i><?= $tourPackage->location ?></span>
+                            <span><i class="fa fa-users"></i> <?= $tourPackage->group_size ?> people</span>
                         </div>
-                    <?php endforeach; ?>
-                <?php else: ?>
-                    <p>No tour packages available.</p>
-                <?php endif; ?>
+                        <p><?php echo substr($tourPackage->description, 0, 250); ?>&nbsp;. . .</p>
+                        <div class="tour-footer">
+                            <div class="tour-price"><?= $tourPackage->package_price ?> LKR <span>for package</span></div>
+                            <button onclick="viewDetails(<?= $tourPackage->package_id ?>)" class="view-btn">View Details</button>
+                        </div>
+                    </div>
+                </div>
+                <?php endforeach; ?>
             </div>
+
         </div>
     </div>
 
     <script>
-        // Toggles the visibility of the menu options
-        function toggleMenu(menuIcon) {
-            const menuOptions = menuIcon.nextElementSibling;
-
-            // Toggle display of menu options
-            const isMenuOpen = menuOptions.style.display === "block";
-            menuOptions.style.display = isMenuOpen ? "none" : "block";
-
-            // Add or remove the expanded class for width adjustment
-            if (!isMenuOpen) {
-                menuOptions.classList.add("menu-options-expanded");
-            } else {
-                menuOptions.classList.remove("menu-options-expanded");
-            }
-
-            // Close any other open menus
-            document.querySelectorAll(".menu-options").forEach((menu) => {
-                if (menu !== menuOptions) {
-                    menu.style.display = "none";
-                    menu.classList.remove("menu-options-expanded");
-                }
-            });
+        function viewDetails(packageId) {
+            window.location.href = "<?= ROOT ?>/tourGuide/C_tourPackageDetails?packageId=" + packageId;
         }
-
-        // Function to delete a tour
-        function deleteTour(tourId) {
-            alert("Are you sure you want to delete: " + tourId);
-            window.location.href = '<?= ROOT ?>/tourGuide/C_tourPackages/deleteTour/${tourId}';
-        }
-
-        // Close menu options when clicking outside
-        document.addEventListener("click", (event) => {
-            const isMenuClick = event.target.closest(".menu-container");
-            if (!isMenuClick) {
-                document.querySelectorAll(".menu-options").forEach((menu) => {
-                    menu.style.display = "none";
-                });
-            }
-        });
     </script>
 </body>
+
 </html>
