@@ -179,7 +179,7 @@
                                 <?php
                                 if ($accommodationBooking->booking_status == 'Pending') {
 
-                                    echo '<a href="' . ROOT . '/traveler/EditBooking/accommodation/">
+                                    echo '<a href="' . ROOT . '/traveler/EditAccommodationBooking/index/' . $accommodationBooking->room_booking_Id . '">
                                                 <button id="editBookingBtn" class="actionButtons">
                                                     <i class="fas fa-edit"></i>Edit Booking
                                                 </button>
@@ -195,9 +195,11 @@
 
                                 } else if ($accommodationBooking->booking_status == 'Approved') {
 
-                                    echo '<button id="confirmBookingBtn" class="actionButtons">
-                                                <i class="fas fa-check-circle"></i>Confirm Booking
-                                            </button>';
+                                    echo '<a href="' . ROOT . '/traveler/ConfirmAccommodationBooking/index/' . $accommodationBooking->room_booking_Id . '">
+                                                <button id="confirmBookingBtn" class="actionButtons">
+                                                    <i class="fas fa-check-circle"></i>Confirm Booking
+                                                </button>
+                                            </a>';
 
                                     echo '<button id="cancelBookingBtn" class="actionButtons">
                                                 <i class="fas fa-ban"></i>Cancel Booking
@@ -205,13 +207,17 @@
 
                                 } else if ($accommodationBooking->booking_status == 'Confirmed') {
 
-                                    echo '<button id="downloadBtn" class="actionButtons">
-                                                <i class="fas fa-download"></i>Download Voucher
-                                            </button>';
+                                    echo '<a href="' . ROOT . '/traveler/ViewAccommodationBookingPaymentReceipt/index/' . $accommodationBooking->room_booking_Id . '" target = "_blank">
+                                                <button id="downloadBtn" class="actionButtons">
+                                                    <i class="fas fa-download"></i>Download Voucher
+                                                </button>
+                                            </a>';
 
-                                    echo '<button id="cancelBookingBtn" class="actionButtons">
-                                                <i class="fas fa-ban"></i>Cancel Booking
-                                            </button>';
+                                    echo '<a href = "' . ROOT . '/traveler/CancelAccommodationBooking/index/' . $accommodationBooking->room_booking_Id . '">
+                                                <button id="cancelBookingBtn" class="actionButtons">
+                                                    <i class="fas fa-ban"></i>Cancel Booking
+                                                </button>
+                                            </a>';
 
                                 } else if ($accommodationBooking->booking_status == 'Completed') {
                                     echo '<a>
@@ -227,9 +233,11 @@
                                             </a>';
 
                                 } else if ($accommodationBooking->booking_status == 'Cancelled') {
-                                    echo '<button id="rebookBtn" class="actionButtons">
-                                            <i class="fas fa-redo"></i>Rebook
-                                        </button>';
+                                    echo '<a href="' . ROOT . '/traveler/TrackAccommodationBookingRefund/index/'. $accommodationBooking->room_booking_Id .'">
+                                                <button id="rebookBtn" class="actionButtons">
+                                                    <i class="fas fa-search"></i>Track Refund
+                                                </button>
+                                            </a>';
 
                                     echo '<a href="' . ROOT . '/traveler/ContactSupport/booking/">
                                                 <button id="supportBtn" class="actionButtons">

@@ -563,6 +563,58 @@
                 grid-column: span 1;
             }
         }
+
+        /* Pop-up container (initially hidden) to show successfull or failed booking requests */
+        .popup-container {
+            font-size: 1.35rem;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            /* Dark transparent overlay */
+            display: none;
+            /* Initially hidden */
+            justify-content: center;
+            align-items: center;
+            z-index: 999;
+            /* Above other content */
+        }
+
+        /* Pop-up content */
+        .popup-content {
+            background: white;
+            padding: 20px 30px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+            max-width: 400px;
+            width: 90%;
+            font-size: 16px;
+        }
+
+        /* Close button */
+        .popup-content button {
+            margin-top: 15px;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .popup-content button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Blur background effect when pop-up is visible */
+        .blur {
+            filter: blur(5px);
+            pointer-events: none;
+        }
     </style>
 
 </head>
@@ -1015,10 +1067,11 @@
                                 </div>
                             </div>
                             <div class="summary-box">
-                                <i class="fas fa-moon"></i>
+                                <i class="fas fa-hourglass-half"></i>
                                 <div class="summary-info">
-                                    <span class="summary-label">Price per Night</span>
-                                    <span id="pricePerNightInCheckAvailability" class="summary-value"></span>
+                                    <span class="summary-label">Pending Reservations</span>
+                                    <!-- <span id="pricePerNightInCheckAvailability" class="summary-value"></span> -->
+                                    <span id="reservedRoomsCount" class="summary-value"></span>
                                 </div>
                             </div>
                         </div>
@@ -1038,34 +1091,41 @@
                             </div>
                         </div>
 
-                         <!-- Hidden content to collect booking person's details -->
-                         <div class="guest-information" id="guestInformationSection" style="display: none;">
-                                <h3 class="guest-info-title">Guest Information</h3>
-                                <div class="guest-form">
-                                    <div class="form-group">
-                                        <label for="guestFullName">Full Name</label>
-                                        <input type="text" id="guestFullName" class="guest-input" placeholder="Enter your full name" value = "<?= $data['userData']->fName . ' ' . $data['userData']->lName ?>">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="guestEmail">Email Address</label>
-                                        <input type="email" id="guestEmail" class="guest-input" placeholder="Enter your email address" value = "<?= $data['userData']->travelerEmail ?>">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="guestPhone">Phone Number</label>
-                                        <input type="tel" id="guestPhone" class="guest-input" placeholder="Enter your phone number" value = "<?= $data['userData']->travelerMobileNum ?>">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="guestNIC">NIC / Passport Number</label>
-                                        <input type="text" id="guestNIC" class="guest-input" placeholder="Enter your NIC or passport num">
-                                    </div>
-                                    <div class="form-group full-width">
-                                        <label for="specialRequests">Special Requests (Optional)</label>
-                                        <textarea id="specialRequests" class="guest-input" rows="3" style="resize: none;"
-                                            placeholder="Any special requests or notes for your stay"></textarea>
-                                    </div>
+                        <!-- Hidden content to collect booking person's details -->
+                        <div class="guest-information" id="guestInformationSection" style="display: none;">
+                            <h3 class="guest-info-title">Guest Information</h3>
+                            <div class="guest-form">
+                                <div class="form-group">
+                                    <label for="guestFullName">Full Name</label>
+                                    <input type="text" id="guestFullName" class="guest-input"
+                                        placeholder="Enter your full name"
+                                        value="<?= $data['userData']->fName . ' ' . $data['userData']->lName ?>">
                                 </div>
-
+                                <div class="form-group">
+                                    <label for="guestEmail">Email Address</label>
+                                    <input type="email" id="guestEmail" class="guest-input"
+                                        placeholder="Enter your email address"
+                                        value="<?= $data['userData']->travelerEmail ?>">
+                                </div>
+                                <div class="form-group">
+                                    <label for="guestPhone">Phone Number</label>
+                                    <input type="tel" id="guestPhone" class="guest-input"
+                                        placeholder="Enter your phone number"
+                                        value="<?= $data['userData']->travelerMobileNum ?>">
+                                </div>
+                                <div class="form-group">
+                                    <label for="guestNIC">NIC / Passport Number</label>
+                                    <input type="text" id="guestNIC" class="guest-input"
+                                        placeholder="Enter your NIC or passport num">
+                                </div>
+                                <div class="form-group full-width">
+                                    <label for="specialRequests">Special Requests (Optional)</label>
+                                    <textarea id="specialRequests" class="guest-input" rows="3" style="resize: none;"
+                                        placeholder="Any special requests or notes for your stay"></textarea>
+                                </div>
                             </div>
+
+                        </div>
 
                         <div class="availability-cards" id="availabilityList">
                             <!-- Room cards will be generated dynamically -->
@@ -1087,14 +1147,15 @@
                                 </div>
                             </div>
 
-                           
+
 
                             <button class="book-button" id="bookNowBtn" style="margin-bottom: 1.5rem;">
                                 <i class="fas fa-check-circle"></i>
-                                Continue                   
+                                Continue
                             </button>
 
-                            <button class="confirm-button" id="confirmBookingBtn" style="display: none;">
+                            <button class="confirm-button" id="confirmBookingBtn" style="display: none;"
+                                onclick="prepareBookingRequest()">
                                 <i class="fa-solid fa-thumbs-up"></i>
                                 Confirm Booking Request
                             </button>
@@ -1105,7 +1166,55 @@
         </div>
     </div>
 
+    <form method="POST" action="<?= ROOT ?>/traveler/ViewParticularHotel/recordBookingRequest">
+        <input type="hidden" name="hotelId" id="hotel_Id" value="<?= $data['hotelData']->hotel_Id ?>">
+        <input type="hidden" name="hotelRoomTypeId" id="hotel_roomType_id" value="">
+        <input type="hidden" name="finalCheckInDate" id="final_checkIn_date" value="">
+        <input type="hidden" name="finalCheckOutDate" id="final_checkOut_date" value="">
+        <input type="hidden" name="bookedRoomCount" id="booked_room_count" value="">
+        <input type="hidden" name="totalAmount" id="total_amount" value="">
 
+        <!--Guest Details-->
+        <input type="hidden" name="guestFullName" id="geust_full_name" value="">
+        <input type="hidden" name="guestEmail" id="geust_email" value="">
+        <input type="hidden" name="guestMobileNum" id="geust_mobile_num" value="">
+        <input type="hidden" name="guestNIC" id="geust_nic" value="">
+        <input type="hidden" name="guestSpecialRequests" id="geust_special_requests" value="">
+    </form>
+
+    <script>
+        function prepareBookingRequest() {
+
+            validateGuestInformation();
+
+            document.getElementById("hotel_roomType_id").value = currentRoomTypeId;
+            document.getElementById("final_checkIn_date").value = document.getElementById("checkIn").value;
+            document.getElementById("final_checkOut_date").value = document.getElementById("checkOut").value;
+            document.getElementById("booked_room_count").value = document.getElementById("selectedRoomCount").innerText;
+            document.getElementById("total_amount").value = document.getElementById("totalAmount").innerText;
+
+            document.getElementById("geust_full_name").value = document.getElementById("guestFullName").value;
+            document.getElementById("geust_email").value = document.getElementById("guestEmail").value;
+            document.getElementById("geust_mobile_num").value = document.getElementById("guestPhone").value;
+            document.getElementById("geust_nic").value = document.getElementById("guestNIC").value;
+            document.getElementById("geust_special_requests").value = document.getElementById("specialRequests").value;
+
+            // Submit the form
+            document.querySelector('form').submit();
+        }
+    </script>
+
+    <!-- Pop-Up Message ------------------------------------------------------------------------------------>
+    <div id="popup" class="popup-container">
+
+        <div class="popup-content">
+            <p id="popup-text"></p>
+            <button id="closePopup">Ok</button>
+        </div>
+
+    </div>
+
+    <!-- Footer -------------------------------------------->
     <section id="footer">
         <div class="foot">
             &copy; ExploreLK, 2024 | All Rights Reserved
@@ -1127,7 +1236,8 @@
 
 
     <!--myAPIKEYCOMESHERE-->
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCFbprhDc_fKXUHl-oYEVGXKD1HciiAsz0&callback=initMap" async defer></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCFbprhDc_fKXUHl-oYEVGXKD1HciiAsz0&callback=initMap"
+        async defer></script>
 
 
     <!--Script for switch tabs in the room details popup-->
@@ -1324,7 +1434,7 @@
             }
 
             // Update modal content dynamically - Check Availability Section
-            document.getElementById('pricePerNightInCheckAvailability').innerText = roomTypes[index].pricePer_night + ' LKR';
+            // document.getElementById('pricePerNightInCheckAvailability').innerText = roomTypes[index].pricePer_night + ' LKR';
 
             // Show modal
             modal.style.display = 'flex';
@@ -1335,6 +1445,7 @@
                 document.getElementById('checkIn').value = "";
                 document.getElementById('checkOut').value = "";
                 document.querySelector('.summary-box .summary-value').innerText = "";
+                document.getElementById('reservedRoomsCount').innerText = "";
                 document.getElementById('totalNights').textContent = "0 Nights";
 
                 // Reset room count to default
@@ -1390,9 +1501,13 @@
         }
 
         function updateAvailabilityUI(data) {
+
             // Update available rooms count
             const availableRoomsElement = document.querySelector('.summary-box .summary-value');
             availableRoomsElement.textContent = `${data.available_rooms} of ${data.total_rooms}`;
+
+            const reservedRoomsElement = document.getElementById('reservedRoomsCount');
+            reservedRoomsElement.textContent = `${data.reserved_rooms} of ${data.total_rooms}`;
 
             // Update max available rooms for selection
             maxAvailableRooms = data.available_rooms;
@@ -1438,26 +1553,26 @@
                 element.remove();
             });
 
-            if(checkIn === "" && checkOut === ""){
+            if (checkIn === "" && checkOut === "") {
                 showValidationError(checkInInput, 'Please select a Check-In date');
                 showValidationError(checkOutInput, 'Please select a Check-Out date');
                 scrollToElement(checkInInput);
                 return;
             }
 
-            if(checkIn === ""){
+            if (checkIn === "") {
                 showValidationError(checkInInput, 'Please select a check-in date first');
                 scrollToElement(checkInInput);
                 return;
             }
 
-            if(checkOut === ""){
+            if (checkOut === "") {
                 showValidationError(checkOutInput, 'Please select a check-out date');
                 checkOutInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
                 scrollToElement(checkOutInput);
                 return;
             }
-           
+
             // Get elements
             const guestInfoSection = document.getElementById('guestInformationSection');
             const continueButton = document.getElementById('bookNowBtn');
@@ -1478,30 +1593,18 @@
         function scrollToElement(element) {
             // Find the modal content container
             const modalBody = document.querySelector('.modal-body');
-    
+
             if (modalBody) {
                 // Calculate the scroll position
                 const elementTop = element.getBoundingClientRect().top;
                 const modalBodyTop = modalBody.getBoundingClientRect().top;
                 const scrollOffset = elementTop - modalBodyTop - 60; // 50px offset for better visibility
-        
+
                 // Scroll the modal body container
                 modalBody.scrollBy({
                     top: scrollOffset,
                     behavior: 'smooth'
                 });
-            }
-        }
-
-        // Function to handle click on Confirm Booking Request button
-        function confirmBookingRequest() {
-            // Validate form fields
-            if (validateGuestInformation()) {
-                // Collect all booking data
-                const bookingData = collectBookingData();
-
-                // Send booking request (you'll need to implement this part)
-                submitBookingRequest(bookingData);
             }
         }
 
@@ -1575,60 +1678,6 @@
             return emailPattern.test(email);
         }
 
-        // Function to collect all booking data
-        function collectBookingData() {
-            return {
-                // Room and booking details
-                roomTypeId: currentRoomTypeId,
-                checkIn: document.getElementById('checkIn').value,
-                checkOut: document.getElementById('checkOut').value,
-                numberOfRooms: currentRoomCount,
-                numberOfNights: numberOfNights,
-                totalAmount: numberOfNights * pricePerNight * currentRoomCount,
-
-                // Guest information
-                guestFullName: document.getElementById('guestFullName').value,
-                guestEmail: document.getElementById('guestEmail').value,
-                guestPhone: document.getElementById('guestPhone').value,
-                guestNIC: document.getElementById('guestNIC').value,
-                specialRequests: document.getElementById('specialRequests').value
-            };
-        }
-
-        // Function to submit booking request to server
-        function submitBookingRequest(bookingData) {
-            // Show loading indicator if you want
-            document.getElementById('confirmBookingBtn').disabled = true;
-            document.getElementById('confirmBookingBtn').innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
-
-            // Send request to server (adjust URL and method as needed)
-            fetch(`<?= ROOT ?>/traveler/RoomBookingController/placeBookingRequest`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(bookingData)
-            })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        // Show success message and close modal or redirect
-                        alert('Your booking request has been successfully submitted!');
-                        closeModal('viewDetailsModal');
-                    } else {
-                        // Show error message
-                        alert('Error: ' + data.message);
-                        document.getElementById('confirmBookingBtn').disabled = false;
-                        document.getElementById('confirmBookingBtn').innerHTML = '<i class="fas fa-check-circle"></i> Confirm Booking Request';
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('An error occurred while submitting your booking request. Please try again.');
-                    document.getElementById('confirmBookingBtn').disabled = false;
-                    document.getElementById('confirmBookingBtn').innerHTML = '<i class="fas fa-check-circle"></i> Confirm Booking Request';
-                });
-        }
 
         // Add these event listeners in your DOMContentLoaded or initialization function
         document.addEventListener('DOMContentLoaded', function () {
@@ -1804,6 +1853,108 @@
         });
 
 
+    </script>
+
+    <!-- Below script is used to check the url detect the success
+    or error message display messages accordingly while placing 
+    room booking reuqests -->
+    <script>
+
+        function showPopup(message, bookingId = null) {
+            const popup = document.getElementById("popup");
+            const popupText = document.getElementById("popup-text");
+            const container = document.querySelector("#main");
+
+            popupText.innerHTML = message;
+
+            // Show the pop-up
+            popup.style.display = "flex";
+
+            // Blur the background
+            container.classList.add("blur");
+
+            // Remove any existing listeners to prevent multiple bindings
+            const closePopup = document.getElementById("closePopup");
+
+            // Remove any existing "View Details" button if present
+            const existingViewDetailsBtn = document.getElementById("viewDetailsBtn");
+            if (existingViewDetailsBtn) {
+                existingViewDetailsBtn.remove();
+            }
+
+            if (bookingId) {
+                const viewDetailsBtn = document.createElement("a");
+                viewDetailsBtn.id = "viewDetailsBtn";
+                viewDetailsBtn.href = "<?= ROOT ?>/traveler/MyBookings?booking_id=" + bookingId; // Change to your actual details page
+                viewDetailsBtn.innerText = "View";
+                viewDetailsBtn.style.background = "#007bff";
+                viewDetailsBtn.style.color = "white";
+                viewDetailsBtn.style.padding = "8.625px 20px";
+                viewDetailsBtn.style.marginRight = "10px";
+                viewDetailsBtn.style.border = "none";
+                viewDetailsBtn.style.cursor = "pointer";
+                viewDetailsBtn.style.textDecoration = "none";
+                viewDetailsBtn.style.borderRadius = "5px";
+                viewDetailsBtn.style.fontSize = "14px";
+
+                viewDetailsBtn.addEventListener("mouseover", function () {
+                    viewDetailsBtn.style.backgroundColor = "#0056b3"; // Change background on hover
+                });
+
+                viewDetailsBtn.addEventListener("mouseout", function () {
+                    viewDetailsBtn.style.backgroundColor = "#007bff"; // Reset background when not hovering
+                });
+
+
+                // closePopup.appendChild(viewDetailsBtn);
+                popupContent = document.querySelector('.popup-content');
+                popupContent.insertBefore(viewDetailsBtn, closePopup);
+
+                closePopup.innerText = "Close";
+            }
+            else{
+                closePopup.innerText = "Ok";
+            }
+
+            closePopup.onclick = function () {
+                // Hide the pop-up
+                popup.style.display = "none";
+
+                // Remove the blur effect
+                container.classList.remove("blur");
+            };
+        }
+
+        // Check for URL parameters on page load
+        document.addEventListener('DOMContentLoaded', function () {
+            // Function to get URL parameters
+            function getUrlParameter(name) {
+                name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+                var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+                var results = regex.exec(location.search);
+                return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+            }
+
+            var successMsg = getUrlParameter('success');    // Check for success message
+            var bookingId = getUrlParameter('booking_id');  // Get booking ID if available
+            var errorMsg = getUrlParameter('error');        // Check for error message
+
+            if (successMsg === 'booking_request_submitted') {
+                showPopup('<span style="color: #4CAF50; font-weight: bold;"><i class="fa fa-check-circle"></i></span>Your booking request has been successfully recorded!', bookingId);
+
+                // Remove the success parameter from URL
+                var url = window.location.href.split('?')[0];
+                window.history.replaceState({}, document.title, url);
+            }
+
+            if (errorMsg === 'booking_request_failed') {
+                showPopup('<span style="color: #F44336; font-weight: bold;"><i class="fa fa-times-circle"></i></span> There was an error processing your booking request. Please try again later!');
+
+                // Remove the error parameter from URL
+                var url = window.location.href.split('?')[0];
+                window.history.replaceState({}, document.title, url);
+            }
+        });
     </script>
 
 

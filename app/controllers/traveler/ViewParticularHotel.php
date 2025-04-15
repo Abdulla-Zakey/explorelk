@@ -57,8 +57,8 @@
             $data['hotelRoomTypesNames'] = $tempRoomTypesNames;
             $data['hotelRoomTypeAmenityList'] = $tempRoomTypeAmenitiesNameAndClassList;
 
-            $this->view('traveler/particularHotel', $data);
-            // $this->view('traveler/temp', $data);
+            // $this->view('traveler/particularHotel', $data);
+            $this->view('traveler/temp', $data);
 
         }
 

@@ -183,7 +183,7 @@ class MyTrips extends Controller
         // Attempt to delete the trip
         $result = $tripModel->delete($trip_Id, 'trip_Id', [
             'traveler_Id' => $_SESSION['traveler_id']
-        ],);
+        ]);
 
         if ($result) {
             // Redirect with success message
@@ -202,6 +202,8 @@ class MyTrips extends Controller
         $tripCollaboratorsModel = new TripCollaboratorsModel();
 
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+
+            $trip = $tripModel->first(['trip_Id' => $trip_Id]);
 
             // Remove ", Sri Lanka" from the start and end locations
             $startingLocation = htmlspecialchars(trim($_POST['startLocation']));
