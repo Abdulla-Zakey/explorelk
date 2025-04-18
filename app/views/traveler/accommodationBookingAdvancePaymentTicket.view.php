@@ -7,6 +7,7 @@
 
 <head>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap">
+    <link rel="stylesheet" href="<?= CSS ?>/Traveler/navbar.css">
     <link rel="icon" href="<?= IMAGES ?>/logos/logoBlack.svg">
     <title>ExploreLK | <?= isset($data['success']) && $data['success'] ? 'Booking Confirmation' : 'Booking Error' ?>
     </title>
@@ -15,15 +16,16 @@
     <style>
         body {
             font-family: 'Poppins', Arial, sans-serif;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
+            margin: 0;
+            padding: 0;
             background-color: #f5f5f5;
             box-sizing: border-box;
         }
 
         .booking-container {
-            margin: 1rem;
+            align-items: center;
+            max-width: 800px;
+            margin: 1rem auto 1rem auto;
             padding: 1rem 1.5rem;
             background: white;
             border-radius: 10px;
@@ -78,22 +80,22 @@
 
         .download-button {
             display: inline-block;
-            background: #007bff;
+            background: darkcyan;
             color: white;
-            padding: 10px 20px;
+            padding: 15px 20px;
             text-decoration: none;
             border: none;
-            border-radius: 5px;
-            margin-bottom: 30px;
-            min-width: 12.5rem;
-            margin-top: 1.5rem;
-            margin-bottom: 0.5rem;
-            margin-left: 72.5%;
+            border-radius: 10px;
+            min-width: 15rem;
+            margin: 1rem 1rem 1rem 0rem;
             box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
         }
 
         .download-button:hover {
-            background: #0056b3;
+            box-shadow: 0px 0px 5px white;
+            color: #1E293B;
+            background-color: #B3D9FF;
             cursor: pointer;
         }
 
@@ -203,190 +205,208 @@
 </head>
 
 <body>
+    <header>
+        <nav class="navbar">
+            <div class="backToHome">
+                <a href="<?= ROOT ?>/traveler/MyBookings">
+                    <i class="fa-solid fa-arrow-left"></i>
+                    <span>Back</span>
+                </a>
+            </div>
+
+            <button id="download" class="download-button">
+                Download Confirmation
+                <i class="fa-solid fa-file-arrow-down"></i>
+            </button>
+
+        </nav>
+    </header>
 
     <?php if (isset($data['success']) && $data['success']): ?>
 
-        <button id="download" class="download-button">
+        <!-- <button id="download" class="download-button">
             Download Confirmation
             <i class="fa-solid fa-file-arrow-down"></i>
-        </button>
+        </button> -->
 
-        <div id="receipt" class="booking-container">
+        <div style="margin-top: 10rem;">
+            <div id="receipt" class="booking-container">
 
-            <div class="booking-header">
-                <h1><?php echo isset($data['hotelData']->hotelName) ? htmlspecialchars($data['hotelData']->hotelName) : 'Hotel Booking'; ?>
-                </h1>
-                <div class="success-message">✅ Booking Confirmed!</div>
-            </div>
-
-            <div class="booking-details">
-
-                <div class="booking-info">
-                    <div>
-                        <strong>Booking Reference:</strong><br>
-                        <?php echo isset($data['bookingData']->room_booking_Id) ? htmlspecialchars($data['bookingData']->room_booking_Id) : 'N/A'; ?>
-                    </div>
-
-                    <div>
-                        <strong>Booking Date:</strong><br>
-                        <?php echo isset($data['bookingData']->requested_date) ? htmlspecialchars($data['bookingData']->requested_date) : 'N/A'; ?>
-                    </div>
-
-                    <div>
-                        <strong>Check-in Date:</strong><br>
-                        <?php echo isset($data['bookingData']->check_in) ? htmlspecialchars($data['bookingData']->check_in) : 'N/A'; ?>
-                    </div>
-
-                    <div>
-                        <strong>Check-out Date:</strong><br>
-                        <?php echo isset($data['bookingData']->check_out) ? htmlspecialchars($data['bookingData']->check_out) : 'N/A'; ?>
-                    </div>
-
-                    <div>
-                        <strong>Total Nights:</strong><br>
-                        <?php
-                        if (isset($data['bookingData']->check_in) && isset($data['bookingData']->check_out)) {
-                            echo htmlspecialchars((strtotime($data['bookingData']->check_out) - strtotime($data['bookingData']->check_in)) / (60 * 60 * 24)) . ' Nights';
-                        } else {
-                            echo 'N/A';
-                        }
-                        ?>
-                    </div>
-
-                    <div>
-                        <strong>Total Rooms:</strong><br>
-                        <?php echo isset($data['bookingData']->total_rooms) ? htmlspecialchars($data['bookingData']->total_rooms) : 'N/A'; ?>
-                    </div>
-
+                <div class="booking-header">
+                    <h1><?php echo isset($data['hotelData']->hotelName) ? htmlspecialchars($data['hotelData']->hotelName) : 'Hotel Booking'; ?>
+                    </h1>
+                    <div class="success-message">✅ Booking Confirmed!</div>
                 </div>
 
-                <div class="hotel-address">
-                    <strong>Special Requests:</strong><br>
-                    <?php echo isset($data['bookingData']->special_requests) && !empty($data['bookingData']->special_requests) ? htmlspecialchars($data['bookingData']->special_requests) : 'None'; ?>
-                </div>
+                <div class="booking-details">
 
-                <div class="hotel-address" style="margin-top: 1rem;">
-                    <strong>Hotel Address:</strong><br>
-                    <?php echo isset($data['hotelData']->hotelAddress) ? htmlspecialchars($data['hotelData']->hotelAddress) : 'Address not available'; ?>
-                </div>
-
-                <?php if (isset($data['bookedRoomTypeDetails'])): ?>
-                    <div class="room-details-container">
-                        <strong class="heading">Room Details:</strong>
+                    <div class="booking-info">
+                        <div>
+                            <strong>Booking Reference:</strong><br>
+                            <?php echo isset($data['bookingData']->room_booking_Id) ? htmlspecialchars($data['bookingData']->room_booking_Id) : 'N/A'; ?>
+                        </div>
 
                         <div>
+                            <strong>Booking Date:</strong><br>
+                            <?php echo isset($data['bookingData']->requested_date) ? htmlspecialchars($data['bookingData']->requested_date) : 'N/A'; ?>
+                        </div>
 
-                            <div class="booking-info">
-                                <div>
-                                    <strong>Room Type:</strong><br>
-                                    <?php echo isset($data['bookedRoomTypeDetails']->roomTypeName) ? htmlspecialchars($data['bookedRoomTypeDetails']->roomTypeName) : 'N/A'; ?>
-                                </div>
+                        <div>
+                            <strong>Check-in Date:</strong><br>
+                            <?php echo isset($data['bookingData']->check_in) ? htmlspecialchars($data['bookingData']->check_in) : 'N/A'; ?>
+                        </div>
 
-                                <div>
-                                    <strong>Maximum Occupancy:</strong><br>
-                                    <?php echo isset($data['bookedRoomTypeDetails']->max_occupancy) ? htmlspecialchars($data['bookedRoomTypeDetails']->max_occupancy) . ' people' : 'N/A'; ?>
-                                </div>
+                        <div>
+                            <strong>Check-out Date:</strong><br>
+                            <?php echo isset($data['bookingData']->check_out) ? htmlspecialchars($data['bookingData']->check_out) : 'N/A'; ?>
+                        </div>
 
-                                <div>
-                                    <strong>Price Per Night:</strong><br>
-                                    <?php echo isset($data['bookedRoomTypeDetails']->pricePer_night) ? 'LKR ' . htmlspecialchars($data['bookedRoomTypeDetails']->pricePer_night) : 'N/A'; ?>
+                        <div>
+                            <strong>Total Nights:</strong><br>
+                            <?php
+                            if (isset($data['bookingData']->check_in) && isset($data['bookingData']->check_out)) {
+                                echo htmlspecialchars((strtotime($data['bookingData']->check_out) - strtotime($data['bookingData']->check_in)) / (60 * 60 * 24)) . ' Nights';
+                            } else {
+                                echo 'N/A';
+                            }
+                            ?>
+                        </div>
+
+                        <div>
+                            <strong>Total Rooms:</strong><br>
+                            <?php echo isset($data['bookingData']->total_rooms) ? htmlspecialchars($data['bookingData']->total_rooms) : 'N/A'; ?>
+                        </div>
+
+                    </div>
+
+                    <div class="hotel-address">
+                        <strong>Special Requests:</strong><br>
+                        <?php echo isset($data['bookingData']->special_requests) && !empty($data['bookingData']->special_requests) ? htmlspecialchars($data['bookingData']->special_requests) : 'None'; ?>
+                    </div>
+
+                    <div class="hotel-address" style="margin-top: 1rem;">
+                        <strong>Hotel Address:</strong><br>
+                        <?php echo isset($data['hotelData']->hotelAddress) ? htmlspecialchars($data['hotelData']->hotelAddress) : 'Address not available'; ?>
+                    </div>
+
+                    <?php if (isset($data['bookedRoomTypeDetails'])): ?>
+                        <div class="room-details-container">
+                            <strong class="heading">Room Details:</strong>
+
+                            <div>
+
+                                <div class="booking-info">
+                                    <div>
+                                        <strong>Room Type:</strong><br>
+                                        <?php echo isset($data['bookedRoomTypeDetails']->roomTypeName) ? htmlspecialchars($data['bookedRoomTypeDetails']->roomTypeName) : 'N/A'; ?>
+                                    </div>
+
+                                    <div>
+                                        <strong>Maximum Occupancy:</strong><br>
+                                        <?php echo isset($data['bookedRoomTypeDetails']->max_occupancy) ? htmlspecialchars($data['bookedRoomTypeDetails']->max_occupancy) . ' people' : 'N/A'; ?>
+                                    </div>
+
+                                    <div>
+                                        <strong>Price Per Night:</strong><br>
+                                        <?php echo isset($data['bookedRoomTypeDetails']->pricePer_night) ? 'LKR ' . htmlspecialchars($data['bookedRoomTypeDetails']->pricePer_night) : 'N/A'; ?>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                <?php endif; ?>
+                    <?php endif; ?>
 
 
 
-                <?php if (isset($data['guestData'])): ?>
-                    <div class="guest-info" style="margin-top: 2rem;">
-                        <strong>Guest Information:</strong>
-                        <table>
-                            <tr>
-                                <th>Guest Name</th>
-                                <td><?php echo isset($data['guestData']->guest_full_name) ? htmlspecialchars($data['guestData']->guest_full_name) : 'N/A'; ?>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>NIC</th>
-                                <td><?php echo isset($data['guestData']->guest_nic) ? htmlspecialchars($data['guestData']->guest_nic) : 'N/A'; ?>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>Email</th>
-                                <td><?php echo isset($data['guestData']->guest_email) ? htmlspecialchars($data['guestData']->guest_email) : 'N/A'; ?>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>Mobile Number</th>
-                                <td><?php echo isset($data['guestData']->guest_mobile_num) ? htmlspecialchars($data['guestData']->guest_mobile_num) : 'N/A'; ?>
-                                </td>
-                            </tr>
-                        </table>
-                    </div>
-                <?php endif; ?>
-
-                <?php if (isset($data['bookingData']->total_amount)): ?>
-                    <div class="payment-details-container" style="margin-top: 4rem;">
-                        <strong class="heading">Payment Details:</strong>
-
-                        <div class="payment-row">
-                            <div>Room Charges for Complete Stay</div>
-                            <div>LKR <?php echo htmlspecialchars($data['bookingData']->total_amount); ?></div>
+                    <?php if (isset($data['guestData'])): ?>
+                        <div class="guest-info" style="margin-top: 2rem;">
+                            <strong>Guest Information:</strong>
+                            <table>
+                                <tr>
+                                    <th>Guest Name</th>
+                                    <td><?php echo isset($data['guestData']->guest_full_name) ? htmlspecialchars($data['guestData']->guest_full_name) : 'N/A'; ?>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>NIC</th>
+                                    <td><?php echo isset($data['guestData']->guest_nic) ? htmlspecialchars($data['guestData']->guest_nic) : 'N/A'; ?>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>Email</th>
+                                    <td><?php echo isset($data['guestData']->guest_email) ? htmlspecialchars($data['guestData']->guest_email) : 'N/A'; ?>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>Mobile Number</th>
+                                    <td><?php echo isset($data['guestData']->guest_mobile_num) ? htmlspecialchars($data['guestData']->guest_mobile_num) : 'N/A'; ?>
+                                    </td>
+                                </tr>
+                            </table>
                         </div>
+                    <?php endif; ?>
 
-                        <div class="payment-row">
-                            <div>Taxes & Fees</div>
-                            <div>LKR 0.00</div>
-                        </div>
+                    <?php if (isset($data['bookingData']->total_amount)): ?>
+                        <div class="payment-details-container" style="margin-top: 4rem;">
+                            <strong class="heading">Payment Details:</strong>
 
-                        <div class="payment-row total">
-                            <div>Total Amount</div>
-                            <div>LKR <?php echo htmlspecialchars($data['bookingData']->total_amount); ?></div>
-                        </div>
+                            <div class="payment-row">
+                                <div>Room Charges for Complete Stay</div>
+                                <div>LKR <?php echo htmlspecialchars($data['bookingData']->total_amount); ?></div>
+                            </div>
 
-                        <div class="payment-row">
-                            <div>Advance Payment Required (25%)</div>
-                            <div>LKR <?php echo htmlspecialchars($data['bookingData']->total_amount * 0.25); ?></div>
-                        </div>
+                            <div class="payment-row">
+                                <div>Taxes & Fees</div>
+                                <div>LKR 0.00</div>
+                            </div>
 
-                        <div class="payment-row">
-                            <div>Paid Advance Payment</div>
-                            <div>LKR
-                                <?php echo isset($data['bookingData']->paid_advance_payment_amount) ? htmlspecialchars($data['bookingData']->paid_advance_payment_amount) : htmlspecialchars($data['bookingData']->advance_payment_amount); ?>
+                            <div class="payment-row total">
+                                <div>Total Amount</div>
+                                <div>LKR <?php echo htmlspecialchars($data['bookingData']->total_amount); ?></div>
+                            </div>
+
+                            <div class="payment-row">
+                                <div>Advance Payment Required (25%)</div>
+                                <div>LKR <?php echo htmlspecialchars($data['bookingData']->total_amount * 0.25); ?></div>
+                            </div>
+
+                            <div class="payment-row">
+                                <div>Paid Advance Payment</div>
+                                <div>LKR
+                                    <?php echo isset($data['bookingData']->paid_advance_payment_amount) ? htmlspecialchars($data['bookingData']->paid_advance_payment_amount) : htmlspecialchars($data['bookingData']->advance_payment_amount); ?>
+                                </div>
+                            </div>
+
+                            <div class="payment-row">
+                                <div>Balance Due (at check-in)</div>
+                                <div>LKR <?php
+                                $paidAmount = isset($data['bookingData']->paid_advance_payment_amount) ?
+                                    $data['bookingData']->paid_advance_payment_amount :
+                                    $data['bookingData']->advance_payment_amount;
+                                echo htmlspecialchars($data['bookingData']->total_amount - $paidAmount);
+                                ?></div>
+                            </div>
+
+                            <div class="payment-row">
+                                <div><strong>Advance Payment Status</strong></div>
+                                <div class="status-paid">PAID</div>
                             </div>
                         </div>
+                    <?php endif; ?>
 
-                        <div class="payment-row">
-                            <div>Balance Due (at check-in)</div>
-                            <div>LKR <?php
-                            $paidAmount = isset($data['bookingData']->paid_advance_payment_amount) ?
-                                $data['bookingData']->paid_advance_payment_amount :
-                                $data['bookingData']->advance_payment_amount;
-                            echo htmlspecialchars($data['bookingData']->total_amount - $paidAmount);
-                            ?></div>
-                        </div>
+                </div>
 
-                        <div class="payment-row">
-                            <div><strong>Advance Payment Status</strong></div>
-                            <div class="status-paid">PAID</div>
-                        </div>
-                    </div>
-                <?php endif; ?>
+                <div class="qr-container">
+                    <h3>Your Booking QR Code</h3>
+
+                    <?php if (isset($data['qr_image']) && file_exists($data['qr_image'])): ?>
+                        <img src="<?php echo ROOT . "/" . htmlspecialchars($data['qr_image']); ?>" alt="Booking QR Code">
+                        <p>Please present this QR code at check-in</p>
+                    <?php else: ?>
+                        <p>QR code generation in progress. Please check your email for the booking confirmation.</p>
+                    <?php endif; ?>
+                </div>
 
             </div>
-
-            <div class="qr-container">
-                <h3>Your Booking QR Code</h3>
-
-                <?php if (isset($data['qr_image']) && file_exists($data['qr_image'])): ?>
-                    <img src="<?php echo ROOT . "/" . htmlspecialchars($data['qr_image']); ?>" alt="Booking QR Code">
-                    <p>Please present this QR code at check-in</p>
-                <?php else: ?>
-                    <p>QR code generation in progress. Please check your email for the booking confirmation.</p>
-                <?php endif; ?>
-            </div>
-
         </div>
 
     <?php else: ?>

@@ -620,11 +620,16 @@
 </head>
 
 <body>
+    <?php
+        // var_dump($data['hotelReviews']);
+        // exit();
+    ?>
     <header>
         <nav class="navbar">
 
             <div class="backToHome">
-                <a href="<?= ROOT ?>/traveler/ParticularDistrict/index/9">
+            <a href="javascript:history.back()">
+                <!-- <a href="<?= ROOT ?>/traveler/ParticularDistrict/index/9"> -->
                     <i class="fa-solid fa-arrow-left"></i>
                     <span>Back</span>
                 </a>
@@ -1067,10 +1072,11 @@
                                 </div>
                             </div>
                             <div class="summary-box">
-                                <i class="fas fa-moon"></i>
+                                <i class="fas fa-hourglass-half"></i>
                                 <div class="summary-info">
-                                    <span class="summary-label">Price per Night</span>
-                                    <span id="pricePerNightInCheckAvailability" class="summary-value"></span>
+                                    <span class="summary-label">Pending Reservations</span>
+                                    <!-- <span id="pricePerNightInCheckAvailability" class="summary-value"></span> -->
+                                    <span id="reservedRoomsCount" class="summary-value"></span>
                                 </div>
                             </div>
                         </div>
@@ -1433,7 +1439,7 @@
             }
 
             // Update modal content dynamically - Check Availability Section
-            document.getElementById('pricePerNightInCheckAvailability').innerText = roomTypes[index].pricePer_night + ' LKR';
+            // document.getElementById('pricePerNightInCheckAvailability').innerText = roomTypes[index].pricePer_night + ' LKR';
 
             // Show modal
             modal.style.display = 'flex';
@@ -1444,6 +1450,7 @@
                 document.getElementById('checkIn').value = "";
                 document.getElementById('checkOut').value = "";
                 document.querySelector('.summary-box .summary-value').innerText = "";
+                document.getElementById('reservedRoomsCount').innerText = "";
                 document.getElementById('totalNights').textContent = "0 Nights";
 
                 // Reset room count to default
@@ -1499,9 +1506,13 @@
         }
 
         function updateAvailabilityUI(data) {
+
             // Update available rooms count
             const availableRoomsElement = document.querySelector('.summary-box .summary-value');
             availableRoomsElement.textContent = `${data.available_rooms} of ${data.total_rooms}`;
+
+            const reservedRoomsElement = document.getElementById('reservedRoomsCount');
+            reservedRoomsElement.textContent = `${data.reserved_rooms} of ${data.total_rooms}`;
 
             // Update max available rooms for selection
             maxAvailableRooms = data.available_rooms;

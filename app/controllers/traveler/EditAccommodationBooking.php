@@ -53,7 +53,7 @@ class EditAccommodationBooking extends Controller
                 
             }
             else{
-                header("Location: " . ROOT . "/traveler/MyBookings?error=Accommodation_Booking_Updation_failed!&bookingId=" . $roomBookingId);
+                header("Location: " . ROOT . "/traveler/MyBookings?error=Accommodation_Booking_Updation_Failed!&bookingId=" . $roomBookingId);
                 exit();
             }
         } 

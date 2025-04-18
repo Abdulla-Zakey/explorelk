@@ -594,6 +594,7 @@
 </head>
 
 <body>
+    
     <header>
         <nav class="navbar">
             <div class="backToHome">
@@ -784,13 +785,12 @@
                                         Please provide a reason for cancellation
                                     </div>
 
+                                    <p>
+                                        Please let us know why you're cancelling this booking. 
+                                        This helps us improve our services.
+                                    </p>
                                     <textarea id="cancellationReason" name="cancellationReason" class="reason-textarea"
                                         placeholder="Please provide a reason for cancellation..."></textarea>
-
-                                    <p>
-                                        Please let us know why you're cancelling this booking. This helps us improve our
-                                        services.
-                                    </p>
 
                                 </div>
                                 <input type = "hidden" name = "refundAmount" value = "<?= htmlspecialchars($data['bookingData']->paid_advance_payment_amount) * ($refundPercentage / 100) ?>">

@@ -13,6 +13,11 @@
 
 </head>
 
+<?php
+    // var_dump($data['bookingData']);
+    // exit();
+?>
+
 <body>
     <header>
         <nav class="navbar">
@@ -78,8 +83,10 @@
                             </div>
 
                             <div class="note-box">
-                                <p><i class="fa-solid fa-circle-info"></i> Your booking has been approved by the
-                                    hotel. Please complete the advance payment to confirm your reservation.</p>
+                                <p>
+                                    <i class="fa-solid fa-circle-info"></i> 
+                                    Your booking has been approved by the hotel. Please complete the advance payment  to confirm your reservation.
+                                </p>
                             </div>
                         </div>
 
@@ -151,15 +158,18 @@
                                 </div>
                                 <div class="payment-row advance">
                                     <div>Required Advance Payment (25%)</div>
-                                    <div class="payment-amount"><span
-                                            id="advance-payment"><?= htmlspecialchars($data['bookingData']->advance_payment_amount) ?></span>
+                                    <div class="payment-amount">
+                                        <span id="advance-payment"><?= htmlspecialchars($data['bookingData']->advance_payment_amount) ?></span>
                                         LKR</div>
                                 </div>
                             </div>
 
                             <div class="warning-box">
-                                <p><i class="fa-solid fa-triangle-exclamation"></i> You must complete the advance
-                                    payment within 72 hours or your booking will be automatically cancelled.</p>
+                                <p>
+                                    <i class="fa-solid fa-triangle-exclamation"></i> 
+                                    You must complete the advance payment by<br>
+                                    <b><?= htmlspecialchars(date('F d, Y h:i A', strtotime($data['bookingData']->advance_payment_deadline))) ?></b>
+                                    or your booking will be automatically cancelled.</p>
                             </div>
                         </div>
                     </div>

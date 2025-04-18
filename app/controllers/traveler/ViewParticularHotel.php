@@ -13,6 +13,9 @@
         private $roomsModel;
         private $roomBookingsFinalModel;
         private $hotelGuestsModel;
+        private $hotelReviewsModel;
+
+        private $hotelCommissionsModel;
 
         public function __construct(){
             $this->travelerModel = new Traveler();
@@ -26,15 +29,17 @@
             $this->roomsModel = new RoomsModel();
             $this->roomBookingsFinalModel = new RoomBookingsFinalModel();
             $this->hotelGuestsModel  = new HotelGuestsModel();
+            $this->hotelReviewsModel = new HotelReviewsModel();
+            $this->hotelCommissionsModel = new HotelCommissionsModel();
         }
 
-        public function index(){
+        public function index($hotelId){
 
             $userID = $_SESSION['traveler_id'];
             $data['userData'] = $this->travelerModel->first(['traveler_Id' => $userID]);
-            $data['hotelData'] = $this->hotelModel->getDetailsByHotelId(18);
-            $data['hotelPics'] = $this->hotelPicsModel->getImagesByHotelId(18);
-            $data['hotelRoomTypes'] = $this->hotelRoomTypesModel->getHotelRoomTypesByHotelId(18);
+            $data['hotelData'] = $this->hotelModel->getDetailsByHotelId($hotelId);
+            $data['hotelPics'] = $this->hotelPicsModel->getImagesByHotelId($hotelId);
+            $data['hotelRoomTypes'] = $this->hotelRoomTypesModel->getHotelRoomTypesByHotelId($hotelId);
 
             $districtName = $data['hotelData']->district;
             $data['districtData'] = $this->topDistrictsModel->where(['district_name'=> $districtName]);
@@ -56,6 +61,23 @@
 
             $data['hotelRoomTypesNames'] = $tempRoomTypesNames;
             $data['hotelRoomTypeAmenityList'] = $tempRoomTypeAmenitiesNameAndClassList;
+
+            $data['hotelReviews'] = [];
+            $hotelReviews = $this->hotelReviewsModel->where(['hotel_Id'=> $hotelId]);
+
+            if ($hotelReviews) {
+                foreach($hotelReviews as $hotelReview) {
+                    $travelerId = $hotelReview->traveler_Id;
+                    $traveler = $this->travelerModel->first(['traveler_Id' => $travelerId]);
+
+                    $hotelReview->travelerUserName = $traveler->username;
+
+                    $travelerProfilePic = $traveler ? $traveler->profilePicture : null;
+                    $hotelReview->travelerProfilePicture = $travelerProfilePic;
+                    
+                    $data['hotelReviews'][] = $hotelReview;
+                }
+            }
 
             // $this->view('traveler/particularHotel', $data);
             $this->view('traveler/temp', $data);
@@ -90,6 +112,8 @@
                 $totalRooms = str_replace(' Room', '', $_POST['bookedRoomCount']);
                 $totalAmount = str_replace(' LKR', '', $_POST['totalAmount']);
                 $advancePayment = $totalAmount * 0.25; // 25% advance
+
+                $advancePaymentDeadline = date('Y-m-d 23:59:00', strtotime('+3 days'));
                 
                 $data = [
                     'traveler_Id' => $_SESSION['traveler_id'],
@@ -101,12 +125,23 @@
                     'special_requests' => $_POST['guestSpecialRequests'],
                     'total_amount' => $totalAmount,
                     'advance_payment_amount' => $advancePayment,
-                    'booking_status' => 'Pending'
+                    'booking_status' => 'Pending',
+                    'advance_payment_deadline' => $advancePaymentDeadline
                 ];
                 
                 $roomBookingId = $this->roomBookingsFinalModel->insert($data);
                 
                 if($roomBookingId) {
+
+                    $commissionAmount = ($totalAmount * 8) / 100;
+                    $commissionData = [
+                        'room_booking_Id' => $roomBookingId,
+                        'hotel_Id' => $_POST['hotelId'],
+                        'total_amount'=> $totalAmount,
+                        'commission_rate' => 8.00,
+                        'commission_amount' => $commissionAmount,
+                        'is_applicable_for_commision' => 1
+                    ];
 
                     $guestData = [
                         'room_booking_Id' => $roomBookingId,
@@ -116,18 +151,26 @@
                         'guest_mobile_num' => $_POST['guestMobileNum']
                     ];
 
+                    // show($commssionData);
+                    // exit();
+                    $commisionId = $this->hotelCommissionsModel->insert($commissionData);
+
                     $guestId = $this->hotelGuestsModel->insert($guestData);
 
+                    if(!$commisionId){
+                        redirect('traveler/ViewParticularHotel/index/'. $_POST['hotelId'] .'?error=commision_details_recording_failed');
+                    }
+
                     if($guestId){
-                        redirect('traveler/ViewParticularHotel?success=booking_request_submitted&booking_id=' . $roomBookingId);
+                        redirect('traveler/ViewParticularHotel/index/'. $_POST['hotelId'] .'?success=booking_request_submitted&booking_id=' . $roomBookingId);
                     }
                     else{
-                        redirect('traveler/ViewParticularHotel?error=guest_details_recording_failed');
+                        redirect('traveler/ViewParticularHotel/index/'. $_POST['hotelId'] .'?error=guest_details_recording_failed');
                     }
                     
                 } else {
                     // Handle error
-                    redirect('traveler/ViewParticularHotel?error=booking_request_failed');
+                    redirect('traveler/ViewParticularHotel/index/'. $_POST['hotelId'] .'?error=booking_request_failed');
                 }
             }
         }
