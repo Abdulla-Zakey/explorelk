@@ -615,21 +615,44 @@
             filter: blur(5px);
             pointer-events: none;
         }
+
+        .no-reviews-container {
+            text-align: center;
+            padding: 4rem 2rem;
+            background-color: #f9f9f9;
+            border-radius: 10px;
+            margin: 1rem 0;
+            box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .no-reviews-icon {
+            font-size: 10rem;
+            color: darkcyan;
+        }
+
+        .no-reviews-container h3 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            color: #555;
+        }
+
+        .no-reviews-container p {
+            color: #777;
+            max-width: 800px;
+            margin: 0 auto;
+            font-size: 1.5rem;
+        }
     </style>
 
 </head>
 
 <body>
-    <?php
-        // var_dump($data['hotelReviews']);
-        // exit();
-    ?>
+    
     <header>
         <nav class="navbar">
 
             <div class="backToHome">
-            <a href="javascript:history.back()">
-                <!-- <a href="<?= ROOT ?>/traveler/ParticularDistrict/index/9"> -->
+                <a href="javascript:history.back()">
                     <i class="fa-solid fa-arrow-left"></i>
                     <span>Back</span>
                 </a>
@@ -821,186 +844,115 @@
             Guest Reviews
         </h1>
 
-        <div class="reviews-row">
-            <!-- Review 1 -->
-            <div class="review-card">
-                <p>
-                    Stayed at Delhousie Hotel before climbing Adam’s Peak.
-                    The mountain view is breathtaking, and rooms were clean and comfy.
-                    Friendly staff gave great hiking tips. Highly recommend for anyone visiting!
-                </p>
-                <div class="review-footer">
-                    <img src="<?= IMAGES ?>/Travelers/userProfilePics/img1.png" alt="Profile Picture" class="review-dp">
-                    <div class="user-info">
-                        <span class="username">Michel Johnson</span>
-                        <span class="posted-date">13 December 2024</span>
+        <?php
+            if(!empty($data['hotelReviews'])){
+                $i = 1;
+                foreach($data['hotelReviews'] as $review) {
+                    if($i > 4){
+                        break;
+                    }
+                    if($i % 2 != 0){
+                        echo '<div class="reviews-row">';
+                    }
+                    
+                    echo
+                        '<div class="review-card">
+                            <p>
+                                '. $review->review_text .'
+                            </p>
+                            <div class="review-footer">
+                                <img src="' . 
+                                    (!empty($review->travelerProfilePicture) 
+                                        ? IMAGES . '/Travelers/userProfilePics/' . $review->travelerProfilePicture 
+                                        : IMAGES . '/Travelers/viewProfile/defaultUserIcon.png'
+                                    ) . '" alt="Traveler Profile Picture" class="review-dp">
+                                        
+                                <div class="user-info">
+                                    <span class="username">
+                                        '. $review->travelerUserName . '
+                                    </span>
+                                    <span class="posted-date">
+                                        '. htmlspecialchars(date('F d, Y', strtotime($review->created_at))) .'
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                            
+                        ';
+
+                    if($i % 2 == 0){
+                        echo '</div>';
+                    }
+
+                    $i++;
+                }
+
+                // If the last review didn't close the row, close it here
+                if (($i - 1) % 2 != 0) {
+                    echo '</div>';
+                }
+
+                if(count($data['hotelReviews']) > 4){
+                    echo 
+                        '<button id="loadMore" class="loadMore-Btn">
+                            See all reviews
+                        </button>
+                        ';
+                }
+                    
+            }
+            else {
+                // Empty state when no reviews are available
+                echo '
+                    <div class="no-reviews-container">
+                        <i class="fa-regular fa-comment-dots no-reviews-icon"></i>
+                        <h3>No Reviews Yet</h3>
+                        <p>This hotel doesn\'t have any reviews at the moment. Be the first to share your experience after your stay!</p>
                     </div>
-                </div>
-            </div>
-
-            <!-- Review 2 -->
-            <div class="review-card">
-                <p>
-                    Delhousie Hotel is great for Adam’s Peak visitors. The room was basic but met needs.
-                    Staff was polite, though service was sometimes slow.
-                    It’s a decent choice for a convenient, no-frills stay before the hike.
-                </p>
-                <div class="review-footer">
-                    <img src="<?= IMAGES ?>/Travelers/userProfilePics/img2.png" alt="Profile Picture" class="review-dp">
-                    <div class="user-info">
-                        <span class="username">Lara Brown</span>
-                        <span class="posted-date">19 September 2024</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="reviews-row">
-            <!-- Review 1 -->
-            <div class="review-card">
-                <p>
-                    Delhousie Hotel is in the perfect spot for those planning to climb Adam's Peak.
-                    The early breakfast and proximity to the trailhead made everything so convenient.
-                    The room was basic but had everything we needed after a long day. Will definitely stay here again!
-                </p>
-                <div class="review-footer">
-                    <img src="<?= IMAGES ?>/Travelers/userProfilePics/img4.jpg" alt="Profile Picture" class="review-dp">
-                    <div class="user-info">
-                        <span class="username">Ammy Jackson</span>
-                        <span class="posted-date">06 July 2024</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Review 2 -->
-            <div class="review-card">
-                <p>
-                    I stayed at Delhousie Hotel for its convenient location near Adam’s Peak, which was a plus.
-                    However, the room felt a bit outdated, and the cleanliness could have been improved. The staff was
-                    helpful, but the service was a bit slow.
-                    It’s an okay choice if you're just looking for a place to crash before the hike.
-
-                </p>
-                <div class="review-footer">
-                    <img src="<?= IMAGES ?>/Travelers/userProfilePics/img5.jpg" alt="Profile Picture" class="review-dp">
-                    <div class="user-info">
-                        <span class="username">Emma Watson</span>
-                        <span class="posted-date">08 June 2024</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <button id="loadMore" class="loadMore-Btn">
-            See all reviews
-        </button>
+                ';
+            }
+            
+        ?>
 
     </section>
 
-    <div class="slider-wrapper" style="display: none;" id="reviewCarousal">
+    <?php
+        if(!empty($data['hotelReviews']) && count($data['hotelReviews']) > 4){
+            $i = 1;
+            echo 
+                '<div class="slider-wrapper" style="display: none;" id="reviewCarousal">
+                    <div class="slider">';
+                    foreach($data['hotelReviews'] as $review) {
+                        echo 
+                            '<div class="reviewSlide" id="reviewSlide'. $i .'">
+                                <i class="fa-solid fa-rectangle-xmark close-carousel-btn" id="closeCarousal"></i>
+                                <div class="profilePic">
+                                    <img src="' . 
+                                    (!empty($review->travelerProfilePicture) 
+                                        ? IMAGES . '/Travelers/userProfilePics/' . $review->travelerProfilePicture 
+                                        : IMAGES . '/Travelers/viewProfile/defaultUserIcon.png'
+                                    ) . '" alt="Traveler Profile Picture">
+                                </div>
 
-
-        <div class="slider">
-
-            <div class="reviewSlide" id="reviewSlide1">
-
-                <i class="fa-solid fa-rectangle-xmark" id="closeCarousal"></i>
-
-                <div class="profilePic">
-                    <img src="<?= IMAGES ?>/Travelers/userProfilePics/img1.png">
+                                <div class="username">
+                                    '. $review->travelerUserName .'
+                                </div>
+                                
+                                <div class="review">
+                                    '. $review->review_text .'
+                                </div>
+                            </div>
+                            ';
+                        $i++;
+                    }
+                echo 
+                    '</div>
                 </div>
-
-                <div class="username">
-                    Michel Johnson
-                </div>
-
-                <div class="review">
-                    Stayed at Delhousie Hotel before climbing Adam’s Peak.
-                    The mountain view is breathtaking, and rooms were clean and comfy.
-                    Friendly staff gave great hiking tips. Highly recommend for anyone visiting!
-                </div>
-            </div>
-
-            <div class="reviewSlide" id="reviewSlide2">
-
-                <i class="fa-solid fa-rectangle-xmark" id="closeCarousal"></i>
-
-                <div class="profilePic">
-                    <img src="<?= IMAGES ?>/Travelers/userProfilePics/img2.png">
-                </div>
-
-                <div class="username">
-                    Lara Brown
-                </div>
-
-                <div class="review">
-                    Delhousie Hotel is great for Adam’s Peak visitors. The room was basic but met needs.
-                    Staff was polite, though service was sometimes slow.
-                    It’s a decent choice for a convenient, no-frills stay before the hike.
-                </div>
-            </div>
-
-            <div class="reviewSlide" id="reviewSlide3">
-
-                <i class="fa-solid fa-rectangle-xmark" id="closeCarousal"></i>
-
-                <div class="profilePic">
-                    <img src="<?= IMAGES ?>/Travelers/userProfilePics/img4.jpg">
-                </div>
-
-                <div class="username">
-                    Ammy Jackson
-                </div>
-
-                <div class="review">
-                    Delhousie Hotel is in the perfect spot for those planning to climb Adam's Peak.
-                    The early breakfast and proximity to the trailhead made everything so convenient.
-                    The room was basic but had everything we needed after a long day. Will definitely stay here again!
-                </div>
-            </div>
-
-            <div class="reviewSlide" id="reviewSlide4">
-
-                <i class="fa-solid fa-rectangle-xmark" id="closeCarousal"></i>
-
-                <div class="profilePic">
-                    <img src="<?= IMAGES ?>/Travelers/userProfilePics/img3.png">
-                </div>
-
-                <div class="username">
-                    Alexandra Green
-                </div>
-
-                <div class="review">
-                    I had a wonderful experience at Delhousie Hotel. The staff were very helpful,
-                    and the views from the hotel were stunning. The rooms were simple but comfortable.
-                    It’s a great budget-friendly option for travelers looking to explore Adam’s Peak.
-                </div>
-            </div>
-
-            <div class="reviewSlide" id="reviewSlide5">
-
-                <i class="fa-solid fa-rectangle-xmark" id="closeCarousal"></i>
-
-                <div class="profilePic">
-                    <img src="<?= IMAGES ?>/Travelers/userProfilePics/img5.jpg">
-                </div>
-
-                <div class="username">
-                    Emma Watson
-                </div>
-
-                <div class="review">
-                    I stayed at Delhousie Hotel for its convenient location near Adam’s Peak, which was a plus.
-                    However, the room felt a bit outdated, and the cleanliness could have been improved. The staff
-                    was helpful, but the service was a bit slow.
-                    It’s an okay choice if you're just looking for a place to crash before the hike.
-                </div>
-            </div>
-
-        </div>
-
-    </div>
+            ';
+                        
+                
+        }
+    ?>
 
     <!--Room type details popup-->
     <div class="custom-modal" id="viewDetailsModal">
@@ -1742,7 +1694,7 @@
         const body = document.body;
         const slider = document.querySelector('.slider');
         const reviews = document.querySelectorAll('.reviewSlide');
-        const closeCarousal = document.getElementById('closeCarousal');
+        const closeCarousalBtns = document.querySelectorAll('.close-carousel-btn');
 
         let currentIndex = 0;
         const showReviews = () => {
@@ -1853,8 +1805,10 @@
 
         addNavigationButtons();
 
-        closeCarousal.addEventListener('click', () => {
-            hideReviews();
+        closeCarousalBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                hideReviews();
+            });
         });
 
 

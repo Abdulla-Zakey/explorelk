@@ -79,8 +79,8 @@
                 }
             }
 
-            // $this->view('traveler/particularHotel', $data);
-            $this->view('traveler/temp', $data);
+            $this->view('traveler/particularHotel', $data);
+            // $this->view('traveler/temp', $data);
 
         }
 
