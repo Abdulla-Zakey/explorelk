@@ -646,17 +646,13 @@
 
 </head>
 
-<>
-    <?php
-        // var_dump(count($data['hotelReviews']));
-        // exit();
-    ?>
+<body>
+    
     <header>
         <nav class="navbar">
 
             <div class="backToHome">
-            <a href="javascript:history.back()">
-                <!-- <a href="<?= ROOT ?>/traveler/ParticularDistrict/index/9"> -->
+                <a href="javascript:history.back()">
                     <i class="fa-solid fa-arrow-left"></i>
                     <span>Back</span>
                 </a>
