@@ -1,13 +1,10 @@
 <?php
 class viewAccommodationBooking extends Controller
 {
-
     private $roomBookingFinalModel;
     private $hotelModel;
     private $hotelRoomTypesModel;
-
     private $commonRoomTypesModel;
-
     private $hotelGuestModel;
 
     public function __construct()

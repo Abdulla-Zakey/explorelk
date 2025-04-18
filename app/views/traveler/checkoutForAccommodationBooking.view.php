@@ -31,7 +31,7 @@ try {
                     "currency" => "lkr",
                     "unit_amount" => $total_amount,
                     "product_data" => [
-                        "name" => "Pay Accommodation Booking Advance Payment",
+                        "name" => "Pay Advance Payment for Your Booking",
                         "description" => $_SESSION['checkout_data']['hotelData']->hotelName . " | " . $_SESSION['checkout_data']['bookingData']->total_rooms . " " . $_SESSION['checkout_data']['bookedRoomTypeDetails']->roomTypeName
                     ]
                 ]

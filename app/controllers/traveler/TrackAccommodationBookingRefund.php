@@ -56,7 +56,7 @@
             $refundBankAccountDetails = $this->roomBookingRefundBankDetailsModel->first(['traveler_Id' => $_SESSION['traveler_id']]);
 
             $bookingcancellationDetails = $this->roomBookingCancellationModel->first(['room_booking_Id' => $roomBookingId]);
-
+            
             $refundDetails = $this->roomBookingRefundsModel->first(['cancellation_Id' => $bookingcancellationDetails->cancellation_Id]);
 
             $data['bookingData'] = $booking;

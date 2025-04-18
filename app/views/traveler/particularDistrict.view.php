@@ -81,14 +81,16 @@
         <h2>Places to Stay</h2>
         <div class="imageContainer">
             <div class="leftImg">
-                <a href = "<?= ROOT ?>/traveler/ViewParticularHotel">
+                <a href = "<?= ROOT ?>/traveler/ViewParticularHotel/index/18">
                     <img src="<?= IMAGES ?>/travelers/topdistricts/nuwaraEliya/hotels/araliya green hills.jpg">
                      <p>Araliya Green Hills Hotel</p>
                 </a>
             </div>
             <div class="midImg">
-                <img src="<?= IMAGES ?>/travelers/topdistricts/nuwaraEliya/hotels/GrandHotelNuwaraEliya.jpg">
-                <p>The Grand Hotel - Heritage Grand</p>
+                <a href = "<?= ROOT ?>/traveler/ViewParticularHotel/index/19">
+                    <img src="<?= IMAGES ?>/travelers/topdistricts/nuwaraEliya/hotels/GrandHotelNuwaraEliya.jpg">
+                    <p>The Grand Hotel - Heritage Grand</p>
+                </a>
             </div>
             <div class="rightImg">
                 <img src="<?= IMAGES ?>/travelers/topdistricts/nuwaraEliya/hotels/the golden ridge hotel.jpg">

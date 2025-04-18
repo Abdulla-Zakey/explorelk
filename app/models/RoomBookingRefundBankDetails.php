@@ -9,9 +9,9 @@
         protected $allowedColumns = [
             'bank_detail_Id',
             'traveler_Id',
-            'account_number',
+            'traveler_accountNum',
             'account_holder_name',
-            'bank_name',
-            'bank_branch'
+            'traveler_bankName',
+            'traveler_bankBranch'
         ];
     }

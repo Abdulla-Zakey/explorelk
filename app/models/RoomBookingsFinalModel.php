@@ -22,8 +22,8 @@ class RoomBookingsFinalModel {
         'path_to_payment_confirmation_QR',
         'booking_status',
         'requested_date',
-        'accepted_date',
-        'advance_payment_deadline'
+        'advance_payment_deadline',
+        'is_archived'
     ];
 
     public function getRoomBookingByTravelerId($traveler_id){
