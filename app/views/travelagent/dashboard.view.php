@@ -6,7 +6,7 @@
 <head>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'poppins';
             margin: 40;
             padding: 20;
             background-color: #FFFFFF;

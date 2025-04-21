@@ -183,7 +183,7 @@
                 <!-- Global Error Display -->
                 <?php if(!empty($errors['registration'])):?>
                     <div class="error" style="text-align: center; margin-bottom: 15px;">
-                        <?=$errors['registration']?>
+                        <?= $errors['registration'] ?>
                     </div>
                 <?php endif;?>
 
@@ -291,6 +291,7 @@
 
                 <!-- Step 3 -->
                 <div class="form-step">
+
                     <div class="headAndLogo">
                         <div class="logo-container">
                             <img alt="ExploreLK logo" src="<?=ROOT?>/assets/images/serviceProviders/logob.png" class="logo"/>
@@ -336,7 +337,7 @@
 
                 <!-- Navigation Buttons -->
                 <div class="buttons">
-                    <a href = "<?= ROOT ?>/traveler/Home" style = "text-decoration: none;">
+                    <a href = "<?= ROOT ?>" style = "text-decoration: none;">
                         <button type="button" id="backToHomeBtn" >Back</button>
                     </a>
                     <button type="button" id="prevBtn" onclick="changeStep(-1)">Previous</button>

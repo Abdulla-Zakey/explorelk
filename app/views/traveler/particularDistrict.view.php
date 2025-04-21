@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap">
     <link rel="stylesheet" href="<?= ROOT ?>/assets/css/Traveler/navbar.css">
-    <link rel="stylesheet" href="<?= ROOT ?>/assets/css/Traveler/nuwaraEliya.css">
+    <link rel="stylesheet" href="<?= ROOT ?>/assets/css/Traveler/viewParticularDistrict.css">
     <link rel="icon" href="<?= ROOT ?>/assets/images/logos/logoBlack.svg">
     <title>ExploreLK | About <?= htmlspecialchars($data['district']->district_name) ?></title>
     <script src="https://kit.fontawesome.com/f35c1c7a11.js" crossorigin="anonymous"></script>
@@ -81,14 +81,16 @@
         <h2>Places to Stay</h2>
         <div class="imageContainer">
             <div class="leftImg">
-                <a href = "<?= ROOT ?>/traveler/ViewParticularHotel">
+                <a href = "<?= ROOT ?>/traveler/ViewParticularHotel/index/18">
                     <img src="<?= IMAGES ?>/travelers/topdistricts/nuwaraEliya/hotels/araliya green hills.jpg">
                      <p>Araliya Green Hills Hotel</p>
                 </a>
             </div>
             <div class="midImg">
-                <img src="<?= IMAGES ?>/travelers/topdistricts/nuwaraEliya/hotels/GrandHotelNuwaraEliya.jpg">
-                <p>The Grand Hotel - Heritage Grand</p>
+                <a href = "<?= ROOT ?>/traveler/ViewParticularHotel/index/19">
+                    <img src="<?= IMAGES ?>/travelers/topdistricts/nuwaraEliya/hotels/GrandHotelNuwaraEliya.jpg">
+                    <p>The Grand Hotel - Heritage Grand</p>
+                </a>
             </div>
             <div class="rightImg">
                 <img src="<?= IMAGES ?>/travelers/topdistricts/nuwaraEliya/hotels/the golden ridge hotel.jpg">

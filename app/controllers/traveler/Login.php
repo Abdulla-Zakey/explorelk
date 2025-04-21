@@ -5,6 +5,10 @@ class Login extends Controller
     public function index()
     {
 
+        header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0"); /*To prevent accessing the logged in prevelages, while logged out, by preventing caching the user credentials, */
+        header("Cache-Control: post-check=0, pre-check=0", false);
+        header("Pragma: no-cache");
+
         // Check if the user is already logged in
         if (isset($_SESSION['traveler_id'])) {
             // $this->view('traveler/registeredTravelerHome');
@@ -148,7 +152,7 @@ class Login extends Controller
         }
 
         // Redirect to login page
-        header("Location: " . ROOT . "/traveler/Home");
+        header("Location: " . ROOT . "/Home");
         exit();
     }
 

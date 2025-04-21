@@ -47,6 +47,12 @@
                     <?php endif; ?>
 
                     Email Address
+                    <?php if(isset($error['email'])): ?>
+                        <br>
+                        <span class="error-message">
+                                <?= isset($error['email']) ? "*" . $error['email'] : ''; ?>
+                        </span>
+                    <?php endif; ?>
                     <br>
                     <div class = "input-container">
                         <input type="email" name = "adminEmail" required>
@@ -55,7 +61,14 @@
                     
                     
                     Password
+                    <?php if(isset($error['password'])): ?>
+                        <br>    
+                        <span class="error-message">
+                                <?= isset($error['password']) ? "*" . $error['password'] : ''; ?>
+                        </span>
+                    <?php endif; ?>
                     <br>
+                    
                     <div class = "input-container">
                         <input type="password" name = "adminPassword" required>
                         <i class="fa-solid fa-lock"></i>

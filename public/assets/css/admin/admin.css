@@ -1229,3 +1229,168 @@ strong {
 .cancel-button:hover {
     background-color: rgb(94, 1, 1);
 }
+
+/* error message displaying */
+.error-message{
+    color: red;
+    font-size: 13px;
+}
+
+/* Users page css */
+/* Search bar */
+.users {
+
+}
+.users .search-bar {
+    margin-bottom: 1.25rem;
+    width: 100%;
+}
+
+.users .search-input {
+    padding: 0.5rem;
+    width: 80%;
+    margin-right: 5%;
+    /* max-width: 30rem; */
+    border: 1px solid #ddd;
+    border-radius: 0.25rem;
+    margin-right: 0.625rem;
+}
+
+.users .search-btn {
+    padding: 0.5rem 1rem;
+    width: 15%;
+    background-color: #002D40;
+    color: white;
+    border: none;
+    border-radius: 0.25rem;
+    cursor: pointer;
+}
+
+/* Filter buttons */
+.users .filter-buttons {
+    margin: 1.25rem 0;
+    display: flex;
+    gap: 0.625rem;
+    flex-wrap: wrap;
+}
+
+.users .filter-btn {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    font-family: 'Poppins', sans-serif;
+    background-color: #f0f0f0;
+    transition: all 0.3s ease;
+}
+
+.users .filter-btn.active {
+    background-color: #002D40;
+    color: white;
+}
+
+.users .filter-btn:hover:not(.active) {
+    background-color: #e0e0e0;
+}
+
+/* Table styles */
+.users .booking-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin-top: 1.25rem;
+    border-radius: 0.5rem;
+    overflow: hidden;
+}
+
+.users .booking-table th,
+.users .booking-table td {
+    padding: 0.75rem;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.users .booking-table th {
+    background-color: #f5f5f5;
+    font-weight: 500;
+}
+
+.users .booking-table tr:last-child td {
+    border-bottom: none;
+}
+
+/* First cell of the first row */
+.users .booking-table thead tr:first-child th:first-child {
+    border-top-left-radius: 0.5rem;
+}
+
+/* Last cell of the first row */
+.users .booking-table thead tr:first-child th:last-child {
+    border-top-right-radius: 0.5rem;
+}
+
+/* First cell of the last row */
+.users .booking-table tbody tr:last-child td:first-child {
+    border-bottom-left-radius: 0.5rem;
+}
+
+/* Last cell of the last row */
+.users .booking-table tbody tr:last-child td:last-child {
+    border-bottom-right-radius: 0.5rem;
+}
+
+/* Action buttons */
+.users .detail-button {
+    padding: 0.375rem 0.75rem;
+    border: none;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    margin-right: 0.3125rem;
+    color: white;
+    font-size: 0.875rem;
+}
+
+.users .detail-button.view {
+    background-color: #002D40;
+}
+
+.users .detail-button.disable {
+    background-color: #dc3545;
+}
+
+.users .detail-button.enable {
+    background-color: #28a745;
+}
+
+.users .fa-user-circle {
+    font-size: 1.5rem;
+    color: #666;
+}
+
+/* Responsive design */
+@media screen and (max-width: 768px) {
+    .users .filter-buttons {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .users .filter-btn {
+        width: 100%;
+    }
+
+    .users .booking-table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+
+    .users .search-bar {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .users .search-btn {
+        align-self: flex-start;
+    }
+}

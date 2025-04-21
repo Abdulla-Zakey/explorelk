@@ -1,0 +1,317 @@
+html {
+    font-size: 10px;
+}
+
+body {
+    margin: 0;
+    font-family: 'poppins';
+    overflow-x: hidden;
+    background-color: #f8f9fa;
+}
+
+
+.main-container {
+    width: 85%;
+    margin: 12.5% 7.5% 0% 7.5%;
+}
+
+.profilePicAndDetails-container {
+    display: flex;
+    width: 100%;
+    margin-bottom: 3.5%;
+}
+
+.guideProfilePic-container {
+    width: 25%;
+}
+
+.guideProfilePic-container img {
+    width: 100%;
+    border: none;
+    border-radius: 1rem;
+}
+
+
+.profileDetails-container {
+    width: 72.5%;
+    margin-left: 2.5%;
+}
+
+.guideName {
+    font-size: 4.8rem;
+    font-weight: 700;
+}
+
+.guideBio {
+    color: #333;
+    font-size: 1.6rem;
+    text-align: justify;
+    line-height: 1.8;
+}
+
+.basicInfo {
+    font-size: 1.5rem;
+    width: 100%;
+}
+
+.row {
+    display: flex;
+    width: 100%;
+    margin: 1rem 0 0.5rem 0;
+    padding: 1rem 0rem;
+    box-sizing: border-box;
+}
+
+.row div {
+    width: auto;
+    margin-right: 2.5rem;
+    padding: 1rem 1.5rem;
+    box-shadow: 0 0px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 1rem;
+    color: #333;
+    background-color: #fff;
+
+}
+
+.row i {
+    margin-right: 0.5rem;
+    /* color: #666; */
+    color: darkcyan;
+}
+
+.row .highlight {
+    font-weight: 500;
+}
+
+
+/* Below styles come under the .upcomingTours*/
+.upcomingTours {
+    width: 100%;
+    margin-bottom: 3.5%;
+}
+
+.subTopic {
+    font-size: 2.4rem;
+    font-weight: 700;
+}
+
+.imageContainer {
+    display: flex;
+    width: 100%;
+    margin-top: 2.5%;
+    padding: 0;
+}
+
+.leftImg,
+.midImg,
+.rightImg {
+    width: 32%;
+    height: 20%;
+}
+
+.leftImg {
+    margin-right: 2%;
+}
+
+.rightImg {
+    margin-left: 2%;
+}
+
+.leftImg img,
+.midImg img,
+.rightImg img,
+.imgOnLeft img,
+.imgOnRight img {
+    width: 100%;
+    border-radius: 1rem;
+}
+
+.leftImg p,
+.midImg p,
+.rightImg p {
+    text-align: center;
+    font-size: 1.5rem;
+}
+
+
+.imgOnLeft,
+.imgOnRight {
+    width: 48%;
+    height: 24%;
+}
+
+.imgOnLeft {
+    margin-right: 4%;
+}
+
+.imageContainer a {
+    color: black;
+    text-decoration: none;
+}
+
+.imageContainer a:hover {
+    cursor: pointer;
+}
+
+
+.btn {
+    width: 15%;
+    margin: 1% 0% 0% 85%;
+    padding: 1%;
+    box-sizing: border-box;
+    color: #FFFFFF;
+    background-color: darkcyan;
+    border: none;
+    border-radius: 1rem;
+    transition: transform 0.2s ease, background-color 0.2s ease;
+    font-family: 'poppins';
+    font-size: 1.4rem;
+}
+
+.btn:hover {
+    cursor: pointer;
+    box-shadow: 0px 0px 1rem rgba(0, 0, 0, 0.5);
+    background-color: #3DA4BF;
+    transform: scale(1.05);
+}
+
+/*User Reviews Section*/
+#guest-reviews {
+    margin: 0 auto;
+    width: 100%;
+    box-sizing: border-box;
+    padding-bottom: 5%;
+}
+
+#guest-reviews h1 {
+    text-align: left;
+    font-size: 2.4rem;
+    margin-bottom: 2rem;
+}
+
+.reviews-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1.5%;
+}
+
+.review-card {
+    position: relative;
+    width: 49%;
+    box-shadow: 0 0px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 1rem;
+    /* border: 0.25px solid #d3d3d3; */
+    padding: 1.5rem;
+    background-color: #fff;
+    box-sizing: border-box;
+}
+
+.review-card p {
+    font-size: 1.4rem;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+    height: 10rem;
+
+}
+
+.review-footer {
+    display: flex;
+    align-items: center;
+    margin-top: 1rem;
+}
+
+.review-dp {
+    width: 5rem;
+    height: 5rem;
+    border-radius: 50%;
+    margin-right: 1.2rem;
+}
+
+.user-info {
+    font-size: 1.4rem;
+}
+
+.username {
+    font-weight: bold;
+    display: block;
+}
+
+.posted-date {
+    font-size: 1.2rem;
+    color: #888;
+}
+
+.slider-wrapper{
+    position: relative;
+    max-width: 75rem;
+    margin: auto;
+}
+
+.slider{
+    display: flex;
+    aspect-ratio: 16/9;
+    overflow-x: scroll;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    box-shadow: 0px 0px 10px rgba(0,0,0,0.5);
+    border-radius: 1rem;
+    scrollbar-width: hidden;
+}
+
+/* Hide scrollbar on Webkit browsers (Chrome, Safari) */
+.slider::-webkit-scrollbar {
+    display: none;
+}
+
+/* Hide scrollbar on Firefox */
+.slider {
+    scrollbar-width: none; 
+}
+
+#closeCarousal {
+    color: lightcoral;
+    font-size: 2rem;
+    margin-left: 92.5%;
+    margin-top: 2.5%;
+    cursor: pointer;
+}
+
+
+.reviewSlide {
+    flex: 1 0 100%;
+    scroll-snap-align: start;
+    object-fit: cover;
+    max-width: 100%;
+    color: #f2f2f2;
+    background-color: #333;
+    overflow-y: hidden;
+}
+
+.profilePic {
+    width: 25%;
+    margin-top: 2.5%;
+    margin-left: 37.5%;
+    margin-bottom: 2.5%;
+    object-fit: cover;
+    border: black;
+}
+
+.profilePic img {
+    border-radius: 50%;
+    height: 100%;
+    width: 100%;
+}
+
+.username {
+    font-size: 1.6rem;
+    text-align: center;
+    font-weight: 750;
+}
+
+.review {
+    font-size: 1.4rem;
+    text-align: justify;
+    margin: 2.5% 7.5% 5% 7.5%;
+    padding-bottom: 2.5%;
+}

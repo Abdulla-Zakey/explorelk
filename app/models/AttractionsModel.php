@@ -20,4 +20,8 @@ class AttractionsModel {
             'attraction_name' => $attractionName
         ]);
     }
+
+    public function getByDistrict($district_Id){
+        return $this->where(['district_id' => $district_Id]);
+    }
 }

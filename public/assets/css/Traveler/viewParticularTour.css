@@ -50,7 +50,7 @@ body{
     text-align: justify;
 }
 
-.basic-info, .inclusionAndexclusion-container, .itinerary-conatiner, .warning{
+.basic-info, .inclusionAndexclusion-container, .itenaryAndAvailableDates-container, .warning{
     width: 100%;
     margin-top: 5rem;
     box-sizing: border-box;
@@ -58,15 +58,18 @@ body{
 }
 
 
-.basic-info, .inclusionAndexclusion-container{
+.basic-info, .itenaryAndAvailableDates-container, .inclusionAndexclusion-container{
     display: flex;
 }
 
-.basic-info, .inclusions, .exclusions, .itinerary-conatiner{
-    padding: 1.25%;
+
+
+.basic-info, .inclusions, .exclusions, .itinerary-conatiner, .availableDates, .linkToGuideProfile-container{
+    padding: 1.5rem 2rem;
     background-color: #fff;
     border: 1px solid #d3d3d3;
     border-radius: 1rem;
+    box-sizing: border-box;
 }
 
 .basic-info div{
@@ -97,7 +100,9 @@ i{
 
 /*this is comes under itinerary-conatiner*/
 .itinerary-conatiner{
+    width: 69%;
     margin-top: 2.5rem;
+    margin-right: 1%;
 }
 .topic{
     margin-bottom: 2.5rem;
@@ -134,6 +139,40 @@ i{
     font-size: 1.6rem;
     color: darkcyan;
 }
+
+/*This is comes under availableDates-container*/
+.availableDates-container{
+    display: block;
+    width: 29%;
+    margin-top: 2.5rem;
+    margin-left: 1%;
+}
+
+.dateIconHolder{
+    font-size: 1.6rem;
+    margin-top: 0.25rem;
+    color: darkcyan;
+}
+
+.availableDates input{
+    border: none;
+    padding: 0.35rem 1rem;
+    font-size: 1.5rem;
+    font-weight: 300;
+    font-family: 'poppins';
+    box-sizing: border-box;
+}
+
+.linkToGuideProfile-container{
+    margin-top: 2.5rem;
+    font-size: 1.5rem;
+}
+
+.linkToGuideProfile-container a{
+    text-decoration: none;
+    cursor: pointer;
+}
+
 
 /*This is comes under inclusionAndexclusion-container*/
 .inclusions, .exclusions{

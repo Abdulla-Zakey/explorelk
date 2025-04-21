@@ -34,7 +34,7 @@ class Signup extends Controller {
 
             // Validate input data
             $data['errors'] = $this->validateSignup($data);
-
+            
             // If no errors, proceed with registration
             if (empty($data['errors'])) {
                 try {
@@ -131,7 +131,7 @@ class Signup extends Controller {
         if (empty($data['yearStarted'])) {
             $errors['yearStarted'] = 'Please enter the year you started your business';
         } elseif (!is_numeric($data['yearStarted']) || 
-                  $data['yearStarted'] < 1900 || 
+                  $data['yearStarted'] < 1800 || 
                   $data['yearStarted'] > date('Y')) {
             $errors['yearStarted'] = 'Invalid year format';
         }
@@ -140,12 +140,14 @@ class Signup extends Controller {
     }
 
     private function registerServiceProvider($data) {
+        
         switch($data['servicetype']) {
             case 'accommodation':
 
                 $user = new Hotel;
                 
                 $insertData = [
+                    'hotelName' => $data['company_name'],
                     'serviceProviderName' => $data['name'],
                     'hotelEmail' => $data['email'],
                     'hotelPassword' => $data['password'],
@@ -153,7 +155,6 @@ class Signup extends Controller {
                     'hotelAddress' => $data['address'],
                     'district' => $data['district'],
                     'province' => $data['province'],
-                    'hotelName' => $data['company_name'],
                     'BRNum' => $data['BRNum'],
                     'yearStarted' => $data['yearStarted']
                 ];
@@ -162,9 +163,10 @@ class Signup extends Controller {
 
                 if ($isInserted) {
                     
-                    $newUser = $user->where(['hotelEmail' => $data['email']])[0];
+                    $newUser = $user->first(['hotelEmail' => $data['email']]);
                     if (!empty($newUser)) {
-                        redirect('traveler/login');
+                        redirect('traveler/Login');
+                        exit();
                     }
                     else {
                         throw new Exception('Could not retrieve inserted user');
@@ -177,6 +179,7 @@ class Signup extends Controller {
 
             case 'dining':
                 $user = new Restaurant(); // Create this model
+
                 $isInserted = $user->insert($data);
                 if ($isInserted) {
                     // Add session and redirect logic

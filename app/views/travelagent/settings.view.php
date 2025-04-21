@@ -14,7 +14,7 @@
             padding: 0;
         }
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'poppins';
             background-color: #f0f2f5;
             margin: 40;
             padding: 20;

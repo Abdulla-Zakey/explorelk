@@ -2,106 +2,166 @@
 
 class C_addTour extends Controller {
 
+    private $tourPackageModel;
+    private $tourPackageActivitiesModel;
+    private $tourPackageImagesModel;
+    private $tourPackageItineraryModel;
+    
+    public function __construct() {
+        $this->tourPackageModel = new TourPackages();
+        $this->tourPackageActivitiesModel = new TourPackageActivities();
+        $this->tourPackageImagesModel = new TourPackageImages();
+        $this->tourPackageItineraryModel = new TourPackageItinerary();
+    }
+
     public function index()
     {
-        $this->view('tourGuide/addTour');
-    }
-
-    public function add()
-{
-    // Collect POST data for the tour package
-    $data = [
-        'package_name' => $_POST['package-name'] ?? '',
-        'tour_location' => $_POST['tour-location'] ?? '',
-        'duration' => $_POST['duration'] ?? '',
-        'number_of_people' => $_POST['number-of-people'] ?? '',
-        'rate' => $_POST['rate'] ?? '',
-        'description' => $_POST['description'] ?? '',
-        'activity_name' => $_POST['activity-name'] ?? '',
-        'images' => $_FILES['images'] ?? [], // Handle file uploads
-    ];
-
-    // Validate the data
-    $errors = [];
-    if (empty($data['package_name'])) {
-        $errors['package_name'] = 'Tour package name is required';
-    }
-    if (empty($data['tour_location'])) {
-        $errors['tour_location'] = 'Tour location is required';
-    }
-    if (empty($data['duration'])) {
-        $errors['duration'] = 'Duration is required';
-    }
-    if (empty($data['number_of_people'])) {
-        $errors['number_of_people'] = 'Number of people is required';
-    }
-    if (empty($data['rate'])) {
-        $errors['rate'] = 'Rate is required';
-    }
-    if (empty($data['description'])) {
-        $errors['description'] = 'Description is required';
-    }
-    if (empty($data['activity_name'])) {
-        $errors['activity_name'] = 'Activity name is required';
-    }
-
-    // Validate file upload
-    if (empty($data['images']['name'][0])) {
-        $errors['images'] = 'At least one image is required';
-    } else {
-        // File upload logic
-        $uploadedImages = [];
-        $allowedTypes = ['image/jpeg', 'image/png', 'image/gif']; // Allowed image types
-        $uploadDir = '../public/assets/images/'; // Upload directory
-
-        foreach ($data['images']['tmp_name'] as $key => $tmp_name) {
-            $fileName = basename($data['images']['name'][$key]);
-            $fileTmpPath = $data['images']['tmp_name'][$key];
-            $fileType = $data['images']['type'][$key];
-            $fileExtension = pathinfo($fileName, PATHINFO_EXTENSION);
-
-            // Validate file type
-            if (!in_array($fileType, $allowedTypes)) {
-                $errors['images'] = 'Invalid image type. Only JPG, PNG, or GIF are allowed.';
-                break;
-            }
-
-            // Sanitize and create unique file name
-            $sanitizedFileName = uniqid('tour_image_', true) . '.' . $fileExtension;
-            $uploadPath = $uploadDir . $sanitizedFileName;
-
-            // Ensure directory exists
-            if (!file_exists($uploadDir)) {
-                mkdir($uploadDir, 0777, true);
-            }
-
-            // Move the uploaded file to the desired directory
-            if (move_uploaded_file($fileTmpPath, $uploadPath)) {
-                $uploadedImages[] = '/assets/images/' . $sanitizedFileName; // Save the relative path
-            } else {
-                $errors['images'] = 'File upload failed. Please try again.';
-                break;
-            }
+        // Check if user is logged in
+        if (!isset($_SESSION['guide_id'])) {
+            header("Location: " . ROOT . "/traveler/Login");
+            exit();
         }
 
-        if (!empty($uploadedImages)) {
-            // Add the uploaded image paths to the data
-            $data['images'] = implode(',', $uploadedImages);
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            // Process form submission
+            try {
+                // Extract and sanitize tour package data
+                $data = [
+                    'guide_id' => $_SESSION['guide_id'],
+                    'name' => htmlspecialchars($_POST['name']),
+                    'location' => htmlspecialchars($_POST['location']),
+                    'duration_days' => (int)$_POST['duration_days'],
+                    'group_size' => htmlspecialchars($_POST['group_size']),
+                    'package_price' => (float)$_POST['package_price'],
+                    'languages' => htmlspecialchars($_POST['languages']),
+                    'description' => htmlspecialchars($_POST['description']),
+                    'tags' => htmlspecialchars($_POST['tags']),
+                    'inclusions' => htmlspecialchars($_POST['inclusions']),
+                    'exclusions' => htmlspecialchars($_POST['exclusions']),
+                ];
+
+                // Insert tour package and get ID
+                $isInserted = $this->tourPackageModel->insert($data);
+                if (!$isInserted) {
+                    throw new Exception("Failed to insert tour package data");
+                }
+                
+                $insertedPackageId = $this->tourPackageModel->lastInsertId();
+
+                // Handle image uploads
+                $this->processImageUploads($insertedPackageId);
+                
+                // Process itinerary data
+                $this->processItineraryData($insertedPackageId);
+
+                // Redirect to success page
+                header("Location: " . ROOT . "/tourGuide/C_tourPackages");
+                exit();
+                
+            } catch (Exception $e) {
+                // Log the error and show error page
+                error_log("Error in tour package creation: " . $e->getMessage());
+                // Redirect to error page or show error message
+                header("Location: " . ROOT . "/tourGuide/C_addTour?error=1");
+                exit();
+            }
+        } else {
+            // Display the form
+            $this->view('tourGuide/addTour');
+        }        
+    }
+    
+    private function processImageUploads($packageId) {
+        if (!isset($_FILES['packageImages']) || empty($_FILES['packageImages']['name'][0])) {
+            return;
+        }
+        
+        // Define paths
+        $basePath = $_SERVER['DOCUMENT_ROOT'] . '/gitexplorelk/explorelk/public';
+        $relativePath = '/assets/images/tourGuide/tourPackagePics/package_id_' . $packageId . '/';
+        $uploadPath = $basePath . $relativePath;
+        
+        // Create directory if it doesn't exist
+        if (!file_exists($uploadPath)) {
+            mkdir($uploadPath, 0755, true);
+        }
+        
+        if (is_array($_FILES['packageImages']['name'])) {
+            for ($i = 0; $i < count($_FILES['packageImages']['name']); $i++) {
+                if ($_FILES['packageImages']['error'][$i] == 0) {
+                    // Generate unique filename
+                    $fileName = uniqid() . '_' . preg_replace('/[^A-Za-z0-9\-\.]/', '', $_FILES['packageImages']['name'][$i]);
+                    $destination = $uploadPath . $fileName;
+                    $dbPath = $relativePath . $fileName;
+                    
+                    if (move_uploaded_file($_FILES['packageImages']['tmp_name'][$i], $destination)) {
+                        $imageData = [
+                            'package_id' => $packageId,
+                            'image_path' => $dbPath, // Store relative path in database
+                        ];
+                        $this->tourPackageImagesModel->insert($imageData);
+                    }
+                }
+            }
         }
     }
-
-    if (!empty($errors)) {
-        // Pass errors to the view
-        $this->view('/tourGuide/addTour', ['errors' => $errors, 'data' => $data]);
-        return;
+    
+    private function processItineraryData($packageId) {
+        // Count the days from POST data
+        $dayCount = 0;
+        foreach ($_POST as $key => $value) {
+            if (preg_match('/^day(\d+)_activity/', $key)) {
+                $day = (int)preg_replace('/^day(\d+)_activity/', '$1', $key);
+                $dayCount = max($dayCount, $day);
+            }
+        }
+        
+        // Process each day in the itinerary
+        for ($day = 1; $day <= $dayCount; $day++) {
+            // Check if this day exists in the POST data
+            if (isset($_POST["day{$day}_activity"])) {
+                // Get all activities for this day
+                $activities = $_POST["day{$day}_activity"];
+                $descriptions = isset($_POST["day{$day}_description"]) ? $_POST["day{$day}_description"] : [];
+                $times = isset($_POST["day{$day}_time"]) ? $_POST["day{$day}_time"] : [];
+                
+                // Ensure arrays have same length
+                $count = count($activities);
+                if (count($descriptions) < $count) {
+                    $descriptions = array_pad($descriptions, $count, '');
+                }
+                if (count($times) < $count) {
+                    $times = array_pad($times, $count, '');
+                }
+                
+                // Insert day itinerary
+                $itineraryData = [
+                    'package_id' => $packageId,
+                    'day_number' => $day,
+                ];
+                
+                $this->tourPackageItineraryModel->insert($itineraryData);
+                $dayId = $this->tourPackageItineraryModel->lastInsertId();
+                
+                // Process each activity for this day
+                for ($i = 0; $i < $count; $i++) {
+                    $activity = trim($activities[$i]);
+                    
+                    // Skip empty activities
+                    if (empty($activity)) {
+                        continue;
+                    }
+                    
+                    $activityData = [
+                        'day_id' => $dayId,
+                        'title' => htmlspecialchars($activity),
+                        'description' => htmlspecialchars(isset($descriptions[$i]) ? trim($descriptions[$i]) : ''),
+                        'activity_time' => htmlspecialchars(isset($times[$i]) ? trim($times[$i]) : ''),
+                    ];
+                    
+                    $this->tourPackageActivitiesModel->insert($activityData);
+                }
+            }
+        }
     }
-
-    // Save tour package data to the database
-    $tourPackageModel = $this->loadModel('TourPackageModel');
-    $tourPackageModel->save($data);
-
-    // Redirect to the tour package list or success page
-    redirect('tourGuide/C_tourPackages');
-}
-
 }

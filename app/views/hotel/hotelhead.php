@@ -1,4 +1,6 @@
-<html>
+
+<!DOCTYPE html>
+<html lang="en">
  <head>
    <style>
         body {
@@ -8,10 +10,10 @@
             background-color: #f8f8f8;
         }
         main {
-            position:absolute;
-            top: -200;
+            position:fixed;
+            top: 0;
             left: 250px;
-            height: 100vh;
+            height: auto;
             width: calc(100% - 250px);
         }
         .content {
@@ -20,7 +22,7 @@
         .image-container {
             display: flex;
             justify-content: center;
-            width: calc(100% - 3rem);
+        
             margin-left: 1.5rem;
             margin-right: 1.5rem;
             position: relative; /* Ensure relative positioning for the image container */
@@ -55,7 +57,8 @@
         <div class="image-container">
             <img alt="Hotel entrance with greenery and lights" src="<?=ROOT?>/assets/images/serviceProviders/hotelCover.jpg"/>
             <div class="title">
-                CINNAMON GRAND
+            <?= htmlspecialchars($data['hotelBasic']->hotelName ?? "Default Hotel") ?>
+
             </div>
         </div>
         <div class="date" id="current-date"></div>

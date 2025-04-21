@@ -1,0 +1,413 @@
+/* manageAttractions.css */
+body {
+    background-color: #f5f7fa;
+}
+/* Main Container Styles */
+.admin-container {
+    display: flex;
+    width: 100%;
+}
+
+.main-content {
+    flex-grow: 1;
+    padding: 2%;
+    margin-left: 20%;
+}
+
+/* Page Header */
+h1 {
+    margin-bottom: 2%;
+    font-size: 2em;
+}
+
+/* Content cards */
+.card {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.card h2 {
+    margin-bottom: 20px;
+    color: #2c3e50;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+}
+
+
+/* Action Panel */
+.action-panel {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2%;
+    width: 100%;
+}
+
+.filter-container {
+    display: flex;
+    align-items: center;
+    width: 50%;
+}
+
+.filter-container label {
+    margin-right: 2%;
+    font-weight: 500;
+}
+
+.filter-container select {
+    padding: 1%;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    width: 60%;
+    font-family: 'Poppins', sans-serif;
+}
+
+.add-attraction-btn {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 1% 2%;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    font-family: 'Poppins';
+    width: 20%;
+    justify-content: start;
+    font-weight: 500;
+}
+
+.add-attraction-btn i {
+    margin-right: 5%;
+}
+
+.add-attraction-btn:hover {
+    background-color: #45a049;
+}
+
+/* Attractions List - Used for both attractions and districts */
+.attractions-list {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2%;
+}
+
+.attraction-card {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    width: 49%;
+    margin-bottom: 2%;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.attraction-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.attraction-header {
+    padding: 2%;
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.attraction-header h3 {
+    margin: 0;
+    font-size: 1.2em;
+    color: #333;
+}
+
+.district-tag {
+    background-color: #e0f2f1;
+    color: #00796b;
+    padding: 0.5% 1.5%;
+    border-radius: 20px;
+    font-size: 0.8em;
+    font-weight: 500;
+}
+
+.attraction-preview {
+    display: flex;
+    padding: 2%;
+    height: 150px;
+}
+
+.preview-image {
+    width: 40%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 4px;
+}
+
+.attraction-details {
+    padding: 0 2%;
+    width: 60%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.description-preview {
+    color: #666;
+    font-size: 0.9em;
+    margin: 0;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+}
+
+.attraction-stats {
+    display: flex;
+    gap: 5%;
+    color: #888;
+    font-size: 0.8em;
+}
+
+.attraction-stats span {
+    display: flex;
+    align-items: center;
+}
+
+.attraction-stats i {
+    margin-right: 5%;
+}
+
+.attraction-actions {
+    display: flex;
+    padding: 2%;
+    background-color: #f8f9fa;
+    border-top: 1px solid #eee;
+}
+
+.action-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    border-radius: 4px;
+    padding: 1% 2%;
+    margin-right: 2%;
+    cursor: pointer;
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.9em;
+    text-decoration: none;
+}
+
+.view-btn {
+    background-color: #2196F3;
+    color: white;
+}
+
+.edit-btn {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.delete-btn {
+    background-color: #f44336;
+    color: white;
+}
+
+.action-btn i {
+    margin-right: 5%;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    margin-left: 20%;
+}
+
+.add-district-btn {
+    padding: 10px 15px;
+    background-color: #002D40;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.flash-message {
+    padding: 10px 15px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+}
+
+.flash-error {
+    background-color: #ffe6e6;
+    border: 1px solid #ff8080;
+    color: #ff0000;
+}
+
+.flash-success {
+    background-color: #e6ffe6;
+    border: 1px solid #80ff80;
+    color: #008000;
+}
+
+.search-box {
+    width: 100%;
+    max-width: 400px;
+    padding: 10px 15px;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-family: 'Poppins', sans-serif;
+}
+
+.toggle-buttons {
+    display: flex;
+    margin-bottom: 20px;
+}
+
+.toggle-btn {
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    background-color: #ccc;
+    font-weight: bold;
+    margin: 0 10px;
+    border-radius: 5px;
+}
+
+.toggle-btn.active {
+    background-color: #007bff;
+    color: white;
+}
+
+.content-section {
+    display: none;
+}
+
+/* No attractions message */
+.no-attractions {
+    width: 100%;
+    background-color: white;
+    border-radius: 8px;
+    padding: 3%;
+    text-align: center;
+    color: #666;
+}
+
+/* Modal Styles */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background-color: white;
+    border-radius: 8px;
+    padding: 3%;
+    width: 40%;
+    max-width: 500px;
+}
+
+.modal h2 {
+    margin-top: 0;
+    color: #333;
+}
+
+.warning {
+    color: #F44336;
+    font-weight: 500;
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 5%;
+}
+
+.cancel-btn {
+    background-color: #ccc;
+    color: #333;
+    border: none;
+    border-radius: 4px;
+    padding: 1.5% 3%;
+    margin-right: 2%;
+    cursor: pointer;
+    font-family: 'Poppins', sans-serif;
+}
+
+.delete-confirm-btn {
+    background-color: #F44336;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 1.5% 3%;
+    cursor: pointer;
+    font-family: 'Poppins', sans-serif;
+}
+
+.cancel-btn:hover { background-color: #bbb; }
+.delete-confirm-btn:hover { background-color: #D32F2F; }
+
+/* Responsive Styles */
+@media screen and (max-width: 992px) {
+    .attraction-card {
+        width: 100%;
+    }
+
+    .filter-container {
+        width: 60%;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .action-panel {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .filter-container {
+        width: 100%;
+        margin-bottom: 2%;
+    }
+
+    .filter-container select {
+        width: 70%;
+    }
+
+    .attraction-preview {
+        flex-direction: column;
+        height: auto;
+    }
+
+    .preview-image {
+        width: 100%;
+        height: 150px;
+        margin-bottom: 2%;
+    }
+
+    .attraction-details {
+        width: 100%;
+    }
+
+    .modal-content {
+        width: 80%;
+    }
+}

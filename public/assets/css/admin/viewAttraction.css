@@ -1,0 +1,114 @@
+.admin-container {
+    display: flex;
+    width: 100%;
+    min-height: 100vh;
+}
+
+/* Main content styles */
+.main-content {
+    flex-grow: 1;
+    padding: 2%;
+    margin-left: 20%;
+    margin-bottom: 2%;
+    width: 80%;
+}
+
+/* Page Header */
+h1 {
+    margin-bottom: 2%;
+    font-size: 2em;
+}
+
+.flexContainer{
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+}
+
+.infoText{
+    margin-right: 5%;
+    width: 50%;
+    text-align: justify;
+    font-size: 1em;
+    color: #333;
+}
+
+.mapHolder{
+    margin-right: 7.5%;
+    width: 30%;
+    border: 0.5px solid darkgray;
+}
+
+.mapHolder iframe{
+    width: 100%;
+    height: 100%;
+}
+
+.gallery-container{
+    padding: 2rem;
+    margin-top: 2.5%;
+
+}
+
+.slider-wrapper{
+    position: relative;
+    max-width: 48rem;
+    margin: auto;
+}
+
+.slider{
+    display: flex;
+    aspect-ratio: 16/9;
+    overflow-x: scroll;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    /* box-shadow: 0 1.5rem 3rem -0.75rem hsla(0, 0, 0, 0.25); */
+    box-shadow: 0px 0px 10px rgba(0,0,0,1);
+    border-radius: 0.5rem;
+    scrollbar-width: hidden;
+}
+
+/* Hide scrollbar on Webkit browsers (Chrome, Safari) */
+.slider::-webkit-scrollbar {
+    display: none;
+}
+
+/* Hide scrollbar on Firefox */
+.slider {
+    scrollbar-width: none; 
+}
+
+.slider img{
+    flex: 1 0 100%;
+    scroll-snap-align: start;
+    object-fit: cover;
+    max-width: 100%;
+}
+
+.thingsToDo{
+    justify-content: end;
+}
+
+.todo-container{
+    display: block;
+    font-size: 1em;
+}
+
+.todo-container i{
+    margin-right: 15px;
+}
+
+.activity-info {
+    display: flex;
+    align-items: center;
+}
+
+.activity-item{
+    display: block;
+    margin-bottom: 3%;
+}
+
+h4 {
+    font-weight: 500;
+    font-size: 1.1rem;
+}

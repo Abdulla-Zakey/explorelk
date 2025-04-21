@@ -2,65 +2,8 @@
     include_once APPROOT.'/views/hotel/nav.php';
     include_once APPROOT.'/views/hotel/hotelhead.php';
 ?>
-<main>
-    <div class="payment-container">
-        <h4>Payment Details Overview</h4>
-        
-        <!-- Payment Summary Cards -->
-        <div class="payment-summary">
-            <div class="summary-card">
-                <h3>Total Revenue</h3>
-                <p class="amount">LKR 250,000</p>
-            </div>
-            <div class="summary-card">
-                <h3>Pending Payments</h3>
-                <p class="amount">LKR 45,000</p>
-            </div>
-            <div class="summary-card">
-                <h3>Today's Earnings</h3>
-                <p class="amount">LKR 35,000</p>
-            </div>
-        </div>
-
-        <!-- Payment Details Table -->
-        <div class="payment-details">
-            <h3>Recent Payments</h3>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Booking ID</th>
-                        <th>Guest Name</th>
-                        <th>Room Number</th>
-                        <th>Amount</th>
-                        <th>Payment Date</th>
-                        <th>Status</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>#BK001</td>
-                        <td>John Doe</td>
-                        <td>101</td>
-                        <td>LKR 15,000</td>
-                        <td>2023-12-01</td>
-                        <td><span class="status-paid">Paid</span></td>
-                        <td><button onclick="viewDetails('#BK001')">View</button></td>
-                    </tr>
-                    <tr>
-                        <td>#BK002</td>
-                        <td>Jane Smith</td>
-                        <td>204</td>
-                        <td>LKR 25,000</td>
-                        <td>2023-12-02</td>
-                        <td><span class="status-pending">Pending</span></td>
-                        <td><button onclick="viewDetails('#BK002')">View</button></td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-
+<head>
+    <title>Payment Details</title>
     <style>
     .payment-container {
         padding: 20px;
@@ -153,6 +96,68 @@
         font-size: 24px;
     }
     </style>
+    </head>
+    
+<main>
+    <div class="payment-container">
+        <h4>Payment Details Overview</h4>
+        
+        <!-- Payment Summary Cards -->
+        <div class="payment-summary">
+            <div class="summary-card">
+                <h3>Total Revenue</h3>
+                <p class="amount">LKR 250,000</p>
+            </div>
+            <div class="summary-card">
+                <h3>Pending Payments</h3>
+                <p class="amount">LKR 45,000</p>
+            </div>
+            <div class="summary-card">
+                <h3>Today's Earnings</h3>
+                <p class="amount">LKR 35,000</p>
+            </div>
+        </div>
+
+        <!-- Payment Details Table -->
+        <div class="payment-details">
+            <h3>Recent Payments</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Booking ID</th>
+                        <th>Guest Name</th>
+                        <th>Room Number</th>
+                        <th>Amount</th>
+                        <th>Payment Date</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>#BK001</td>
+                        <td>John Doe</td>
+                        <td>101</td>
+                        <td>LKR 15,000</td>
+                        <td>2023-12-01</td>
+                        <td><span class="status-paid">Paid</span></td>
+                        <td><button onclick="viewDetails('#BK001')">View</button></td>
+                    </tr>
+                    <tr>
+                        <td>#BK002</td>
+                        <td>Jane Smith</td>
+                        <td>204</td>
+                        <td>LKR 25,000</td>
+                        <td>2023-12-02</td>
+                        <td><span class="status-pending">Pending</span></td>
+                        <td><button onclick="viewDetails('#BK002')">View</button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    
 
     <script>
     function viewDetails(bookingId) {

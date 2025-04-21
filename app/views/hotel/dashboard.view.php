@@ -5,9 +5,10 @@ include_once APPROOT . '/views/hotel/hotelhead.php';
 <html>
 
 <head>
+<title>Dashboard</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'poppins';
             margin: 40;
             padding: 20;
             background-color: #FFFFFF;
