@@ -1,6 +1,11 @@
-<?php 
-    $title = "EO - Pending Events";
-    include '../app/views/components/eonavbar.php';
+<?php
+$title = "EO - Pending Events";
+include '../app/views/components/eonavbar.php';
+
+// Generate CSRF token
+if (!isset($_SESSION['csrf_token'])) {
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+}
 ?>
 
 <!DOCTYPE html>
@@ -8,333 +13,281 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="<?= CSS ?>/Eventorganizer/eoevents.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="icon" href="<?= IMAGES ?>/logos/logoBlack.svg">
     <title><?= $title ?></title>
-</head>
-<body>
-
-<div class="my-events-container">
-    <!-- <div>
-        <h2 class="my-events-heading">My Events</h2>
-    </div> -->
-    <div>
-        <h2 class="my-events-heading">Pending Events for Admin approval</h2>
-    </div>
-    <hr>
-    <div class="my-events" id="events-list">
-        <!-- Event cards will be dynamically inserted here -->
-    </div>
-</div>
-
-
-       
-       
-  
-  <style>
-   
-/* Container for All Events */
-.my-events-container {
-    max-width: 1000px;
-    margin: 50px auto;
-    padding: 20px;
-    background-color: white;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-/* Heading */
-.my-events-heading {
-    font-size: 2em;
-    text-align: center;
-    color: #333;
-    margin-bottom: 20px;
-}
-
-/* Individual Event Card Styles */
-.my-events {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 20px;
-}
-
-
-/* Edit Mode Styles */
-[contenteditable="true"] {
-    background-color: #f9f9f9;
-    border: 1px solid #ccc;
-    padding: 5px;
-    border-radius: 4px;
-    outline: none;
-    transition: border-color 0.3s ease;
-}
-
-[contenteditable="true"]:focus {
-    border-color: #007bff;
-}
-
-/* Event Actions Buttons */
-.event-actions {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-button {
-    padding: 10px 20px;
-    font-size: 0.9em;
-    cursor: pointer;
-    border-radius: 4px;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-}
-
-button:hover {
-    transform: scale(1.05);
-}
-
-.edit-btn {
-    background-color: #007bff;
-    color: white;
-    border: none;
-}
-
-.save-btn {
-    background-color: #28a745;
-    color: white;
-    border: none;
-    display: inline-block;
-}
-
-.cancel-btn {
-    background-color: #dc3545;
-    color: white;
-    border: none;
-    display: inline-block;
-}
-
-.delete-btn {
-    background-color: #f44336;
-    color: white;
-    border: none;
-    display: inline-block;
-}
-
-/* Button Group for Edit/Save/Cancel */
-button:focus {
-    outline: none;
-}
-
-/* Container for the events */
-.my-events-container {
-            width: 80%;
-            margin: auto;
-            padding: 20px;
-            background-color: #f4f6f9; /* Light background to contrast with dark blue */
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        /* Heading Style */
-        .my-events-heading {
-            text-align: center;
-            font-size: 2.5em;
-            font-family: 'Roboto', sans-serif;
-            color: #002D40; /* Dark blue color for the heading */
-            margin-bottom: 20px;
-            text-transform: uppercase;
-        }
-
-        /* Individual Event Styling */
-        .my-event {
-            border: 1px solid #003C53; /* Slightly lighter dark blue for borders */
-            padding: 20px;
-            margin-bottom: 20px;
-            background-color: #ffffff;
-            border-radius: 8px;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        /* Hover Effect for Events */
-        .my-event:hover {
-            transform: scale(1.02);
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        }
-
-        /* Event Details Styling */
-        .event-details p {
-            font-size: 1.1em;
-            color: #003C53; /* Lighter dark blue text */
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f9;
+            color: #333;
             line-height: 1.6;
         }
-
-        /* Action Buttons Styling */
+        .container {
+            margin-left: 300px;
+            padding: 0 20px;
+        }
+        h1 {
+            color: #002D40;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .events-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        .event-card {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        .event-header {
+            background-color: #002D40;
+            color: #fff;
+            padding: 15px;
+        }
+        .event-body {
+            padding: 15px;
+        }
+        .event-detail {
+            margin-bottom: 10px;
+        }
         .event-actions {
-            margin-top: 20px;
+            background-color: #f0f0f0;
+            padding: 15px;
+            text-align: right;
+        }
+        .btn {
+            padding: 8px 12px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+        .btn-edit { background-color: #004D6D; color: white; }
+        .btn-delete { background-color: #dc3545; color: white; }
+        .btn-save { background-color: #28a745; color: white; }
+        .btn-cancel { background-color: #6c757d; color: white; }
+        input, textarea {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .edit-form-container {
+            padding: 15px;
+        }
+        .edit-form .event-detail {
+            margin-bottom: 15px;
+        }
+        .edit-form label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #002D40;
+        }
+        .edit-form input,
+        .edit-form textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-top: 5px;
+        }
+        .edit-form textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        .event-content {
+            display: block;
+        }
+        .message, .error {
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 4px;
             text-align: center;
         }
+        .message { background-color: #d4edda; color: #155724; }
+        .error { background-color: #f8d7da; color: #721c24; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Pending Events for Admin Approval</h1>
 
-        /* Button Style */
-        .event-actions button {
-            padding: 12px 24px;
-            margin-right: 10px;
-            background-color: #002D40; /* Primary dark blue */
-            color: white;
-            border: none;
-            cursor: pointer;
-            border-radius: 4px;
-            transition: background-color 0.3s ease;
+        <?php if (isset($_SESSION['message'])): ?>
+            <div class="message"><?php echo $_SESSION['message']; unset($_SESSION['message']); ?></div>
+        <?php endif; ?>
+        <?php if (isset($_SESSION['error'])): ?>
+            <div class="error"><?php echo $_SESSION['error']; unset($_SESSION['error']); ?></div>
+        <?php endif; ?>
+
+        <div class="events-grid" id="events-list">
+            <!-- Event cards will be dynamically inserted here -->
+        </div>
+    </div>
+
+    <script>
+        let eventsdata = <?php echo json_encode($eventsdata); ?>;
+
+        // Debugging: Log eventsdata
+        console.log('Events Data:', eventsdata);
+
+        function renderEvents() {
+            const eventsContainer = document.getElementById("events-list");
+            eventsContainer.innerHTML = '';
+
+            eventsdata.forEach(event => {
+                if (!event.event_Id) {
+                    console.error('Event missing event_Id:', event);
+                    return;
+                }
+
+                const eventCard = document.createElement("div");
+                eventCard.classList.add("event-card");
+                eventCard.id = `event-${event.event_Id}`;
+                eventCard.dataset.eventId = event.event_Id;
+
+                const eventContent = `
+                    <div class="event-header">
+                        <h3>${event.eventName}</h3>
+                    </div>
+                    <div class="event-content">
+                        <div class="event-body">
+                            <div class="event-detail"><i class="fas fa-layer-group"></i> Type: ${event.eventType || 'N/A'}</div>
+                            <div class="event-detail"><i class="fas fa-calendar"></i> Date: ${event.eventDate}</div>
+                            <div class="event-detail"><i class="fas fa-clock"></i> Time: ${event.eventStartTime} - ${event.eventEndTime}</div>
+                            <div class="event-detail"><i class="fas fa-map-marker-alt"></i> Location: ${event.eventLocation}</div>
+                            <div class="event-detail"><i class="fas fa-ticket-alt"></i> Tickets: ${event.ticketCount || 'N/A'} available at $${event.ticketPrice || 'N/A'} each</div>
+                            <div class="event-detail"><i class="fas fa-info-circle"></i> About: ${event.aboutEvent}</div>
+                            <div class="event-detail"><i class="fas fa-check-circle"></i> Status: ${event.eventStatus || 'Pending'}</div>
+                            ${event.eventWebBannerPath ? `<img src="${event.eventWebBannerPath}" alt="Event Image" style="width:100%;border-radius:8px;margin-top:10px;">` : ''}
+                        </div>
+                        <div class="event-actions">
+                            <button class="btn btn-edit" data-event-id="${event.event_Id}">Edit</button>
+                            <form method="post" action="http://localhost/gitexplorelk/explorelk/public/eventorganizer/Eoevents/delete_event" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete ${event.eventName}?');">
+                                <input type="hidden" name="id" value="${event.event_Id}">
+                                <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
+                                <button type="submit" class="btn btn-delete">Delete</button>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="edit-form-container" style="display: none;">
+                        <form method="post" action="http://localhost/gitexplorelk/explorelk/public/eventorganizer/Eoevents/updateEvent" class="edit-form">
+                            <input type="hidden" name="id" value="${event.event_Id}">
+                            <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
+                            <div class="event-detail">
+                                <label>Event Name:</label>
+                                <input type="text" name="eventName" value="${event.eventName}" required>
+                            </div>
+                            <div class="event-detail">
+                                <label>Event Type:</label>
+                                <input type="text" name="eventType" value="${event.eventType || ''}" required>
+                            </div>
+                            <div class="event-detail">
+                                <label>Date:</label>
+                                <input type="date" name="eventDate" value="${event.eventDate}" required>
+                            </div>
+                            <div class="event-detail">
+                                <label>Start Time:</label>
+                                <input type="time" name="eventStartTime" value="${event.eventStartTime}" required>
+                            </div>
+                            <div class="event-detail">
+                                <label>End Time:</label>
+                                <input type="time" name="eventEndTime" value="${event.eventEndTime}" required>
+                            </div>
+                            <div class="event-detail">
+                                <label>Location:</label>
+                                <input type="text" name="eventLocation" value="${event.eventLocation}" required>
+                            </div>
+                            <div class="event-detail">
+                                <label>Ticket Count:</label>
+                                <input type="number" name="ticketCount" value="${event.ticketCount || ''}">
+                            </div>
+                            <div class="event-detail">
+                                <label>Ticket Price:</label>
+                                <input type="number" step="0.01" name="ticketPrice" value="${event.ticketPrice || ''}">
+                            </div>
+                            <div class="event-detail">
+                                <label>About Event:</label>
+                                <textarea name="aboutEvent" required>${event.aboutEvent}</textarea>
+                            </div>
+                            <div class="event-actions">
+                                <button type="submit" class="btn btn-save">Save</button>
+                                <button type="button" class="btn btn-cancel" data-event-id="${event.event_Id}">Cancel</button>
+                            </div>
+                        </form>
+                    </div>
+                `;
+
+                eventCard.innerHTML = eventContent;
+                eventsContainer.appendChild(eventCard);
+            });
+
+            // Event delegation for edit and cancel buttons
+            eventsContainer.addEventListener('click', (e) => {
+                if (e.target.classList.contains('btn-edit')) {
+                    const eventId = e.target.dataset.eventId;
+                    editEvent(eventId);
+                } else if (e.target.classList.contains('btn-cancel')) {
+                    const eventId = e.target.dataset.eventId;
+                    cancelEdit(eventId);
+                }
+            });
         }
 
-        /* Button Hover Effect */
-        .event-actions button:hover {
-            background-color: #00415a; /* Slightly lighter blue for hover effect */
+        function editEvent(eventId) {
+            console.log('Editing event with ID:', eventId);
+            document.querySelectorAll('.edit-form-container').forEach(container => {
+                container.style.display = 'none';
+            });
+            document.querySelectorAll('.event-content').forEach(content => {
+                content.style.display = 'block';
+            });
+
+            const eventCard = document.getElementById(`event-${eventId}`);
+            if (!eventCard) {
+                console.error(`Event card with ID event-${eventId} not found`);
+                return;
+            }
+
+            const eventContent = eventCard.querySelector('.event-content');
+            const editFormContainer = eventCard.querySelector('.edit-form-container');
+
+            if (eventContent && editFormContainer) {
+                eventContent.style.display = 'none';
+                editFormContainer.style.display = 'block';
+                console.log(`Toggled edit form for event-${eventId}`);
+            } else {
+                console.error('Event content or edit form not found in card:', eventCard);
+            }
         }
 
-        /* Disabled Button */
-        .event-actions button:disabled {
-            background-color: #d3d3d3; /* Gray for disabled button */
-            cursor: not-allowed;
+        function cancelEdit(eventId) {
+            console.log('Canceling edit for event with ID:', eventId);
+            const eventCard = document.getElementById(`event-${eventId}`);
+            if (!eventCard) {
+                console.error(`Event card with ID event-${eventId} not found`);
+                return;
+            }
+
+            const eventContent = eventCard.querySelector('.event-content');
+            const editFormContainer = eventCard.querySelector('.edit-form-container');
+
+            if (eventContent && editFormContainer) {
+                eventContent.style.display = 'block';
+                editFormContainer.style.display = 'none';
+                console.log(`Canceled edit for event-${eventId}`);
+            } else {
+                console.error('Event content or edit form not found in card:', eventCard);
+            }
         }
 
-        /* Input Fields */
-        input[type="text"], input[type="date"], input[type="time"], input[type="number"] {
-            width: 100%;
-            padding: 10px;
-            margin-top: 5px;
-            border: 1px solid #003C53; /* Lighter blue border for inputs */
-            border-radius: 4px;
-            background-color: #f9f9f9; /* Light background */
-        }
-
-        /* Read-only Input Fields */
-        input[readonly] {
-            background-color: #e3e3e3; /* Light gray for read-only fields */
-        }
-
-        /* Input Focus Effect */
-        input:focus {
-            outline: none;
-            border-color: #002D40; /* Focus border color matches the primary blue */
-            box-shadow: 0 0 5px rgba(0, 45, 64, 0.5); /* Subtle glow on focus */
-        }
-
-/* Responsive Design */
-@media (max-width: 768px) {
-    .my-events {
-        grid-template-columns: 1fr 1fr;
-    }
-}
-
-@media (max-width: 500px) {
-    .my-events {
-        grid-template-columns: 1fr;
-    }
-
-    .event-actions {
-        flex-direction: column;
-        gap: 10px;
-    }
-}
-
-  </style>
-
-<script>
-    // Dummy data for events
-    let eventsdata = <?php echo json_encode($eventsdata); ?>;
-
-    // Function to render events dynamically
-    function renderEvents() {
-        const eventsContainer = document.getElementById("events-list");
-
-        eventsdata.forEach(event => {
-            // Create event card element
-            const eventCard = document.createElement("div");
-            eventCard.classList.add("my-event");
-            eventCard.id = `event-${event.id}`;
-
-            // Create event details HTML
-            const eventDetails = `
-                
-                <form method="post" action="http://localhost/gitexplorelk/explorelk/public/eventorganizer/Eoevents/updateEvent" >
-                <div class="event-details">
-                    <input type="hidden" id="event-name-${event.id}" value="${event.id}" name="id" readonly>
-                    <label for="event-name-${event.id}">Event Name:</label>
-                    <input type="text" id="event-name-${event.id}" value="${event.eventName}" name="eventName" readonly>
-                    
-                    <label for="event-description-${event.id}">About Event:</label>
-                    <input type="text" id="event-description-${event.id}" value="${event.aboutEvent}" name="aboutEvent" readonly>
-
-
-                    <label for="event-date-${event.id}">Event Date:</label>
-                    <input type="date" id="event-date-${event.id}" value="${event.eventDate}" name="eventDate" readonly>
-
-                    <label for="start-time-${event.id}">Start Time:</label>
-                    <input type="time" id="start-time-${event.id}" value="${event.eventStartTime}" name="eventStartTime" readonly>
-
-                    <label for="end-time-${event.id}">End Time:</label>
-                    <input type="time" id="end-time-${event.id}" value="${event.eventEndTime}" name="eventEndTime" readonly>
-
-                    <label for="event-location-${event.id}">Location:</label>
-                    <input type="text" id="event-location-${event.id}" value="${event.eventLocation}" name="eventLocation" readonly>
-
-                    <label for="available-tickets-${event.id}">Tickets Available:</label>
-                    <input type="number" id="available-tickets-${event.id}" value="${event.ticketCount}" name="ticketCount" readonly>
-
-                    <label for="ticket-price-${event.id}">Ticket Price:</label>
-                    <input type="number" id="ticket-price-${event.id}" value="${event.ticketPrice}" name="ticketPrice" readonly>
-                </div>
-                <div class="event-actions">
-                    <button type="button" id="edit-btn-${event.id}" onclick="editEvent(${event.id})">Edit</button>
-                    <button type="submit" id="save-btn-${event.id}" style="display:none;" >Save</button>
-                </form>
-                
-                    <button type="button" id="cancel-btn-${event.id}" onclick="cancelEdit(${event.id})" style="display:none;">Cancel</button>
-                <form method="post" action="http://localhost/gitexplorelk/explorelk/public/eventorganizer/Eoevents/delete_event">
-                    <input type="hidden" value="${event.id}" name="id" >   
-                    <button type="submit" id="delete-btn-${event.id}" >Delete</button>
-                </form>
-                </div>
-           
-            `;
-
-            // Append the event card to the container
-            eventCard.innerHTML = eventDetails;
-            eventsContainer.appendChild(eventCard);
-        });
-    }
-
-    // Function to enable editing
-    function editEvent(eventId) {
-        document.getElementById(`edit-btn-${eventId}`).style.display = "none";
-        document.getElementById(`save-btn-${eventId}`).style.display = "inline";
-        document.getElementById(`cancel-btn-${eventId}`).style.display = "inline";
-        
-        const inputs = document.querySelectorAll(`#event-${eventId} input`);
-        inputs.forEach(input => input.removeAttribute("readonly"));
-    }
-
-    // Function to save the changes
-  
-
-    // Function to cancel editing
-    function cancelEdit(eventId) {
-        const inputs = document.querySelectorAll(`#event-${eventId} input`);
-        inputs.forEach(input => input.setAttribute("readonly", true));
-
-        document.getElementById(`edit-btn-${eventId}`).style.display = "inline";
-        document.getElementById(`save-btn-${eventId}`).style.display = "none";
-        document.getElementById(`cancel-btn-${eventId}`).style.display = "none";
-    }
-
-    // Function to delete an event
-    function deleteEvent(eventId) {
-        const eventCard = document.getElementById(`event-${eventId}`);
-        eventCard.remove();
-    }
-
-    // Render the events when the page loads
-    renderEvents();
-</script>
+        renderEvents();
+    </script>
 </body>
 </html>

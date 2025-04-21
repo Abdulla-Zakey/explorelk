@@ -55,6 +55,7 @@
 
         .nav-menu li {
             margin-bottom: 20px;
+            height: 40px;
         }
 
         .nav-menu li a {
@@ -118,6 +119,7 @@
             <li><a href="Rdashboard"><i class="fas fa-th-large"></i> Dashboard</a></li>
             <li><a href="Rmenu"><i class="fas fa-burger"></i> Menu</a></li>
             <li><a href="Rdining"><i class="fas fa-utensils"></i> Dining</a></li>
+            <li><a href="Rpromotion"><i class="fas fa-bullhorn"></i> Promotions & Discounts</a></li>
             <li><a href="Rpaymentdetails"><i class="fas fa-credit-card"></i> Payment Details</a></li>
             <li><a href="Rreviews"><i class="fas fa-comments"></i> Reviews</a></li>
             <li><a href="Rnotifications"><i class="fas fa-bell"></i> Notifications</a></li>
@@ -126,7 +128,7 @@
         </ul>
 
         <div class="logout">
-            <a href="#"><i class="fas fa-sign-out-alt"></i> Log Out</a>
+            <a href="<?= ROOT ?>/traveler/Login/logout"><i class="fas fa-sign-out-alt"></i> Log Out</a>
         </div>
     </div>
 
