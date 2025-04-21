@@ -157,21 +157,8 @@
                     and must-visit places across the island.
                 </p>
             </div>
-        
+
             <div class = "middle">
-                <img src="<?php echo ROOT; ?>/assets/images/Travelers/index/restaurantIcon.png">
-                <h2>
-                    Savor the Flavors
-                </h2>
-    
-                <p>
-                    Delight your taste buds with ExploreLK's restaurant discovery. 
-                    Find the best dining spots across Sri Lanka and 
-                    browse descriptions, menus, photos, and reviews to choose the perfect place for your next meal.
-                </p>
-            </div>
-    
-            <div class = "right">
                 <img src="<?php echo ROOT; ?>/assets/images/Travelers/index/hotelIcon.png">
                 <h2>
                     Find Your Perfect Stay
@@ -184,6 +171,21 @@
                     hostels, all tailored to fit your travel needs.
                 </p>
             </div>
+
+            <div class = "right">
+                <img src="<?php echo ROOT; ?>/assets/images/Travelers/index/carIcon.png">
+                <h2>
+                    Drive Your Adventure
+                </h2>
+    
+                <p>
+                    Hit the road with ease using ExploreLK's car rental service. 
+                    Choose from a variety of vehicles to suit your travel style and 
+                    budget, from compact cars to spacious SUVs and start 
+                    exploring the island at your own pace.
+                </p>
+            </div>
+    
         </div>
     
         <div class="row">
@@ -199,21 +201,20 @@
                     make every moment of your journey unforgettable!
                 </p>
             </div>
-        
+
             <div class = "middle">
-                <img src="<?php echo ROOT; ?>/assets/images/Travelers/index/carIcon.png">
+                <img src="<?php echo ROOT; ?>/assets/images/Travelers/index/restaurantIcon.png">
                 <h2>
-                    Drive Your Adventure
+                    Savor the Flavors
                 </h2>
     
                 <p>
-                    Hit the road with ease using ExploreLK's car rental service. 
-                    Choose from a variety of vehicles to suit your travel style and 
-                    budget, from compact cars to spacious SUVs and start 
-                    exploring the island at your own pace.
+                    Delight your taste buds with ExploreLK's restaurant discovery. 
+                    Find the best dining spots across Sri Lanka and 
+                    browse descriptions, menus, photos, and reviews to choose the perfect place for your next meal.
                 </p>
             </div>
-    
+        
             <div class = "right">
                 <img src="<?php echo ROOT; ?>/assets/images/Travelers/index/eventsIcon.png">
                 <h2>

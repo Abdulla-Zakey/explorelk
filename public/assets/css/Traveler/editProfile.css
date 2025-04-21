@@ -93,12 +93,14 @@ body{
 
 .profilePicHolder{
     width: 10%;
+    height: 10%;
     margin-right: 2.5%;
     
 }
 
 .profilePicHolder img{
     width: 100%;
+    height: 100%;
     border-radius: 50%;
 }
 

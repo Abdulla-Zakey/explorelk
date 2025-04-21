@@ -10,7 +10,9 @@ class TourGuide_M
 	protected $table = 'tourguide';
 
 	protected $allowedColumns = [
-		'name',
+		'firstName',
+		'lastName',
+		'guide_Id',
 		'nic',
 		'email',
 		'mobileNum',
@@ -22,7 +24,10 @@ class TourGuide_M
 		'tourFrequencyPerMonth',
 		'guideLocation',
 		'guideBio',
-		'profilePhoto'
+		'profilePhoto',
+		'gender',
+		'status',
+		'approved',
 	];
 
 	public function validate($data)
@@ -127,6 +132,80 @@ class TourGuide_M
 		return false;
 	}
 
+	public function profileValidate($data) {
+		$this->errors = [];
+		
+		// Name validation
+		if(empty($data['firstName']))
+		{
+			$this->errors['firstName'] = "Please enter your first name";
+		}
+
+		if(empty($data['lastName']))
+		{
+			$this->errors['lastName'] = "Please enter your last name";
+		}
+
+		if(empty($data['gender']))
+		{
+			$this->errors['gender'] = "Please select your gender";
+		}
+
+		if(empty($data['password']))
+		{
+			$this->errors['password'] = "Please enter a password";
+		}
+
+		if(empty($data['email']))
+		{
+			$this->errors['email'] = "Please enter your email";
+		}
+
+		if(empty($data['mobileNum']))
+		{
+			$this->errors['mobileNum'] = "Please enter your mobile number";
+		}
+
+		if(empty($data['licenseNum']))
+		{
+			$this->errors['licenseNum'] = "Please enter your license number";
+		}
+
+		if(empty($data['nic']))
+		{
+			$this->errors['nic'] = "Please enter your NIC number";
+		}
+
+		if(empty($data['tourFrequencyPerMonth']))
+		{
+			$this->errors['tourFrequencyPerMonth'] = "Please enter your tour frequency per month";
+		}
+
+		if(empty($data['experience']))
+		{
+			$this->errors['experience'] = "Please enter your experience in years";
+		}
+
+		if(empty($data['guideBio']))
+		{
+			$this->errors['guideBio'] = "Please enter bio";
+		}
+
+		if(empty($data['profilePhoto']))
+		{
+			$this->errors['profilePhoto'] = "Please add a profile photo";
+		}
+
+		return empty($this->errors);
+	}
+
+	public function findUserById($id){
+        $query = "SELECT * FROM $this->table WHERE guide_id = :id";
+        $params = [':id' => $id];
+        $result = $this->query($query, $params);
+        return $result ? $result[0] : null;
+    }
+
 	// Hash password before inserting
 	public function hashPassword($password)
 	{
@@ -145,38 +224,4 @@ class TourGuide_M
 		return $data;
 	}
 	
-	// public function updateProfilePhoto($guideId, $imageData)
-    // {
-    //     $query = "UPDATE " . $this->table . " SET profilePhoto = ? WHERE guide_id = ?";
-    //     $stmt = $this->connect()->prepare($query);
-    //     return $stmt->execute([$imageData, $guideId]);
-    // }
-
-	// public function updateProfile($guideId, $data)
-	// {
-		
-
-	// 	try {
-	// 		$fields = [];
-	// 		$values = [];
-			
-	// 		foreach ($data as $key => $value) {
-	// 			if (in_array($key, $this->allowedColumns)) {
-	// 				$fields[] = "$key = ?";
-	// 				$values[] = $value;
-	// 			}
-	// 		}
-			
-	// 		// Add guide_id to values array
-	// 		$values[] = $guideId;
-			
-	// 		$query = "UPDATE " . $this->table . " SET " . implode(', ', $fields) . " WHERE guide_id = ?";
-	// 		$stmt = $this->connect()->prepare($query);
-			
-	// 		return $stmt->execute($values);
-	// 	} catch (Exception $e) {
-	// 		// Log error if needed
-	// 		return false;
-	// 	}
-	// }
 }

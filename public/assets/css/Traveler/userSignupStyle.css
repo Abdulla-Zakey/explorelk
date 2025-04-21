@@ -28,9 +28,11 @@ body::before {
     margin-bottom: 10%;
     margin-left: 20%;
     margin-right: 20%;
-    filter: brightness(1.125);
-    border-image: fill 0 linear-gradient(rgba(0, 0, 0, 0.15), rgba(255, 255, 255, 0.25), rgba(0, 0, 0, 0.35));
-    box-shadow: 0px 0px 15px darkcyan;
+    filter: brightness(1.25);
+    border-radius: 25px;
+    overflow: hidden;
+    border: none;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
 }
 
 /* body::before,  */
@@ -59,14 +61,16 @@ body::before {
     width: 50%;
     height: 100%;
     box-sizing: border-box;
-
+    border-top-left-radius: 25px;
+    border-bottom-left-radius: 25px;
 }
 
 .logoContainer{
     width: 25%;
     height: 25%;
-    margin-left: 2.5%;
-    background-image: url(../../images/logos/logoWhite.svg);                  /*paths marked for incase of folder changes*/
+    margin-left: 72.5%;
+    opacity: 0.75;
+    background-image: url(../../images/logos/logoBlack.svg);                  /*paths marked for incase of folder changes*/
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center center; 
@@ -76,18 +80,18 @@ body::before {
 .textContainer{
     width: 100%;
     height: 75%;
-    padding-top: 12.5%;
-    padding-left: 15%;
-    /* background-color: #000; */
+    padding-top: 10%;
+    padding-left: 12.5%;
     color: #ffff;
-    font-size: 2.5rem;
-    font-family: 'Times New Roman', Times, serif;
+    font-size: 2.25rem;
+    line-height: 1.25;
+    font-family: Georgia, serif;
     font-style: italic;
     justify-content: center;
     align-items: center;
     box-sizing: border-box;
-    font-weight: 750;
-    text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    font-weight: 600;
+    text-shadow: 0 0 25px rgba(0, 0, 0, 0.5);
 }
 
 .rightContainer{
@@ -96,6 +100,8 @@ body::before {
     background-color: #ffff;
     opacity: 0.8;
     filter: brightness(0.875);
+    border-top-right-radius: 25px;
+    border-bottom-right-radius: 25px;
 }
 
 .forrm{

@@ -5,34 +5,49 @@
  */
 class C_tourPackageDetails extends Controller
 {
-
-    public function index($id = null)
-{
-    $tourPackageModel = $this->loadModel('TourPackageModel');
+    private $tourPackageModel;
+    private $tourPackageActivitiesModel;
+    private $tourPackageImagesModel;
+    private $tourPackageItineraryModel;
     
-    // Check if ID is provided
-    if ($id === null) {
-        // Redirect or show an error
-        header('Location: ' . ROOT . '/tourGuide/C_tourPackages');
-        exit();
+    public function __construct() {
+        $this->tourPackageModel = new TourPackages();
+        $this->tourPackageActivitiesModel = new TourPackageActivities();
+        $this->tourPackageImagesModel = new TourPackageImages();
+        $this->tourPackageItineraryModel = new TourPackageItinerary();
     }
-    
-    // Fetch the tour package details by ID
-    $tourPackage = $tourPackageModel->getPackageById($id);
 
-    // Check if package exists
-    if ($tourPackage === null) {
-        // Option 1: Show error page
-        $this->view('404');
+    public function index() {
+        if (!isset($_SESSION['guide_id'])) {
+            header("Location: " . ROOT . "/traveler/Login");
+            exit();
+        }
+
         
-        // Option 2: Redirect to tour packages list
-        // header('Location: ' . ROOT . '/tourGuide/C_tourPackages');
-        // exit();
-        
-        return;
+        // echo 'hi';
+        $packageId = $_GET['packageId'];
+        $tourPackage = $this->tourPackageModel->where(['package_id' => $packageId]);
+
+        $tourPackageImages = $this->tourPackageImagesModel->where(['package_id' => $packageId]);
+
+        $tourPackageItinerary = $this->tourPackageItineraryModel->where(['package_id' => $packageId]);
+        // show($tourPackageItinerary);
+
+        // Get activities for each day
+        $dayActivities = [];
+        foreach ($tourPackageItinerary as $day) {
+            $dayActivities[$day->day_id] = $this->tourPackageActivitiesModel->where(['day_id' => $day->day_id]);
+        }
+        // show($dayActivities);
+
+        $data = [
+            'tourPackage' => $tourPackage,
+            'tourPackageImages' => $tourPackageImages,
+            'tourPackageItinerary' => $tourPackageItinerary,
+            'dayActivities' => $dayActivities,
+        ];
+        // show($data);
+        $this->view('tourGuide/tourPackageDetails', $data);
+
     }
-    
-    // Pass the tour package to the view
-    $this->view('tourGuide/tourPackageDetails', ['tourPackage' => $tourPackage]);
-}
 }

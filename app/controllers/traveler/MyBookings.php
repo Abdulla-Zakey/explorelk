@@ -1,16 +1,108 @@
 <?php
 
-    class MyBookings extends Controller{
+class MyBookings extends Controller{
 
-        public function index(){
+    private $roomBookingFinalModel;
+    private $hotelModel;
+    private $hotelPicsModel;
 
-            // Check if user is logged in
-            if (!isset($_SESSION['traveler_id'])) {
-                header("Location: " . ROOT . "/traveler/Login");
-                exit();
-            }
+    private $roomBookingCancellationModel;
 
-            $this->view('traveler/myBookings');
+    private $hotelCommissionsModel;
+
+    public function __construct(){
+        $this->roomBookingFinalModel = new RoomBookingsFinalModel();
+        $this->hotelModel = new Hotel();
+        $this->hotelPicsModel = new HotelPicsModel();
+        $this->roomBookingCancellationModel = new RoomBookingCancellationsModel();
+        $this->hotelCommissionsModel = new HotelCommissionsModel();
+    }
+
+    public function index(){
+
+        // Check if user is logged in
+        if (!isset($_SESSION['traveler_id'])) {
+            header("Location: " . ROOT . "/traveler/Login");
+            exit();
+        }
+
+        $bookings = $this->roomBookingFinalModel->getRoomBookingByTravelerId($_SESSION['traveler_id']);
+        $data['accommodationBookingsData'] = [];
+
+        foreach($bookings as $booking){
             
+            $hotelInfo = $this->hotelModel->getDetailsByHotelId($booking->hotel_Id);
+            $hotelPics = $this->hotelPicsModel->getImagesByHotelId($booking->hotel_Id);
+            $hotelPic = $hotelPics[0]->image_path;
+
+            $refundStatus = "";
+            if($booking->booking_status == "Cancelled"){
+                $cancellationRecord = $this->roomBookingCancellationModel->first(['room_booking_Id' => $booking->room_booking_Id]);
+                $refundStatus = $cancellationRecord->refund_status;
+            }
+            
+            // Create a complete booking record with all related data
+            $bookingData = $booking;
+            $bookingData->hotelInfo = $hotelInfo;
+            $bookingData->hotelPic = $hotelPic;
+            $bookingData->refund_status = $refundStatus;
+            
+            // Add this complete booking to our data array
+            $data['accommodationBookingsData'][] = $bookingData;
+        }
+
+        $this->view('traveler/myBookings', $data);
+    }
+
+    public function deleteAccommodationBooking($bookingId){
+        $booking = $this->roomBookingFinalModel->first(['room_booking_Id' => $bookingId]);
+        if ($booking) {
+            if($booking->traveler_Id == $_SESSION['traveler_id']) {
+
+                $result = $this->roomBookingFinalModel->delete($bookingId, 'room_booking_Id');
+
+                if($result){
+
+                    $result = $this->hotelCommissionsModel->delete($bookingId, 'room_booking_Id');
+                    
+                    if($result){
+                        redirect('traveler/MyBookings?success=booking_request_deleted&booking_id=' . $bookingId);
+                    }
+                    else{
+                        redirect('traveler/MyBookings?error=booking_request_deleted_but_failed_to_delete_commission_record&booking_id=' . $bookingId);
+                    }
+                    
+                }
+                else{
+                    redirect('traveler/MyBookings?error=booking_request_deletion_failed&booking_id=' . $bookingId);
+                }
+            }
+            else{
+                redirect('traveler/MyBookings?error=booking_request_does_not_belongs_to_the_current_user&booking_id=' . $bookingId);
+            }
+        }
+        else{
+            redirect('traveler/MyBookings?error=booking_request_not_found&booking_id=' . $bookingId);
         }
     }
+
+    public function archiveAccommodationBooking($bookingId){
+        $result = $this->roomBookingFinalModel->update($bookingId, ['is_archived' => 1], 'room_booking_Id');
+        if($result){
+            header("Location: " . ROOT . "/traveler/MyBookings?success=booking_archived_successfully");
+        }
+        else{
+            header("Location: " . ROOT . "/traveler/MyBookings?error=failed_to_archive_booking");
+        }
+    }
+
+    public function unarchiveAccommodationBooking($bookingId){
+        $result = $this->roomBookingFinalModel->update($bookingId, ['is_archived' => 0], 'room_booking_Id');
+        if($result){
+            header("Location: " . ROOT . "/traveler/MyBookings?success=booking_unarchived_successfully");
+        }
+        else{
+            header("Location: " . ROOT . "/traveler/MyBookings?error=failed_to_unarchive_booking");
+        }
+    }
+}

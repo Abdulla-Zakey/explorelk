@@ -12,14 +12,7 @@ class Eventorganizer {
         'company_MobileNum',
         'company_Name',
         'company_Address',
-        'first_Name',
-        'last_Name',
-        'website',
-        'blog',
-        'job_Title',
-        'event_Type',
-        'experience',
-        'profile_Image',
+        'status'
     ];
 
     public function validate($data, $update = false)
