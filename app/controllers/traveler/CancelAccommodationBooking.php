@@ -11,7 +11,8 @@ class CancelAccommodationBooking extends Controller
     private $travelerBankAccountModel;
     private $roomBookingCancellationModel;
     private $hotelCommissionsModel;
-    
+    private $notificationsModel;
+    private $accommodationBookingNotificationsModel;
 
     public function __construct()
     {
@@ -24,6 +25,8 @@ class CancelAccommodationBooking extends Controller
         $this->roomBookingRefundBankDetailsModel = new RoomBookingRefundBankDetails();
         $this->roomBookingCancellationModel = new RoomBookingCancellationsModel();
         $this->hotelCommissionsModel = new HotelCommissionsModel();
+        $this->notificationsModel = new NotificationsModel();
+        $this->accommodationBookingNotificationsModel = new AccommodationBookingNotifications();
     }
 
     public function index($roomBookingId)
@@ -107,8 +110,41 @@ class CancelAccommodationBooking extends Controller
                                                                     'room_booking_Id'
                                                                 );
                     if($result){
-                        header("Location: " . ROOT . "/traveler/MyBookings?success=booking_cancelled_successfully&refund_status=" . urlencode($refundStatus));
-                        exit();
+
+                        $hotelData = $this->hotelModel->first(['hotel_Id' => $booking->hotel_Id]);
+                        
+                        $notificationData = [
+                            'recipient_type' => 'traveler',
+                            'recipient_Id' => $_SESSION['traveler_id'],
+                            'notification_type' => 'accommodation_related',
+                            'notification_title' => 'Booking Canceled for ' . $hotelData->hotelName,
+                            'notification_text' => 'Your booking at ' . $hotelData->hotelName . ' has been successfully canceled. If eligible, you can track your refund status in the "My Bookings" section.'
+                        ];
+
+                        $notificationId = $this->notificationsModel->insert($notificationData);
+
+                        if($notificationId){
+                            $accommodationBookingNotificationData = [
+                                'notification_Id' => $notificationId,
+                                'room_booking_Id' => $roomBookingId
+                            ];
+
+                            $result = $this->accommodationBookingNotificationsModel->insert($accommodationBookingNotificationData);
+
+                            if($result){
+                                header("Location: " . ROOT . "/traveler/MyBookings?success=booking_cancelled_successfully&refund_status=" . urlencode($refundStatus));
+                                exit();
+                            }
+                            else{
+                                header("Location: " . ROOT . "/traveler/MyBookings?error=booking_cancelled_successfully_but_failed_to_generate_accommodation_notification&refund_status=" . urlencode($refundStatus));
+                                exit();
+                            }
+                        }
+                        else{
+                            header("Location: " . ROOT . "/traveler/MyBookings?error=booking_cancelled_successfully_but_failed_to_generate_notification&refund_status=" . urlencode($refundStatus));
+                            exit();
+                        }
+                        
                     }
                     else{
                         header("Location: " . ROOT . "/traveler/MyBookings?error=booking_cancelled_successfully_failed_to_update_commission_status&refund_status=" . urlencode($refundStatus));

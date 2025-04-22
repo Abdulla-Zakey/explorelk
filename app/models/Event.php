@@ -5,6 +5,20 @@ class Event{
 
   protected $table = "event";
 
+  protected $allowedColumns = [
+      'event_Id',
+      'organizer_Id',
+      'eventWebBannerPath',
+      'eventThumnailPic',
+      'eventName',
+      'aboutEvent',
+      'eventDate',
+      'eventStartTime',
+      'eventEndTime',
+      'eventLocation',
+      'eventStatus'
+  ];
+
   public function insert_event($organizer_Id, $eventWebBannerPath, $eventName, $aboutEvent, $eventDate, $eventStartTime, $eventEndTime, $eventLocation, $eventStatus = "pending"){
     
     return $this->insert([
@@ -27,7 +41,7 @@ class Event{
   }
 
   public function getAnEventByEventId($event_Id){
-    $data = $this->where(['event_Id' => $event_Id]);
+    $data = $this->first(['event_Id' => $event_Id]);
     return $data;
   }
 

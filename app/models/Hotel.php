@@ -14,6 +14,7 @@
             'hotelPassword',
             'hotelMobileNum',
             'hotelAddress',
+            'hotelLogo',
             'district',
             'province',
             'hotelLatitude',
