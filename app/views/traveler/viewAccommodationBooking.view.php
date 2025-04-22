@@ -12,12 +12,6 @@
     <title>ExploreLK | Booking Details</title>
     <script src="https://kit.fontawesome.com/f35c1c7a11.js" crossorigin="anonymous"></script>
     <style>
-        /* .payment-deadline-info {
-            margin-top: 1.5rem;
-            border-top: 1px dashed var(--warning-color);
-            padding-top: 1.5rem;
-        } */
-
         .deadline-highlight {
             color: var(--warning-color);
             font-weight: 700;
@@ -36,7 +30,7 @@
     <header>
         <nav class="navbar">
             <div class="backToHome">
-                <a href="<?= ROOT ?>/traveler/MyBookings">
+                <a href="javascript:void(0);" onclick="window.history.back();">
                     <i class="fa-solid fa-arrow-left"></i>
                     <span>Back</span>
                 </a>

@@ -12,7 +12,7 @@
     <script src="https://kit.fontawesome.com/f35c1c7a11.js" crossorigin="anonymous"></script>
 </head>
 <?php
-// var_dump($data['accommodationBookingsData']);
+// var_dump($data['eventBookingsData']);
 // exit();
 ?>
 
@@ -55,7 +55,13 @@
 
             <div class="linkHolder">
                 <a href="<?= ROOT ?>/traveler/Notifications" class="linkItem">
-                    <i class="fa-solid fa-bell"></i>Notifications
+                    <i class="fa-solid fa-bell"></i>
+                    Notifications
+                    <?php if(($data['unreadNotifications']) > 0): ?>
+                        <span id="notificationCount" class="notificationCountIndicator">
+                            <?= $data['unreadNotifications'] ?>
+                        </span>
+                    <?php endif; ?>
                 </a>
             </div>
 
@@ -91,6 +97,10 @@
 
                 <button class="booking-tab" data-tab="car-rentals">
                     <i class="fa-solid fa-car"></i> Car Rentals
+                </button>
+
+                <button class="booking-tab" data-tab="event-tickets">
+                    <i class="fa-solid fa-ticket"></i> Event Tickets
                 </button>
 
                 <button class="booking-tab" data-tab="tour-guides">
@@ -298,7 +308,9 @@
                     }
 
                 </script>
+
             </div>
+
             <!-- Car Rentals Section -->
             <div id="car-rentals" class="bookings-section">
                 <div class="bookingContainer">
@@ -414,73 +426,231 @@
                 </div>
             </div>
 
-            <!-- Tour Guides Section -->
-            <div id="tour-guides" class="bookings-section">
-                <div class="bookingContainer">
-                    <div class="bookingItemImage-Container">
-                        <img src="<?= IMAGES ?>/travelers/tourGuides/guide1.jpg">
+            <div id="event-tickets" class="bookings-section">
+                <?php if (!empty($data['eventBookingsData'])): ?>
+                    <!-- Search and filter section -->
+                    <div class="search-filter">
+                        <input type="text" placeholder="Search bookings...">
+                        <select>
+                            <option value="all">All Statuses</option>
+                            <option value="pending">Pending</option>
+                            <option value="confirmed">Confirmed</option>
+                            <option value="completed">Completed</option>
+                            <option value="cancelled">Cancelled</optio>
+                        </select>
+                        <button><i class="fa-solid fa-search"></i> Search</button>
                     </div>
 
-                    <div class="bookingItemDetails">
-                        <h2>
-                            Sigiriya Tour with John Perera
-                            <span class="status-badge pending">Pending</span>
-                        </h2>
+                    <?php foreach ($data['eventBookingsData'] as $eventBooking): ?>
+                        <div class="bookingContainer">
+                            <div class="bookingItemImage-Container">
+                                <img src="<?= IMAGES . '/events/eventThumbnailPics/' . htmlspecialchars($eventBooking->eventInfo->eventThumnailPic) ?>">
+                            </div>
 
-                        <div class="bookingKeyInfo-Holder">
-                            <div class="firstKid">
-                                <i class="fa fa-calendar-o" aria-hidden="true"></i>Tour Date:
+                            <div class="bookingItemDetails">
+                                <h2>
+                                    <?= htmlspecialchars($eventBooking->eventInfo->eventName) ?>
+                                    <?php
+                                        if ($eventBooking->eventInfo->eventStatus == 'approved' && $eventBooking->eventInfo->eventDate == date('Y-m-d')) {
+                                            echo '<span class="status-badge completed">Live Today</span>';
+                                        } 
+                                        else if ($eventBooking->eventInfo->eventStatus == 'approved') {
+                                            echo '<span class="status-badge pending">Upcoming</span>';
+                                        } 
+                                        else if ($eventBooking->eventInfo->eventStatus == 'cancelled') {
+                                            echo '<span class="status-badge cancelled">Cancelled</span>';
+                                        } 
+                                        else if($eventBooking->eventInfo->eventStatus == 'completed') {
+                                            echo '<span class="status-badge approved">Completed</span>';
+                                        } 
+
+                                    ?>
+                                </h2>
+
+                                <div class="bookingKeyInfo-Holder">
+                                    <div class="firstKid">
+                                        <i class="fa fa-calendar-o" aria-hidden="true"></i>Event Date:
+                                    </div>
+                                    <div class="secondKid">
+                                    <?= (date('F d, Y', strtotime(htmlspecialchars($eventBooking->eventInfo->eventDate)))) ?>
+                                    </div>
+                                </div>
+
+                                <div class="bookingKeyInfo-Holder">
+                                    <div class="firstKid">
+                                        <i class="fa-solid fa-hourglass-start" aria-hidden="true"></i>Event Start Time:
+                                    </div>
+                                    <div class="secondKid">
+                                        <?= (date('h:i A', strtotime(htmlspecialchars($eventBooking->eventInfo->eventStartTime)))) ?>
+                                    </div>
+                                </div>
+
+                                <div class="bookingKeyInfo-Holder">
+                                    <div class="firstKid">
+                                        <i class="fa-solid fa-hourglass-end" aria-hidden="true"></i>Event End Time:
+                                    </div>
+                                    <div class="secondKid">
+                                        <?= (date('h:i A', strtotime(htmlspecialchars($eventBooking->eventInfo->eventEndTime)))) ?>
+                                    </div>
+                                </div>
+
                             </div>
-                            <div class="secondKid">
-                                25-04-2025
+
+                            <div class="bookingActionBtn-Holder">
+                                <a href="<?= ROOT ?>/traveler/ViewEventBooking/index/<?= $eventBooking->booking_Id ?>">
+                                    <button id="viewBookingBtn" class="actionButtons">
+                                        <i class="fas fa-eye"></i>View Details
+                                    </button>
+                                </a>
+
+                                <?php
+                                    if ($eventBooking->eventInfo->eventStatus == 'approved') {
+                                        echo '<a href="' . ROOT . '/traveler/ViewEventBookingTickets/index/' . $eventBooking->booking_Id . '">
+                                                <button id="downloadBtn" class="actionButtons">
+                                                    <i class="fas fa-download"></i>Download Ticket
+                                                </button>
+                                            </a>';
+                                    } 
+
+                                    else if ($eventBooking->eventInfo->eventStatus == 'cancelled') {
+                                        echo '<a href="' . ROOT . '/traveler/TrackEventBookingRefund/index/' . $eventBooking->booking_Id . '">
+                                                <button id="rebookBtn" class="actionButtons">
+                                                    <i class="fas fa-search"></i>Track Refund
+                                                </button>
+                                            </a>';
+                                    }
+                                    else if($eventBooking->eventInfo->eventStatus == 'completed'){
+                                        echo '<a href = "' . ROOT . '/traveler/LeaveReviewForAccommodationBooking/index/' . $accommodationBooking->room_booking_Id . '">
+                                                <button id="reviewBtn" class="actionButtons">
+                                                    <i class="fas fa-star"></i>Leave a Review
+                                                </button>
+                                            </a>';
+                                        
+                                        echo '<a href="' . ROOT . '/traveler/ViewParticularHotel/index/' . $accommodationBooking->hotel_Id . '">
+                                            <button id="bookAgainBtn" class="actionButtons">
+                                                <i class="fas fa-redo"></i>Book Similar Events
+                                            </button>
+                                        </a>';
+                                    }
+
+                                    if (($eventBooking->eventInfo->eventStatus == 'approved')||($eventBooking->eventInfo->eventStatus == 'cancelled')) {
+                                        echo '<a href="' . ROOT . '/traveler/ContactSupport/booking/">
+                                                <button id="supportBtn" class="actionButtons">
+                                                    <i class="fas fa-headset"></i>Contact Support
+                                                </button>
+                                            </a>';
+                                    }
+                                ?>
+
                             </div>
+                                
                         </div>
+                    
+                    <?php endforeach; ?>
 
-                        <div class="bookingKeyInfo-Holder">
-                            <div class="firstKid">
-                                <i class="fa fa-clock-o" aria-hidden="true"></i>Duration:
-                            </div>
-                            <div class="secondKid">
-                                Full Day (8 hours)
-                            </div>
-                        </div>
+                <?php else:?>
 
-                        <div class="bookingKeyInfo-Holder">
-                            <div class="firstKid">
-                                <i class="fas fa-credit-card"></i>Payment Status:
-                            </div>
-                            <div class="secondKid">
-                                Not Paid
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="bookingActionBtn-Holder">
-                        <a href="<?= ROOT ?>/traveler/ViewBookings/tourGuide/1">
-                            <button id="viewBookingBtn" class="actionButtons">
-                                <i class="fas fa-eye"></i>View Details
+                    <div class="empty-bookings">
+                        <i class="fa-solid fa-ticket"></i>
+                        <h3>No Event Tickets Booked Yet</h3>
+                        <p>Discover exciting events and grab your tickets now.</p>
+                        <a href="<?= ROOT ?>/traveler/ViewAllEvents">
+                            <button class="buttonStyle" style="font-family: poppins;">
+                            Browse Events
                             </button>
                         </a>
-
-                        <button id="editBookingBtn" class="actionButtons">
-                            <i class="fas fa-edit"></i>Edit Booking
-                        </button>
-
-                        <button id="deleteBookingBtn" class="actionButtons">
-                            <i class="fas fa-ban"></i>Cancel Booking
-                        </button>
                     </div>
-                </div>
 
-                <!-- Empty state for tour guides if needed -->
-                <div class="empty-bookings" style="display: none;">
-                    <i class="fa-solid fa-map-marked-alt"></i>
-                    <h3>No Tour Guide Bookings Yet</h3>
-                    <p>Enhance your travel experience by booking a local guide for your next adventure.</p>
-                    <a href="<?= ROOT ?>/traveler/SearchTourGuides">
-                        <button class="buttonStyle">Find Tour Guides</button>
-                    </a>
-                </div>
+                <?php endif; ?>
+
+            </div>
+
+            <!-- Tour Guides Section -->
+            <div id="tour-guides" class="bookings-section">
+                <?php if (!empty($data['tourBookingsData'])): ?>
+                    <!-- Search and filter section -->
+                    <div class="search-filter">
+                        <input type="text" placeholder="Search bookings...">
+                        <select>
+                            <option value="all">All Statuses</option>
+                            <option value="pending">Pending</option>
+                            <option value="confirmed">Confirmed</option>
+                            <option value="completed">Completed</option>
+                            <option value="cancelled">Cancelled</optio>
+                        </select>
+                        <button><i class="fa-solid fa-search"></i> Search</button>
+                    </div>
+
+                    <?php foreach ($data['tourBookingsData'] as $tourBooking): ?>
+                        <div class="bookingContainer">
+                            <div class="bookingItemImage-Container">
+                                <img src="<?= IMAGES ?>/travelers/tourGuides/guide1.jpg">
+                            </div>
+
+                            <div class="bookingItemDetails">
+                                <h2>
+                                    Sigiriya Tour with John Perera
+                                    <span class="status-badge pending">Pending</span>
+                                </h2>
+
+                                <div class="bookingKeyInfo-Holder">
+                                    <div class="firstKid">
+                                        <i class="fa fa-calendar-o" aria-hidden="true"></i>Tour Date:
+                                    </div>
+                                    <div class="secondKid">
+                                        25-04-2025
+                                    </div>
+                                </div>
+
+                                <div class="bookingKeyInfo-Holder">
+                                    <div class="firstKid">
+                                        <i class="fa fa-clock-o" aria-hidden="true"></i>Duration:
+                                    </div>
+                                    <div class="secondKid">
+                                        Full Day (8 hours)
+                                    </div>
+                                </div>
+
+                                <div class="bookingKeyInfo-Holder">
+                                    <div class="firstKid">
+                                        <i class="fas fa-credit-card"></i>Payment Status:
+                                    </div>
+                                    <div class="secondKid">
+                                        Not Paid
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="bookingActionBtn-Holder">
+                                <a href="<?= ROOT ?>/traveler/ViewBookings/tourGuide/1">
+                                    <button id="viewBookingBtn" class="actionButtons">
+                                        <i class="fas fa-eye"></i>View Details
+                                    </button>
+                                </a>
+
+                                <button id="editBookingBtn" class="actionButtons">
+                                    <i class="fas fa-edit"></i>Edit Booking
+                                </button>
+
+                                <button id="deleteBookingBtn" class="actionButtons">
+                                    <i class="fas fa-ban"></i>Cancel Booking
+                                </button>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                <?php else: ?>
+
+                    <!-- Empty state for tour guides if needed -->
+                    <div class="empty-bookings" style="display: none;">
+                        <i class="fa-solid fa-map-marked-alt"></i>
+                        <h3>No Tour Guide Bookings Yet</h3>
+                        <p>Enhance your travel experience by booking a local guide for your next adventure.</p>
+                        <a href="<?= ROOT ?>/traveler/SearchTourGuides">
+                            <button class="buttonStyle">Find Tour Guides</button>
+                        </a>
+                    </div>
+                <?php endif; ?>
+
             </div>
 
             <div id="archived-bookings" class="bookings-section">

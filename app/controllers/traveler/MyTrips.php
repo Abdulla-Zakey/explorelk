@@ -2,6 +2,11 @@
 
 class MyTrips extends Controller
 {
+    private $notificationsModel;
+
+    public function __construct(){
+        $this->notificationsModel = new NotificationsModel();
+    }
 
     public function index(){
 
@@ -78,9 +83,19 @@ class MyTrips extends Controller
             'sharedTrips' => $sharedTrips ?? []
         ];
 
+        $notifications = $this->notificationsModel->getNotifications('traveler', $_SESSION['traveler_id']);
+        $unreadNotifications = 0;
+
+        foreach ($notifications as $notification) {
+            if($notification->is_read == 0){
+                $unreadNotifications++;
+            }
+        }
+
+        $data['unreadNotifications'] = $unreadNotifications;
+
         // Load the myTrips view with trip data
         $this->view('traveler/myTrips', $data);
-        // $this->view('traveler/dummy', $data);
     }
 
     // Method to view a specific trip details
@@ -181,9 +196,10 @@ class MyTrips extends Controller
         $tripModel = new Trip();
 
         // Attempt to delete the trip
-        $result = $tripModel->delete($trip_Id, 'trip_Id', [
-            'traveler_Id' => $_SESSION['traveler_id']
-        ]);
+        $result = $tripModel->delete(
+            $trip_Id, 
+            'trip_Id'
+        );
 
         if ($result) {
             // Redirect with success message

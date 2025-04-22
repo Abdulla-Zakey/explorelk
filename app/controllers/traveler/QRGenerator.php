@@ -6,12 +6,17 @@ class QRGenerator extends Controller {
     private $eventBookingModel;
     private $SoldEventTicketsModel;
     private $EventTicketTypeModel;
+    private $notificationsModel;
+    private $eventBookingNotificationsModel;
+
 
     public function __construct() {
         // Initialize the model in the constructor
         $this->eventBookingModel = new EventBookingModel();
         $this->SoldEventTicketsModel = new SoldEventTicketsModel();
         $this->EventTicketTypeModel = new EventTicketType();
+        $this->notificationsModel = new NotificationsModel();
+        $this->eventBookingNotificationsModel = new EventBookingNotificationModel();
     }
 
     public function index() {
@@ -62,6 +67,35 @@ class QRGenerator extends Controller {
                 $qrImage, 
                 'Completed'
             );
+
+            if($booking_Id){
+                $notificationData = [
+                    'recipient_type' => 'traveler',
+                    'recipient_Id' => $_SESSION['traveler_id'],
+                    'notification_type' => 'event_related',
+                    'notification_title' => 'Ticket Purchase Confirmed for ' . $eventDetails['eventName'],
+                    'notification_text' => 'Your ticket purchase for ' . $eventDetails['eventName'] . ' was successful. We are excited to have you join us. Get ready for an unforgettable experience!'
+                ];
+
+                $notificationId = $this->notificationsModel->insert($notificationData);
+
+                if($notificationId){
+                    $eventBookingNotificationData = [
+                        'notification_Id' => $notificationId,
+                        'booking_Id' => $booking_Id
+                    ];
+
+                    $result = $this->eventBookingNotificationsModel->insert($eventBookingNotificationData);
+
+                    if(!$result){
+                        throw new Exception('Payment received, but failed to generate eventBookingNotification record');
+                    }
+                }
+                else{
+                    throw new Exception('Payment received, but we could not notify you due to a system issue. Please check your booking details or contact support.');
+                }
+
+            }
 
             foreach ($_SESSION['ticket_details'] as $ticket) {
                 if ($ticket !== NULL) {

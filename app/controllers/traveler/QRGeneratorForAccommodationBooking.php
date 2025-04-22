@@ -8,6 +8,8 @@ class QRGeneratorForAccommodationBooking extends Controller
     private $hotelRoomTypesModel;
     private $commonRoomTypesModel;
     private $hotelGuestModel;
+    private $notificationsModel;
+    private $accommodationBookingNotificationsModel;
 
     public function __construct()
     {
@@ -17,6 +19,8 @@ class QRGeneratorForAccommodationBooking extends Controller
         $this->hotelRoomTypesModel = new HotelRoomTypesModel();
         $this->commonRoomTypesModel = new CommonRoomTypesModel();
         $this->hotelGuestModel = new HotelGuestsModel();
+        $this->notificationsModel = new NotificationsModel();
+        $this->accommodationBookingNotificationsModel = new AccommodationBookingNotifications();
     }
 
     public function index()
@@ -105,8 +109,38 @@ class QRGeneratorForAccommodationBooking extends Controller
 
             $result = $this->roomBookingFinalModel->update($bookingDetails->room_booking_Id, $updateData, 'room_booking_Id');
 
+            if($result){
+                $notificationData = [
+                    'recipient_type' => 'traveler',
+                    'recipient_Id' => $_SESSION['traveler_id'],
+                    'notification_type' => 'accommodation_related',
+                    'notification_title' => 'Advance Payment Received for ' . $hotelDetails->hotelName,
+                    'notification_text' => 'We have received your advance payment for ' . $hotelDetails->hotelName . '. Your booking is now confirmed. Get ready for a memorable stay!'            
+                ];
+
+                $notificationId = $this->notificationsModel->insert($notificationData);
+
+                if($notificationId){
+                    $accommodationBookingNotificationData = [
+                        'notification_Id' => $notificationId,
+                        'room_booking_Id' => $bookingDetails->room_booking_Id
+                    ];
+
+                    $result = $this->accommodationBookingNotificationsModel->insert($accommodationBookingNotificationData);
+
+                    if(!$result){
+                        throw new Exception('Payment received, but failed to generate accommodationBookingNotification record');
+                    }
+                }
+                else{
+                    throw new Exception('Payment received, but we could not notify you due to a system issue. Please check your booking details or contact support.');
+                }
+
+            }
+
             if (!$result) {
-                throw new Exception('Failed to update booking status. Please contact support.');
+                throw new Exception('Your payment was successful, but we encountered an issue while updating your booking status. Please contact our support team for assistance.');
+
             }
 
             // Pass data to view

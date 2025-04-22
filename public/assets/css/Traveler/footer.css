@@ -88,8 +88,9 @@
     margin: 0;
     text-align: center;
     background-color: black;
-    width: 100%;
+    width: 100vw;
     padding: 1%;
     color: white;
-    margin-left: -9px;
+    position: relative;
+    /* margin-left: -9px; */
 }
