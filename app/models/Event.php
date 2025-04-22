@@ -86,10 +86,13 @@ class Event {
         );
     }
 
-    public function getAllApprovedEvents() {
-        return $this->where([
+    public function getAllAprovedEvents(){
+        $result = $this->where(
+          [ 
             'eventDate>=' => date('Y-m-d'),
             'eventStatus' => 'approved'
-        ]);
-    }
+          ]
+        );
+        return $result;
+      }
 }
