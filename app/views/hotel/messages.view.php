@@ -1,326 +1,56 @@
-<?php 
-    include_once APPROOT.'/views/hotel/nav.php';
+<?php
+    include_once APPROOT . '/views/hotel/nav.php';
     include_once APPROOT.'/views/hotel/hotelhead.php';
-    
-    // ?>
-
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Poppins', sans-serif;
-        }
-
-        body {
-            background-color: #f4f4f4;
-            min-height: 100vh;
-            padding: 20px;
-            margin-left: 100px;
-        }
-
-        .chat-container {
-            display: flex;
-            max-width: 1100px;
-            margin-top: 200px;
-            margin-left: 165px; 
-            height: 70vh;
-            background: #fff;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-
-        .sidebar1 {
-            width: 30%;
-            background-color: #f8f9fa;
-            border-right: 1px solid #ddd;
-            border-radius: 10px 0 0 10px;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .heading {
-            padding: 20px;
-            background: #fff;
-            border-bottom: 1px solid #ddd;
-        }
-
-        .heading h2 {
-            font-size: 1.5em;
-            font-weight: 600;
-            color: #002D40;
-        }
-
-        .search-bar {
-            padding: 15px;
-            background: #fff;
-            border: none;
-            border-bottom: 1px solid #ddd;
-            width: 100%;
-            font-size: 1rem;
-        }
-
-        .search-bar:focus {
-            outline: none;
-            background-color: #f8f9fa;
-        }
-
-        .contacts-list {
-            overflow-y: auto;
-            flex: 1;
-        }
-
-        .contact {
-            display: flex;
-            align-items: center;
-            padding: 10px 15px;
-            cursor: pointer;
-            border-bottom: 1px solid #eee;
-            transition: background-color 0.3s;
-        }
-
-        .contact:hover {
-            background-color: #f0f0f0;
-        }
-
-        .contact.active {
-            background-color: #e3f2fd;
-        }
-
-        .contact img {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            margin-right: 15px;
-            object-fit: cover;
-        }
-
-        .contact-info {
-            flex: 1;
-        }
-
-        .contact-info .name {
-            font-weight: 600;
-            margin-bottom: 5px;
-        }
-
-        .contact-info .preview {
-            font-size: 0.9em;
-            color: #666;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            max-width: 200px;
-        }
-
-        .unread-badge {
-            background-color: #002D40;
-            color: white;
-            border-radius: 50%;
-            min-width: 20px;
-            height: 20px;
-            font-size: 0.7em;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-left: 10px;
-        }
-
-        .chat {
-            width: 70%;
-            display: flex;
-            flex-direction: column;
-            background: #fff;
-            border-radius: 0 10px 10px 0;
-        }
-
-        .chat-header {
-            padding: 20px;
-            background: #fff;
-            border-bottom: 1px solid #ddd;
-            display: flex;
-            align-items: center;
-        }
-
-        .chat-messages {
-            flex: 1;
-            overflow-y: auto;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .empty-state {
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            color: #666;
-            font-size: 1.2em;
-            text-align: center;
-        }
-        
-        .empty-state i {
-            font-size: 3em;
-            margin-bottom: 20px;
-            color: #002D40;  
-        }
-        
-        .message {
-            max-width: 70%;
-            margin-bottom: 15px;
-            padding: 12px 15px;
-            border-radius: 10px;
-            background: #f0f0f0;
-            align-self: flex-start;
-            word-break: break-word;
-        }
-
-        .message.sent {
-            background: #e3f2fd;
-            align-self: flex-end;
-        }
-        
-        .message.pending {
-            opacity: 0.7;
-        }
-
-        .message-time {
-            font-size: 0.7em;
-            color: #888;
-            margin-top: 5px;
-            text-align: right;
-        }
-
-        .chat-input {
-            padding: 20px;
-            background: #fff;
-            border-top: 1px solid #ddd;
-        }
-
-        .input-wrapper {
-            display: flex;
-            gap: 10px;
-        }
-
-        .input-wrapper input {
-            flex: 1;
-            padding: 12px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 1rem;
-        }
-
-        .input-wrapper input:focus {
-            outline: none;
-            border-color: #002D40;
-        }
-
-        .input-wrapper button {
-            padding: 12px 24px;
-            background: #002D40;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-
-        .input-wrapper button:disabled {
-            background: #ccc;
-            cursor: not-allowed;
-        }
-
-        .input-wrapper button:not(:disabled):hover {
-            background: #003d5c;
-        }
-        
-        .loading {
-            text-align: center;
-            padding: 20px;
-            color: #666;
-        }
-        
-        .error-message {
-            color: #e74c3c;
-            text-align: center;
-            padding: 10px;
-            margin-top: 10px;
-            display: none;
-        }
-        
-        .empty-contacts {
-            padding: 20px;
-            text-align: center;
-            color: #666;
-        }
-        
-        /* Mobile Responsiveness */
-        @media (max-width: 768px) {
-            .chat-container {
-                flex-direction: column;
-                margin-left: 0;
-                margin-top: 100px;
-                height: 85vh;
-            }
-            
-            .sidebar1 {
-                width: 100%;
-                height: 35%;
-                border-radius: 10px 10px 0 0;
-            }
-            
-            .chat {
-                width: 100%;
-                height: 65%;
-                border-radius: 0 0 10px 10px;
-            }
-            
-            body {
-                margin-left: 0;
-                padding: 10px;
-            }
-        }
-    </style>
-    <title>Chat Interface</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="<?= ROOT ?>/assets/css/hotel/messages.css?v=1.3">
+    <title>Hotel Messaging System</title>
 </head>
 <body>
     <div class="chat-container">
+        <!-- Sidebar with contacts -->
         <div class="sidebar1">
-            <div class="heading">
-                <h2>Messages</h2>
+            <div class="search-container">
+                <input type="text" class="search-bar" placeholder="Search travelers...">
             </div>
-            <input type="text" class="search-bar" placeholder="Search contacts...">
             <div class="contacts-list">
                 <?php if (!empty($data['conversations'])): ?>
                     <?php foreach ($data['conversations'] as $conversation): ?>
-                        <div class="contact" data-user-id="<?= $conversation->user_id ?>">
-                            <img src="<?= !empty($conversation->profile_image) ? ROOT . '/assets/images/users/' . $conversation->profile_image : ROOT . '/assets/images/serviceProviders/profile.jpg' ?>" alt="<?= htmlspecialchars($conversation->name) ?>">
+                        <div class="contact" 
+                             data-hotel-id="<?= htmlspecialchars($_SESSION['hotel_id'] ?? '') ?>" 
+                             data-traveler-id="<?= htmlspecialchars($conversation->traveler_Id) ?>"
+                             data-traveler-name="<?= htmlspecialchars($conversation->username) ?>">
+                            <img src="<?= !empty($conversation->profilePicture) ? htmlspecialchars(ROOT . '/assets/images/users/' . $conversation->profilePicture) : htmlspecialchars(ROOT . '/assets/images/serviceProviders/profile.jpg') ?>" 
+                                 alt="<?= htmlspecialchars($conversation->username) ?>"
+                                 onerror="this.src='<?= htmlspecialchars(ROOT) ?>/assets/images/serviceProviders/profile.jpg';">
                             <div class="contact-info">
-                                <p class="name"><?= htmlspecialchars($conversation->name) ?></p>
-                                <p class="preview"><?= htmlspecialchars($conversation->last_message) ?></p>
+                                <p class="name"><?= htmlspecialchars($conversation->username) ?></p>
+                                <p class="preview"><?= htmlspecialchars($conversation->last_message ?: 'No messages yet') ?></p>
                             </div>
-                            <?php if ($conversation->unread_count > 0): ?>
-                                <div class="unread-badge"><?= $conversation->unread_count ?></div>
+                            <p class="timestamp">
+                                <?= !empty($conversation->timestamp) ? htmlspecialchars(date('h:i A', strtotime($conversation->timestamp))) : '' ?>
+                            </p>
+                            <?php if (isset($conversation->unread_count) && $conversation->unread_count > 0): ?>
+                                <div class="unread-badge"><?= htmlspecialchars($conversation->unread_count) ?></div>
                             <?php endif; ?>
                         </div>
                     <?php endforeach; ?>
                 <?php else: ?>
-                    <div class="empty-contacts">
+                    <div class="empty-state">
                         <p>No conversations yet</p>
                     </div>
                 <?php endif; ?>
             </div>
         </div>
 
-        <div class="chat">
-        
+        <!-- Main chat area -->
+        <div class="chat-main">
+            <div class="chat-header"></div>
             <div class="chat-messages">
                 <div class="empty-state">
                     <i class="fa-solid fa-comments"></i>
@@ -329,8 +59,8 @@
             </div>
             <div class="chat-input">
                 <div class="input-wrapper">
-                    <input type="text" placeholder="Type your message...">
-                    <button disabled>Send</button>
+                    <input type="text" placeholder="Type your message..." disabled>
+                    <button type="button" disabled><i class="fa-solid fa-paper-plane"></i>Send</button>
                 </div>
                 <div class="error-message"></div>
             </div>
@@ -339,51 +69,115 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const contacts = document.querySelectorAll('.contact');
+            // DOM Elements
+            const contactsList = document.querySelector('.contacts-list');
             const chatHeader = document.querySelector('.chat-header');
             const chatMessages = document.querySelector('.chat-messages');
-            const chatInput = document.querySelector('.chat-input');
-            const messageInput = chatInput.querySelector('input');
-            const sendButton = chatInput.querySelector('button');
+            const messageInput = document.querySelector('.input-wrapper input');
+            const sendButton = document.querySelector('.input-wrapper button');
             const errorMessage = document.querySelector('.error-message');
+            const searchBar = document.querySelector('.search-bar');
+            const chat = document.querySelector('.input-wrapper');
 
-            let selectedUserId = null;
+            
+
+
+            // State variables
+            let selectedHotelId = null;
+            let selectedTravelerId = null;
+            let selectedTravelerName = null;
             let lastMessageTimestamp = null;
             let pollingInterval = null;
-            
-            // Add click event listener to each contact
-            contacts.forEach(contact => {
-                contact.addEventListener('click', function() {
-                    const userId = this.getAttribute('data-user-id');
-                    loadChat(userId, this);
-                });
+
+            // Search functionality with debounce
+            let searchTimeout;
+            searchBar.addEventListener('input', () => {
+                clearTimeout(searchTimeout);
+                searchTimeout = setTimeout(() => {
+                    const searchTerm = searchBar.value.toLowerCase();
+                    document.querySelectorAll('.contact').forEach(contact => {
+                        const name = contact.querySelector('.name').textContent.toLowerCase();
+                        contact.style.display = name.includes(searchTerm) ? 'flex' : 'none';
+                    });
+                }, 300);
             });
-            
-            // Show/hide chat input based on message input
-            messageInput.addEventListener('input', () => {
-                sendButton.disabled = !messageInput.value.trim();
-                errorMessage.style.display = 'none';
-            });
-            
-            // Function to format timestamp
+
+            // Format timestamp for display
             function formatTimestamp(timestamp) {
-                // Handle various timestamp formats
-                let date;
-                if (timestamp.includes('T') || timestamp.includes('Z')) {
-                    // ISO format
-                    date = new Date(timestamp);
-                } else if (timestamp.includes('-') && timestamp.includes(':')) {
-                    // MySQL format: 2023-02-25 14:30:45
-                    date = new Date(timestamp.replace(' ', 'T'));
-                } else {
-                    // Fallback to current time if format is unrecognized
-                    console.warn('Unrecognized timestamp format:', timestamp);
-                    date = new Date();
+                if (!timestamp) return '';
+                const date = new Date(timestamp);
+                const now = new Date();
+                if (date.toDateString() === now.toDateString()) {
+                    return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
                 }
-                return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                const yesterday = new Date(now);
+                yesterday.setDate(now.getDate() - 1);
+                if (date.toDateString() === yesterday.toDateString()) {
+                    return 'Yesterday';
+                }
+                return date.toLocaleDateString();
             }
-            
-            // Function to show error message
+
+            // Format date for separator
+            function formatDateForSeparator(timestamp) {
+                if (!timestamp) return '';
+                const date = new Date(timestamp);
+                const now = new Date();
+                if (date.toDateString() === now.toDateString()) {
+                    return 'Today';
+                }
+                const yesterday = new Date(now);
+                yesterday.setDate(now.getDate() - 1);
+                if (date.toDateString() === yesterday.toDateString()) {
+                    return 'Yesterday';
+                }
+                const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+                return date.toLocaleDateString(undefined, options);
+            }
+
+            // Add message to chat
+            function addMessage(message) {
+                const messageId = message.message_id || message.id || Date.now();
+                if (document.getElementById(`msg_${messageId}`) && !message.temp) {
+                    return;
+                }
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `message ${message.sender_type === 'hotel' ? 'sent' : 'received'}`;
+                if (message.temp) messageDiv.classList.add('temp');
+                messageDiv.id = `msg_${messageId}`;
+
+                const timestamp = message.timestamp || message.created_at;
+                const formattedTime = formatTimestamp(timestamp);
+                const messageContent = message.conversations || '';
+
+                messageDiv.innerHTML = `
+                    <div class="message-content">${messageContent}</div>
+                    <div class="message-time">${formattedTime}</div>
+                `;
+
+                const messageDate = new Date(timestamp).toDateString();
+                const lastMessage = chatMessages.querySelector('.message:last-child');
+                if (lastMessage) {
+                    const lastTimestamp = lastMessage.querySelector('.message-time').dataset.fullDate;
+                    if (lastTimestamp && new Date(lastTimestamp).toDateString() !== messageDate) {
+                        const dateSeparator = document.createElement('div');
+                        dateSeparator.className = 'date-separator';
+                        dateSeparator.textContent = formatDateForSeparator(timestamp);
+                        chatMessages.appendChild(dateSeparator);
+                    }
+                } else {
+                    const dateSeparator = document.createElement('div');
+                    dateSeparator.className = 'date-separator';
+                    dateSeparator.textContent = formatDateForSeparator(timestamp);
+                    chatMessages.appendChild(dateSeparator);
+                }
+
+                messageDiv.querySelector('.message-time').dataset.fullDate = timestamp;
+                chatMessages.appendChild(messageDiv);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+
+            // Show error message
             function showError(message) {
                 errorMessage.textContent = message;
                 errorMessage.style.display = 'block';
@@ -391,320 +185,258 @@
                     errorMessage.style.display = 'none';
                 }, 5000);
             }
-            
-            // Start polling for new messages
-            function startPolling() {
-                if (pollingInterval) {
-                    clearInterval(pollingInterval);
-                }
-                
-                if (selectedUserId) {
-                    pollingInterval = setInterval(() => {
-                        checkNewMessages();
-                    }, 5000); // Poll every 5 seconds
+
+            // Update contact preview
+            function updateContactPreview(travelerId, message, timestamp) {
+                const contact = document.querySelector(`.contact[data-traveler-id="${travelerId}"]`);
+                if (contact) {
+                    const preview = contact.querySelector('.preview');
+                    const timestampEl = contact.querySelector('.timestamp');
+                    if (preview) preview.textContent = message;
+                    if (timestampEl) timestampEl.textContent = formatTimestamp(timestamp);
+                    const parentNode = contact.parentNode;
+                    if (parentNode && parentNode.firstChild !== contact) {
+                        parentNode.insertBefore(contact, parentNode.firstChild);
+                    }
                 }
             }
-            
-            // Stop polling for new messages
-            function stopPolling() {
-                if (pollingInterval) {
-                    clearInterval(pollingInterval);
-                    pollingInterval = null;
-                }
-            }
-            
-            // Check for new messages
-            function checkNewMessages() {
-                if (!selectedUserId) return;
-                
-                const formData = new FormData();
-                formData.append('user_id', selectedUserId);
-                
-                // Only append timestamp if we have one
-                if (lastMessageTimestamp) {
-                    formData.append('last_timestamp', lastMessageTimestamp);
-                }
-                
-                fetch('<?= ROOT ?>/hmessages/checkNewMessages', {
-                    method: 'POST',
-                    body: formData
-                })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok: ' + response.status);
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    if (data.error) {
-                        console.error('Error checking messages:', data.error);
-                        return;
-                    }
-                    
-                    if (data.new_messages && data.new_messages.length > 0) {
-                        // Add new messages to chat
-                        data.new_messages.forEach(message => {
-                            addMessage(message);
-                        });
-                        
-                        // Update last message timestamp
-                        const lastMsg = data.new_messages[data.new_messages.length - 1];
-                        lastMessageTimestamp = lastMsg.timestamp;
-                        
-                        // Update contact preview if it's the selected user
-                        const contact = document.querySelector(`.contact[data-user-id="${selectedUserId}"]`);
-                        if (contact) {
-                            const preview = contact.querySelector('.preview');
-                            if (preview) {
-                                preview.textContent = lastMsg.content;
-                            }
-                        }
-                    }
-                })
-                .catch(error => {
-                    console.error('Error checking for new messages:', error);
-                });
-            }
-            
-            // Add a message to the chat
-            function addMessage(message) {
-                const messageDiv = document.createElement('div');
-                messageDiv.className = `message ${message.message_type || (message.is_sender ? 'sent' : 'received')}`;
-                messageDiv.innerHTML = `
-                    ${message.content || message.message}
-                    <div class="message-time">${formatTimestamp(message.timestamp)}</div>
-                `;
-                chatMessages.appendChild(messageDiv);
-                
-                // Scroll to bottom
-                chatMessages.scrollTop = chatMessages.scrollHeight;
-            }
 
-            function loadChat(userId, contactElement) {
-                // Check if userId is valid
-                if (!userId) {
-                    console.error('Invalid user ID');
-                    return;
-                }
-                
-                // Stop current polling
-                stopPolling();
-                
-                // Update selected user
-                selectedUserId = userId;
-                contacts.forEach(c => c.classList.remove('active'));
-                contactElement.classList.add('active');
-                
-                // If there was an unread badge, remove it
-                const unreadBadge = contactElement.querySelector('.unread-badge');
-                if (unreadBadge) {
-                    unreadBadge.remove();
-                }
-
-                // Show loading state
-                chatMessages.innerHTML = '<div class="loading">Loading messages...</div>';
-                
-                // Update UI states
-                chatHeader.style.display = 'flex';
-                chatInput.style.display = 'block';
-                const emptyState = document.querySelector('.empty-state');
-                if (emptyState) {
-                    emptyState.style.display = 'none';
-                }
-
-                // Reset error message
-                errorMessage.style.display = 'none';
-
-                // Fetch conversation from server
-                const formData = new FormData();
-                formData.append('user_id', userId);
-                
-                fetch('<?= ROOT ?>/hmessages/getConversation', {
-                    method: 'POST',
-                    body: formData
-                })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok: ' + response.status);
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    console.log('Conversation data:', data); // Debug
-                    
-                    if (data.error) {
-                        showError(data.error);
-                        chatMessages.innerHTML = `<div class="empty-state"><p>Error: ${data.error}</p></div>`;
-                        return;
-                    }
-                    
-                    // Update chat header
-                    chatHeader.querySelector('h3').textContent = data.user.name;
-                    if (data.user.profile_image) {
-                        chatHeader.querySelector('img').src = '<?= ROOT ?>/assets/images/users/' + data.user.profile_image;
-                    } else {
-                        chatHeader.querySelector('img').src = '<?= ROOT ?>/assets/images/serviceProviders/profile.jpg';
-                    }
-                    
-                    // Clear previous messages
-                    chatMessages.innerHTML = '';
-                    
-                    // Add messages
-                    if (!data.messages || data.messages.length === 0) {
-                        chatMessages.innerHTML = '<div class="empty-state"><p>No messages yet. Start the conversation!</p></div>';
-                        // Set a default timestamp (now) if no messages
-                        lastMessageTimestamp = new Date().toISOString();
-                    } else {
-                        data.messages.forEach(message => {
-                            addMessage(message);
-                        });
-                        
-                        // Get the timestamp of the last message
-                        const lastMsg = data.messages[data.messages.length - 1];
-                        lastMessageTimestamp = lastMsg.timestamp;
-                        
-                        // Scroll to bottom
-                        chatMessages.scrollTop = chatMessages.scrollHeight;
-                    }
-                    
-                    // Focus input
-                    messageInput.focus();
-                    sendButton.disabled = !messageInput.value.trim();
-                    
-                    // Start polling for new messages
-                    startPolling();
-                })
-                .catch(error => {
-                    console.error('Error loading conversation:', error);
-                    chatMessages.innerHTML = '<div class="empty-state"><p>Error loading messages. Please try again.</p></div>';
-                    showError('Failed to load messages. Please try again.');
-                });
-            }
-
-            // Add event listener for send button
-            sendButton.addEventListener('click', sendMessage);
-            
-            // Add event listener for enter key
-            messageInput.addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') {
-                    sendMessage();
-                }
-            });
-
+            // Send message
             function sendMessage() {
-                const text = messageInput.value.trim();
-                if (!text || !selectedUserId) return;
+                if (!selectedHotelId || !selectedTravelerId) return;
+                const content = messageInput.value.trim();
+                if (!content) return;
 
-                // Disable input and button
-                messageInput.disabled = true;
+                const tempId = 'msg_temp_' + Date.now();
+                addMessage({
+                    message_id: tempId,
+                    conversations: content,
+                    timestamp: new Date().toISOString(),
+                    sender_type: 'hotel',
+                    is_read: 1,
+                    temp: true
+                });
+
+                messageInput.value = '';
                 sendButton.disabled = true;
-                
-                // Add temporary message to chat
-                const tempId = 'msg-' + Date.now();
-                const tempMessageDiv = document.createElement('div');
-                tempMessageDiv.id = tempId;
-                tempMessageDiv.className = 'message sent pending';
-                tempMessageDiv.innerHTML = `
-                    ${text}
-                    <div class="message-time">Sending...</div>
-                `;
-                chatMessages.appendChild(tempMessageDiv);
-                
-                // Scroll to bottom
-                chatMessages.scrollTop = chatMessages.scrollHeight;
-                
-                // Prepare form data
-                const formData = new FormData();
-                formData.append('user_id', selectedUserId);
-                formData.append('message', text);
-                
-                // Send message to server
-                fetch('<?= ROOT ?>/hmessages/sendMessage', {
+                messageInput.focus();
+
+                fetch(`${ROOT}/Hmessages/api_sendMessage`, {
                     method: 'POST',
-                    body: formData
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    body: JSON.stringify({
+                        hotel_id: selectedHotelId,
+                        traveler_id: selectedTravelerId,
+                        content: content
+                    })
                 })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok: ' + response.status);
-                    }
-                    return response.json();
-                })
+                .then(response => response.json())
                 .then(data => {
-                    // Enable input and clear it
-                    messageInput.disabled = false;
-                    messageInput.value = '';
-                    messageInput.focus();
-                    sendButton.disabled = true;
-                    
-                    if (data.error) {
-                        // Update temporary message to show error
-                        const tempMsg = document.getElementById(tempId);
-                        if (tempMsg) {
-                            tempMsg.classList.add('error');
-                            tempMsg.querySelector('.message-time').textContent = 'Failed to send';
-                        }
-                        showError(data.error);
-                        return;
-                    }
-                    
-                    // Update temporary message with sent status
-                    const tempMsg = document.getElementById(tempId);
-                    if (tempMsg) {
-                        tempMsg.classList.remove('pending');
-                        tempMsg.querySelector('.message-time').textContent = formatTimestamp(data.message.timestamp);
-                    }
-                    
-                    // Update last message timestamp
-                    lastMessageTimestamp = data.message.timestamp;
-                    
-                    // Update contact preview
-                    const contact = document.querySelector(`.contact[data-user-id="${selectedUserId}"]`);
-                    if (contact) {
-                        const preview = contact.querySelector('.preview');
-                        if (preview) {
-                            preview.textContent = text;
-                        }
-                        
-                        // Move contact to top of list
-                        const contactsList = document.querySelector('.contacts-list');
-                        if (contactsList.firstChild) {
-                            contactsList.insertBefore(contact, contactsList.firstChild);
-                        }
+                    const tempMessage = document.getElementById(tempId);
+                    if (data.success && tempMessage) {
+                        tempMessage.classList.remove('temp');
+                        tempMessage.id = `msg_${data.message_id}`;
+                        lastMessageTimestamp = new Date().toISOString();
+                        updateContactPreview(selectedTravelerId, content, new Date().toISOString());
+                    } else {
+                        if (tempMessage) tempMessage.classList.add('error');
+                        showError(data.error || 'Failed to send message');
                     }
                 })
                 .catch(error => {
                     console.error('Error sending message:', error);
-                    
-                    // Enable input and button
-                    messageInput.disabled = false;
-                    messageInput.focus();
-                    sendButton.disabled = !messageInput.value.trim();
-                    
-                    // Update temporary message to show error
-                    const tempMsg = document.getElementById(tempId);
-                    if (tempMsg) {
-                        tempMsg.classList.add('error');
-                        tempMsg.querySelector('.message-time').textContent = 'Failed to send';
-                    }
-                    
+                    const tempMessage = document.getElementById(tempId);
+                    if (tempMessage) tempMessage.classList.add('error');
                     showError('Failed to send message. Please try again.');
                 });
             }
 
-            // Initialize search functionality
-            const searchBar = document.querySelector('.search-bar');
-            searchBar.addEventListener('input', function() {
-                const searchTerm = this.value.toLowerCase();
-                contacts.forEach(contact => {
-                    const name = contact.querySelector('.name').textContent.toLowerCase();
-                    const preview = contact.querySelector('.preview').textContent.toLowerCase();
-                    
-                    if (name.includes(searchTerm) || preview.includes(searchTerm)) {
-                        contact.style.display = 'flex';
-                    } else {
-                        contact.style.display = 'none';
+            // Fetch conversation
+            // Fetch conversation
+function fetchConversation(silent = false) {
+    if (!selectedHotelId || !selectedTravelerId) return;
+    if (!silent) {
+        // Remove the spinner and just show empty div
+        chatMessages.innerHTML = '';
+    }
+
+    let url = `${ROOT}/Hmessages/api_getConversation/${selectedHotelId}/${selectedTravelerId}`;
+    if (lastMessageTimestamp && silent) {
+        url += `?last_timestamp=${encodeURIComponent(lastMessageTimestamp)}`;
+    }
+
+    fetch(url, {
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        const messages = data.messages || [];
+        if (!silent) {
+            chatMessages.innerHTML = '';
+            if (messages.length === 0) {
+                chatMessages.innerHTML = '<div class="empty-state"><p>No messages yet. Start the conversation!</p></div>';
+            } else {
+                messages.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+                messages.forEach(message => addMessage(message));
+            }
+        } else {
+            const existingIds = Array.from(document.querySelectorAll('.message'))
+                .map(el => el.id.replace('msg_', ''));
+            messages.forEach(message => {
+                const messageId = message.message_id || message.id || '';
+                if (messageId && !existingIds.includes(messageId.toString())) {
+                    addMessage(message);
+                    const messageTimestamp = message.timestamp || message.created_at;
+                    if (messageTimestamp && (!lastMessageTimestamp || new Date(messageTimestamp) > new Date(lastMessageTimestamp))) {
+                        lastMessageTimestamp = messageTimestamp;
                     }
+                }
+            });
+        }
+        if (!silent) markConversationAsRead();
+        updateUnreadCounts();
+    })
+    .catch(error => {
+        console.error('Error fetching conversation:', error);
+        if (!silent) {
+            chatMessages.innerHTML = '<div class="empty-state"><i class="fas fa-exclamation-triangle"></i><p>Failed to load messages. Please try again.</p></div>';
+            showError('Failed to load messages. Please refresh the page.');
+        }
+    });
+}
+
+            // Mark conversation as read
+            function markConversationAsRead() {
+                if (!selectedHotelId || !selectedTravelerId) return;
+                fetch(`${ROOT}/Hmessages/api_markAsRead`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    body: JSON.stringify({
+                        hotel_id: selectedHotelId,
+                        traveler_id: selectedTravelerId
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        const contact = document.querySelector(`.contact[data-traveler-id="${selectedTravelerId}"]`);
+                        if (contact) {
+                            const badge = contact.querySelector('.unread-badge');
+                            if (badge) badge.remove();
+                        }
+                    }
+                })
+                .catch(error => {
+                    console.warn('Error marking conversation as read:', error);
                 });
+            }
+
+            // Update unread counts
+            function updateUnreadCounts() {
+                if (!selectedHotelId) return;
+                fetch(`${ROOT}/Hmessages/api_getUnreadCounts/${selectedHotelId}`, {
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    const unreadCounts = data.unread_counts || {};
+                    document.querySelectorAll('.contact').forEach(contact => {
+                        const travelerId = contact.dataset.travelerId;
+                        if (!travelerId) return;
+                        const existingBadge = contact.querySelector('.unread-badge');
+                        if (existingBadge) existingBadge.remove();
+                        const unreadCount = unreadCounts[travelerId];
+                        if (unreadCount && unreadCount > 0) {
+                            const badge = document.createElement('div');
+                            badge.className = 'unread-badge';
+                            badge.textContent = unreadCount;
+                            contact.appendChild(badge);
+                        }
+                    });
+                })
+                .catch(error => {
+                    console.warn('Error updating unread counts:', error);
+                });
+            }
+
+            // Load chat
+            function loadChat(hotel_Id, traveler_Id, travelerName, contactElement) {
+                selectedHotelId = hotel_Id;
+                selectedTravelerId = traveler_Id;
+                selectedTravelerName = travelerName;
+                lastMessageTimestamp = null;
+                document.querySelectorAll('.contact').forEach(c => c.classList.remove('active'));
+                contactElement.classList.add('active');
+                const travelerImage = contactElement.querySelector('img').src;
+                chatHeader.innerHTML = `
+                    <img src="${travelerImage}" alt="${travelerName}">
+                    <h3>${travelerName}</h3>
+                `;
+                messageInput.disabled = false;
+                messageInput.placeholder = `Message ${travelerName}...`;
+                messageInput.focus();
+                sendButton.disabled = !messageInput.value.trim();
+                fetchConversation();
+                startPolling();
+            }
+
+            // Start polling
+            function startPolling() {
+                if (pollingInterval) clearInterval(pollingInterval);
+                if (!selectedHotelId || !selectedTravelerId) return;
+                pollingInterval = setInterval(() => {
+                    fetchConversation(true);
+                }, 3000);
+            }
+
+            // Event listeners
+            document.querySelectorAll('.contact').forEach(contact => {
+                contact.addEventListener('click', () => {
+                    const hotelId = contact.dataset.hotelId;
+                    const travelerId = contact.dataset.travelerId;
+                    const travelerName = contact.dataset.travelerName;
+                    loadChat(hotelId, travelerId, travelerName, contact);
+                });
+            });
+
+            messageInput.addEventListener('input', () => {
+                sendButton.disabled = !messageInput.value.trim();
+                errorMessage.style.display = 'none';
+            });
+
+            messageInput.addEventListener('keypress', e => {
+                if (e.key === 'Enter' && !sendButton.disabled) {
+                    e.preventDefault();
+                    sendMessage();
+                }
+            });
+
+            sendButton.addEventListener('click', sendMessage);
+
+            if ('hotel_id' in window.sessionStorage) {
+                updateUnreadCounts();
+            }
+
+            document.addEventListener('visibilitychange', () => {
+                if (document.visibilityState === 'visible' && selectedHotelId && selectedTravelerId) {
+                    startPolling();
+                } else if (pollingInterval) {
+                    clearInterval(pollingInterval);
+                }
+            });
+
+            window.addEventListener('beforeunload', () => {
+                if (pollingInterval) clearInterval(pollingInterval);
             });
         });
     </script>

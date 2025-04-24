@@ -1,10 +1,9 @@
 <?php
-include '../app/models/Event.php';   
+include '../app/models/Event.php';
 
-
-    class Eoevents extends Controller{
-        private $model;
-        private $event = [];
+class Eoevents extends Controller {
+    private $model;
+    private $event = [];
 
         public function index($a = '', $b = '', $c = ''){
 
@@ -42,11 +41,22 @@ include '../app/models/Event.php';
             if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $id = $_POST["id"];
                 $success = $this->model->delete_event($id);
-                redirect("eventorganizer/Eoevents");
+                if ($success) {
+                    $_SESSION['message'] = "Event deleted successfully!";
+                    error_log("Event deleted successfully: $id");
+                } else {
+                    $_SESSION['error'] = "Failed to delete event.";
+                    error_log("Failed to delete event: $id");
+                }
+            } else {
+                $_SESSION['error'] = "Invalid event ID.";
+                error_log("Invalid event ID received");
             }
+            redirect("eventorganizer/Eoevents");
+        } else {
+            $_SESSION['error'] = "Invalid request method.";
+            error_log("Invalid request method for delete_event");
+            redirect("eventorganizer/Eoevents");
         }
-
-
     }
-
-
+}
