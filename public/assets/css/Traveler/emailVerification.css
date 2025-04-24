@@ -1,0 +1,27 @@
+body,
+html {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    /* Prevents scrollbars */
+    font-size: 18px;
+    /* Default font size */
+    font-family: 'Poppins', sans-serif;
+}
+
+body::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    filter: blur(3.5px);
+    /* Adjust the blur radius of the behind images */
+    z-index: -1;
+    /* Ensure it is behind the content */
+    background-image: url(../../images/Travelers/signupAndLogin/background.webp);            /*paths marked for incase of folder changes*/
+
+    
+}

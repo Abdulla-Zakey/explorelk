@@ -57,6 +57,7 @@ class Eocreateevent extends Controller{
                 $eventName = $_POST['eventName'];
                 $eventType = $_POST['eventType'];
                 $aboutEvent = $_POST['aboutEvent'];
+                $eventType = $_POST['eventType'];
                 $eventDate = $_POST['eventDate'];
                 $eventStartTime = $_POST['eventStartTime'];
                 $eventEndTime = $_POST['eventEndTime'];
@@ -71,6 +72,7 @@ class Eocreateevent extends Controller{
                     $eventName,
                     $eventType,
                     $aboutEvent,
+                    $eventType,
                     $eventDate,
                     $eventStartTime,
                     $eventEndTime,

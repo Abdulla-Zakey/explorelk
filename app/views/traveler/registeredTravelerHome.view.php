@@ -89,7 +89,7 @@
 
         <div class="rightContainer">
             <h1>
-                <?php echo "Welcome back, " . htmlspecialchars($data['userData']->username) . "! Ready for your next adventure?";?>
+                <?php echo "Welcome " . htmlspecialchars($data['userData']->username) . "! ready for your next adventure?";?>
             </h1>
             <div class="contentContainer">
                 <h2>
