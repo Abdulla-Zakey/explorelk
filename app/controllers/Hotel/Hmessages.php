@@ -1,199 +1,144 @@
 <?php
 
 class Hmessages extends Controller {
-    private $hotelModel;
-    private $messageModel;
-    private $userModel;
+    private $messagesModel;
     
     public function __construct() {
-        // Check if session is active
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
-        
-        // Check if user is logged in
         if (!isset($_SESSION['hotel_id'])) {
-            redirect('hlogin');
-            exit; // Ensure execution stops
+            redirect('login');
         }
-        
-        $this->hotelModel = new Hotel();
-        $this->messageModel = new Message();
-        $this->userModel = new User();
-    }
-   
-    public function index($a = '', $b = '', $c = '') {
-        $data = [];
-        $data['hotelBasic'] = $this->hotelModel->first(['hotel_Id' => $_SESSION['hotel_id']]);
-        $data['conversations'] = $this->messageModel->getHotelConversations($_SESSION['hotel_id']);
-        
-        $this->view('hotel/messages', data: $data);
+        $this->messagesModel = $this->loadModel('Messages');
     }
     
-    // API method to get conversation with a specific user
-    public function getConversation() {
-        // Check if request is AJAX
-        if (!$this->isAjaxRequest()) {
-            redirect('hmessages');
+    public function index() {
+        $data['conversations'] = $this->messagesModel->getHotelConversations($_SESSION['hotel_id']);
+        $this->view('hotel/messages', $data);
+    }
+    
+    public function api_getConversation($hotel_id = null, $traveler_id = null) {
+        if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH'] !== 'XMLHttpRequest') {
+            http_response_code(403);
+            echo json_encode(['error' => 'Invalid request']);
             exit;
         }
         
-        // Get user ID from POST
-        $user_id = $_POST['user_id'] ?? 0;
-        if (!$user_id) {
-            echo json_encode(['error' => 'Invalid user ID']);
-            return;
-        }
-        
-        // Get messages
-        $messages = $this->messageModel->getConversation($_SESSION['hotel_id'], $user_id);
-        $user = $this->userModel->first(['user_id' => $user_id]);
-        
-        if (!$user) {
-            echo json_encode(['error' => 'User  not found']);
-            return;
-        }
-        
-        // Return JSON response
-        echo json_encode([
-            'messages' => $messages,
-            'user' => [
-                'name' => $user->name ?? 'Unknown',
-                'profile_image' => $user->profile_image ?? ''
-            ]
-        ]);
-    }
-    
-    // API method to check for new messages
-    public function checkNewMessages() {
-        // Check if request is AJAX
-        if (!$this->isAjaxRequest()) {
-            redirect('hmessages');
+        if (!$hotel_id || !$traveler_id || $hotel_id != $_SESSION['hotel_id']) {
+            http_response_code(403);
+            echo json_encode(['error' => 'Access denied']);
             exit;
         }
         
-        // Get user ID and last message time from POST
-        $user_id = $_POST['user_id'] ?? 0;
-        $last_timestamp = $_POST['last_timestamp'] ?? '';
-        
-        if (!$user_id || !$last_timestamp) {
-            echo json_encode(['error' => 'Missing required data']);
-            return;
+        $lastTimestamp = isset($_GET['last_timestamp']) ? urldecode($_GET['last_timestamp']) : null;
+        try {
+            $messages = $this->messagesModel->getConversation($hotel_id, $traveler_id, $lastTimestamp);
+            header('Content-Type: application/json');
+            echo json_encode(['success' => true, 'messages' => $messages]);
+        } catch (Exception $e) {
+            error_log('Error fetching conversation: ' . $e->getMessage());
+            http_response_code(500);
+            echo json_encode(['error' => 'Failed to fetch conversation']);
         }
-        
-        // Get new messages
-        $new_messages = $this->messageModel->getNewMessages($_SESSION['hotel_id'], $user_id, $last_timestamp);
-        
-        // Mark messages as read
-        if (!empty($new_messages)) {
-            $this->messageModel->markAsRead($_SESSION['hotel_id'], $user_id);
-        }
-        
-        // Return JSON response
-        echo json_encode([
-            'new_messages' => $new_messages,
-            'count' => count($new_messages)
-        ]);
     }
     
-    // API method to send a message
-    public function sendMessage() {
-        // Check if request is AJAX
-        if (!$this->isAjaxRequest()) {
-            redirect('hmessages');
+    public function api_sendMessage() {
+        if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH'] !== 'XMLHttpRequest') {
+            http_response_code(403);
+            echo json_encode(['error' => 'Invalid request']);
             exit;
         }
         
-        // Get data from POST
-        $user_id = $_POST['user_id'] ?? 0;
-        $content = $_POST['content'] ?? ''; // Changed from 'message' to 'content'
+        $data = json_decode(file_get_contents('php://input'), true);
         
-        if (!$user_id) {
-            echo json_encode(['error' => 'Invalid user ID']);
-            return;
+        if (!isset($data['hotel_id']) || !isset($data['traveler_id']) || !isset($data['content']) || empty(trim($data['content']))) {
+            http_response_code(400);
+            echo json_encode(['error' => 'Missing or invalid required fields']);
+            exit;
         }
         
-        // Validate content
-        if (empty(trim($content))) {
-            echo json_encode(['error' => 'Message cannot be empty']);
-            return;
+        if ($data['hotel_id'] != $_SESSION['hotel_id']) {
+            http_response_code(403);
+            echo json_encode(['error' => 'Access denied']);
+            exit;
         }
         
-        // Limit message length
-        if (strlen($content) > 1000) { // Adjust max length as needed
-            echo json_encode(['error' => 'Message too long (maximum 1000 characters)']);
-            return;
-        }
-        
-        // Send message
-        $result = $this->messageModel->sendMessage(
-            $_SESSION['hotel_id'],
-            $user_id,
-            $content,
-            $_SESSION['hotel_id'] // Assuming this is the sender ID
-        );
-        
-        // Return JSON response
-        if ($result) {
-            // Get the latest message to return
-            $messages = $this->messageModel->getConversation($_SESSION['hotel_id'], $user_id);
-            echo json_encode([
-                'success' => true,
-                'message' => end($messages) // Get the last message
-            ]);
-        } else {
+        try {
+            $message_id = $this->messagesModel->sendMessage(
+                $data['hotel_id'],
+                $data['traveler_id'],
+                trim($data['content']),
+                'hotel'
+            );
+            if ($message_id) {
+                header('Content-Type: application/json');
+                echo json_encode(['success' => true, 'message_id' => $message_id]);
+            } else {
+                http_response_code(500);
+                echo json_encode(['error' => 'Failed to send message']);
+            }
+        } catch (Exception $e) {
+            error_log('Error sending message: ' . $e->getMessage());
+            http_response_code(500);
             echo json_encode(['error' => 'Failed to send message']);
         }
     }
     
-    // API method to search conversations
-    public function searchConversations() {
-        // Check if request is AJAX
-        if (!$this->isAjaxRequest()) {
-            redirect('hmessages');
+    public function api_markAsRead() {
+        if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH'] !== 'XMLHttpRequest') {
+            http_response_code(403);
+            echo json_encode(['error' => 'Invalid request']);
             exit;
         }
         
-        // Get search term from POST
-        $search_term = $_POST['search_term'] ?? '';
+        $data = json_decode(file_get_contents('php://input'), true);
         
-        if (empty(trim($search_term))) {
-            echo json_encode(['error' => 'Search term cannot be empty']);
-            return;
-        }
-        
-        // Get conversations
-        $conversations = $this->messageModel->searchConversations($_SESSION['hotel_id'], $search_term);
-        
-        // Return JSON response
-        echo json_encode(['conversations' => $conversations]);
-    }
-    
-    // API method to mark messages as read
-    public function markAsRead() {
-        // Check if request is AJAX
-        if (!$this->isAjaxRequest()) {
-            redirect('hmessages');
+        if (!isset($data['hotel_id']) || !isset($data['traveler_id'])) {
+            http_response_code(400);
+            echo json_encode(['error' => 'Missing required fields']);
             exit;
         }
         
-        // Get user ID from POST
-        $user_id = $_POST['user_id'] ?? 0;
-        
-        if (!$user_id) {
-            echo json_encode(['error' => 'Invalid user ID']);
-            return;
+        if ($data['hotel_id'] != $_SESSION['hotel_id']) {
+            http_response_code(403);
+            echo json_encode(['error' => 'Access denied']);
+            exit;
         }
         
-        // Mark messages as read
-        $result = $this->messageModel->markAsRead($_SESSION['hotel_id'], $user_id);
-        
-        // Return JSON response
-        echo json_encode(['success' => true]);
+        try {
+            $success = $this->messagesModel->markAsRead($data['hotel_id'], $data['traveler_id']);
+            header('Content-Type: application/json');
+            echo json_encode(['success' => $success]);
+        } catch (Exception $e) {
+            error_log('Error marking as read: ' . $e->getMessage());
+            http_response_code(500);
+            echo json_encode(['error' => 'Failed to mark messages as read']);
+        }
     }
     
-    // Helper function to check if the request is AJAX
-    private function isAjaxRequest() {
-        return isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest';
+    public function api_getUnreadCounts($hotel_id = null) {
+        if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH'] !== 'XMLHttpRequest') {
+            http_response_code(403);
+            echo json_encode(['error' => 'Invalid request']);
+            exit;
+        }
+        
+        if (!$hotel_id || $hotel_id != $_SESSION['hotel_id']) {
+            http_response_code(403);
+            echo json_encode(['error' => 'Access denied']);
+            exit;
+        }
+        
+        try {
+            $counts = $this->messagesModel->getUnreadCounts($hotel_id);
+            $formattedCounts = [];
+            foreach ($counts as $count) {
+                $formattedCounts[$count->traveler_Id] = (int)$count->count;
+            }
+            header('Content-Type: application/json');
+            echo json_encode(['success' => true, 'unread_counts' => $formattedCounts]);
+        } catch (Exception $e) {
+            error_log('Error fetching unread counts: ' . $e->getMessage());
+            http_response_code(500);
+            echo json_encode(['error' => 'Failed to fetch unread counts']);
+        }
     }
 }
