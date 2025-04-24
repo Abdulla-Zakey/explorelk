@@ -1,0 +1,376 @@
+body {
+    overflow-x: hidden;
+    margin: 0;
+    background-color: #f8f9fa;
+}
+
+.main-container {
+    margin: 2% 2% 2% 7.5%;
+    margin-left: 22%;
+    width: 76%;
+}
+
+.page-header {
+    margin-bottom: 2%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.page-header h1 {
+    font-size: 2.25rem;
+    color: #333;
+}
+
+/* Booking Requests Page Specific Styles */
+.heading {
+    padding-top: 2%;
+    padding-bottom: 2%;
+}
+
+.search-container {
+    width: 100%;
+    margin-bottom: 2%;
+}
+
+.search-bar {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 1em;
+}
+
+.request-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.request-item {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+}
+
+.request-item:hover {
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    transform: translateY(-2px);
+}
+
+.request-details {
+    width: 60%;
+}
+
+.status {
+    font-size: 0.8em;
+    padding: 4px 10px;
+    border-radius: 12px;
+    display: inline-block;
+    margin-bottom: 8px;
+    font-weight: 500;
+}
+
+.status.pending {
+    background-color: #E9ECEF;
+    color: #495057;
+}
+
+.status.accepted {
+    background-color: #D4EDDA;
+    color: #155724;
+}
+
+.status.rejected {
+    background-color: #F8D7DA;
+    color: #721C24;
+}
+
+.title {
+    font-size: 1.1em;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.location, .date {
+    font-size: 0.9em;
+    color: #666;
+    margin-bottom: 5px;
+}
+
+.package-price {
+    font-size: 0.9em;
+    color: #002D40;
+    font-weight: bold;
+    margin-top: 5px;
+}
+
+.request-actions {
+    width: 35%;
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+}
+
+.action-button {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.9em;
+    transition: background-color 0.3s;
+}
+
+.view-btn {
+    background-color: #002D40;
+    color: white;
+}
+
+.view-btn:hover {
+    background-color: #1E7A8F;
+}
+
+.accept-btn {
+    background-color: #28A745;
+    color: white;
+}
+
+.accept-btn:hover {
+    background-color: #218838;
+}
+
+.reject-btn {
+    background-color: #DC3545;
+    color: white;
+}
+
+.reject-btn:hover {
+    background-color: #C82333;
+}
+
+.request-image {
+    width: 20%;
+    height: 100px;
+    overflow: hidden;
+    border-radius: 8px;
+}
+
+.request-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+/* Modal Styles */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.5);
+    animation: fadeIn 0.3s;
+}
+
+@keyframes fadeIn {
+    from {opacity: 0;}
+    to {opacity: 1;}
+}
+
+.modal-content {
+    background-color: #ffffff;
+    margin: 5% auto;
+    padding: 0;
+    border-radius: 12px;
+    width: 80%;
+    max-width: 800px;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+    animation: slideIn 0.3s;
+}
+
+@keyframes slideIn {
+    from {transform: translateY(-50px); opacity: 0;}
+    to {transform: translateY(0); opacity: 1;}
+}
+
+.modal-header {
+    background: linear-gradient(135deg, #002D40 0%, #1E7A8F 100%);
+    color: white;
+    padding: 20px;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-header h2 {
+    margin: 0;
+    font-size: 1.5em;
+}
+
+.close {
+    color: #ffffff;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+.close:hover {
+    color: #B3D9FF;
+}
+
+.modal-body {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.modal-image {
+    width: 100%;
+    height: 250px;
+    overflow: hidden;
+    border-radius: 8px;
+}
+
+.modal-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.modal-details {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.detail-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.detail-row:last-child {
+    border-bottom: none;
+}
+
+.detail-icon {
+    color: #1E7A8F;
+    font-size: 1.2em;
+}
+
+.detail-label {
+    font-weight: 600;
+    color: #002D40;
+    width: 150px;
+    flex-shrink: 0;
+}
+
+.detail-value {
+    color: #333;
+    flex: 1;
+    line-height: 1.5;
+}
+
+.detail-value.pending {
+    color: #495057;
+    background-color: #E9ECEF;
+    padding: 4px 10px;
+    border-radius: 12px;
+    display: inline-block;
+}
+
+.modal-footer {
+    padding: 20px;
+    border-top: 1px solid #e0e0e0;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.modal-action-button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.9em;
+    transition: background-color 0.3s;
+}
+
+.modal-primary-btn {
+    background-color: #1E7A8F;
+    color: white;
+}
+
+.modal-primary-btn:hover {
+    background-color: #002D40;
+}
+
+.modal-secondary-btn {
+    background-color: #e0e0e0;
+    color: #333;
+}
+
+.modal-secondary-btn:hover {
+    background-color: #d0d0d0;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .modal-content {
+        width: 90%;
+        margin: 10% auto;
+    }
+
+    .modal-image {
+        height: 200px;
+    }
+
+    .request-item {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .request-details, .request-image, .request-actions {
+        width: 100%;
+    }
+
+    .request-image {
+        margin-top: 15px;
+        height: 150px;
+    }
+
+    .request-actions {
+        margin-top: 15px;
+        justify-content: flex-start;
+    }
+
+    .detail-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+    }
+
+    .detail-label {
+        width: 100%;
+    }
+}
