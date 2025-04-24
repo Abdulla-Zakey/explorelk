@@ -26,7 +26,8 @@
                 'eventLocation' => $data['eventDetails']->eventLocation
             ];
             
-            $this->view('traveler/particularEvent', $data);
+            // $this->view('traveler/particularEvent', $data);
+            $this->view('traveler/temp', $data);
             
         }
 
