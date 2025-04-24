@@ -1,0 +1,106 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'poppins';
+    background-color: #f0f0f0;
+}
+
+.sidebar {
+    width: 250px;
+    height: 100vh;
+    background-color: #002D40;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: fixed;
+    top: 0;
+    left: 0;
+}
+
+.logo {
+    align-items: center;
+    display: flex;
+    margin-bottom: 20px;
+}
+
+.logo-img {
+    width: 80px;
+    height: 80px;
+    margin-bottom: 20px;
+}
+
+.logo h2 {
+    color: white;
+    font-size: 26px;
+    margin-bottom: 25px;
+}
+
+.nav-menu {
+    list-style: none;
+}
+
+.nav-menu li {
+    margin-bottom: 20px;
+}
+
+.nav-menu li a {
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    padding: 5px;
+    transition: background-color 0.3s ease;
+    border-radius: 5px;
+}
+
+.nav-menu li a:hover {
+    background-color: #B3D9FF;
+    border-radius: 5px;
+    color: #002D40;
+}
+
+/* New active state styling */
+.nav-menu li a.active {
+    background-color: #B3D9FF;
+    color: #002D40;
+    font-weight: 500;
+}
+
+.nav-menu li a i {
+    margin-right: 10px;
+}
+
+.logout {
+    margin-top: auto;
+}
+
+.logout a {
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    transition: background-color 0.3s ease;
+    border-radius: 5px;
+}
+
+.logout a:hover {
+    background-color: #B3D9FF;
+    color: #002D40;
+}
+
+.logout a i {
+    margin-right: 10px;
+}
+
+.main-content {
+    margin-left: 250px;
+    padding: 20px;
+}

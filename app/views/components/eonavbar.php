@@ -117,7 +117,7 @@
     
         <ul class="nav-menu">
             <li><a href = "<?= ROOT ?>/Eventorganizer/Eodashboard"><i class="fas fa-home"></i> Dashboard</a></li>
-            <li><a href = "<?= ROOT ?>/Eventorganizer/Eoevents"><i class="fas fa-hourglass-half"></i> Pending Events</a></li>
+            <li><a href = "<?= ROOT ?>/Eventorganizer/ViewPendingEvents"><i class="fas fa-hourglass-half"></i> Pending Events</a></li>
             <li><a href = "<?= ROOT ?>/Eventorganizer/Eomyevents"><i class="fas fa-check-circle"></i>Approved Events</a></li>
 
             <!--Here we have to display the events with the status of completed in the database, Also we have to have link to view the earnings of the event-->

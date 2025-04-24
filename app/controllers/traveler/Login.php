@@ -69,15 +69,23 @@ class Login extends Controller
             }
 
             // Query the database for the user
-            $result = $user->where($data);
+            $result = $user->first($data);
 
             if (!empty($result)) {
+
+                // Check if email is verified
+                if ($userRole == 'traveler' && $result->emailVerified != 1) {
+                    // Email not verified
+                    redirect('traveler/VerificationPending');
+                    exit();
+                }
+
                 // Verify password using the correct password field
-                if (password_verify($password, $result[0]->$passwordField)) {
+                if (password_verify($password, $result->$passwordField)) {
                     switch($userRole){
                         case 'traveler':
                             // Set session variables
-                            $_SESSION['traveler_id'] = $result[0]->traveler_Id;
+                            $_SESSION['traveler_id'] = $result->traveler_Id;
 
                             // Redirect to Traveler's dashboard
                             redirect('traveler/RegisteredTravelerHome');
@@ -85,14 +93,14 @@ class Login extends Controller
 
                         case 'eventOrganizer':
                             // Set session variables
-                            $_SESSION['organizer_id'] = $result[0]->organizer_Id;
+                            $_SESSION['organizer_id'] = $result->organizer_Id;
     
                             // Redirect to Event Organizer's dashboard
                             redirect('Eventorganizer/Eodashboard');
                             exit();
 
                         case 'accommodationSP':
-                            $_SESSION['hotel_id'] = $result[0]->hotel_Id;
+                            $_SESSION['hotel_id'] = $result->hotel_Id;
 
                             // Redirect to Accommodation service provider's dashboard
                             redirect('Hotel/Hdashboard');
@@ -101,7 +109,7 @@ class Login extends Controller
 
                         case 'tourGuide':
                             // Set session variables
-                            $_SESSION['guide_id'] = $result[0]->guide_Id;
+                            $_SESSION['guide_id'] = $result->guide_Id;
 
                             // Redirect to Tour Guide's dashboard
                             $this->view('tourguide/dashboard');

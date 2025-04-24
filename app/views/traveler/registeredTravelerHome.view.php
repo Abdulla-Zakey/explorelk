@@ -21,9 +21,15 @@
             box-shadow: 0 0 10px rgba(0,0,0,0.5);
         }
     </style>
+
 </head>
 
 <body>
+    <?php
+        // show($data['eventData']);
+        // exit();
+
+    ?>
     <div class="mainContainer">
 
         <div class="leftPanel">
@@ -55,7 +61,15 @@
             </div>
 
             <div class="linkHolder">
-                <a href="<?= ROOT ?>/traveler/Notifications" class="linkItem"><i class="fa-solid fa-bell"></i>Notifications</a>
+                <a href="<?= ROOT ?>/traveler/Notifications" class="linkItem">
+                    <i class="fa-solid fa-bell"></i>
+                    Notifications
+                    <?php if(($data['unreadNotifications']) > 0): ?>
+                        <span id="notificationCount" class="notificationCountIndicator">
+                            <?= $data['unreadNotifications'] ?>
+                        </span>
+                    <?php endif; ?>
+                </a>
             </div>
 
             <div class="linkHolder">
@@ -75,7 +89,7 @@
 
         <div class="rightContainer">
             <h1>
-                <?php echo "Welcome back, " . htmlspecialchars($data['userData']->username) . "! Ready for your next adventure?";?>
+                <?php echo "Welcome " . htmlspecialchars($data['userData']->username) . "! ready for your next adventure?";?>
             </h1>
             <div class="contentContainer">
                 <h2>

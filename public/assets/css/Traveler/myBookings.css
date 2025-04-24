@@ -28,14 +28,13 @@ body{
     overflow-x: hidden;
 }
 
-
 .rightPanel{
     width: 85%;
     margin-right: 7.5%;
     color: #000000;
     margin-top: 0;
-    margin-left: 25.5%;     /*Methana 25.5 thiyala thiyenne, 20% navbar eka fix karala thiyena nisa ey pramanyath, amathara 7.5% vala ekathuvath samagaya*/
-    padding-bottom: 5%;
+    margin-left: 25.5%;  /*Methana 25.5 thiyala thiyenne, 20% navbar eka fix karala thiyena nisa ey pramanyath, amathara 7.5% vala ekathuvath samagaya*/
+    padding-bottom: 5%; 
 }
 
 .rightPanel h1{
@@ -107,9 +106,9 @@ body{
 }
 
 .bookingItemDetails{
-    width: 37.5%;
+    width: 40%;
     margin-top: 2.5%;
-    margin-left: 7.5%;
+    margin-left: 5%;
     /* border: 1px solid red; */
 }
 

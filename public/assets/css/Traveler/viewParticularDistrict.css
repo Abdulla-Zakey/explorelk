@@ -2,6 +2,8 @@ body {
     background-color: #fff;
     overflow-x: hidden;
     font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
 }
 
 .top{
@@ -135,21 +137,139 @@ body {
     margin-left: 85%;
     box-sizing: border-box;
     color: #FFFFFF;
-    background-color: #002D40;
+    background-color: darkcyan;
     border-radius: 10px;
     margin-top: 1%;
     margin-bottom: 0%;
+    border: none;
+    font-family: 'Poppins';
 }
 
 .btn:hover{
     cursor: pointer;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);;
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.5);;
+}
+
+/* Hotel and Restaurant Empty State */
+.hotel-empty-state, .restaurant-empty-state{
+    background-color: #f9f9f9;
+    border-radius: 15px;
+    padding: 40px 30px;
+    text-align: center;
+    margin: 20px 0 40px 0;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    border-left: 5px solid #002D40;
+}
+
+.hotel-icon-container, .restaurant-icon-container{
+    position: relative;
+    display: inline-block;
+    margin-bottom: 25px;
+}
+
+.primary-icon {
+    font-size: 60px;
+    color: #002D40;
+    opacity: 0.8;
+}
+
+.hotel-icon-container .primary-icon {
+    animation: pulse 3s ease-in-out infinite;
+}
+
+.restaurant-icon-container .primary-icon {
+    animation: float 3s ease-in-out infinite;
+}
+
+.secondary-icon {
+    position: absolute;
+    color: #1E7A8F;
+    background-color: #f9f9f9;
+    border-radius: 50%;
+    padding: 8px;
+}
+
+.hotel-icon-container .secondary-icon {
+    top: 5px;
+    right: -20px;
+    font-size: 25px;
+    animation: twinkle 2s infinite;
+}
+
+.restaurant-icon-container .secondary-icon {
+    bottom: -10px;
+    right: -15px;
+    font-size: 30px;
+    animation: bounce 2s infinite;
+}
+
+.hotel-empty-state h3, .restaurant-empty-state h3{
+    font-size: 24px;
+    color: #002D40;
+    margin-bottom: 15px;
+}
+
+.hotel-empty-state p, .restaurant-empty-state p{
+    font-size: 16px;
+    color: #555;
+    line-height: 1.6;
+    max-width: 80%;
+    margin: 0 auto 10px;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.08);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+
+@keyframes float {
+    0% {
+        transform: translateY(0px);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
+
+    100% {
+        transform: translateY(0px);
+    }
+}
+
+
+@keyframes twinkle {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}
+
+@keyframes bounce {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-8px);
+    }
 }
 
 
 .foot{
     text-align: center;
-    background-color: black;
+    background-color: #002D40;
     width: 100%;
     padding: 1%;
     color: white;
