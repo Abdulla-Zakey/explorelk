@@ -59,6 +59,10 @@
             </div>
 
             <div class="linkHolder">
+                <a href="<?= ROOT ?>/traveler/Restaurant" class="linkItem"><i class="fa-solid fa-bell"></i>Rest</a>
+            </div>
+
+            <div class="linkHolder">
                 <a href="<?= ROOT ?>/traveler/ViewProfile" class="linkItem"><i class="fa-solid fa-user"></i>View Profile</a>
             </div>
 

@@ -1,428 +1,521 @@
 <?php 
   include '../app/views/components/rnav.php';
-  include '../app/views/components/rhotelhead.php';
 
 ?>
-<html>
-    <head>
-        <style>
-            body {
-                font-family: 'Arial', sans-serif;
-                background-color: #f5f5f5;
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                padding: 20px;
-                margin: 0;
-            }
-            .review-card {
-                display: flex;
-                background-color: #ffffff;
-                border-radius: 20px;
-                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-                padding: 20px;
-                width: 100%;
-                max-width: 1000px;
-                margin-bottom: 20px; /* Adds space between cards */
-                position: relative; /* Ensures proper stacking */
-            }
-            .profile-pic, .profile-initial {
-                border-radius: 50%;
-                width: 50px;
-                height: 50px;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                font-size: 24px;
-                color: #ffffff;
-                background-color: #333333;
-            }
-            .profile-pic {
-                display: none;
-            }
-            .review-content {
-                margin-left: 25px;
-            }
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hotel Reviews</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        }
+
+        body {
+            background-color: #f9fafb;
+            color: #1f2937;
+            line-height: 1.5;
+        }
+
+        /* Container Styles */
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+
+        .header {
+            margin-bottom: 2rem;
+        }
+
+        .header h1 {
+            font-size: 1.875rem;
+            font-weight: 700;
+            color: #111827;
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            color: #6b7280;
+        }
+
+        /* Review Card Styles */
+        .reviews-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .review-card {
+            background-color: #ffffff;
+            border-radius: 0.5rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            position: relative;
+            border: 1px solid #e5e7eb;
+            transition: all 0.2s ease;
+        }
+
+        .review-card.highlighted {
+            border: 2px solid #fbbf24;
+            background-color: #fffbeb;
+        }
+
+        .review-card.hidden {
+            display: none;
+        }
+
+        .review-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+
+        .reviewer-info {
+            display: flex;
+            gap: 1rem;
+            align-items: flex-start;
+        }
+
+        .avatar {
+            width: 3rem;
+            height: 3rem;
+            border-radius: 50%;
+            background-color: #1f2937;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 1.25rem;
+            flex-shrink: 0;
+        }
+
+        .reviewer-details {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .reviewer-name-container {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .reviewer-name {
+            font-weight: 600;
+            color: #111827;
+        }
+
+        .highlight-badge {
+            font-size: 0.75rem;
+            padding: 0.125rem 0.5rem;
+            background-color: #fef3c7;
+            border: 1px solid #fbbf24;
+            border-radius: 9999px;
+            color: #92400e;
+            font-weight: 500;
+        }
+
+        .review-date {
+            font-size: 0.875rem;
+            color: #6b7280;
+            margin-top: 0.25rem;
+        }
+
+        .review-actions {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Star Rating Styles */
+        .star-rating {
+            display: flex;
+            gap: 0.125rem;
+        }
+
+        .star {
+            color: #d1d5db;
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+
+        .star.filled {
+            color: #f59e0b;
+        }
+
+        /* Dropdown Menu Styles */
+        .dropdown {
+            position: relative;
+        }
+
+        .dropdown-toggle {
+            background: none;
+            border: none;
+            cursor: pointer;
+            width: 2rem;
+            height: 2rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #6b7280;
+            transition: background-color 0.2s ease;
+        }
+
+        .dropdown-toggle:hover {
+            background-color: #f3f4f6;
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            right: 0;
+            top: 100%;
+            background-color: white;
+            border-radius: 0.375rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            width: 12rem;
+            z-index: 10;
+            overflow: hidden;
+            display: none;
+            border: 1px solid #e5e7eb;
+        }
+
+        .dropdown-menu.show {
+            display: block;
+        }
+
+        .dropdown-item {
+            padding: 0.5rem 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .dropdown-item:hover {
+            background-color: #f3f4f6;
+        }
+
+        .dropdown-item.danger {
+            color: #dc2626;
+        }
+
+        .dropdown-item i {
+            font-size: 0.875rem;
+            width: 1rem;
+        }
+
+        /* Review Text Styles */
+        .review-text {
+            color: #4b5563;
+            line-height: 1.625;
+        }
+
+        /* Show Hidden Reviews Button */
+        .show-hidden-btn {
+            margin-top: 1rem;
+            padding: 0.5rem 1rem;
+            background-color: white;
+            border: 1px solid #d1d5db;
+            border-radius: 0.375rem;
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            display: none;
+        }
+
+        .show-hidden-btn.visible {
+            display: inline-block;
+        }
+
+        .show-hidden-btn:hover {
+            background-color: #f3f4f6;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 640px) {
             .review-header {
-                display: flex;
                 flex-direction: column;
-                align-items: flex-start;
-                margin-bottom: 10px;
-            }
-            .review-header h3 {
-                margin: 0;
-                font-size: 18px;
-                color: #333333;
-            }
-            .review-date {
-                font-size: 12px;
-                color: #999999;
-                margin-top: 5px;
-            }
-            .review-text {
-                font-size: 14px;
-                color: #666666;
-                margin: 0;
-            }
-            .rating {
-                display: flex;
-                align-items: center;
-                position: absolute;
-                top: 20px;
-                right: 60px;
-            }
-            .rating i {
-                color: #f5c518;
-                margin-right: 2px;
-                cursor: pointer;
-            }
-            .rating i.unrated {
-                color: #e0e0e0;
-            }
-            .rating i:last-child {
-                margin-right: 0;
-            }
-            .more-options {
-                position: absolute;
-                top: 20px;
-                right: 20px;
-                cursor: pointer;
-            }
-            .more-options i {
-                color: #999999;
-                display: block;
-                margin-bottom: 2px;
-            }
-            .options-popup {
-                display: none;
-                position: absolute;
-                top: 40px;
-                right: 20px;
-                background-color: #ffffff;
-                border: 1px solid #e0e0e0;
-                border-radius: 5px;
-                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-                z-index: 10;
-            }
-            .options-popup div {
-                padding: 10px;
-                cursor: pointer;
-                font-size: 14px;
-                color: #333333;
-            }
-            .options-popup div:hover {
-                background-color: #f5f5f5;
-            }
-            .review-container{
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                margin-top: 200px;
-                margin-left: 240px;
-            }
-            .review-card:nth-child(1) {
-                margin-top: 20px;
-            }
-        </style>
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
-        <script>
-            // JavaScript remains the same
-            function rateStar(starIndex, cardIndex) {
-                const reviewCards = document.querySelectorAll('.review-card');
-                const stars = reviewCards[cardIndex].querySelectorAll('.rating i');
-                stars.forEach((star, index) => {
-                    if (index <= starIndex) {
-                        star.classList.remove('unrated');
-                    } else {
-                        star.classList.add('unrated');
-                    }
-                });
-                console.log(`Review ${cardIndex + 1}: Rated ${starIndex + 1} stars`);
+                gap: 1rem;
             }
 
-            function toggleOptions() {
-                const popup = document.querySelector('.options-popup');
-                popup.style.display = popup.style.display === 'block' ? 'none' : 'block';
+            .review-actions {
+                align-self: flex-end;
             }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Guest Reviews</h1>
+            <p>See what our guests have to say about their experience</p>
+        </div>
 
-            window.onclick = function(event) {
-                if (!event.target.matches('.more-options, .more-options i')) {
-                    const popup = document.querySelector('.options-popup');
-                    if (popup.style.display === 'block') {
-                        popup.style.display = 'none';
-                    }
+        <div class="reviews-container" id="reviews-container">
+            <!-- Reviews will be dynamically inserted here -->
+        </div>
+
+        <button id="show-hidden-btn" class="show-hidden-btn">
+            Show <span id="hidden-count">0</span> hidden reviews
+        </button>
+    </div>
+
+    <script>
+        // Review data
+        const reviewsData = [
+            {
+                id: "1",
+                name: "Vijay Prasath",
+                initial: "V",
+                date: "18 August",
+                text: "This hotel exceeded all expectations with its impeccable service, luxurious amenities, and beautifully designed spaces. Truly a gem in the heart of the city!",
+                rating: 0,
+                highlighted: false
+            },
+            {
+                id: "2",
+                name: "Akila Perera",
+                initial: "A",
+                date: "10 September",
+                text: "The food was amazing, and the staff went out of their way to make us feel comfortable. The view from the room was breathtaking!",
+                rating: 0,
+                highlighted: false
+            },
+            {
+                id: "3",
+                name: "Jessica Lee",
+                initial: "J",
+                date: "22 July",
+                text: "A perfect location for a weekend getaway. Clean rooms, friendly service, and amazing local cuisine. Highly recommend!",
+                rating: 0,
+                highlighted: false
+            },
+            {
+                id: "4",
+                name: "Mohammed Faheem",
+                initial: "M",
+                date: "5 June",
+                text: "I stayed here for a business trip and everything was on point. The WiFi was strong, and the hotel ambiance helped me relax after a long day.",
+                rating: 0,
+                highlighted: false
+            },
+            {
+                id: "5",
+                name: "Lakshmi Patel",
+                initial: "L",
+                date: "15 April",
+                text: "The spa treatments were absolutely rejuvenating! A great place for anyone looking to unwind and recharge.",
+                rating: 0,
+                highlighted: false
+            }
+        ];
+
+        // Track hidden reviews
+        const hiddenReviews = [];
+
+        // DOM elements
+        const reviewsContainer = document.getElementById('reviews-container');
+        const showHiddenBtn = document.getElementById('show-hidden-btn');
+        const hiddenCountSpan = document.getElementById('hidden-count');
+
+        // Render all reviews
+        function renderReviews() {
+            reviewsContainer.innerHTML = '';
+            
+            reviewsData.forEach(review => {
+                const isHidden = hiddenReviews.includes(review.id);
+                if (!isHidden) {
+                    const reviewElement = createReviewElement(review);
+                    reviewsContainer.appendChild(reviewElement);
                 }
+            });
+
+            // Update hidden reviews button
+            if (hiddenReviews.length > 0) {
+                showHiddenBtn.classList.add('visible');
+                hiddenCountSpan.textContent = hiddenReviews.length;
+            } else {
+                showHiddenBtn.classList.remove('visible');
             }
+        }
 
-            function setProfilePicture(imageUrl, name) {
-                const profilePic = document.querySelector('.profile-pic');
-                const profileInitial = document.querySelector('.profile-initial');
-                if (imageUrl) {
-                    profilePic.src = imageUrl;
-                    profilePic.style.display = 'block';
-                    profileInitial.style.display = ' none';
-                } else {
-                    profileInitial.textContent = name.charAt(0).toUpperCase();
-                    profilePic.style.display = 'none';
-                    profileInitial.style.display = 'flex';
-                }
+        // Create a single review element
+        function createReviewElement(review) {
+            const reviewCard = document.createElement('div');
+            reviewCard.className = `review-card ${review.highlighted ? 'highlighted' : ''}`;
+            reviewCard.dataset.id = review.id;
+
+            reviewCard.innerHTML = `
+                <div class="review-header">
+                    <div class="reviewer-info">
+                        <div class="avatar">${review.initial}</div>
+                        <div class="reviewer-details">
+                            <div class="reviewer-name-container">
+                                <span class="reviewer-name">${review.name}</span>
+                                ${review.highlighted ? '<span class="highlight-badge">Highlighted</span>' : ''}
+                            </div>
+                            <span class="review-date">${review.date}</span>
+                        </div>
+                    </div>
+                    <div class="review-actions">
+                        <div class="star-rating" data-review-id="${review.id}">
+                            ${generateStars(review.rating)}
+                        </div>
+                        <div class="dropdown">
+                            <button class="dropdown-toggle">
+                                <i class="fas fa-ellipsis-vertical"></i>
+                            </button>
+                            <div class="dropdown-menu">
+                                <div class="dropdown-item" data-action="reply">
+                                    <i class="fas fa-reply"></i>
+                                    <span>Reply</span>
+                                </div>
+                                <div class="dropdown-item" data-action="highlight">
+                                    <i class="fas fa-star"></i>
+                                    <span>${review.highlighted ? 'Unhighlight' : 'Highlight'}</span>
+                                </div>
+                                <div class="dropdown-item danger" data-action="hide">
+                                    <i class="fas fa-eye-slash"></i>
+                                    <span>Hide</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <p class="review-text">${review.text}</p>
+            `;
+
+            // Add event listeners
+            setupReviewEventListeners(reviewCard, review);
+
+            return reviewCard;
+        }
+
+        // Generate star HTML based on rating
+        function generateStars(rating) {
+            let starsHtml = '';
+            for (let i = 1; i <= 5; i++) {
+                starsHtml += `<i class="star fas fa-star ${i <= rating ? 'filled' : ''}" data-value="${i}"></i>`;
             }
+            return starsHtml;
+        }
 
-            document.addEventListener('DOMContentLoaded', function () {
-                const reviewCards = document.querySelectorAll('.review-card');
-
-                reviewCards.forEach((card, cardIndex) => {
-                    // Star rating logic
-                    const stars = card.querySelectorAll('.rating i');
-                    stars.forEach((star, starIndex) => {
-                        star.addEventListener('click', () => {
-                            stars.forEach((s, i) => {
-                                if (i <= starIndex) {
-                                    s.classList.remove('unrated');
-                                } else {
-                                    s.classList.add('unrated');
-                                }
-                            });
-                            console.log(`Review ${cardIndex + 1}: Rated ${starIndex + 1} stars`);
-                        });
-                    });
-
-                    // Popup toggle logic
-                    const moreOptionsButton = card.querySelector('.more-options');
-                    const optionsPopup = card.querySelector('.options-popup');
-
-                    moreOptionsButton.addEventListener('click', (event) => {
-                        // Close all other popups
-                        document.querySelectorAll('.options-popup').forEach((popup, index) => {
-                            if (index !== cardIndex) {
-                                popup.style.display = 'none';
-                            }
-                        });
-
-                        // Toggle the current popup
-                        optionsPopup.style.display = optionsPopup.style.display === 'block' ? 'none' : 'block';
-
-                        // Prevent event from propagating to window
-                        event.stopPropagation();
-                    });
-                });
-
-                // Close popup when clicking outside
-                window.addEventListener('click', function () {
-                    document.querySelectorAll('.options-popup').forEach((popup) => {
-                        popup.style.display = 'none';
-                    });
+        // Setup event listeners for a review card
+        function setupReviewEventListeners(reviewCard, review) {
+            // Star rating
+            const starRating = reviewCard.querySelector('.star-rating');
+            const stars = starRating.querySelectorAll('.star');
+            
+            stars.forEach(star => {
+                star.addEventListener('click', () => {
+                    const value = parseInt(star.dataset.value);
+                    updateRating(review.id, value);
                 });
             });
 
-        </script>
-    </head>
-    <body>
-        <div class="review-container">
-        <!-- Review 1 -->
-            <div class="review-card">
-                <div class="profile-initial">V</div>
-                <div class="review-content">
-                    <div class="review-header">
-                        <h3>Vijay Prasath</h3>
-                        <p class="review-date">18 August</p>
-                    </div>
-                    <p class="review-text">
-                        This hotel exceeded all expectations with its impeccable service, luxurious amenities, and beautifully designed spaces. Truly a gem in the heart of the city!
-                    </p>
-                </div>
-                <div class="rating">
-                    <i class="fas fa-star unrated" onclick="rateStar(0)">
-                    </i>
-                    <i class="fas fa-star unrated" onclick="rateStar(1)">
-                    </i>
-                    <i class="fas fa-star unrated" onclick="rateStar(2)">
-                    </i>
-                    <i class="fas fa-star unrated" onclick="rateStar(3)">
-                    </i>
-                    <i class="fas fa-star unrated" onclick="rateStar(4)">
-                    </i>
-                </div>
-                <div class="more-options" onclick="toggleOptions()">
-                    <i class="fas fa-ellipsis-h" style="transform: rotate(90deg);">
-                    </i>
-                </div>
-                <div class="options-popup">
-                    <div>
-                        Reply
-                    </div>
-                    <div>
-                        Highlight
-                    </div>
-                    <div>
-                        Hide
-                    </div>
-                </div>
-            </div>
+            // Dropdown toggle
+            const dropdownToggle = reviewCard.querySelector('.dropdown-toggle');
+            const dropdownMenu = reviewCard.querySelector('.dropdown-menu');
+            
+            dropdownToggle.addEventListener('click', (e) => {
+                e.stopPropagation();
+                // Close all other dropdowns first
+                document.querySelectorAll('.dropdown-menu.show').forEach(menu => {
+                    if (menu !== dropdownMenu) {
+                        menu.classList.remove('show');
+                    }
+                });
+                dropdownMenu.classList.toggle('show');
+            });
 
-            <!-- Review 2 -->
-            <div class="review-card">
-                <div class="profile-initial">A</div>
-                <div class="review-content">
-                    <div class="review-header">
-                        <h3>Akila Perera</h3>
-                        <p class="review-date">10 September</p>
-                    </div>
-                    <p class="review-text">
-                        The food was amazing, and the staff went out of their way to make us feel comfortable. The view from the room was breathtaking!
-                    </p>
-                </div>
-                <div class="rating">
-                    <i class="fas fa-star unrated" onclick="rateStar(0)">
-                    </i>
-                    <i class="fas fa-star unrated" onclick="rateStar(1)">
-                    </i>
-                    <i class="fas fa-star unrated" onclick="rateStar(2)">
-                    </i>
-                    <i class="fas fa-star unrated" onclick="rateStar(3)">
-                    </i>
-                    <i class="fas fa-star unrated" onclick="rateStar(4)">
-                    </i>
-                </div>
-                <div class="more-options" onclick="toggleOptions()">
-                    <i class="fas fa-ellipsis-h" style="transform: rotate(90deg);">
-                    </i>
-                </div>
-                <div class="options-popup">
-                    <div>
-                        Reply
-                    </div>
-                    <div>
-                        Highlight
-                    </div>
-                    <div>
-                        Hide
-                    </div>
-                </div>
-            </div>
+            // Dropdown actions
+            const dropdownItems = reviewCard.querySelectorAll('.dropdown-item');
+            
+            dropdownItems.forEach(item => {
+                item.addEventListener('click', () => {
+                    const action = item.dataset.action;
+                    
+                    if (action === 'reply') {
+                        alert(`Reply to ${review.name}'s review`);
+                    } else if (action === 'highlight') {
+                        toggleHighlight(review.id);
+                    } else if (action === 'hide') {
+                        hideReview(review.id);
+                    }
+                    
+                    dropdownMenu.classList.remove('show');
+                });
+            });
+        }
 
-            <!-- Review 3 -->
-            <div class="review-card">
-                <div class="profile-initial">J</div>
-                <div class="review-content">
-                    <div class="review-header">
-                        <h3>Jessica Lee</h3>
-                        <p class="review-date">22 July</p>
-                    </div>
-                    <p class="review-text">
-                        A perfect location for a weekend getaway. Clean rooms, friendly service, and amazing local cuisine. Highly recommend!
-                    </p>
-                </div>
-                <div class="rating">
-                    <i class="fas fa-star unrated" onclick="rateStar(0)">
-                    </i>
-                    <i class="fas fa-star unrated" onclick="rateStar(1)">
-                    </i>
-                    <i class="fas fa-star unrated" onclick="rateStar(2)">
-                    </i>
-                    <i class="fas fa-star unrated" onclick="rateStar(3)">
-                    </i>
-                    <i class="fas fa-star unrated" onclick="rateStar(4)">
-                    </i>
-                </div>
-                <div class="more-options" onclick="toggleOptions()">
-                    <i class="fas fa-ellipsis-h" style="transform: rotate(90deg);">
-                    </i>
-                </div>
-                <div class="options-popup">
-                    <div>
-                        Reply
-                    </div>
-                    <div>
-                        Highlight
-                    </div>
-                    <div>
-                        Hide
-                    </div>
-                </div>
-            </div>
+        // Update rating for a review
+        function updateRating(reviewId, rating) {
+            const reviewIndex = reviewsData.findIndex(r => r.id === reviewId);
+            if (reviewIndex !== -1) {
+                reviewsData[reviewIndex].rating = rating;
+                
+                // Update stars in the UI
+                const starContainer = document.querySelector(`.star-rating[data-review-id="${reviewId}"]`);
+                const stars = starContainer.querySelectorAll('.star');
+                
+                stars.forEach((star, index) => {
+                    if (index < rating) {
+                        star.classList.add('filled');
+                    } else {
+                        star.classList.remove('filled');
+                    }
+                });
+            }
+        }
 
-            <!-- Review 4 -->
-            <div class="review-card">
-                <div class="profile-initial">M</div>
-                <div class="review-content">
-                    <div class="review-header">
-                        <h3>Mohammed Faheem</h3>
-                        <p class="review-date">5 June</p>
-                    </div>
-                    <p class="review-text">
-                        I stayed here for a business trip and everything was on point. The WiFi was strong, and the hotel ambiance helped me relax after a long day.
-                    </p>
-                </div>
-                <div class="rating">
-                    <i class="fas fa-star unrated" onclick="rateStar(0)">
-                    </i>
-                    <i class="fas fa-star unrated" onclick="rateStar(1)">
-                    </i>
-                    <i class="fas fa-star unrated" onclick="rateStar(2)">
-                    </i>
-                    <i class="fas fa-star unrated" onclick="rateStar(3)">
-                    </i>
-                    <i class="fas fa-star unrated" onclick="rateStar(4)">
-                    </i>
-                </div>
-                <div class="more-options" onclick="toggleOptions()">
-                    <i class="fas fa-ellipsis-h" style="transform: rotate(90deg);">
-                    </i>
-                </div>
-                <div class="options-popup">
-                    <div>
-                        Reply
-                    </div>
-                    <div>
-                        Highlight
-                    </div>
-                    <div>
-                        Hide
-                    </div>
-                </div>
-            </div>
+        // Toggle highlight for a review
+        function toggleHighlight(reviewId) {
+            const reviewIndex = reviewsData.findIndex(r => r.id === reviewId);
+            if (reviewIndex !== -1) {
+                reviewsData[reviewIndex].highlighted = !reviewsData[reviewIndex].highlighted;
+                renderReviews();
+            }
+        }
 
-            <!-- Review 5 -->
-            <div class="review-card">
-                <div class="profile-initial">L</div>
-                <div class="review-content">
-                    <div class="review-header">
-                        <h3>Lakshmi Patel</h3>
-                        <p class="review-date">15 April</p>
-                    </div>
-                    <p class="review-text">
-                        The spa treatments were absolutely rejuvenating! A great place for anyone looking to unwind and recharge.
-                    </p>
-                </div>
-                <div class="rating">
-                    <i class="fas fa-star unrated" onclick="rateStar(0)">
-                    </i>
-                    <i class="fas fa-star unrated" onclick="rateStar(1)">
-                    </i>
-                    <i class="fas fa-star unrated" onclick="rateStar(2)">
-                    </i>
-                    <i class="fas fa-star unrated" onclick="rateStar(3)">
-                    </i>
-                    <i class="fas fa-star unrated" onclick="rateStar(4)">
-                    </i>
-                </div>
-                <div class="more-options" onclick="toggleOptions()">
-                    <i class="fas fa-ellipsis-h" style="transform: rotate(90deg);">
-                    </i>
-                </div>
-                <div class="options-popup">
-                    <div>
-                        Reply
-                    </div>
-                    <div>
-                        Highlight
-                    </div>
-                    <div>
-                        Hide
-                    </div>
-                </div>
-            </div>
-        </div>
-    </body>
+        // Hide a review
+        function hideReview(reviewId) {
+            if (!hiddenReviews.includes(reviewId)) {
+                hiddenReviews.push(reviewId);
+                renderReviews();
+            }
+        }
+
+        // Show all hidden reviews
+        function showHiddenReviews() {
+            hiddenReviews.length = 0;
+            renderReviews();
+        }
+
+        // Close dropdowns when clicking outside
+        document.addEventListener('click', () => {
+            document.querySelectorAll('.dropdown-menu.show').forEach(menu => {
+                menu.classList.remove('show');
+            });
+        });
+
+        // Show hidden reviews button click handler
+        showHiddenBtn.addEventListener('click', showHiddenReviews);
+
+        // Initial render
+        renderReviews();
+    </script>
+</body>
 </html>

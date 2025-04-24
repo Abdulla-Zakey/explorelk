@@ -27,6 +27,10 @@ class Login extends Controller
             redirect('Hotel/Hdashboard');
             exit();
         }
+        elseif (isset($_SESSION['restaurant_id'])) {
+            redirect('Restaurant/Rdashboard');
+            exit();
+        }
 
 
         // Check if the form is submitted
@@ -62,6 +66,13 @@ class Login extends Controller
                     $user = new Hotel;
                     $passwordField = 'hotelPassword';
                     break;
+                
+                case 'diningSP':
+                    $data = ['restaurantEmail' => $email];
+                    $user = new Restaurant;
+                    $passwordField = 'restaurantPassword';
+                    break;
+
 
                 default:
                     $this->redirectWithError("Invalid user role");
@@ -105,6 +116,14 @@ class Login extends Controller
 
                             // Redirect to Tour Guide's dashboard
                             $this->view('tourguide/dashboard');
+                            exit();
+
+                        case 'diningSP':
+                            // Set session variables
+                            $_SESSION['restaurant_id'] = $result[0]->restaurant_id;
+
+                            // Redirect to Restaurant service provider's dashboard
+                            redirect('Restaurant/Rdashboard');
                             exit();
                     }
                 } else {

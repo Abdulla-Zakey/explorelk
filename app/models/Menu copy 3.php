@@ -4,7 +4,6 @@ class Menu {
 
     protected $table = "menu_items";
     protected $allowedColumns = [
-        'restaurant_id',
         'name',
         'description',
         'price',
@@ -14,18 +13,18 @@ class Menu {
         'is_active'
     ];
 
-    public function getAllMenuItems($restaurant_id) {
-        error_log("Menu::getAllMenuItems called for restaurant_id: $restaurant_id");
-        $query = "SELECT * FROM {$this->table} WHERE restaurant_id = :restaurant_id";
-        $result = $this->query($query, ['restaurant_id' => $restaurant_id]);
+    public function getAllMenuItems() {
+        error_log("Menu::getAllMenuItems called");
+        $query = "SELECT * FROM {$this->table}";
+        $result = $this->query($query);
         error_log("getAllMenuItems result: " . json_encode($result));
         return $result ?: [];
     }
 
-    public function getMenuItemById($id, $restaurant_id) {
-        error_log("Menu::getMenuItemById called for ID: $id, restaurant_id: $restaurant_id");
-        $query = "SELECT * FROM {$this->table} WHERE id = :id AND restaurant_id = :restaurant_id LIMIT 1";
-        $result = $this->query($query, ['id' => $id, 'restaurant_id' => $restaurant_id]);
+    public function getMenuItemById($id) {
+        error_log("Menu::getMenuItemById called for ID: $id");
+        $query = "SELECT * FROM {$this->table} WHERE id = :id LIMIT 1";
+        $result = $this->query($query, ['id' => $id]);
         error_log("getMenuItemById($id) result: " . json_encode($result));
         return $result ? $result[0] : null;
     }
@@ -33,7 +32,7 @@ class Menu {
     public function createMenuItem($data) {
         error_log("Menu::createMenuItem called with data: " . json_encode($data));
         try {
-            $requiredFields = ['restaurant_id', 'name', 'description', 'price', 'category', 'availability'];
+            $requiredFields = ['name', 'description', 'price', 'category', 'availability'];
             foreach ($requiredFields as $field) {
                 if (!isset($data[$field]) || empty($data[$field])) {
                     throw new Exception("Missing or empty required field: $field");
@@ -98,15 +97,9 @@ class Menu {
         }
     }
 
-    public function updateMenuItem($id, $data, $restaurant_id) {
-        error_log("Menu::updateMenuItem called for ID: $id, restaurant_id: $restaurant_id with data: " . json_encode($data));
+    public function updateMenuItem($id, $data) {
+        error_log("Menu::updateMenuItem called for ID: $id with data: " . json_encode($data));
         try {
-            // Verify the item belongs to the restaurant
-            $existingItem = $this->getMenuItemById($id, $restaurant_id);
-            if (!$existingItem) {
-                throw new Exception("Menu item not found or does not belong to restaurant_id: $restaurant_id");
-            }
-
             if (!empty($data['image']) && is_array($data['image']) && $data['image']['size'] > 0) {
                 $uploadDir = ROOT . '/assets/images/restaurant/menu-item/';
                 if (!is_dir($uploadDir)) {
@@ -130,9 +123,10 @@ class Menu {
                 error_log("Attempting to upload new image to: $targetPath");
                 if (move_uploaded_file($data['image']['tmp_name'], $targetPath)) {
                     $data['image'] = '/assets/images/restaurant/menu-item/' . $fileName;
-                    if ($existingItem->image && file_exists(ROOT . $existingItem->image) && $existingItem->image !== '/assets/images/restaurant/menu-item/default.jpg') {
-                        error_log("Deleting old image: " . ROOT . $existingItem->image);
-                        unlink(ROOT . $existingItem->image);
+                    $oldItem = $this->getMenuItemById($id);
+                    if ($oldItem && $oldItem->image && file_exists(ROOT . $oldItem->image) && $oldItem->image !== '/assets/images/restaurant/menu-item/default.jpg') {
+                        error_log("Deleting old image: " . ROOT . $oldItem->image);
+                        unlink(ROOT . $oldItem->image);
                     }
                     error_log("New image uploaded successfully: " . $data['image']);
                 } else {
@@ -156,12 +150,12 @@ class Menu {
         }
     }
 
-    public function deleteMenuItem($id, $restaurant_id) {
-        error_log("Menu::deleteMenuItem called for ID: $id, restaurant_id: $restaurant_id");
+    public function deleteMenuItem($id) {
+        error_log("Menu::deleteMenuItem called for ID: $id");
         try {
-            $item = $this->getMenuItemById($id, $restaurant_id);
+            $item = $this->getMenuItemById($id);
             if (!$item) {
-                throw new Exception("Menu item not found with ID: $id for restaurant_id: $restaurant_id");
+                throw new Exception("Menu item not found with ID: $id");
             }
             if ($item->image && file_exists(ROOT . $item->image) && $item->image !== '/assets/images/restaurant/menu-item/default.jpg') {
                 error_log("Attempting to delete image: " . ROOT . $item->image);
@@ -174,14 +168,14 @@ class Menu {
                 error_log("No image to delete or image is default: " . ($item->image ?? 'none'));
             }
             error_log("Executing database delete for ID: $id");
-            $query = "DELETE FROM {$this->table} WHERE id = :id AND restaurant_id = :restaurant_id";
-            $result = $this->query($query, ['id' => $id, 'restaurant_id' => $restaurant_id]);
+            $query = "DELETE FROM {$this->table} WHERE id = :id";
+            $result = $this->query($query, ['id' => $id]);
             error_log("Raw delete result: " . json_encode($result));
-            $checkQuery = "SELECT COUNT(*) as count FROM {$this->table} WHERE id = :id AND restaurant_id = :restaurant_id";
-            $checkResult = $this->query($checkQuery, ['id' => $id, 'restaurant_id' => $restaurant_id]);
+            $checkQuery = "SELECT COUNT(*) as count FROM {$this->table} WHERE id = :id";
+            $checkResult = $this->query($checkQuery, ['id' => $id]);
             $count = $checkResult[0]->count ?? 1;
             if ($count > 0) {
-                throw new Exception("Database deletion failed for ID: $id");
+                throw new Exception("Database deletion failed for ID: $id (item still exists)");
             }
             error_log("Menu::deleteMenuItem successful for ID: $id");
             return true;
@@ -191,19 +185,15 @@ class Menu {
         }
     }
 
-    public function toggleAvailability($id, $is_active, $restaurant_id) {
-        error_log("Menu::toggleAvailability called for ID: $id, is_active: $is_active, restaurant_id: $restaurant_id");
+    public function toggleAvailability($id, $is_active) {
+        error_log("Menu::toggleAvailability called for ID: $id, is_active: $is_active");
         try {
-            $item = $this->getMenuItemById($id, $restaurant_id);
-            if (!$item) {
-                throw new Exception("Menu item not found with ID: $id for restaurant_id: $restaurant_id");
-            }
             $data = ['is_active' => $is_active];
             error_log("Updating is_active for ID: $id to: $is_active");
             $result = $this->update($id, $data, 'id');
             error_log("Raw update result: " . json_encode($result));
-            $updatedItem = $this->getMenuItemById($id, $restaurant_id);
-            if ($updatedItem && $updatedItem->is_active == $is_active) {
+            $item = $this->getMenuItemById($id);
+            if ($item && $item->is_active == $is_active) {
                 error_log("Menu::toggleAvailability successful for ID: $id");
                 return true;
             } else {
