@@ -304,7 +304,13 @@
 
             <div class="linkHolder">
                 <a href="<?= ROOT ?>/traveler/Notifications" class="linkItem">
-                    <i class="fa-solid fa-bell"></i>Notifications
+                    <i class="fa-solid fa-bell"></i>
+                    Notifications
+                    <?php if(($data['unreadNotifications']) > 0): ?>
+                        <span id="notificationCount" class="notificationCountIndicator">
+                            <?= $data['unreadNotifications'] ?>
+                        </span>
+                    <?php endif; ?>
                 </a>
             </div>
 
@@ -409,12 +415,12 @@
 
                                 <div class="bookingKeyInfo-Holder">
                                     <div class = "firstKid"><i class="fa-regular fa-calendar"></i>Trip Start Date:</div>
-                                    <div class = "secondKid"><?= date('d-m-Y', strtotime($trip->startDate)) ?></div>
+                                    <div class = "secondKid"><?= date('F d, Y', strtotime($trip->startDate)) ?></div>
                                 </div>
 
                                 <div class="bookingKeyInfo-Holder">
                                     <div class = "firstKid"><i class="fa-regular fa-calendar"></i>Trip End Date:</div>
-                                    <div class = "secondKid"><?= date('d-m-Y', strtotime($trip->endDate)) ?></div>
+                                    <div class = "secondKid"><?= date('F d, Y', strtotime($trip->endDate)) ?></div>
                                 </div>
                             </div>
 

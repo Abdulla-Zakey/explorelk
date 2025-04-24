@@ -1,11 +1,14 @@
 <?php
 class RegisteredTravelerHome extends Controller
 {
+    private $eventModel;
 
-    private $EventModel;
+    // This model is to get unread notifications 
+    private $notificationsModel;
 
     public function __construct(){
-        $this->EventModel = new Event();
+        $this->eventModel = new Event();
+        $this->notificationsModel = new NotificationsModel();
     }
 
     public function index()
@@ -20,12 +23,23 @@ class RegisteredTravelerHome extends Controller
         $traveler = new Traveler();
         $user = $traveler->first(['traveler_Id' => $_SESSION['traveler_id']]);
 
-        $topUpComingEvents = $this->EventModel->getUpcomingEvents();
+        $topUpComingEvents = $this->eventModel->getUpcomingEvents();
 
         $data = [
             'userData' => $user,
             'eventData' => $topUpComingEvents
         ];
+
+        $notifications = $this->notificationsModel->getNotifications('traveler', $_SESSION['traveler_id']);
+        $unreadNotifications = 0;
+
+        foreach ($notifications as $notification) {
+            if($notification->is_read == 0){
+                $unreadNotifications++;
+            }
+        }
+
+        $data['unreadNotifications'] = $unreadNotifications;
 
         // Pass user data to the view
         $this->view('traveler/registeredTravelerHome', $data);

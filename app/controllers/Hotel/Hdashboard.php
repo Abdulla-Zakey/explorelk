@@ -12,7 +12,7 @@
            
             $data['hotelBasic'] = $this->hotelModel->first(['hotel_Id' => $_SESSION['hotel_id']]);
 
-            $this->view('hotel/dashboard', data: $data);
+            $this->view('hotel/dashboard', $data);
             
         }
     }

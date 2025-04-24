@@ -43,7 +43,15 @@
             </div>
 
             <div class = "linkHolder">
-                <a href = "<?= ROOT ?>/traveler/Notifications" class = "linkItem"><i class="fa-solid fa-bell"></i>Notifications</a>
+                <a href = "<?= ROOT ?>/traveler/Notifications" class = "linkItem">
+                    <i class="fa-solid fa-bell"></i>
+                    Notifications
+                    <?php if(($data['unreadNotifications']) > 0): ?>
+                        <span id="notificationCount" class="notificationCountIndicator">
+                            <?= $data['unreadNotifications'] ?>
+                        </span>
+                    <?php endif; ?>
+                </a>
             </div>
 
             <div id = "activeLink" class = "linkHolder">
@@ -72,7 +80,6 @@
                 </h1>
 
                 
-                    
                 </a>
                 <button class = "buttonStyle">
                     <a href = "<?= ROOT ?>/traveler/EditProfile">

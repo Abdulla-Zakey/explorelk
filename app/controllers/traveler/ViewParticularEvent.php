@@ -20,10 +20,10 @@
             // Store event details in session before displaying the view
             $_SESSION['current_event'] = [
                 'eventId' => $event_Id,
-                'eventName' => $data['eventDetails'][0]->eventName,
-                'eventDate' => $data['eventDetails'][0]->eventDate,
-                'eventStartTime' => $data['eventDetails'][0]->eventStartTime,
-                'eventLocation' => $data['eventDetails'][0]->eventLocation
+                'eventName' => $data['eventDetails']->eventName,
+                'eventDate' => $data['eventDetails']->eventDate,
+                'eventStartTime' => $data['eventDetails']->eventStartTime,
+                'eventLocation' => $data['eventDetails']->eventLocation
             ];
             
             $this->view('traveler/particularEvent', $data);

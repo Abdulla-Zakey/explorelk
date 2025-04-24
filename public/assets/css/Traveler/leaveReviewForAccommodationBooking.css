@@ -1,0 +1,350 @@
+:root {
+    --primary-color: #1E7A8F;
+    --secondary-color: #2c3e50;
+    --accent-color: #e74c3c;
+    --light-gray: #f5f7fa;
+    --medium-gray: #e6e9ed;
+    --dark-gray: #7f8c8d;
+    --success-color: #2ecc71;
+    --warning-color: #f39c12;
+    --danger-color: #e74c3c;
+    --pending-color: #f39c12;
+    --approved-color: #2196F3;
+    --completed-color: #2ecc71;
+    --cancelled-color: #e74c3c;
+    --text-light: #FFFFFF;
+    --text-dark: #333333;
+    --border-radius: 12px;
+    --box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    background-color: #f5f7fa;
+    color: #333;
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Review Container Styling */
+.review-container {
+    background-color: white;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    margin-top: 30px;
+    overflow: hidden;
+}
+
+.review-header {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 30px;
+    position: relative;
+    border-radius: var(--border-radius);
+}
+
+.review-title {
+    font-size: 28px;
+    font-weight: 600;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.booking-status {
+    display: inline-block;
+    padding: 8px 20px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 500;
+    background-color: var(--medium-gray);
+}
+
+.status-completed {
+    background-color: var(--completed-color);
+    color: white;
+}
+
+.review-content {
+    padding: 40px;
+}
+
+.review-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+}
+
+@media (max-width: 768px) {
+    .review-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .form-actions {
+        flex-direction: column-reverse;
+    }
+
+    .cancel-button,
+    .submit-button {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+.review-section {
+    margin-bottom: 40px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    padding: 25px;
+}
+
+.section-title {
+    font-size: 20px;
+    color: var(--secondary-color);
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid var(--medium-gray);
+    display: flex;
+    align-items: center;
+}
+
+/* Hotel Card Styling */
+.hotel-card {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 10px;
+    padding: 20px;
+    background-color: var(--light-gray);
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.hotel-image {
+    width: 125px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.hotel-details {
+    flex: 1;
+}
+
+.hotel-name {
+    font-weight: 600;
+    font-size: 18px;
+    margin-bottom: 10px;
+    color: var(--secondary-color);
+}
+
+.hotel-location, .booking-dates {
+    font-size: 14px;
+    margin-bottom: 8px;
+    color: var(--dark-gray);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Rating Categories Styling */
+.rating-categories {
+    margin-bottom: 30px;
+}
+
+.rating-category {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--light-gray);
+}
+
+.category-label {
+    font-weight: 500;
+    color: var(--secondary-color);
+}
+
+.star-rating {
+    display: flex;
+    gap: 5px;
+}
+
+.star-rating i {
+    color: #FFD700;
+    cursor: pointer;
+    font-size: 20px;
+    transition: transform 0.2s ease;
+}
+
+.star-rating i:hover {
+    transform: scale(1.2);
+}
+
+.overall-rating {
+    background-color: var(--light-gray);
+    padding: 20px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.overall-label {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: var(--secondary-color);
+}
+
+.overall-stars {
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--primary-color);
+}
+
+/* Review Form Styling */
+.review-form-group {
+    margin-bottom: 25px;
+}
+
+.review-form-group label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: 500;
+    color: var(--secondary-color);
+}
+
+.required {
+    color: var(--danger-color);
+    margin-left: 3px;
+}
+
+.review-form-group textarea {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid var(--medium-gray);
+    border-radius: 8px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    transition: border-color 0.3s ease;
+}
+
+.review-form-group textarea:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(30, 122, 143, 0.1);
+}
+
+.char-count {
+    text-align: right;
+    font-size: 12px;
+    color: var(--dark-gray);
+    margin-top: 5px;
+}
+
+/* Review Disclaimer */
+.review-disclaimer {
+    background-color: rgba(33, 150, 243, 0.1);
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid var(--approved-color);
+    margin-bottom: 30px;
+    font-size: 14px;
+}
+
+.review-disclaimer i {
+    color: var(--approved-color);
+    margin-right: 8px;
+}
+
+/* Form Actions */
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+    padding: 25px 40px;
+    background-color: var(--light-gray);
+    border-top: 1px solid var(--medium-gray);
+}
+
+.cancel-button,
+.submit-button {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+    min-width: 12.5rem;
+    justify-content: center;
+}
+
+.cancel-button {
+    background-color: white;
+    color: var(--dark-gray);
+    border: 1px solid var(--medium-gray);
+}
+
+.submit-button {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.cancel-button:hover {
+    background-color: #f0f0f0;
+    border: 0.1px solid red;
+}
+
+.submit-button:hover {
+    background-color: #186a7d;
+}
+
+.submit-button:disabled {
+    background-color: var(--medium-gray);
+    cursor: not-allowed;
+}
+
+/* Icons */
+.icon {
+    margin-right: 10px;
+}
+
+.icon-hotel::before {
+    content: "\f594";
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    color: var(--primary-color);
+}
+
+.icon-comment::before {
+    content: "\f075";
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    color: var(--primary-color);
+}
+
+.icon-star::before {
+    content: "\f005";
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    color: var(--primary-color);
+}

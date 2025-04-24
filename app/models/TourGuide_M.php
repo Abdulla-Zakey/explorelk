@@ -27,6 +27,7 @@ class TourGuide_M
 		'profilePhoto',
 		'gender',
 		'status',
+		'approved',
 	];
 
 	public function validate($data)

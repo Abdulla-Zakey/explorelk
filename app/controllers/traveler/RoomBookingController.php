@@ -1,83 +1,81 @@
 <?php
-    class RoomBookingController extends Controller{
-       
-        private $hotelRoomTypesModel;
-        private $roomsModel;
-        private $roomBookingModel;
+class RoomBookingController extends Controller
+{
 
-        public function __construct() {
-            $this->hotelRoomTypesModel = new HotelRoomTypesModel();
-            $this->roomsModel = new RoomsModel();
-            $this->roomBookingModel = new RoomBookingModel();
+    private $hotelRoomTypesModel;
+    private $roomsModel;
+    private $roomBookingsFinalModel;
+
+    public function __construct()
+    {
+        $this->hotelRoomTypesModel = new HotelRoomTypesModel();
+        $this->roomsModel = new RoomsModel();
+        $this->roomBookingsFinalModel = new RoomBookingsFinalModel;
+    }
+
+    public function checkAvailability($hotelRoomTypeId, $checkInDate, $checkOutDate)
+    {
+        // Validate date format
+        if (!strtotime($checkInDate) || !strtotime($checkOutDate)) {
+            header('Content-Type: application/json');
+            echo json_encode(['error' => 'Invalid date format']);
+            return;
         }
 
-        // public function checkAvailability($hotelRoomTypeId, $checkInDate, $checkOutDate) {
-            // Get all rooms of this type
-            // $rooms = $this->roomsModel->getRoomsByType($hotelRoomTypeId);
+        // Get all rooms of this type
+        $rooms = $this->roomsModel->getRoomsByType($hotelRoomTypeId);
+        $totalRooms = count($rooms);
 
-            // $availableRooms = [];
-            // foreach ($rooms as $room) {
-                // Check bookings for each room
-        //         $existingBookings = $this->roomBookingModel->checkRoomAvailability(
-        //             $room['room_Id'],
-        //             $checkInDate,
-        //             $checkOutDate
-        //         );
-            
-        //         if ($existingBookings) {
-        //             $availableRooms[] = $room;
-        //         }
-        //     }
+        $confirmedBookings = $this->roomBookingsFinalModel->getConfirmedRoomBookingByHotelRoomType($hotelRoomTypeId, $checkInDate, $checkOutDate);
+        $bookedRoomCount = 0;
+
+        foreach($confirmedBookings as $confirmedBooking){
+            $bookedRoomCount += $confirmedBooking->total_rooms;
+        }
+
+        $pendingBookings = $this->roomBookingsFinalModel->getPendingRoomBookingByHotelRoomType($hotelRoomTypeId, $checkInDate, $checkOutDate);
+        $pendingRoomCount = 0;
+
+        foreach($pendingBookings as $pendingBooking){
+            $pendingRoomCount += $pendingBooking->total_rooms;
+        }
+
+        $approvedBookings = $this->roomBookingsFinalModel->getApprovedRoomBookingByHotelRoomType($hotelRoomTypeId, $checkInDate, $checkOutDate);
+        $approvedRoomCount = 0;
+
+        foreach($approvedBookings as $approvedBooking){
+            $approvedRoomCount += $approvedBooking->total_rooms;
+        }
+
+        $totalReservedRooms =  $pendingRoomCount + $approvedRoomCount;
+        $availableRooms = $totalRooms - $totalReservedRooms - $bookedRoomCount;
         
-        //     return [
-        //         'available' => !empty($availableRooms),
-        //         'total_rooms' => count($rooms),
-        //         'available_rooms' => count($availableRooms),
-        //         'booked_rooms' => count($rooms) - count($availableRooms),
-        //         'available_room_details' => $availableRooms,
-        //         'check_in' => $checkInDate,
-        //         'check_out' => $checkOutDate
-        //     ];
-    
+
+        // $availableRooms = [];
+        // foreach ($rooms as $room) {
+        //     // Check bookings for each room
+        //     $isAvailable = $this->roomBookingModel->checkRoomAvailability(
+        //         $room->room_Id,
+        //         $checkInDate,
+        //         $checkOutDate
+        //     );
+
+        //     if ($isAvailable) {
+        //         $availableRooms[] = $room;
+        //     }
         // }
 
-        // Modify your RoomBookingController.php to add this method
-public function checkAvailability($hotelRoomTypeId, $checkInDate, $checkOutDate) {
-    // Validate date format
-    if (!strtotime($checkInDate) || !strtotime($checkOutDate)) {
+        $result = [
+            'available' => !empty($availableRooms),
+            'total_rooms' => $totalRooms,
+            'available_rooms' => $availableRooms,
+            'booked_rooms' => $bookedRoomCount,
+            'reserved_rooms' => $totalReservedRooms,
+            'check_in' => $checkInDate,
+            'check_out' => $checkOutDate
+        ];
+
         header('Content-Type: application/json');
-        echo json_encode(['error' => 'Invalid date format']);
-        return;
+        echo json_encode($result);
     }
-
-    // Get all rooms of this type
-    $rooms = $this->roomsModel->getRoomsByType($hotelRoomTypeId);
-
-    $availableRooms = [];
-    foreach ($rooms as $room) {
-        // Check bookings for each room
-        $isAvailable = $this->roomBookingModel->checkRoomAvailability(
-            $room->room_Id,
-            $checkInDate,
-            $checkOutDate
-        );
-    
-        if ($isAvailable) {
-            $availableRooms[] = $room;
-        }
-    }
-
-    $result = [
-        'available' => !empty($availableRooms),
-        'total_rooms' => count($rooms),
-        'available_rooms' => count($availableRooms),
-        'booked_rooms' => count($rooms) - count($availableRooms),
-        'available_room_details' => $availableRooms,
-        'check_in' => $checkInDate,
-        'check_out' => $checkOutDate
-    ];
-
-    header('Content-Type: application/json');
-    echo json_encode($result);
 }
-    }

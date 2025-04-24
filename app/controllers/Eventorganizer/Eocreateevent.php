@@ -55,6 +55,7 @@ class Eocreateevent extends Controller{
                 $organizer_Id = $_SESSION['organizer_id'];
                 $eventWebBannerPath = $this->handleEventBannerUpload();
                 $eventName = $_POST['eventName'];
+                $eventType = $_POST['eventType'];
                 $aboutEvent = $_POST['aboutEvent'];
                 $eventDate = $_POST['eventDate'];
                 $eventStartTime = $_POST['eventStartTime'];
@@ -68,6 +69,7 @@ class Eocreateevent extends Controller{
                     $organizer_Id,
                     $eventWebBannerPath,
                     $eventName,
+                    $eventType,
                     $aboutEvent,
                     $eventDate,
                     $eventStartTime,
