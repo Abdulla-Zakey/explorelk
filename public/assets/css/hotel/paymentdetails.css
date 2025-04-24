@@ -1,0 +1,90 @@
+.payment-container {
+    padding: 20px;
+    margin-top: 200px;
+}
+
+.payment-summary {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+    margin-bottom: 30px;
+    gap: 20px;
+    padding: 0 20px;
+}
+
+.summary-card {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    flex: 1;
+}
+
+.amount {
+    font-size: 24px;
+    color: #002D40;
+    font-weight: bold;
+}
+
+.payment-details {
+    margin: 0 20px;
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.payment-details table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+}
+
+.payment-details th, 
+.payment-details td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+}
+
+.payment-details th {
+    background: #f8f9fa;
+    color: #002D40;
+}
+
+.status-paid {
+    background: #28a745;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+}
+
+.status-pending {
+    background: #ffc107;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+}
+
+button {
+    background: #002D40;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #B3D9FF;
+    color: #002D40;
+}
+
+h2, h3 {
+    color: #002D40;
+}
+h4 {
+    color: #002D40;
+    margin-left: 25px;
+    font-size: 24px;
+}

@@ -14,8 +14,9 @@
         private $roomBookingsFinalModel;
         private $hotelGuestsModel;
         private $hotelReviewsModel;
-
         private $hotelCommissionsModel;
+        private $notificationsModel;
+        private $accommodationBookingNotificationsModel;
 
         public function __construct(){
             $this->travelerModel = new Traveler();
@@ -31,6 +32,8 @@
             $this->hotelGuestsModel  = new HotelGuestsModel();
             $this->hotelReviewsModel = new HotelReviewsModel();
             $this->hotelCommissionsModel = new HotelCommissionsModel();
+            $this->notificationsModel = new NotificationsModel();
+            $this->accommodationBookingNotificationsModel = new AccommodationBookingNotifications();
         }
 
         public function index($hotelId){
@@ -151,20 +154,48 @@
                         'guest_mobile_num' => $_POST['guestMobileNum']
                     ];
 
-                    // show($commssionData);
-                    // exit();
+                    $hotelData = $this->hotelModel->getDetailsByHotelId($_POST['hotelId']);
+                    
+                    $notificationData = [
+                        'recipient_type' => 'traveler',
+                        'recipient_Id' => $_SESSION['traveler_id'],
+                        'notification_type' => 'accommodation_related',
+                        'notification_title' => 'Booking Request Submitted for ' . $hotelData->hotelName,
+                        'notification_text' => 'Your booking request for ' . $hotelData->hotelName . ' has been successfully submitted. 
+                                                Please make the advance payment before '. date('F d, Y', strtotime($advancePaymentDeadline)) . ' at 11:59 PM to confirm your booking'
+                    ];
+
                     $commisionId = $this->hotelCommissionsModel->insert($commissionData);
 
                     $guestId = $this->hotelGuestsModel->insert($guestData);
 
-                    if(!$commisionId){
+                    if($guestId && $commisionId) {
+                        $notificationId = $this->notificationsModel->insert($notificationData);
+
+                        if($notificationId){
+                            $accommodationBookingNotificationData = [
+                                'notification_Id' => $notificationId,
+                                'room_booking_Id' => $roomBookingId
+                            ];
+
+                            $result = $this->accommodationBookingNotificationsModel->insert($accommodationBookingNotificationData);
+
+                            if($result){
+                                redirect('traveler/ViewParticularHotel/index/'. $_POST['hotelId'] .'?success=booking_request_submitted&booking_id=' . $roomBookingId);
+                            }
+                            else{
+                                redirect('traveler/ViewParticularHotel/index/'. $_POST['hotelId'] .'?error=booking_request_submitted_but_failed_to_generate_accommodation_notification&booking_id=' . $roomBookingId);
+                            }
+                        }
+                        else{
+                            redirect('traveler/ViewParticularHotel/index/'. $_POST['hotelId'] .'?error=booking_request_submitted_but_failed_to_generate_notification&booking_id=' . $roomBookingId);
+                        }
+                        
+                    }
+                    else if(!$commisionId){
                         redirect('traveler/ViewParticularHotel/index/'. $_POST['hotelId'] .'?error=commision_details_recording_failed');
                     }
-
-                    if($guestId){
-                        redirect('traveler/ViewParticularHotel/index/'. $_POST['hotelId'] .'?success=booking_request_submitted&booking_id=' . $roomBookingId);
-                    }
-                    else{
+                    else if(!$guestId){
                         redirect('traveler/ViewParticularHotel/index/'. $_POST['hotelId'] .'?error=guest_details_recording_failed');
                     }
                     

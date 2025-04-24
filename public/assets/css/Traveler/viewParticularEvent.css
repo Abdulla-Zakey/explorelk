@@ -26,6 +26,8 @@ body{
     font-family: 'Poppins', sans-serif;
     overflow-x: hidden;
     background: #f8f9fa;
+    margin: 0;
+    padding: 0;
 }
 
 /* Event Banner Section */
@@ -363,6 +365,7 @@ button:hover {
 }
 
 .popup-content {
+    min-width: 600px;
     background: white;
     padding: 2rem;
     border-radius: 1rem;
