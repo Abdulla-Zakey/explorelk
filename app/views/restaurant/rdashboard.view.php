@@ -340,9 +340,9 @@ $message = $data['message'];
     <script>
         // Simulated promotions data (replace with actual data from backend in the future)
         const promotionsData = [
-            { image: "<?php echo ROOT; ?>/assets/images/resturant/ads/prom2.jpg", info: "50% off on weekends" },
-            { image: "<?php echo ROOT; ?>/assets/images/resturant/ads/prom2.jpg", info: "New menu items" },
-            { image: "<?php echo ROOT; ?>/assets/images/resturant/ads/prom2.jpg", info: "Happy hour specials" }
+            { image: "<?php echo ROOT; ?>/assets/images/restaurant/ads/prom2.jpg", info: "50% off on weekends" },
+            { image: "<?php echo ROOT; ?>/assets/images/restaurant/ads/prom2.jpg", info: "New menu items" },
+            { image: "<?php echo ROOT; ?>/assets/images/restaurant/ads/prom2.jpg", info: "Happy hour specials" }
         ];
 
         // Promotions logic

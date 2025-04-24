@@ -1,5 +1,6 @@
 <?php 
   include '../app/views/components/rnav.php';
+
 ?>
 
 <!DOCTYPE html>
@@ -9,12 +10,785 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Restaurant Payments Dashboard</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link rel="stylesheet" href="<?= CSS ?>/restaurant/rpaymentsdetails.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    /* Reset and base styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    }
 
-  
+    :root {
+      --background: #ffffff;
+      --foreground: #0f172a;
+      --muted: #f1f5f9;
+      --muted-foreground: #64748b;
+      --border: #e2e8f0;
+      --input: #e2e8f0;
+      --primary: #0ea5e9;
+      --primary-foreground: #f8fafc;
+      --secondary: #f1f5f9;
+      --secondary-foreground: #0f172a;
+      --accent: #f1f5f9;
+      --accent-foreground: #0f172a;
+      --destructive: #ef4444;
+      --destructive-foreground: #f8fafc;
+      --ring: #0ea5e9;
+      --radius: 0.5rem;
+    }
+
+    body {
+      background-color: var(--background);
+      color: var(--foreground);
+      min-height: 100vh;
+    }
+
+    /* Layout */
+    .flex {
+      display: flex;
+    }
+
+    .flex-col {
+      flex-direction: column;
+    }
+
+    .items-center {
+      align-items: center;
+    }
+
+    .justify-between {
+      justify-content: space-between;
+    }
+
+    .justify-end {
+      justify-content: flex-end;
+    }
+
+    .gap-2 {
+      gap: 0.5rem;
+    }
+
+    .gap-4 {
+      gap: 1rem;
+    }
+
+    .grid {
+      display: grid;
+    }
+
+    .grid-cols-1 {
+      grid-template-columns: repeat(1, minmax(0, 1fr));
+    }
+
+    .grid-cols-2 {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .grid-cols-3 {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .w-full {
+      width: 100%;
+    }
+
+    .h-full {
+      height: 100%;
+    }
+
+    .min-h-screen {
+      min-height: 100vh;
+    }
+
+    .p-2 {
+      padding: 0.5rem;
+    }
+
+    .p-4 {
+      padding: 1rem;
+    }
+
+    .p-6 {
+      padding: 1.5rem;
+    }
+
+    .px-4 {
+      padding-left: 1rem;
+      padding-right: 1rem;
+    }
+
+    .py-2 {
+      padding-top: 0.5rem;
+      padding-bottom: 0.5rem;
+    }
+
+    .py-4 {
+      padding-top: 1rem;
+      padding-bottom: 1rem;
+    }
+
+    .m-2 {
+      margin: 0.5rem;
+    }
+
+    .m-4 {
+      margin: 1rem;
+    }
+
+    .mb-2 {
+      margin-bottom: 0.5rem;
+    }
+
+    .mb-4 {
+      margin-bottom: 1rem;
+    }
+
+    .mt-2 {
+      margin-top: 0.5rem;
+    }
+
+    .mt-4 {
+      margin-top: 1rem;
+    }
+
+    .ml-2 {
+      margin-left: 0.5rem;
+    }
+
+    .mr-2 {
+      margin-right: 0.5rem;
+    }
+
+    .space-y-2 > * + * {
+      margin-top: 0.5rem;
+    }
+
+    .space-y-4 > * + * {
+      margin-top: 1rem;
+    }
+
+    /* Typography */
+    .text-xs {
+      font-size: 0.75rem;
+      line-height: 1rem;
+    }
+
+    .text-sm {
+      font-size: 0.875rem;
+      line-height: 1.25rem;
+    }
+
+    .text-base {
+      font-size: 1rem;
+      line-height: 1.5rem;
+    }
+
+    .text-lg {
+      font-size: 1.125rem;
+      line-height: 1.75rem;
+    }
+
+    .text-xl {
+      font-size: 1.25rem;
+      line-height: 1.75rem;
+    }
+
+    .text-2xl {
+      font-size: 1.5rem;
+      line-height: 2rem;
+    }
+
+    .font-medium {
+      font-weight: 500;
+    }
+
+    .font-semibold {
+      font-weight: 600;
+    }
+
+    .font-bold {
+      font-weight: 700;
+    }
+
+    .text-center {
+      text-align: center;
+    }
+
+    .text-right {
+      text-align: right;
+    }
+
+    .text-muted-foreground {
+      color: var(--muted-foreground);
+    }
+
+    .text-destructive {
+      color: var(--destructive);
+    }
+
+    /* Components */
+    .header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      height: 4rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      border-bottom: 1px solid var(--border);
+      background-color: var(--background);
+      padding: 0 1rem;
+    }
+
+    .main {
+      display: flex;
+      flex: 1;
+      flex-direction: column;
+      gap: 1rem;
+      padding: 1rem;
+    }
+
+    .card {
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      background-color: var(--background);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+    }
+
+    .card-header {
+      display: flex;
+      flex-direction: column;
+      padding: 1rem 1rem 0.5rem 1rem;
+    }
+
+    .card-title {
+      font-size: 0.875rem;
+      font-weight: 500;
+    }
+
+    .card-description {
+      font-size: 0.875rem;
+      color: var(--muted-foreground);
+    }
+
+    .card-content {
+      padding: 1rem;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: var(--radius);
+      font-weight: 500;
+      font-size: 0.875rem;
+      line-height: 1.25rem;
+      padding: 0.5rem 1rem;
+      cursor: pointer;
+      transition: background-color 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .button-primary {
+      background-color: var(--primary);
+      color: var(--primary-foreground);
+      border: 1px solid var(--primary);
+    }
+
+    .button-primary:hover {
+      background-color: #0284c7;
+      border-color: #0284c7;
+    }
+
+    .button-outline {
+      background-color: transparent;
+      color: var(--foreground);
+      border: 1px solid var(--border);
+    }
+
+    .button-outline:hover {
+      background-color: var(--accent);
+      color: var(--accent-foreground);
+    }
+
+    .button-destructive {
+      background-color: var(--destructive);
+      color: var(--destructive-foreground);
+      border: 1px solid var(--destructive);
+    }
+
+    .button-destructive:hover {
+      background-color: #dc2626;
+      border-color: #dc2626;
+    }
+
+    .button-ghost {
+      background-color: transparent;
+      color: var(--foreground);
+      border: none;
+    }
+
+    .button-ghost:hover {
+      background-color: var(--accent);
+      color: var(--accent-foreground);
+    }
+
+    .button-sm {
+      padding: 0.25rem 0.5rem;
+      font-size: 0.75rem;
+    }
+
+    .button-icon {
+      padding: 0.5rem;
+      height: 2rem;
+      width: 2rem;
+    }
+
+    .input {
+      display: flex;
+      height: 2.5rem;
+      width: 100%;
+      border-radius: var(--radius);
+      border: 1px solid var(--input);
+      background-color: transparent;
+      padding: 0 0.75rem;
+      font-size: 0.875rem;
+      line-height: 1.25rem;
+      color: var(--foreground);
+    }
+
+    .input:focus {
+      outline: none;
+      box-shadow: 0 0 0 2px var(--ring);
+    }
+
+    .input-search {
+      padding-left: 2.5rem;
+    }
+
+    .input-icon {
+      position: absolute;
+      left: 0.75rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--muted-foreground);
+    }
+
+    .input-wrapper {
+      position: relative;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 9999px;
+      padding: 0.125rem 0.5rem;
+      font-size: 0.75rem;
+      font-weight: 500;
+      line-height: 1;
+      white-space: nowrap;
+    }
+
+    .badge-outline {
+      border: 1px solid;
+    }
+
+    .badge-paid {
+      background-color: rgba(34, 197, 94, 0.1);
+      color: rgb(22, 163, 74);
+      border-color: rgba(34, 197, 94, 0.2);
+    }
+
+    .badge-pending {
+      background-color: rgba(234, 179, 8, 0.1);
+      color: rgb(202, 138, 4);
+      border-color: rgba(234, 179, 8, 0.2);
+    }
+
+    .badge-failed {
+      background-color: rgba(239, 68, 68, 0.1);
+      color: rgb(220, 38, 38);
+      border-color: rgba(239, 68, 68, 0.2);
+    }
+
+    .badge-refund-full {
+      background-color: rgba(59, 130, 246, 0.1);
+      color: rgb(37, 99, 235);
+      border-color: rgba(59, 130, 246, 0.2);
+    }
+
+    .badge-refund-partial {
+      background-color: rgba(168, 85, 247, 0.1);
+      color: rgb(147, 51, 234);
+      border-color: rgba(168, 85, 247, 0.2);
+    }
+
+    /* Table */
+    .table-container {
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      overflow: auto;
+    }
+
+    .table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .table th {
+      font-weight: 500;
+      text-align: left;
+      padding: 0.75rem 1rem;
+      background-color: var(--muted);
+      color: var(--muted-foreground);
+      font-size: 0.875rem;
+    }
+
+    .table td {
+      padding: 0.75rem 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.875rem;
+    }
+
+    .table tr:hover {
+      background-color: var(--muted);
+    }
+
+    .table-sort-button {
+      display: inline-flex;
+      align-items: center;
+      background: none;
+      border: none;
+      font-weight: 500;
+      font-size: 0.875rem;
+      color: var(--muted-foreground);
+      cursor: pointer;
+    }
+
+    .table-sort-button:hover {
+      color: var(--foreground);
+    }
+
+    .table-sort-icon {
+      margin-left: 0.25rem;
+    }
+
+    /* Tabs */
+    .tabs {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+    }
+
+    .tabs-list {
+      display: flex;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .tab {
+      padding: 0.5rem 1rem;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--muted-foreground);
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+    }
+
+    .tab.active {
+      color: var(--foreground);
+      border-bottom-color: var(--primary);
+    }
+
+    .tab-content {
+      padding-top: 1rem;
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    /* Chart */
+    .chart-container {
+      height: 300px;
+      width: 100%;
+    }
+
+    /* Dialog */
+    .dialog-overlay {
+      position: fixed;
+      inset: 0;
+      background-color: rgba(0, 0, 0, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 50;
+    }
+
+    .dialog {
+      background-color: var(--background);
+      border-radius: var(--radius);
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+      width: 100%;
+      max-width: 500px;
+      padding: 1.5rem;
+      position: relative;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    .dialog-close {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--muted-foreground);
+    }
+
+    .dialog-header {
+      margin-bottom: 1rem;
+    }
+
+    .dialog-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+    }
+
+    .dialog-description {
+      color: var(--muted-foreground);
+      font-size: 0.875rem;
+    }
+
+    .dialog-footer {
+      display: flex;
+      justify-content: flex-end;
+      gap: 0.5rem;
+      margin-top: 1.5rem;
+    }
+
+    /* Dropdown */
+    .dropdown {
+      position: relative;
+      display: inline-block;
+    }
+
+    .dropdown-menu {
+      position: absolute;
+      right: 0;
+      z-index: 10;
+      min-width: 8rem;
+      overflow: hidden;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      background-color: var(--background);
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+      display: none;
+    }
+
+    .dropdown-menu.show {
+      display: block;
+    }
+
+    .dropdown-item {
+      padding: 0.5rem 1rem;
+      font-size: 0.875rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+    }
+
+    .dropdown-item:hover {
+      background-color: var(--accent);
+    }
+
+    .dropdown-label {
+      padding: 0.5rem 1rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--muted-foreground);
+    }
+
+    .dropdown-separator {
+      height: 1px;
+      background-color: var(--border);
+      margin: 0.25rem 0;
+    }
+
+    /* Form elements */
+    .form-group {
+      margin-bottom: 1rem;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 0.875rem;
+      font-weight: 500;
+      margin-bottom: 0.5rem;
+    }
+
+    .form-hint {
+      font-size: 0.75rem;
+      color: var(--muted-foreground);
+      margin-top: 0.25rem;
+    }
+
+    .radio-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .radio-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .textarea {
+      display: block;
+      width: 100%;
+      min-height: 5rem;
+      border-radius: var(--radius);
+      border: 1px solid var(--input);
+      padding: 0.5rem 0.75rem;
+      font-size: 0.875rem;
+      resize: vertical;
+    }
+
+    .textarea:focus {
+      outline: none;
+      box-shadow: 0 0 0 2px var(--ring);
+    }
+
+    /* Checkbox */
+    .checkbox-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .checkbox {
+      height: 1rem;
+      width: 1rem;
+      border-radius: 0.25rem;
+      border: 1px solid var(--input);
+    }
+
+    /* Utilities */
+    .hidden {
+      display: none;
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border-width: 0;
+    }
+
+    .rounded {
+      border-radius: var(--radius);
+    }
+
+    .bg-muted {
+      background-color: var(--muted);
+    }
+
+    .bg-blue-50 {
+      background-color: rgba(59, 130, 246, 0.1);
+    }
+
+    .text-blue-700 {
+      color: rgb(29, 78, 216);
+    }
+
+    .border-blue-200 {
+      border-color: rgba(59, 130, 246, 0.2);
+    }
+
+    /* Responsive */
+    @media (min-width: 640px) {
+      .sm\:flex-row {
+        flex-direction: row;
+      }
+    }
+
+    @media (min-width: 768px) {
+      .md\:grid-cols-2 {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .md\:grid-cols-3 {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .md\:block {
+        display: block;
+      }
+
+      .md\:hidden {
+        display: none;
+      }
+
+      .md\:p-8 {
+        padding: 2rem;
+      }
+
+      .md\:gap-8 {
+        gap: 2rem;
+      }
+
+      .main {
+        padding: 2rem;
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .lg\:grid-cols-3 {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .lg\:grid-cols-4 {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+      }
+
+      .lg\:table-cell {
+        display: table-cell;
+      }
+    }
+  </style>
 </head>
 <body>
   <div class="flex flex-col min-h-screen">
+    <header class="header">
+      <div class="flex flex-1 items-center gap-2">
+        <h1 class="text-xl font-semibold">Payments Dashboard</h1>
+      </div>
+      <div class="flex items-center gap-2">
+        <div class="input-wrapper hidden md:block">
+          <i class="fas fa-search input-icon"></i>
+          <input type="search" placeholder="Search transactions..." class="input input-search" />
+        </div>
+        <button class="button button-outline button-sm" id="filter-button">
+          <i class="fas fa-filter mr-2"></i>
+          Filter
+        </button>
+        <button class="button button-outline button-sm">
+          <i class="fas fa-download mr-2"></i>
+          Export
+        </button>
+      </div>
+    </header>
+
     <main class="main">
       <!-- Summary Cards -->
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -56,8 +830,21 @@
 
         <!-- Overview Tab -->
         <div class="tab-content active" id="overview-tab">
-          <!-- Filter Panel -->
-          <!-- <div class="card mb-4">
+          <!-- Income Chart -->
+          <div class="card mb-4">
+            <div class="card-header">
+              <div class="card-title">Monthly Income</div>
+              <div class="card-description">Income from reservations over the past 12 months</div>
+            </div>
+            <div class="card-content">
+              <div class="chart-container">
+                <canvas id="income-chart"></canvas>
+              </div>
+            </div>
+          </div>
+
+          <!-- Filter Panel (hidden by default) -->
+          <div class="card mb-4 hidden" id="filter-panel">
             <div class="card-content p-4">
               <div class="flex flex-col gap-4">
                 <div class="flex items-center justify-between">
@@ -98,7 +885,7 @@
                 </div>
               </div>
             </div>
-          </div> -->
+          </div>
 
           <!-- Payments Table -->
           <div class="table-container">
@@ -392,6 +1179,12 @@
       },
     ];
 
+    // Chart data
+    const chartData = {
+      labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+      values: [8500, 9200, 8800, 9800, 10200, 11500, 12800, 13200, 12000, 11000, 10450, 12350]
+    };
+
     // Current state
     let currentSort = { column: 'reservationDate', direction: 'desc' };
     let selectedRows = [];
@@ -399,6 +1192,7 @@
 
     // DOM Elements
     const tableBody = document.querySelector('#payments-table tbody');
+    const filterButton = document.getElementById('filter-button');
     const filterPanel = document.getElementById('filter-panel');
     const closeFilterButton = document.getElementById('close-filter');
     const tabs = document.querySelectorAll('.tab');
@@ -623,6 +1417,57 @@
       selectAllCheckbox.checked = selectedRows.length > 0 && selectedRows.length === payments.length;
     }
 
+    // Initialize chart
+    function initChart() {
+      const ctx = document.getElementById('income-chart').getContext('2d');
+      new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: chartData.labels,
+          datasets: [{
+            label: 'Monthly Income',
+            data: chartData.values,
+            backgroundColor: '#0ea5e9',
+            borderRadius: 4,
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              display: false
+            },
+            tooltip: {
+              callbacks: {
+                label: function(context) {
+                  return `Income: ${formatCurrency(context.raw)}`;
+                }
+              }
+            }
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              ticks: {
+                callback: function(value) {
+                  return '$' + value;
+                }
+              },
+              grid: {
+                color: 'rgba(0, 0, 0, 0.05)'
+              }
+            },
+            x: {
+              grid: {
+                display: false
+              }
+            }
+          }
+        }
+      });
+    }
+
     // Open refund dialog
     function openRefundDialog(id) {
       currentPayment = payments.find(p => p.id === id);
@@ -774,6 +1619,9 @@
       // Render table
       renderTable();
 
+      // Initialize chart
+      initChart();
+
       // Add event listeners
       document.addEventListener('click', function(e) {
         // Close dropdowns when clicking outside
@@ -782,6 +1630,11 @@
             menu.classList.remove('show');
           });
         }
+      });
+
+      // Filter button
+      filterButton.addEventListener('click', function() {
+        filterPanel.classList.toggle('hidden');
       });
 
       // Close filter button

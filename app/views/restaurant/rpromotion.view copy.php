@@ -1,5 +1,5 @@
 <?php
-include '../app/views/components/rnav.php';
+  include '../app/views/components/rnav.php';
 ?>
 
 <!DOCTYPE html>
@@ -97,10 +97,6 @@ include '../app/views/components/rnav.php';
             backdrop-filter: blur(4px);
             z-index: 1000;
             overflow-y: auto;
-        }
-
-        .modal.active {
-            display: block;
         }
 
         .modal-content {
@@ -243,12 +239,6 @@ include '../app/views/components/rnav.php';
             gap: 1rem;
         }
 
-        .error {
-            color: var(--danger-color);
-            font-size: 0.9rem;
-            margin-top: 0.5rem;
-        }
-
         @media (max-width: 768px) {
             .modal-content {
                 margin: 1rem auto;
@@ -265,141 +255,139 @@ include '../app/views/components/rnav.php';
             <button class="btn btn-primary" id="addPromotionBtn">+ Add Promotion</button>
         </div>
 
-        <?php if (!empty($data['errors']['general'])): ?>
-            <p class="error"><?php echo htmlspecialchars($data['errors']['general']); ?></p>
-        <?php endif; ?>
-
-        <div class="promotions-grid" id="promotionsGrid">
-            <?php foreach ($data['promotions'] as $promotion): ?>
-                <?php $foodItems = json_decode($promotion['food_items'], true); ?>
-                <div class="promotion-card">
-                    <?php if (!empty($promotion['image'])): ?>
-                        <img src="<?php echo htmlspecialchars($promotion['image']); ?>" alt="Promotion" class="promotion-image">
-                    <?php endif; ?>
-                    <div class="promotion-content">
-                        <div class="promotion-title">
-                            <?php echo $promotion['type'] === 'combo' ? 'Combo Deal' : 'Single Item Discount'; ?>
-                        </div>
-                        <div class="promotion-details">
-                            <?php echo htmlspecialchars(implode(', ', array_column($foodItems, 'name'))); ?>
-                        </div>
-                        <div class="promotion-discount">
-                            <?php echo htmlspecialchars($promotion['discount']); ?>% OFF
-                        </div>
-                        <p><?php echo htmlspecialchars($promotion['description']); ?></p>
-                        <p>Valid until: <?php echo htmlspecialchars(date('m/d/Y', strtotime($promotion['valid_until']))); ?></p>
-                        <div class="promotion-actions">
-                            <form method="POST" style="display: inline;">
-                                <input type="hidden" name="action" value="edit">
-                                <input type="hidden" name="promotion_id" value="<?php echo htmlspecialchars($promotion['id']); ?>">
-                                <button type="submit" class="btn btn-primary">Edit</button>
-                            </form>
-                            <form method="POST" style="display: inline;" onsubmit="return confirm('Are you sure you want to delete this promotion?');">
-                                <input type="hidden" name="action" value="delete">
-                                <input type="hidden" name="promotion_id" value="<?php echo htmlspecialchars($promotion['id']); ?>">
-                                <button type="submit" class="btn btn-danger">Remove</button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            <?php endforeach; ?>
-        </div>
+        <div class="promotions-grid" id="promotionsGrid"></div>
     </div>
 
     <!-- Add/Edit Promotion Modal -->
     <div class="modal" id="promotionModal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2 id="modalTitle"><?php echo $data['is_editing'] ? 'Edit Promotion' : 'Add New Promotion'; ?></h2>
-                <button class="close-modal" id="closeModal">×</button>
+                <h2 id="modalTitle">Add New Promotion</h2>
+                <button class="close-modal" id="closeModal">&times;</button>
             </div>
-            <form method="POST" enctype="multipart/form-data" id="promotionForm">
-                <input type="hidden" name="action" id="formAction" value="<?php echo $data['is_editing'] ? 'update' : 'create'; ?>">
-                <input type="hidden" name="promotion_id" id="promotionId" value="<?php echo htmlspecialchars($data['editing_id'] ?? ''); ?>">
+            <form id="promotionForm">
+                <input type="hidden" id="promotionId">
                 <div class="form-group">
                     <label for="promotionType">Promotion Type</label>
-                    <select class="form-control" id="promotionType" name="promotionType" required>
+                    <select class="form-control" id="promotionType" required>
                         <option value="">Select Type</option>
-                        <option value="single" <?php echo ($data['form_data']['promotionType'] ?? '') === 'single' ? 'selected' : ''; ?>>Single Item Discount</option>
-                        <option value="combo" <?php echo ($data['form_data']['promotionType'] ?? '') === 'combo' ? 'selected' : ''; ?>>Combo Deal</option>
+                        <option value="single">Single Item Discount</option>
+                        <option value="combo">Combo Deal</option>
                     </select>
-                    <?php if (!empty($data['errors']['type'])): ?>
-                        <p class="error"><?php echo htmlspecialchars($data['errors']['type']); ?></p>
-                    <?php endif; ?>
                 </div>
 
                 <div class="form-group">
                     <label for="promotionImage">Promotion Image</label>
-                    <input type="file" class="form-control" id="promotionImage" name="promotionImage" accept="image/*">
-                    <div class="image-preview" id="imagePreview" <?php echo ($data['is_editing'] && !empty($data['form_data']['image'])) ? 'style="display: block;"' : ''; ?>>
-                        <img src="<?php echo htmlspecialchars($data['form_data']['image'] ?? '/placeholder.svg'); ?>" alt="Preview">
+                    <input type="file" class="form-control" id="promotionImage" accept="image/*">
+                    <div class="image-preview" id="imagePreview">
+                        <img src="/placeholder.svg" alt="Preview">
                     </div>
                 </div>
 
                 <div class="form-group" id="foodItemsGroup">
-                    <label>Menu Items</label>
+                    <label>Food Items</label>
                     <div class="food-items-container" id="foodItemsContainer">
-                        <?php 
-                        $selectedItems = $data['form_data']['menu_items'] ?? [];
-                        $itemCount = max(count($selectedItems), 1);
-                        for ($i = 0; $i < $itemCount; $i++): ?>
-                            <div class="food-item">
-                                <select class="form-control" name="menu_items[]" required>
-                                    <option value="">Select Menu Item</option>
-                                    <?php foreach ($data['menu_items'] as $item): ?>
-                                        <option value="<?php echo htmlspecialchars($item['id']); ?>" 
-                                            <?php echo (isset($selectedItems[$i]) && $selectedItems[$i] == $item['id']) ? 'selected' : ''; ?>>
-                                            <?php echo htmlspecialchars($item['name'] . ' - $' . $item['price']); ?>
-                                        </option>
-                                    <?php endforeach; ?>
-                                </select>
-                                <span class="remove-item">×</span>
-                            </div>
-                        <?php endfor; ?>
+                        <div class="food-item">
+                            <select class="form-control" required>
+                                <option value="">Select Food Item</option>
+                            </select>
+                            <span class="remove-item">&times;</span>
+                        </div>
                     </div>
-                    <button type="button" class="btn btn-primary" id="addItemBtn" style="margin-top: 1rem; <?php echo ($data['form_data']['promotionType'] ?? '') === 'single' ? 'display: none;' : ''; ?>">
+                    <button type="button" class="btn btn-primary" id="addItemBtn" style="margin-top: 1rem;">
                         + Add Item
                     </button>
-                    <?php if (!empty($data['errors']['food_items'])): ?>
-                        <p class="error"><?php echo htmlspecialchars($data['errors']['food_items']); ?></p>
-                    <?php endif; ?>
                 </div>
 
                 <div class="form-group">
                     <label for="discount">Discount Percentage</label>
-                    <input type="number" class="form-control" id="discount" name="discount" min="0" max="100" 
-                        value="<?php echo htmlspecialchars($data['form_data']['discount'] ?? ''); ?>" required>
-                    <?php if (!empty($data['errors']['discount'])): ?>
-                        <p class="error"><?php echo htmlspecialchars($data['errors']['discount']); ?></p>
-                    <?php endif; ?>
+                    <input type="number" class="form-control" id="discount" min="0" max="100" required>
                 </div>
 
                 <div class="form-group">
                     <label for="description">Description</label>
-                    <textarea class="form-control" id="description" name="description" rows="3" required><?php echo htmlspecialchars($data['form_data']['description'] ?? ''); ?></textarea>
-                    <?php if (!empty($data['errors']['description'])): ?>
-                        <p class="error"><?php echo htmlspecialchars($data['errors']['description']); ?></p>
-                    <?php endif; ?>
+                    <textarea class="form-control" id="description" rows="3" required></textarea>
                 </div>
 
                 <div class="form-group">
                     <label for="validUntil">Valid Until</label>
-                    <input type="date" class="form-control" id="validUntil" name="validUntil" 
-                        value="<?php echo htmlspecialchars($data['form_data']['validUntil'] ?? ''); ?>" required>
-                    <?php if (!empty($data['errors']['valid_until'])): ?>
-                        <p class="error"><?php echo htmlspecialchars($data['errors']['valid_until']); ?></p>
-                    <?php endif; ?>
+                    <input type="date" class="form-control" id="validUntil" required>
                 </div>
 
-                <button type="submit" class="btn btn-primary" id="submitBtn"><?php echo $data['is_editing'] ? 'Update Promotion' : 'Create Promotion'; ?></button>
+                <button type="submit" class="btn btn-primary" id="submitBtn">Create Promotion</button>
             </form>
         </div>
     </div>
 
     <script>
+        // Simulated API functions
+        async function fetchFoodItems() {
+            // Simulated API call
+            return [
+                { id: 1, name: 'Margherita Pizza', price: 12 },
+                { id: 2, name: 'Chicken Burger', price: 8 },
+                { id: 3, name: 'Caesar Salad', price: 6 },
+                { id: 4, name: 'Pasta Carbonara', price: 10 },
+                { id: 5, name: 'Fish & Chips', price: 15 }
+            ];
+        }
+
+        async function fetchPromotions() {
+            // Simulated API call
+            return [
+                {
+                    id: '1',
+                    type: 'combo',
+                    image: 'https://images.unsplash.com/photo-1513104890138-7c749659a591?w=500&q=80',
+                    foodItems: [
+                        { id: '1', name: 'Margherita Pizza - $12' },
+                        { id: '2', name: 'Caesar Salad - $6' }
+                    ],
+                    discount: 25,
+                    description: 'Pizza & Salad Combo! Perfect for a healthy and satisfying meal. Get our signature Margherita Pizza with a fresh Caesar Salad.',
+                    validUntil: '2024-03-30'
+                },
+                {
+                    id: '2',
+                    type: 'single',
+                    image: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=500&q=80',
+                    foodItems: [
+                        { id: '2', name: 'Chicken Burger - $8' }
+                    ],
+                    discount: 15,
+                    description: 'Burger Tuesday Special! Enjoy our signature Chicken Burger at a special discount every Tuesday.',
+                    validUntil: '2024-03-31'
+                },
+                // ... (other promotions)
+            ];
+        }
+
+        async function createPromotion(promotionData) {
+            // Simulated API call
+            console.log('Creating promotion:', promotionData);
+            // In a real implementation, this would send a POST request to your backend
+            return { ...promotionData, id: Date.now().toString() };
+        }
+
+        async function updatePromotion(id, promotionData) {
+            // Simulated API call
+            console.log('Updating promotion:', id, promotionData);
+            // In a real implementation, this would send a PUT request to your backend
+            return { ...promotionData, id };
+        }
+
+        async function deletePromotion(id) {
+            // Simulated API call
+            console.log('Deleting promotion:', id);
+            // In a real implementation, this would send a DELETE request to your backend
+            return true;
+        }
+
         // State management
-        let isEditing = <?php echo $data['is_editing'] ? 'true' : 'false'; ?>;
-        let editingId = '<?php echo htmlspecialchars($data['editing_id'] ?? ''); ?>';
+        let promotions = [];
+        let foodItems = [];
+        let isEditing = false;
+        let editingId = null;
 
         // DOM Elements
         const modal = document.getElementById('promotionModal');
@@ -408,13 +396,13 @@ include '../app/views/components/rnav.php';
         const addPromotionBtn = document.getElementById('addPromotionBtn');
         const closeModal = document.getElementById('closeModal');
         const promotionForm = document.getElementById('promotionForm');
-        const formAction = document.getElementById('formAction');
         const promotionId = document.getElementById('promotionId');
         const promotionType = document.getElementById('promotionType');
         const promotionImage = document.getElementById('promotionImage');
         const imagePreview = document.getElementById('imagePreview');
         const foodItemsContainer = document.getElementById('foodItemsContainer');
         const addItemBtn = document.getElementById('addItemBtn');
+        const promotionsGrid = document.getElementById('promotionsGrid');
 
         // Event Listeners
         addPromotionBtn.addEventListener('click', () => {
@@ -422,29 +410,14 @@ include '../app/views/components/rnav.php';
             editingId = null;
             modalTitle.textContent = 'Add New Promotion';
             submitBtn.textContent = 'Create Promotion';
-            formAction.value = 'create';
-            promotionId.value = '';
             promotionForm.reset();
             imagePreview.style.display = 'none';
-            foodItemsContainer.innerHTML = `
-                <div class="food-item">
-                    <select class="form-control" name="menu_items[]" required>
-                        <option value="">Select Menu Item</option>
-                        <?php foreach ($data['menu_items'] as $item): ?>
-                            <option value="<?php echo htmlspecialchars($item['id']); ?>">
-                                <?php echo htmlspecialchars($item['name'] . ' - $' . $item['price']); ?>
-                            </option>
-                        <?php endforeach; ?>
-                    </select>
-                    <span class="remove-item">×</span>
-                </div>
-            `;
-            modal.classList.add('active');
+            modal.style.display = 'block';
             document.body.classList.add('modal-open');
         });
 
         closeModal.addEventListener('click', () => {
-            modal.classList.remove('active');
+            modal.style.display = 'none';
             document.body.classList.remove('modal-open');
             promotionForm.reset();
             imagePreview.style.display = 'none';
@@ -454,7 +427,7 @@ include '../app/views/components/rnav.php';
 
         window.addEventListener('click', (e) => {
             if (e.target === modal) {
-                modal.classList.remove('active');
+                modal.style.display = 'none';
                 document.body.classList.remove('modal-open');
                 promotionForm.reset();
                 imagePreview.style.display = 'none';
@@ -466,7 +439,9 @@ include '../app/views/components/rnav.php';
         promotionType.addEventListener('change', () => {
             const isCombo = promotionType.value === 'combo';
             addItemBtn.style.display = isCombo ? 'block' : 'none';
-            if (!isCombo && foodItemsContainer.children.length > 1) {
+            
+            // Clear food items if switching to single
+            if (!isCombo) {
                 while (foodItemsContainer.children.length > 1) {
                     foodItemsContainer.removeChild(foodItemsContainer.lastChild);
                 }
@@ -480,40 +455,170 @@ include '../app/views/components/rnav.php';
                 reader.onload = function(e) {
                     imagePreview.querySelector('img').src = e.target.result;
                     imagePreview.style.display = 'block';
-                };
+                }
                 reader.readAsDataURL(file);
             }
         });
 
         addItemBtn.addEventListener('click', () => {
-            addMenuItemSelect();
+            addFoodItemSelect();
         });
 
-        function addMenuItemSelect(selectedId = '') {
+        promotionForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const foodItems = Array.from(foodItemsContainer.querySelectorAll('select'))
+                .map(select => ({
+                    id: select.value,
+                    name: select.options[select.selectedIndex].text
+                }));
+
+            const promotionData = {
+                type: promotionType.value,
+                image: imagePreview.querySelector('img').src,
+                foodItems: foodItems,
+                discount: document.getElementById('discount').value,
+                description: document.getElementById('description').value,
+                validUntil: document.getElementById('validUntil').value
+            };
+
+            if (isEditing) {
+                await updatePromotion(editingId, promotionData);
+            } else {
+                await createPromotion(promotionData);
+            }
+
+            await loadPromotions();
+            renderPromotions();
+
+            modal.style.display = 'none';
+            document.body.classList.remove('modal-open');
+            promotionForm.reset();
+            imagePreview.style.display = 'none';
+            isEditing = false;
+            editingId = null;
+        });
+
+        async function editPromotion(id) {
+            const promotion = promotions.find(p => p.id === id);
+            if (!promotion) return;
+
+            isEditing = true;
+            editingId = id;
+            modalTitle.textContent = 'Edit Promotion';
+            submitBtn.textContent = 'Update Promotion';
+
+            // Fill form with promotion data
+            promotionType.value = promotion.type;
+            imagePreview.querySelector('img').src = promotion.image;
+            imagePreview.style.display = 'block';
+            document.getElementById('discount').value = promotion.discount;
+            document.getElementById('description').value = promotion.description;
+            document.getElementById('validUntil').value = promotion.validUntil;
+
+            // Handle food items
+            foodItemsContainer.innerHTML = '';
+            promotion.foodItems.forEach(item => {
+                addFoodItemSelect(item.id);
+            });
+
+            // Show/hide add item button based on promotion type
+            addItemBtn.style.display = promotion.type === 'combo' ? 'block' : 'none';
+
+            modal.style.display = 'block';
+            document.body.classList.add('modal-open');
+        }
+
+        function renderPromotions() {
+            promotionsGrid.innerHTML = promotions.map(promotion => `
+                <div class="promotion-card">
+                    ${promotion.image ? `
+                        <img src="${promotion.image}" alt="Promotion" class="promotion-image">
+                    ` : ''}
+                    <div class="promotion-content">
+                        <div class="promotion-title">
+                            ${promotion.type === 'combo' ? 'Combo Deal' : 'Single Item Discount'}
+                        </div>
+                        <div class="promotion-details">
+                            ${promotion.foodItems.map(item => item.name).join(', ')}
+                        </div>
+                        <div class="promotion-discount">
+                            ${promotion.discount}% OFF
+                        </div>
+                        <p>${promotion.description}</p>
+                        <p>Valid until: ${new Date(promotion.validUntil).toLocaleDateString()}</p>
+                        <div class="promotion-actions">
+                            <button class="btn btn-primary" onclick="editPromotion('${promotion.id}')">
+                                Edit
+                            </button>
+                            <button class="btn btn-danger" onclick="deletePromotionHandler('${promotion.id}')">
+                                Remove
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        async function deletePromotionHandler(id) {
+            if (confirm('Are you sure you want to delete this promotion?')) {
+                await deletePromotion(id);
+                await loadPromotions();
+                renderPromotions();
+            }
+        }
+
+        function addFoodItemSelect(selectedId = '') {
             const foodItem = document.createElement('div');
             foodItem.className = 'food-item';
             foodItem.innerHTML = `
-                <select class="form-control" name="menu_items[]" required>
-                    <option value="">Select Menu Item</option>
-                    <?php foreach ($data['menu_items'] as $item): ?>
-                        <option value="<?php echo htmlspecialchars($item['id']); ?>" ${selectedId === '<?php echo $item['id']; ?>' ? 'selected' : ''}>
-                            <?php echo htmlspecialchars($item['name'] . ' - $' . $item['price']); ?>
-                        </option>
-                    <?php endforeach; ?>
+                <select class="form-control" required>
+                    <option value="">Select Food Item</option>
+                    ${foodItems.map(item => 
+                        `<option value="${item.id}" ${item.id === parseInt(selectedId) ? 'selected' : ''}>
+                            ${item.name} - $${item.price}
+                        </option>`
+                    ).join('')}
                 </select>
-                <span class="remove-item">×</span>
+                <span class="remove-item">&times;</span>
             `;
+            
             foodItem.querySelector('.remove-item').addEventListener('click', () => {
                 foodItem.remove();
             });
+
             foodItemsContainer.appendChild(foodItem);
         }
 
-        // Auto-open modal for edit or error state
-        <?php if (!empty($data['form_data']) || $data['is_editing']): ?>
-            modal.classList.add('active');
-            document.body.classList.add('modal-open');
-        <?php endif; ?>
+        async function loadFoodItems() {
+            foodItems = await fetchFoodItems();
+            // Populate the initial food item select
+            const initialSelect = foodItemsContainer.querySelector('select');
+            initialSelect.innerHTML = `
+                <option value="">Select Food Item</option>
+                ${foodItems.map(item => 
+                    `<option value="${item.id}">${item.name} - $${item.price}</option>`
+                ).join('')}
+            `;
+        }
+
+        async function loadPromotions() {
+            promotions = await fetchPromotions();
+        }
+
+        // Add cleanup on page unload
+        window.addEventListener('beforeunload', () => {
+            document.body.classList.remove('modal-open');
+        });
+
+        // Initialize
+        async function init() {
+            await loadFoodItems();
+            await loadPromotions();
+            renderPromotions();
+        }
+
+        init();
     </script>
 </body>
 </html>

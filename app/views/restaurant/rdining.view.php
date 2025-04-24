@@ -1,889 +1,1320 @@
-<?php 
-  include '../app/views/components/rnav.php';
-
+<?php
+// Start session if not already started
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 ?>
 
+<?php include '../app/views/components/rnav.php'; ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dining Reservation System</title>
-    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --primary-color: #002D40;
-            --primary-hover: #004D60;
-            --background: #f8f9fa;
-            --card-bg: #ffffff;
-            --text-primary: #333333;
-            --text-secondary: #666666;
-            --border-color: #e0e0e0;
-            --success-color: #28a745;
-            --warning-color: #ffc107;
-            --danger-color: #dc3545;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap">
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+  <title>Restaurant Management Dashboard</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      /* font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; */
+    }
 
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--background);
-            color: var(--text-primary);
-            min-height: 100vh;
-        }
+    :root {
+      --primary: #002D40;
+      --primary-foreground: #ffffff;
+      --muted: #f5f5f5;
+      --muted-foreground: #6b7280;
+      --border: #e5e7eb;
+      --background: #ffffff;
+      --card: #ffffff;
+      --destructive: #ef4444;
+      --destructive-foreground: #ffffff;
+      --success: #10b981;
+      --success-foreground: #ffffff;
+      --warning: #f59e0b;
+      --warning-foreground: #ffffff;
+    }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 2rem;
-            margin-left: 265px;
-        }
+    body {
+      background-color: rgba(245, 245, 245, 0.4);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
 
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 2rem;
-        }
+    .container {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      width: 100%;
+    }
 
-        .controls {
-            display: flex;
-            gap: 1rem;
-            margin-bottom: 2rem;
-        }
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      display: flex;
+      height: 64px;
+      align-items: center;
+      gap: 16px;
+      border-bottom: 1px solid var(--border);
+      background-color: var(--background);
+      padding: 0 16px;
+    }
 
-        .btn {
-            padding: 0.75rem 1.5rem;
-            border: none;
-            border-radius: 0.5rem;
-            cursor: pointer;
-            font-weight: 500;
-            transition: all 0.2s;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
+    @media (min-width: 640px) {
+      header {
+        padding: 0 24px;
+      }
+    }
 
-        .btn-primary {
-            background-color: var(--primary-color);
-            color: white;
-        }
+    header h1 {
+      font-size: 18px;
+      font-weight: 600;
+    }
 
-        .btn-primary:hover {
-            background-color: var(--primary-hover);
-        }
+    @media (min-width: 768px) {
+      header h1 {
+        font-size: 24px;
+      }
+    }
 
-        .btn-outline {
-            background-color: transparent;
-            border: 1px solid var(--border-color);
-            color: var(--text-primary);
-        }
+    main {
+      display: flex;
+      flex: 1;
+      flex-direction: column;
+      gap: 16px;
+      padding: 16px;
+      margin-left: 250px;
+    }
 
-        .btn-outline:hover {
-            background-color: var(--border-color);
-        }
+    @media (min-width: 768px) {
+      main {
+        gap: 32px;
+        padding: 32px;
+      }
+    }
 
-        .btn-sm {
-            padding: 0.5rem 1rem;
-            font-size: 0.875rem;
-        }
+    .tabs {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
 
-        .date-navigation {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            margin-bottom: 2rem;
-            justify-content: center;
-        }
+    .tabs-list {
+      display: flex;
+      background-color: var(--muted);
+      border-radius: 8px;
+      padding: 2px;
+    }
 
-        .current-date {
-            font-size: 1.25rem;
-            font-weight: 600;
-            min-width: 200px;
-            text-align: center;
-        }
+    .tab-trigger {
+      flex: 1;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 6px;
+      padding: 8px 16px;
+      font-size: 14px;
+      font-weight: 500;
+      background-color: transparent;
+      color: var(--muted-foreground);
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-decoration: none;
+      text-align: center;
+    }
 
-        .tables-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 2rem;
-        }
+    .tab-trigger[aria-selected="true"] {
+      background-color: white;
+      color: black;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
 
-        .table-card {
-            background-color: var(--card-bg);
-            border-radius: 0.75rem;
-            padding: 1.5rem;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            border: 1px solid var(--border-color);
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
+    .tab-content {
+      display: none;
+      flex-direction: column;
+      gap: 16px;
+    }
 
-        .table-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
+    .tab-content[data-active="true"] {
+      display: flex;
+    }
 
-        .table-card h3 {
-            margin-bottom: 1rem;
-            font-size: 1.25rem;
-        }
+    .card {
+      background-color: var(--card);
+      border-radius: 8px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+    }
 
-        .table-info {
-            display: grid;
-            gap: 0.5rem;
-        }
+    .card-header {
+      padding: 16px;
+      border-bottom: 1px solid var(--border);
+    }
 
-        .table-info-item {
-            display: flex;
-            justify-content: space-between;
-            color: var(--text-secondary);
-        }
+    .card-title {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
 
-        .table-actions {
-            display: flex;
-            gap: 0.5rem;
-            margin-top: 1rem;
-            padding-top: 1rem;
-            border-top: 1px solid var(--border-color);
-        }
+    .card-description {
+      color: var(--muted-foreground);
+      font-size: 14px;
+    }
 
-        .timeline-container {
-            background-color: var(--card-bg);
-            border-radius: 0.75rem;
-            padding: 1.5rem;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            border: 1px solid var(--border-color);
-            margin-top: 2rem;
-            height: 600px;
-        }
+    .card-content {
+      padding: 16px;
+    }
 
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(4px);
-            z-index: 1000;
-        }
+    .card-footer {
+      padding: 12px 24px;
+      border-top: 1px solid var(--border);
+      background-color: rgba(245, 245, 245, 0.2);
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
 
-        .modal-content {
-            background-color: var(--card-bg);
-            border-radius: 0.75rem;
-            padding: 2rem;
-            width: 90%;
-            max-width: 500px;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-        }
+    .form-grid {
+      display: grid;
+      gap: 16px;
+    }
 
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
-        }
+    .form-grid-2 {
+      grid-template-columns: 1fr;
+    }
 
-        .close-modal {
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            cursor: pointer;
-            color: var(--text-primary);
-        }
+    @media (min-width: 640px) {
+      .form-grid-2 {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      
+      .form-grid-4 {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
 
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
+    .form-group {
+      display: grid;
+      gap: 8px;
+    }
 
-        .form-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 500;
-        }
+    label {
+      font-size: 14px;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
 
-        .form-control {
-            width: 100%;
-            padding: 0.75rem;
-            border: 1px solid var(--border-color);
-            border-radius: 0.5rem;
-            background-color: var(--card-bg);
-            color: var(--text-primary);
-        }
+    input, select, textarea {
+      padding: 8px 12px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      font-size: 14px;
+      width: 100%;
+      background-color: var(--background);
+    }
 
-        .form-control:focus {
-            outline: none;
-            border-color: var(--primary-color);
-        }
+    input:focus, select:focus, textarea:focus {
+      outline: 2px solid var(--primary);
+      outline-offset: 1px;
+      border-color: var(--primary);
+    }
 
-        .modal-footer {
-            display: flex;
-            justify-content: flex-end;
-            gap: 1rem;
-            margin-top: 2rem;
-        }
+    textarea {
+      resize: none;
+      min-height: 80px;
+    }
 
-        @media (max-width: 768px) {
-            .container {
-                padding: 1rem;
-            }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 6px;
+      padding: 8px 16px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+      border: none;
+    }
 
-            .header {
-                flex-direction: column;
-                gap: 1rem;
-                text-align: center;
-            }
+    .btn-primary {
+      background-color: var(--primary);
+      color: var(--primary-foreground);
+    }
 
-            .controls {
-                flex-direction: column;
-            }
+    .btn-primary:hover {
+      background-color: #1A4555;
+    }
 
-            .date-navigation {
-                flex-wrap: wrap;
-            }
-        }
-    </style>
+    .btn-outline {
+      background-color: transparent;
+      border: 1px solid var(--border);
+    }
+
+    .btn-outline:hover {
+      background-color: var(--muted);
+    }
+
+    .btn-block {
+      width: 100%;
+    }
+
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .btn-icon {
+      margin-right: 8px;
+    }
+
+    .tables-grid {
+      display: grid;
+      gap: 16px;
+    }
+
+    @media (min-width: 640px) {
+      .tables-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .tables-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    .table-card-header {
+      background-color: rgba(245, 245, 245, 0.5);
+      padding-bottom: 12px;
+    }
+
+    .table-card-header-content {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .table-card-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 4px;
+      padding: 2px 8px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .badge-outline {
+      border: 1px solid var(--border);
+    }
+
+    .badge-destructive {
+      background-color: var(--destructive);
+      color: var(--destructive-foreground);
+    }
+
+    .badge-success {
+      background-color: var(--success);
+      color: var(--success-foreground);
+    }
+
+    .badge-warning {
+      background-color: var(--warning);
+      color: var(--warning-foreground);
+    }
+
+    .table-card-content {
+      padding-top: 16px;
+    }
+
+    .table-info {
+      display: grid;
+      gap: 8px;
+    }
+
+    .table-info-item {
+      display: flex;
+      align-items: center;
+      font-size: 14px;
+    }
+
+    .table-info-icon {
+      margin-right: 8px;
+      color: var(--muted-foreground);
+    }
+
+    .reservation-info {
+      margin-top: 8px;
+      background-color: var(--muted);
+      border-radius: 6px;
+      padding: 8px;
+      font-size: 14px;
+    }
+
+    .reservation-name {
+      font-weight: 500;
+    }
+
+    .reservation-time {
+      font-size: 12px;
+      color: var(--muted-foreground);
+    }
+
+    .reservation-card-content {
+      padding: 0;
+    }
+
+    .reservation-card-layout {
+      display: flex;
+      flex-direction: column;
+    }
+
+    @media (min-width: 640px) {
+      .reservation-card-layout {
+        flex-direction: row;
+      }
+    }
+
+    .reservation-card-number {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: var(--primary);
+      padding: 16px;
+      color: var(--primary-foreground);
+    }
+
+    @media (min-width: 640px) {
+      .reservation-card-number {
+        width: 120px;
+      }
+    }
+
+    .reservation-card-number span {
+      font-size: 24px;
+      font-weight: 700;
+    }
+
+    .reservation-card-details {
+      padding: 16px;
+    }
+
+    .reservation-card-customer {
+      font-weight: 600;
+    }
+
+    .reservation-card-meta {
+      margin-top: 4px;
+      display: flex;
+      align-items: center;
+      font-size: 14px;
+      color: var(--muted-foreground);
+    }
+
+    .reservation-card-meta-icon {
+      margin-right: 4px;
+    }
+
+    .reservation-card-time {
+      margin-top: 8px;
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .reservation-card-notes {
+      margin-top: 4px;
+      font-size: 14px;
+      color: var(--muted-foreground);
+    }
+
+    .empty-state {
+      display: flex;
+      height: 128px;
+      align-items: center;
+      justify-content: center;
+      border: 1px dashed var(--border);
+      border-radius: 6px;
+    }
+
+    .empty-state p {
+      color: var(--muted-foreground);
+    }
+
+    .modal-backdrop {
+      background-color: rgba(0, 0, 0, 0.5);
+      padding: 16px;
+      border-radius: 8px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 50;
+      width: 100%;
+      max-width: 475px;
+    }
+
+    .modal {
+      background-color: white;
+      border-radius: 8px;
+      width: 100%;
+      max-width: 425px;
+      overflow-y: auto;
+    }
+
+    .modal-header {
+      padding: 16px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .modal-title {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .modal-description {
+      color: var(--muted-foreground);
+      font-size: 14px;
+    }
+
+    .modal-body {
+      padding: 16px;
+    }
+
+    .modal-footer {
+      padding: 16px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+    }
+
+    .time-slots {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .time-slot {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 12px;
+      border-radius: 6px;
+      background-color: var(--muted);
+      font-size: 14px;
+    }
+
+    .time-slot-reserved {
+      background-color: rgba(239, 68, 68, 0.1);
+      border-left: 3px solid var(--destructive);
+    }
+
+    .time-slot-available {
+      background-color: rgba(16, 185, 129, 0.1);
+      border-left: 3px solid var(--success);
+    }
+
+    .time-slot-info {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .time-slot-customer {
+      font-weight: 500;
+    }
+
+    .time-slot-time {
+      font-size: 12px;
+      color: var(--muted-foreground);
+    }
+
+    .time-slot-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .icon {
+      width: 16px;
+      height: 16px;
+      stroke-width: 2;
+      stroke: currentColor;
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .mt-4 {
+      margin-top: 16px;
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border-width: 0;
+    }
+
+    .reservation-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .reservation-item {
+      padding: 12px;
+      border-radius: 6px;
+      background-color: var(--muted);
+      border-left: 3px solid var(--primary);
+    }
+
+    .reservation-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .reservation-table {
+      font-weight: 600;
+    }
+
+    .reservation-details {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .reservation-detail {
+      display: flex;
+      align-items: center;
+      font-size: 14px;
+    }
+
+    .reservation-detail-icon {
+      margin-right: 8px;
+      color: var(--muted-foreground);
+    }
+
+    .date-selector {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .date-selector label {
+      margin-bottom: 0;
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .date-selector input {
+      flex: 1;
+      max-width: 200px;
+    }
+
+    .date-selector button {
+      padding: 8px 12px;
+    }
+
+    .error-message {
+      color: var(--destructive);
+      font-size: 13px;
+      margin-top: 4px;
+    }
+
+    .success-message {
+      color: var(--success);
+      font-size: 14px;
+      padding: 12px;
+      background-color: rgba(16, 185, 129, 0.1);
+      border-radius: 6px;
+      text-align: center;
+      margin-bottom: 12px;
+    }
+
+    .success-popup {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 100;
+      background-color: var(--background);
+      border-radius: 8px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+      padding: 16px;
+      max-width: 300px;
+      text-align: center;
+    }
+
+    .success-popup-content {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .success-popup-message {
+      color: var(--success);
+      font-size: 16px;
+      font-weight: 500;
+    }
+
+    .success-popup-close {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 8px 16px;
+      background-color: var(--primary);
+      color: var(--primary-foreground);
+      border-radius: 6px;
+      text-decoration: none;
+      font-size: 14px;
+    }
+
+    .success-popup-close:hover {
+      background-color: #0060df;
+    }
+
+    form {
+      width: 100%;
+    }
+
+    .tabs-list a {
+      display: block;
+      width: 100%;
+    }
+
+    .dining-head {
+      font-size: 45px;
+      font-weight: 600;
+      margin-bottom: 16px;
+      z-index: 10;
+      display: flex;
+      height: 64px;
+      align-items: center;
+      gap: 16px;
+      border-bottom: 1px solid var(--border);
+      background-color: var(--background);
+      padding: 0 16px;
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>Dining Reservation System</h1>
+  
+  <div class="container">
+    <main>
+      <h1 class="dining-head">Restaurant Menu</h1>
+      <!-- Server errors -->
+      <?php if (isset($data['error'])): ?>
+        <div class="error-message"><?php echo htmlspecialchars($data['error']); ?></div>
+      <?php endif; ?>
+      
+      <!-- Success Popup -->
+      <?php if (isset($data['success_message'])): ?>
+        <div class="success-popup">
+          <div class="success-popup-content">
+            <div class="success-popup-message"><?php echo htmlspecialchars($data['success_message']); ?></div>
+            <a href="?tab=<?php echo htmlspecialchars($data['tab']); ?>&date=<?php echo htmlspecialchars($data['selectedDate']); ?>" class="success-popup-close">Close</a>
+          </div>
         </div>
+      <?php endif; ?>
 
-        <div class="controls">
-            <button class="btn btn-primary" id="addTableBtn">
-                <span>+</span> Add Table
-            </button>
-            <button class="btn btn-primary" id="addReservationBtn">
-                <span>+</span> Add Reservation
-            </button>
+      <div class="tabs">
+        <!-- Tab navigation -->
+        <div class="tabs-list" role="tablist">
+          <a href="?tab=tables&date=<?php echo htmlspecialchars($data['selectedDate']); ?>" class="tab-trigger" role="tab" aria-selected="<?php echo $data['tab'] === 'tables' ? 'true' : 'false'; ?>">Tables</a>
+          <a href="?tab=reservations&date=<?php echo htmlspecialchars($data['selectedDate']); ?>" class="tab-trigger" role="tab" aria-selected="<?php echo $data['tab'] === 'reservations' ? 'true' : 'false'; ?>">Reservations</a>
         </div>
-
-        <div class="date-navigation">
-            <button class="btn btn-outline" id="prevDay">←</button>
-            <div class="current-date" id="currentDate"></div>
-            <button class="btn btn-outline" id="nextDay">→</button>
-        </div>
-
-        <div class="tables-grid" id="tablesGrid"></div>
-
-        <div class="timeline-container">
-            <div id="timeline"></div>
-        </div>
-    </div>
-
-    <!-- Add Table Modal -->
-    <div class="modal" id="tableModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2>Add New Table</h2>
-                <button class="close-modal" id="closeTableModal">×</button>
+        
+        <!-- Tables Tab -->
+        <div class="tab-content" data-tab="tables" data-active="<?php echo $data['tab'] === 'tables' ? 'true' : 'false'; ?>">
+          <!-- Add Table Form -->
+          <div class="card">
+            <div class="card-header">
+              <h2 class="card-title">Add New Table</h2>
+              <p class="card-description">Create a new table with its details.</p>
             </div>
-            <form id="tableForm">
-                <div class="form-group">
-                    <label for="tableNumber">Table Number</label>
-                    <input type="text" id="tableNumber" name="tableNumber" class="form-control" required>
-                </div>
-                <div class="form-group">
+            <div class="card-content">
+              <form method="POST" action="">
+                <input type="hidden" name="add_table" value="1">
+                <input type="hidden" name="tab" value="tables">
+                <input type="hidden" name="date" value="<?php echo htmlspecialchars($data['selectedDate']); ?>">
+                <div class="form-grid form-grid-4">
+                  <div class="form-group">
+                    <label for="table-number">Table Number</label>
+                    <input id="table-number" name="number" type="number" placeholder="Enter table number" value="<?php echo htmlspecialchars($_POST['number'] ?? ''); ?>">
+                    <?php if (isset($data['errors']['table']['number'])): ?>
+                      <div class="error-message"><?php echo htmlspecialchars($data['errors']['table']['number']); ?></div>
+                    <?php endif; ?>
+                  </div>
+                  <div class="form-group">
                     <label for="capacity">Capacity</label>
-                    <input type="number" id="capacity" name="capacity" class="form-control" min="1" required>
-                </div>
-                <div class="form-group">
-                    <label for="section">Section</label>
-                    <select id="section" name="section" class="form-control" required>
-                        <option value="">Select Section</option>
-                        <option value="Main Dining">Main Dining</option>
-                        <option value="Outdoor">Outdoor</option>
-                        <option value="Private">Private</option>
-                        <option value="Bar">Bar</option>
-                        <option value="VIP">VIP</option>
+                    <input id="capacity" name="capacity" type="number" placeholder="Enter capacity" value="<?php echo htmlspecialchars($_POST['capacity'] ?? ''); ?>">
+                    <?php if (isset($data['errors']['table']['capacity'])): ?>
+                      <div class="error-message"><?php echo htmlspecialchars($data['errors']['table']['capacity']); ?></div>
+                    <?php endif; ?>
+                  </div>
+                  <div class="form-group">
+                    <label for="location">Location</label>
+                    <select id="location" name="location">
+                      <option value="" disabled <?php echo !isset($_POST['location']) ? 'selected' : ''; ?>>Select location</option>
+                      <option value="Indoor" <?php echo ($_POST['location'] ?? '') === 'Indoor' ? 'selected' : ''; ?>>Indoor</option>
+                      <option value="Outdoor" <?php echo ($_POST['location'] ?? '') === 'Outdoor' ? 'selected' : ''; ?>>Outdoor</option>
+                      <option value="VIP" <?php echo ($_POST['location'] ?? '') === 'VIP' ? 'selected' : ''; ?>>VIP</option>
                     </select>
+                    <?php if (isset($data['errors']['table']['location'])): ?>
+                      <div class="error-message"><?php echo htmlspecialchars($data['errors']['table']['location']); ?></div>
+                    <?php endif; ?>
+                  </div>
+                  <div class="form-group">
+                    <label for="price">Price ($)</label>
+                    <input id="price" name="price" type="number" step="0.01" placeholder="Enter price" value="<?php echo htmlspecialchars($_POST['price'] ?? ''); ?>">
+                    <?php if (isset($data['errors']['table']['price'])): ?>
+                      <div class="error-message"><?php echo htmlspecialchars($data['errors']['table']['price']); ?></div>
+                    <?php endif; ?>
+                  </div>
                 </div>
-                <div class="form-group">
-                    <label for="tableType">Table Type</label>
-                    <select id="tableType" name="tableType" class="form-control" required>
-                        <option value="">Select Type</option>
-                        <option value="Regular">Regular</option>
-                        <option value="High Top">High Top</option>
-                        <option value="Booth">Booth</option>
-                        <option value="Counter">Counter</option>
-                        <option value="Private Room">Private Room</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="features">Features</label>
-                    <textarea id="features" name="features" class="form-control" rows="3"></textarea>
-                </div>
-                <div class="form-group">
-                    <label for="price">Price per Hour</label>
-                    <input type="number" id="price" name="price" class="form-control" min="0" step="0.01" required>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-outline" id="cancelTableBtn">Cancel</button>
-                    <button type="submit" class="btn btn-primary">Add Table</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- Add Reservation Modal -->
-    <div class="modal" id="reservationModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2>Add New Reservation</h2>
-                <button class="close-modal" id="closeReservationModal">×</button>
+                <button type="submit" class="btn btn-primary mt-4">
+                  <svg class="icon btn-icon" viewBox="0 0 24 24">
+                    <path d="M12 5v14M5 12h14"></path>
+                  </svg>
+                  Add Table
+                </button>
+              </form>
             </div>
-            <form id="reservationForm">
-                <div class="form-group">
-                    <label for="tableId">Select Table</label>
-                    <select id="tableId" name="tableId" class="form-control" required></select>
-                </div>
-                <div class="form-group">
-                    <label for="customerName">Customer Name</label>
-                    <input type="text" id="customerName" name="customerName" class="form-control" required>
-                </div>
-                <div class="form-group">
-                    <label for="people">Number of People</label>
-                    <input type="number" id="people" name="people" class="form-control" min="1" required>
-                </div>
-                <div class="form-group">
-                    <label for="date">Date</label>
-                    <input type="date" id="date" name="date" class="form-control" required>
-                </div>
-                <div class="form-group">
-                    <label for="startTime">Start Time</label>
-                    <input type="time" id="startTime" name="startTime" class="form-control" required>
-                </div>
-                <div class="form-group">
-                    <label for="endTime">End Time</label>
-                    <input type="time" id="endTime" name="endTime" class="form-control" required>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-outline" id="cancelReservationBtn">Cancel</button>
-                    <button type="submit" class="btn btn-primary">Add Reservation</button>
-                </div>
+          </div>
+          
+          <!-- Date Selector -->
+          <div class="date-selector">
+            <form method="GET" action="">
+              <input type="hidden" name="tab" value="tables">
+              <label for="selected-date">Date:</label>
+              <input type="date" id="selected-date" name="date" value="<?php echo htmlspecialchars($data['selectedDate']); ?>">
+              <button type="submit" class="btn btn-primary">Update Date</button>
             </form>
-        </div>
-    </div>
-
-    <script>
-        // Dummy data for tables
-        const DUMMY_TABLES = [
-            {
-                id: '1',
-                number: 'A1',
-                capacity: 4,
-                section: 'Main Dining',
-                type: 'Regular',
-                features: 'Window view, Power outlets',
-                price: 50
-            },
-            {
-                id: '2',
-                number: 'A2',
-                capacity: 6,
-                section: 'Main Dining',
-                type: 'Booth',
-                features: 'Corner booth, USB charging',
-                price: 75
-            },
-            {
-                id: '3',
-                number: 'B1',
-                capacity: 2,
-                section: 'Bar',
-                type: 'High Top',
-                features: 'Bar view',
-                price: 30
-            },
-            {
-                id: '4',
-                number: 'P1',
-                capacity: 8,
-                section: 'Private',
-                type: 'Private Room',
-                features: 'Private TV, Sound system',
-                price: 150
-            },
-            {
-                id: '5',
-                number: 'O1',
-                capacity: 4,
-                section: 'Outdoor',
-                type: 'Regular',
-                features: 'Garden view, Umbrella',
-                price: 45
-            }
-        ];
-
-        // Dummy data for reservations
-        const DUMMY_RESERVATIONS = [
-            {
-                id: '1',
-                tableId: '1',
-                customerName: 'John Doe',
-                people: 4,
-                date: '2024-02-24',
-                startTime: '12:00',
-                endTime: '14:00',
-                status: 'confirmed'
-            },
-            {
-                id: '2',
-                tableId: '2',
-                customerName: 'Jane Smith',
-                people: 6,
-                date: '2024-02-24',
-                startTime: '18:00',
-                endTime: '20:00',
-                status: 'confirmed'
-            },
-            {
-                id: '3',
-                tableId: '3',
-                customerName: 'Mike Johnson',
-                people: 2,
-                date: '2024-02-24',
-                startTime: '19:00',
-                endTime: '21:00',
-                status: 'confirmed'
-            }
-        ];
-
-        // Initialize Google Charts
-        google.charts.load('current', {'packages':['timeline']});
-        let chart = null;
-        let dataTable = null;
-            // State management
-        let tables = JSON.parse(localStorage.getItem('tables')) || DUMMY_TABLES;
-        let reservations = JSON.parse(localStorage.getItem('reservations')) || DUMMY_RESERVATIONS;
-        let currentDate = new Date();
-
-        // DOM Elements
-        const tableModal = document.getElementById('tableModal');
-        const reservationModal = document.getElementById('reservationModal');
-        const tableForm = document.getElementById('tableForm');
-        const reservationForm = document.getElementById('reservationForm');
-        const addTableBtn = document.getElementById('addTableBtn');
-        const addReservationBtn = document.getElementById('addReservationBtn');
-        const closeTableModal = document.getElementById('closeTableModal');
-        const closeReservationModal = document.getElementById('closeReservationModal');
-        const cancelTableBtn = document.getElementById('cancelTableBtn');
-        const cancelReservationBtn = document.getElementById('cancelReservationBtn');
-        const currentDateEl = document.getElementById('currentDate');
-        const prevDayBtn = document.getElementById('prevDay');
-        const nextDayBtn = document.getElementById('nextDay');
-        const tablesGrid = document.getElementById('tablesGrid');
-
-        // Event Listeners
-        addTableBtn.addEventListener('click', () => {
-            tableModal.style.display = 'block';
-        });
-
-        addReservationBtn.addEventListener('click', () => {
-            populateTableSelect();
-            reservationModal.style.display = 'block';
-        });
-
-        [closeTableModal, cancelTableBtn].forEach(btn => {
-            btn.addEventListener('click', () => {
-                tableModal.style.display = 'none';
-                tableForm.reset();
-            });
-        });
-
-        [closeReservationModal, cancelReservationBtn].forEach(btn => {
-            btn.addEventListener('click', () => {
-                reservationModal.style.display = 'none';
-                reservationForm.reset();
-            });
-        });
-
-        prevDayBtn.addEventListener('click', () => {
-            currentDate.setDate(currentDate.getDate() - 1);
-            updateDateDisplay();
-            drawTimeline();
-        });
-
-        nextDayBtn.addEventListener('click', () => {
-            currentDate.setDate(currentDate.getDate() + 1);
-            updateDateDisplay();
-            drawTimeline();
-        });
-
-        tableForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const formData = new FormData(e.target);
-            const newTable = {
-                id: Date.now().toString(),
-                number: formData.get('tableNumber'),
-                capacity: parseInt(formData.get('capacity')),
-                section: formData.get('section'),
-                type: formData.get('tableType'),
-                features: formData.get('features'),
-                price: parseFloat(formData.get('price'))
-            };
-            
-            tables.push(newTable);
-            localStorage.setItem('tables', JSON.stringify(tables));
-            renderTables();
-            tableModal.style.display = 'none';
-            e.target.reset();
-        });
-
-        reservationForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const formData = new FormData(e.target);
-            const newReservation = {
-                id: Date.now().toString(),
-                tableId: formData.get('tableId'),
-                customerName: formData.get('customerName'),
-                people: parseInt(formData.get('people')),
-                date: formData.get('date'),
-                startTime: formData.get('startTime'),
-                endTime: formData.get('endTime'),
-                status: 'confirmed'
-            };
-
-            reservations.push(newReservation);
-            localStorage.setItem('reservations', JSON.stringify(reservations));
-            drawTimeline();
-            reservationModal.style.display = 'none';
-            e.target.reset();
-        });
-
-        // Close modals when clicking outside
-        window.addEventListener('click', (e) => {
-            if (e.target === tableModal) {
-                tableModal.style.display = 'none';
-                tableForm.reset();
-            }
-            if (e.target === reservationModal) {
-                reservationModal.style.display = 'none';
-                reservationForm.reset();
-            }
-        });
-
-        // Update date display
-        function updateDateDisplay() {
-            currentDateEl.textContent = currentDate.toLocaleDateString('en-US', {
-                weekday: 'long',
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric'
-            });
-        }
-
-        // Populate table select in reservation form
-        function populateTableSelect() {
-            const tableSelect = document.getElementById('tableId');
-            tableSelect.innerHTML = `
-                <option value="">Select Table</option>
-                ${tables.map(table => `
-                    <option value="${table.id}">
-                        Table ${table.number} (${table.capacity} people - ${table.section})
-                    </option>
-                `).join('')}
-            `;
-        }
-
-        // Render tables
-        function renderTables() {
-            tablesGrid.innerHTML = tables.map(table => `
-                <div class="table-card" data-table-id="${table.id}">
-                    <h3>Table ${table.number}</h3>
+          </div>
+          
+          <!-- Tables Grid -->
+          <div class="tables-grid">
+            <?php if (empty($data['tables'])): ?>
+              <div class="empty-state">
+                <p>No tables available.</p>
+              </div>
+            <?php else: ?>
+              <?php foreach ($data['tables'] as $table): ?>
+                <?php
+                  $reservationsForDate = $table->reservations ?? [];
+                  $status = 'Available';
+                  if (!empty($reservationsForDate)) {
+                      $now = new DateTime();
+                      $currentTime = $now->format('H:i');
+                      $today = $now->format('Y-m-d');
+                      $futureReservations = array_filter($reservationsForDate, function($res) use ($today, $currentTime, $data) {
+                          return $data['selectedDate'] !== $today || $res->end_time > $currentTime;
+                      });
+                      $status = !empty($futureReservations) ? (count($futureReservations) === count($reservationsForDate) ? 'Reserved' : 'Partially Reserved') : 'Available';
+                  }
+                  $statusBadgeClass = $status === 'Reserved' ? 'badge-destructive' : ($status === 'Partially Reserved' ? 'badge-warning' : 'badge-success');
+                ?>
+                <div class="card">
+                  <div class="card-header table-card-header">
+                    <div class="table-card-header-content">
+                      <div>
+                        <h3 class="card-title">Table #<?php echo htmlspecialchars($table->number); ?></h3>
+                        <span class="badge <?php echo $statusBadgeClass; ?>"><?php echo $status; ?></span>
+                      </div>
+                      <div class="table-card-actions">
+                        <form method="POST" action="">
+                          <input type="hidden" name="show_update_table" value="1">
+                          <input type="hidden" name="table_id" value="<?php echo htmlspecialchars($table->id); ?>">
+                          <input type="hidden" name="tab" value="tables">
+                          <input type="hidden" name="date" value="<?php echo htmlspecialchars($data['selectedDate']); ?>">
+                          <button type="submit" class="btn btn-outline">
+                            <svg class="icon btn-icon" viewBox="0 0 24 24">
+                              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                              <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                            </svg>
+                            Update
+                          </button>
+                        </form>
+                        <form method="POST" action="">
+                          <input type="hidden" name="delete_table" value="1">
+                          <input type="hidden" name="table_id" value="<?php echo htmlspecialchars($table->id); ?>">
+                          <input type="hidden" name="tab" value="tables">
+                          <input type="hidden" name="date" value="<?php echo htmlspecialchars($data['selectedDate']); ?>">
+                          <button type="submit" class="btn btn-outline" onclick="return confirm('Are you sure you want to delete Table #<?php echo htmlspecialchars($table->number); ?>? This will also delete all associated reservations.')">
+                            <svg class="icon btn-icon" viewBox="0 0 24 24">
+                              <line x1="18" y1="6" x2="6" y2="18"></line>
+                              <line x1="6" y1="6" x2="18" y2="18"></line>
+                            </svg>
+                            Delete
+                          </button>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="card-content table-card-content">
                     <div class="table-info">
-                        <div class="table-info-item">
-                            <span>Capacity:</span>
-                            <span>${table.capacity} people</span>
+                      <div class="table-info-item">
+                        <svg class="icon table-info-icon" viewBox="0 0 24 24">
+                          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                          <circle cx="9" cy="7" r="4"></circle>
+                          <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                          <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                        </svg>
+                        <span>Capacity: <?php echo htmlspecialchars($table->capacity); ?></span>
+                      </div>
+                      <div class="table-info-item">
+                        <svg class="icon table-info-icon" viewBox="0 0 24 24">
+                          <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                          <circle cx="12" cy="10" r="3"></circle>
+                        </svg>
+                        <span>Location: <?php echo htmlspecialchars($table->location); ?></span>
+                      </div>
+                      <div class="table-info-item">
+                        <svg class="icon table-info-icon" viewBox="0 0 24 24">
+                          <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                        </svg>
+                        <span>Price: $<?php echo htmlspecialchars(number_format($table->price, 2)); ?></span>
+                      </div>
+                    </div>
+                    
+                    <div class="time-slots">
+                      <h4>Reservations for <?php echo htmlspecialchars(date('D, M d, Y', strtotime($data['selectedDate']))); ?></h4>
+                      <?php if (empty($reservationsForDate)): ?>
+                        <div class="time-slot time-slot-available">
+                          <span>No reservations for this date</span>
                         </div>
-                        <div class="table-info-item">
-                            <span>Section:</span>
-                            <span>${table.section}</span>
-                        </div>
-                        <div class="table-info-item">
-                            <span>Type:</span>
-                            <span>${table.type}</span>
-                        </div>
-                        <div class="table-info-item">
-                            <span>Price:</span>
-                            <span>$${table.price}/hour</span>
-                        </div>
-                        ${table.features ? `
-                            <div class="table-info-item">
-                                <span>Features:</span>
-                                <span>${table.features}</span>
+                      <?php else: ?>
+                        <?php
+                          usort($reservationsForDate, function($a, $b) {
+                              return strcmp($a->start_time, $b->start_time);
+                          });
+                        ?>
+                        <?php foreach ($reservationsForDate as $reservation): ?>
+                          <div class="time-slot time-slot-reserved">
+                            <div class="time-slot-info">
+                              <span class="time-slot-customer"><?php echo htmlspecialchars($reservation->customer_name); ?></span>
+                              <span class="time-slot-time">
+                                <?php
+                                  $start = DateTime::createFromFormat('H:i:s', $reservation->start_time);
+                                  $end = DateTime::createFromFormat('H:i:s', $reservation->end_time);
+                                  echo $start->format('h:i A') . ' - ' . $end->format('h:i A');
+                                ?>
+                              </span>
                             </div>
-                        ` : ''}
+                            <div class="time-slot-actions">
+                              <form method="POST" action="">
+                                <input type="hidden" name="edit_reservation" value="1">
+                                <input type="hidden" name="reservation_id" value="<?php echo htmlspecialchars($reservation->id); ?>">
+                                <input type="hidden" name="table_id" value="<?php echo htmlspecialchars($table->id); ?>">
+                                <input type="hidden" name="tab" value="tables">
+                                <input type="hidden" name="date" value="<?php echo htmlspecialchars($data['selectedDate']); ?>">
+                                <button type="submit" class="btn btn-outline edit-reservation-btn">
+                                  <svg class="icon" viewBox="0 0 24 24">
+                                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                                  </svg>
+                                </button>
+                              </form>
+                              <form method="POST" action="">
+                                <input type="hidden" name="cancel_reservation" value="1">
+                                <input type="hidden" name="reservation_id" value="<?php echo htmlspecialchars($reservation->id); ?>">
+                                <input type="hidden" name="tab" value="tables">
+                                <input type="hidden" name="date" value="<?php echo htmlspecialchars($data['selectedDate']); ?>">
+                                <button type="submit" class="btn btn-outline cancel-reservation-btn" onclick="return confirm('Are you sure you want to cancel this reservation?')">
+                                  <svg class="icon" viewBox="0 0 24 24">
+                                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                                  </svg>
+                                </button>
+                              </form>
+                            </div>
+                          </div>
+                        <?php endforeach; ?>
+                      <?php endif; ?>
                     </div>
-                    <div class="table-actions">
-                        <button class="btn btn-outline btn-sm" onclick="editTable('${table.id}')">Edit</button>
-                        <button class="btn btn-outline btn-sm" onclick="deleteTable('${table.id}')">Delete</button>
-                    </div>
+                  </div>
+                  <!-- Table Actions (Add Reservation Only) -->
+                  <div class="card-footer">
+                    <form method="POST" action="">
+                      <input type="hidden" name="show_add_reservation" value="1">
+                      <input type="hidden" name="table_id" value="<?php echo htmlspecialchars($table->id); ?>">
+                      <input type="hidden" name="tab" value="tables">
+                      <input type="hidden" name="date" value="<?php echo htmlspecialchars($data['selectedDate']); ?>">
+                      <button type="submit" class="btn btn-primary btn-block">
+                        <svg class="icon btn-icon" viewBox="0 0 24 24">
+                          <path d="M12 5v14M5 12h14"></path>
+                        </svg>
+                        Add Reservation
+                      </button>
+                    </form>
+                  </div>
                 </div>
-            `).join('');
-        }
-
-        // Edit table
-        function editTable(tableId) {
-            const table = tables.find(t => t.id === tableId);
-            if (!table) return;
-
-            document.getElementById('tableNumber').value = table.number;
-            document.getElementById('capacity').value = table.capacity;
-            document.getElementById('section').value = table.section;
-            document.getElementById('tableType').value = table.type;
-            document.getElementById('features').value = table.features;
-            document.getElementById('price').value = table.price;
-
-            tableModal.style.display = 'block';
-        }
-
-        // Delete table
-        function deleteTable(tableId) {
-            if (confirm('Are you sure you want to delete this table?')) {
-                tables = tables.filter(t => t.id !== tableId);
-                localStorage.setItem('tables', JSON.stringify(tables));
-                renderTables();
-            }
-        }
-
-        // Draw timeline
-        function initializeTimeline() {
-        try {
-            const container = document.getElementById('timeline');
-            chart = new google.visualization.Timeline(container);
-            dataTable = new google.visualization.DataTable();
-
-            // Add columns
-            dataTable.addColumn({ type: 'string', id: 'Table' });
-            dataTable.addColumn({ type: 'string', id: 'Status' });
-            dataTable.addColumn({ type: 'string', id: 'style', role: 'style' });
-            dataTable.addColumn({ type: 'date', id: 'Start' });
-            dataTable.addColumn({ type: 'date', id: 'End' });
-
-            // Draw initial timeline
-            drawTimeline();
-
-            // Add window resize handler
-            window.addEventListener('resize', debounce(drawTimeline, 250));
-        } catch (error) {
-            console.error('Error initializing timeline:', error);
-        }
-    }
-
-    function drawTimeline() {
-        if (!chart || !dataTable) return;
-
-        try {
-            // Clear existing rows
-            dataTable.removeRows(0, dataTable.getNumberOfRows());
-
-            const dateString = currentDate.toISOString().split('T')[0];
-            const dayReservations = reservations.filter(r => r.date === dateString);
-
-            // Add rows for each table (even without reservations)
-            const timelineRows = [];
-            
-            // First, add all tables
-            tables.forEach(table => {
-                const tableReservations = dayReservations.filter(r => r.tableId === table.id);
-                
-                if (tableReservations.length === 0) {
-                    // Add empty row for table with no reservations
-                    timelineRows.push([
-                        `Table ${table.number}`,
-                        'Available',
-                        '#e0e0e0',
-                        new Date(dateString + 'T06:00'), // Start at 6 AM
-                        new Date(dateString + 'T23:00')  // End at 11 PM
-                    ]);
-                } else {
-                    // Add reservations for this table
-                    tableReservations.forEach(reservation => {
-                        timelineRows.push([
-                            `Table ${table.number}`,
-                            `${reservation.customerName} (${reservation.people} people)`,
-                            '#002D40',
-                            new Date(dateString + 'T' + reservation.startTime),
-                            new Date(dateString + 'T' + reservation.endTime)
-                        ]);
+              <?php endforeach; ?>
+            <?php endif; ?>
+          </div>
+        </div>
+        
+        <!-- Reservations Tab -->
+        <div class="tab-content" data-tab="reservations" data-active="<?php echo $data['tab'] === 'reservations' ? 'true' : 'false'; ?>">
+          <div class="card">
+            <div class="card-header">
+              <h2 class="card-title">Current Reservations</h2>
+              <p class="card-description">View and manage all current table reservations.</p>
+            </div>
+            <div class="card-content">
+              <div class="date-selector">
+                <form method="GET" action="">
+                  <input type="hidden" name="tab" value="reservations">
+                  <label for="reservations-date">Date:</label>
+                  <input type="date" id="reservations-date" name="date" value="<?php echo htmlspecialchars($data['selectedDate']); ?>">
+                  <button type="submit" class="btn btn-primary">Update Date</button>
+                </form>
+              </div>
+              <div class="reservation-list">
+                <?php if (empty($data['reservations'])): ?>
+                  <div class="empty-state">
+                    <p>No reservations for <?php echo htmlspecialchars(date('D, M d, Y', strtotime($data['selectedDate']))); ?></p>
+                  </div>
+                <?php else: ?>
+                  <?php
+                    usort($data['reservations'], function($a, $b) {
+                        return strcmp($a->start_time, $b->start_time);
                     });
-                }
-            });
-
-            // Add all rows to the dataTable
-            dataTable.addRows(timelineRows);
-
-            // Configure options
-            const options = {
-                timeline: {
-                    showRowLabels: true,
-                    showBarLabels: true,
-                    rowLabelStyle: {
-                        fontName: 'Inter',
-                        fontSize: 14,
-                        color: '#333'
-                    },
-                    barLabelStyle: {
-                        fontName: 'Inter',
-                        fontSize: 12
-                    }
-                },
-                avoidOverlappingGridLines: true,
-                height: tables.length * 50 + 50, // Dynamic height based on number of tables
-                backgroundColor: '#ffffff',
-                alternatingRowBackground: true,
-                hAxis: {
-                    format: 'HH:mm',
-                    minValue: new Date(dateString + 'T06:00'),
-                    maxValue: new Date(dateString + 'T23:00')
-                }
-            };
-
-            // Draw the chart
-            chart.draw(dataTable, options);
-
-            // Add click handler for the chart
-            google.visualization.events.addListener(chart, 'select', function() {
-                const selection = chart.getSelection();
-                if (selection.length > 0) {
-                    const row = selection[0].row;
-                    const tableInfo = dataTable.getValue(row, 0);
-                    const reservationInfo = dataTable.getValue(row, 1);
-                    if (reservationInfo !== 'Available') {
-                        alert(`Reservation Details:\nTable: ${tableInfo}\n${reservationInfo}`);
-                    }
-                }
-            });
-
-        } catch (error) {
-            console.error('Error drawing timeline:', error);
-            const container = document.getElementById('timeline');
-            container.innerHTML = '<p class="text-center text-red-500">Error loading timeline. Please try again.</p>';
-        }
-    }
-
-    // Utility function for debouncing window resize
-    function debounce(func, wait) {
-        let timeout;
-        return function executedFunction(...args) {
-            const later = () => {
-                clearTimeout(timeout);
-                func(...args);
-            };
-            clearTimeout(timeout);
-            timeout = setTimeout(later, wait);
-        };
-    }
-
-    // Initialize the timeline after Google Charts is loaded
-    google.charts.setOnLoadCallback(() => {
-        initializeTimeline();
-        updateDateDisplay();
-        renderTables();
-    });
-
-    // Update the date navigation handlers
-    prevDayBtn.addEventListener('click', () => {
-        currentDate.setDate(currentDate.getDate() - 1);
-        updateDateDisplay();
-        drawTimeline();
-    });
-
-    nextDayBtn.addEventListener('click', () => {
-        currentDate.setDate(currentDate.getDate() + 1);
-        updateDateDisplay();
-        drawTimeline();
-    });
-
-    // Add validation to the reservation form
-    reservationForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const formData = new FormData(e.target);
-        const startTime = formData.get('startTime');
-        const endTime = formData.get('endTime');
-        const date = formData.get('date');
-        const tableId = formData.get('tableId');
-
-        // Check for overlapping reservations
-        const existingReservations = reservations.filter(r => 
-            r.date === date && 
-            r.tableId === tableId
-        );
-
-        const newStart = new Date(`${date}T${startTime}`);
-        const newEnd = new Date(`${date}T${endTime}`);
-
-        const hasOverlap = existingReservations.some(reservation => {
-            const existingStart = new Date(`${reservation.date}T${reservation.startTime}`);
-            const existingEnd = new Date(`${reservation.date}T${reservation.endTime}`);
-            return (newStart < existingEnd && newEnd > existingStart);
-        });
-
-        if (hasOverlap) {
-            alert('This table is already reserved during the selected time period.');
-            return;
-        }
-
-        const newReservation = {
-            id: Date.now().toString(),
-            tableId: tableId,
-            customerName: formData.get('customerName'),
-            people: parseInt(formData.get('people')),
-            date: date,
-            startTime: startTime,
-            endTime: endTime,
-            status: 'confirmed'
-        };
-
-        reservations.push(newReservation);
-        localStorage.setItem('reservations', JSON.stringify(reservations));
-        drawTimeline();
-        reservationModal.style.display = 'none';
-        e.target.reset();
-    });
-
-    // Add some CSS for the timeline
-    const style = document.createElement('style');
-    style.textContent = `
-        .google-visualization-tooltip {
-            background-color: white !important;
-            padding: 8px !important;
-            border-radius: 4px !important;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1) !important;
-            border: 1px solid #e0e0e0 !important;
-            font-family: 'Inter', sans-serif !important;
-        }
-        .google-visualization-tooltip-item-list {
-            margin: 0 !important;
-            padding: 0 !important;
-        }
-        .google-visualization-tooltip-item {
-            margin: 0 !important;
-            padding: 4px 0 !important;
-            font-size: 12px !important;
-            color: #333 !important;
-        }
-    `;
-    document.head.appendChild(style);
-             // Initialize
-            google.charts.setOnLoadCallback(() => {
-                updateDateDisplay();
-                renderTables();
-                drawTimeline();
-            });
-    </script>
+                  ?>
+                  <?php foreach ($data['reservations'] as $reservation): ?>
+                    <div class="reservation-item">
+                      <div class="reservation-header">
+                        <span class="reservation-table">Table #<?php echo htmlspecialchars($reservation->table_number); ?> (<?php echo htmlspecialchars($reservation->table_location); ?>)</span>
+                        <div class="time-slot-actions">
+                          <form method="POST" action="">
+                            <input type="hidden" name="edit_reservation" value="1">
+                            <input type="hidden" name="reservation_id" value="<?php echo htmlspecialchars($reservation->id); ?>">
+                            <input type="hidden" name="table_id" value="<?php echo htmlspecialchars($reservation->table_id); ?>">
+                            <input type="hidden" name="tab" value="reservations">
+                            <input type="hidden" name="date" value="<?php echo htmlspecialchars($data['selectedDate']); ?>">
+                            <button type="submit" class="btn btn-outline edit-reservation-btn">
+                              <svg class="icon" viewBox="0 0 24 24">
+                                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                              </svg>
+                            </button>
+                          </form>
+                          <form method="POST" action="">
+                            <input type="hidden" name="cancel_reservation" value="1">
+                            <input type="hidden" name="reservation_id" value="<?php echo htmlspecialchars($reservation->id); ?>">
+                            <input type="hidden" name="tab" value="reservations">
+                            <input type="hidden" name="date" value="<?php echo htmlspecialchars($data['selectedDate']); ?>">
+                            <button type="submit" class="btn btn-outline cancel-reservation-btn" onclick="return confirm('Are you sure you want to cancel this reservation?')">
+                              <svg class="icon" viewBox="0 0 24 24">
+                                <line x1="18" y1="6" x2="6" y2="18"></line>
+                                <line x1="6" y1="6" x2="18" y2="18"></line>
+                              </svg>
+                            </button>
+                          </form>
+                        </div>
+                      </div>
+                      <div class="reservation-details">
+                        <div class="reservation-detail">
+                          <svg class="icon reservation-detail-icon" viewBox="0 0 24 24">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                          </svg>
+                          <span><?php echo htmlspecialchars($reservation->customer_name); ?></span>
+                        </div>
+                        <div class="reservation-detail">
+                          <svg class="icon reservation-detail-icon" viewBox="0 0 24 24">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polyline points="12 6 12 12 16 14"></polyline>
+                          </svg>
+                          <span>
+                            <?php
+                              $start = DateTime::createFromFormat('H:i:s', $reservation->start_time);
+                              $end = DateTime::createFromFormat('H:i:s', $reservation->end_time);
+                              echo $start->format('h:i A') . ' - ' . $end->format('h:i A');
+                            ?>
+                          </span>
+                        </div>
+                        <div class="reservation-detail">
+                          <svg class="icon reservation-detail-icon" viewBox="0 0 24 24">
+                            <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                          </svg>
+                          <span>Price: $<?php echo htmlspecialchars(number_format($reservation->table_price, 2)); ?></span>
+                        </div>
+                        <?php if (!empty($reservation->notes)): ?>
+                          <div class="reservation-detail">
+                            <svg class="icon reservation-detail-icon" viewBox="0 0 24 24">
+                              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                              <polyline points="14 2 14 8 20 8"></polyline>
+                              <line x1="16" y1="13" x2="8" y2="13"></line>
+                              <line x1="16" y1="17" x2="8" y2="17"></line>
+                              <polyline points="10 9 9 9 8 9"></polyline>
+                            </svg>
+                            <span><?php echo htmlspecialchars($reservation->notes); ?></span>
+                          </div>
+                        <?php endif; ?>
+                      </div>
+                    </div>
+                  <?php endforeach; ?>
+                <?php endif; ?>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Add Reservation Popup Form -->
+        <?php if (isset($data['add_reservation_form'])): ?>
+          <div class="modal-backdrop">
+            <div class="modal">
+              <div class="modal-header">
+                <h2 class="modal-title">Reserve Table #<?php echo htmlspecialchars($data['add_reservation_form']['table_number']); ?></h2>
+                <p class="modal-description">Enter the customer details to reserve this table for $<?php echo htmlspecialchars(number_format($data['add_reservation_form']['table_price'], 2)); ?>.</p>
+              </div>
+              <div class="modal-body">
+                <form method="POST" action="">
+                  <input type="hidden" name="add_reservation" value="1">
+                  <input type="hidden" name="table_id" value="<?php echo htmlspecialchars($data['add_reservation_form']['table_id']); ?>">
+                  <input type="hidden" name="tab" value="<?php echo htmlspecialchars($data['tab']); ?>">
+                  <input type="hidden" name="date" value="<?php echo htmlspecialchars($data['selectedDate']); ?>">
+                  <div class="form-grid">
+                    <div class="form-group">
+                      <label for="add-customer-name">
+                        <svg class="icon" viewBox="0 0 24 24">
+                          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                          <circle cx="12" cy="7" r="4"></circle>
+                        </svg>
+                        Customer Name
+                      </label>
+                      <input id="add-customer-name" name="customer_name" type="text" placeholder="Enter customer name" value="<?php echo htmlspecialchars($_POST['customer_name'] ?? ''); ?>">
+                      <?php if (isset($data['errors']['reservation']['customer_name'])): ?>
+                        <div class="error-message"><?php echo htmlspecialchars($data['errors']['reservation']['customer_name']); ?></div>
+                      <?php endif; ?>
+                    </div>
+                    <div class="form-grid form-grid-2">
+                      <div class="form-group">
+                        <label for="add-start-time">
+                          <svg class="icon" viewBox="0 0 24 24">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polyline points="12 6 12 12 16 14"></polyline>
+                          </svg>
+                          Start Time
+                        </label>
+                        <input id="add-start-time" name="start_time" type="time" value="<?php echo htmlspecialchars($_POST['start_time'] ?? ''); ?>">
+                        <?php if (isset($data['errors']['reservation']['start_time'])): ?>
+                          <div class="error-message"><?php echo htmlspecialchars($data['errors']['reservation']['start_time']); ?></div>
+                        <?php endif; ?>
+                      </div>
+                      <div class="form-group">
+                        <label for="add-end-time">
+                          <svg class="icon" viewBox="0 0 24 24">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polyline points="12 6 12 12 16 14"></polyline>
+                          </svg>
+                          End Time
+                        </label>
+                        <input id="add-end-time" name="end_time" type="time" value="<?php echo htmlspecialchars($_POST['end_time'] ?? ''); ?>">
+                        <?php if (isset($data['errors']['reservation']['end_time'])): ?>
+                          <div class="error-message"><?php echo htmlspecialchars($data['errors']['reservation']['end_time']); ?></div>
+                        <?php endif; ?>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label for="add-notes">
+                        <svg class="icon" viewBox="0 0 24 24">
+                          <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                          <line x1="16" y1="2" x2="16" y2="6"></line>
+                          <line x1="8" y1="2" x2="8" y2="6"></line>
+                          <line x1="3" y1="10" x2="21" y2="10"></line>
+                        </svg>
+                        Notes
+                      </label>
+                      <textarea id="add-notes" name="notes" placeholder="Any special requests or notes" rows="3"><?php echo htmlspecialchars($_POST['notes'] ?? ''); ?></textarea>
+                      <?php if (isset($data['errors']['reservation']['notes'])): ?>
+                        <div class="error-message"><?php echo htmlspecialchars($data['errors']['reservation']['notes']); ?></div>
+                      <?php endif; ?>
+                    </div>
+                  </div>
+                  <div class="modal-footer">
+                    <a href="?tab=<?php echo htmlspecialchars($data['tab']); ?>&date=<?php echo htmlspecialchars($data['selectedDate']); ?>" class="btn btn-outline">Cancel</a>
+                    <button type="submit" class="btn btn-primary">Reserve Table</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        <?php endif; ?>
+        
+        <!-- Update Table Popup Form -->
+        <?php if (isset($data['update_table_form'])): ?>
+          <div class="modal-backdrop">
+            <div class="modal">
+              <div class="modal-header">
+                <h2 class="modal-title">Update Table #<?php echo htmlspecialchars($data['update_table_form']['number']); ?></h2>
+                <p class="modal-description">Modify the table details.</p>
+              </div>
+              <div class="modal-body">
+                <form method="POST" action="">
+                  <input type="hidden" name="update_table" value="1">
+                  <input type="hidden" name="table_id" value="<?php echo htmlspecialchars($data['update_table_form']['id']); ?>">
+                  <input type="hidden" name="tab" value="<?php echo htmlspecialchars($data['tab']); ?>">
+                  <input type="hidden" name="date" value="<?php echo htmlspecialchars($data['selectedDate']); ?>">
+                  <div class="form-grid form-grid-4">
+                    <div class="form-group">
+                      <label for="update-table-number">Table Number</label>
+                      <input id="update-table-number" name="number" type="number" placeholder="Enter table number" value="<?php echo htmlspecialchars($_POST['number'] ?? $data['update_table_form']['number']); ?>">
+                      <?php if (isset($data['errors']['table']['number'])): ?>
+                        <div class="error-message"><?php echo htmlspecialchars($data['errors']['table']['number']); ?></div>
+                      <?php endif; ?>
+                    </div>
+                    <div class="form-group">
+                      <label for="update-capacity">Capacity</label>
+                      <input id="update-capacity" name="capacity" type="number" placeholder="Enter capacity" value="<?php echo htmlspecialchars($_POST['capacity'] ?? $data['update_table_form']['capacity']); ?>">
+                      <?php if (isset($data['errors']['table']['capacity'])): ?>
+                        <div class="error-message"><?php echo htmlspecialchars($data['errors']['table']['capacity']); ?></div>
+                      <?php endif; ?>
+                    </div>
+                    <div class="form-group">
+                      <label for="update-location">Location</label>
+                      <select id="update-location" name="location">
+                        <option value="" disabled>Select location</option>
+                        <option value="Indoor" <?php echo ($_POST['location'] ?? $data['update_table_form']['location']) === 'Indoor' ? 'selected' : ''; ?>>Indoor</option>
+                        <option value="Outdoor" <?php echo ($_POST['location'] ?? $data['update_table_form']['location']) === 'Outdoor' ? 'selected' : ''; ?>>Outdoor</option>
+                        <option value="VIP" <?php echo ($_POST['location'] ?? $data['update_table_form']['location']) === 'VIP' ? 'selected' : ''; ?>>VIP</option>
+                      </select>
+                      <?php if (isset($data['errors']['table']['location'])): ?>
+                        <div class="error-message"><?php echo htmlspecialchars($data['errors']['table']['location']); ?></div>
+                      <?php endif; ?>
+                    </div>
+                    <div class="form-group">
+                      <label for="update-price">Price ($)</label>
+                      <input id="update-price" name="price" type="number" step="0.01" placeholder="Enter price" value="<?php echo htmlspecialchars($_POST['price'] ?? $data['update_table_form']['price']); ?>">
+                      <?php if (isset($data['errors']['table']['price'])): ?>
+                        <div class="error-message"><?php echo htmlspecialchars($data['errors']['table']['price']); ?></div>
+                      <?php endif; ?>
+                    </div>
+                  </div>
+                  <div class="modal-footer">
+                    <a href="?tab=<?php echo htmlspecialchars($data['tab']); ?>&date=<?php echo htmlspecialchars($data['selectedDate']); ?>" class="btn btn-outline">Cancel</a>
+                    <button type="submit" class="btn btn-primary">Update Table</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        <?php endif; ?>
+        
+        <!-- Edit Reservation Popup Form -->
+        <?php if (isset($data['edit_reservation'])): ?>
+          <div class="modal-backdrop">
+            <div class="modal">
+              <div class="modal-header">
+                <h2 class="modal-title">Edit Reservation for Table #<?php echo htmlspecialchars($data['edit_reservation']['table_number']); ?></h2>
+                <p class="modal-description">Update the reservation details for $<?php echo htmlspecialchars(number_format($data['edit_reservation']['table_price'], 2)); ?>.</p>
+              </div>
+              <div class="modal-body">
+                <form method="POST" action="">
+                  <input type="hidden" name="update_reservation" value="1">
+                  <input type="hidden" name="reservation_id" value="<?php echo htmlspecialchars($data['edit_reservation']['id']); ?>">
+                  <input type="hidden" name="table_id" value="<?php echo htmlspecialchars($data['edit_reservation']['table_id']); ?>">
+                  <input type="hidden" name="tab" value="<?php echo htmlspecialchars($data['tab']); ?>">
+                  <input type="hidden" name="date" value="<?php echo htmlspecialchars($data['selectedDate']); ?>">
+                  <div class="form-grid">
+                    <div class="form-group">
+                      <label for="edit-customer-name">
+                        <svg class="icon" viewBox="0 0 24 24">
+                          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                          <circle cx="12" cy="7" r="4"></circle>
+                        </svg>
+                        Customer Name
+                      </label>
+                      <input id="edit-customer-name" name="customer_name" type="text" placeholder="Enter customer name" value="<?php echo htmlspecialchars($_POST['customer_name'] ?? $data['edit_reservation']['customer_name']); ?>">
+                      <?php if (isset($data['errors']['reservation']['customer_name'])): ?>
+                        <div class="error-message"><?php echo htmlspecialchars($data['errors']['reservation']['customer_name']); ?></div>
+                      <?php endif; ?>
+                    </div>
+                    <div class="form-grid form-grid-2">
+                      <div class="form-group">
+                        <label for="edit-start-time">
+                          <svg class="icon" viewBox="0 0 24 24">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polyline points="12 6 12 12 16 14"></polyline>
+                          </svg>
+                          Start Time
+                        </label>
+                        <input id="edit-start-time" name="start_time" type="time" value="<?php echo htmlspecialchars($_POST['start_time'] ?? $data['edit_reservation']['start_time']); ?>">
+                        <?php if (isset($data['errors']['reservation']['start_time'])): ?>
+                          <div class="error-message"><?php echo htmlspecialchars($data['errors']['reservation']['start_time']); ?></div>
+                        <?php endif; ?>
+                      </div>
+                      <div class="form-group">
+                        <label for="edit-end-time">
+                          <svg class="icon" viewBox="0 0 24 24">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polyline points="12 6 12 12 16 14"></polyline>
+                          </svg>
+                          End Time
+                        </label>
+                        <input id="edit-end-time" name="end_time" type="time" value="<?php echo htmlspecialchars($_POST['end_time'] ?? $data['edit_reservation']['end_time']); ?>">
+                        <?php if (isset($data['errors']['reservation']['end_time'])): ?>
+                          <div class="error-message"><?php echo htmlspecialchars($data['errors']['reservation']['end_time']); ?></div>
+                        <?php endif; ?>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label for="edit-notes">
+                        <svg class="icon" viewBox="0 0 24 24">
+                          <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                          <line x1="16" y1="2" x2="16" y2="6"></line>
+                          <line x1="8" y1="2" x2="8" y2="6"></line>
+                          <line x1="3" y1="10" x2="21" y2="10"></line>
+                        </svg>
+                        Notes
+                      </label>
+                      <textarea id="edit-notes" name="notes" placeholder="Any special requests or notes" rows="3"><?php echo htmlspecialchars($_POST['notes'] ?? $data['edit_reservation']['notes'] ?? ''); ?></textarea>
+                      <?php if (isset($data['errors']['reservation']['notes'])): ?>
+                        <div class="error-message"><?php echo htmlspecialchars($data['errors']['reservation']['notes']); ?></div>
+                      <?php endif; ?>
+                    </div>
+                  </div>
+                  <div class="modal-footer">
+                    <a href="?tab=<?php echo htmlspecialchars($data['tab']); ?>&date=<?php echo htmlspecialchars($data['selectedDate']); ?>" class="btn btn-outline">Cancel</a>
+                    <button type="submit" class="btn btn-primary">Update Reservation</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        <?php endif; ?>
+      </div>
+    </main>
+  </div>
 </body>
 </html>

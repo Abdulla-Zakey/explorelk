@@ -57,7 +57,7 @@
         <!-- Overview Tab -->
         <div class="tab-content active" id="overview-tab">
           <!-- Filter Panel -->
-          <!-- <div class="card mb-4">
+          <div class="card mb-4">
             <div class="card-content p-4">
               <div class="flex flex-col gap-4">
                 <div class="flex items-center justify-between">
@@ -98,7 +98,7 @@
                 </div>
               </div>
             </div>
-          </div> -->
+          </div>
 
           <!-- Payments Table -->
           <div class="table-container">

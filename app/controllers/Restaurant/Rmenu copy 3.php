@@ -10,6 +10,7 @@ class Rmenu extends Controller {
     }
 
     public function index($a = '', $b = '', $c = '') {
+
         // Start session if not already started
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
@@ -24,7 +25,7 @@ class Rmenu extends Controller {
         
         error_log("Rmenu::index called with params: a=$a, b=$b, c=$c");
         $data = [
-            'menuItems' => $this->menuModel->getAllMenuItems($_SESSION['restaurant_id']),
+            'menuItems' => $this->menuModel->getAllMenuItems(),
             'title' => 'Restaurant Menu Management'
         ];
         $this->view('restaurant/rmenu', $data);
@@ -32,17 +33,6 @@ class Rmenu extends Controller {
     }
 
     public function create() {
-        // Start session if not already started
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
-
-        if (!isset($_SESSION['restaurant_id'])) {
-            error_log("Session Error: restaurant_id not set in session.");
-            echo json_encode(['success' => false, 'error' => 'Unauthorized']);
-            exit();
-        }
-
         error_log("Rmenu::create called");
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             try {
@@ -56,7 +46,6 @@ class Rmenu extends Controller {
                 }
 
                 $data = [
-                    'restaurant_id' => $_SESSION['restaurant_id'],
                     'name' => trim($_POST['name']),
                     'description' => trim($_POST['description']),
                     'price' => floatval($_POST['price']),
@@ -86,17 +75,6 @@ class Rmenu extends Controller {
     }
 
     public function update($id = '') {
-        // Start session if not already started
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
-
-        if (!isset($_SESSION['restaurant_id'])) {
-            error_log("Session Error: restaurant_id not set in session.");
-            echo json_encode(['success' => false, 'error' => 'Unauthorized']);
-            exit();
-        }
-
         error_log("Rmenu::update called for ID: $id");
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             try {
@@ -112,7 +90,7 @@ class Rmenu extends Controller {
                     $data['image'] = $_FILES['image'];
                 }
 
-                if ($this->menuModel->updateMenuItem($id, $data, $_SESSION['restaurant_id'])) {
+                if ($this->menuModel->updateMenuItem($id, $data)) {
                     error_log("Rmenu::update successful");
                     echo json_encode(['success' => true]);
                 } else {
@@ -126,28 +104,17 @@ class Rmenu extends Controller {
     }
 
     public function delete($id = '') {
-        // Start session if not already started
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
-
-        if (!isset($_SESSION['restaurant_id'])) {
-            error_log("Session Error: restaurant_id not set in session.");
-            echo json_encode(['success' => false, 'error' => 'Unauthorized']);
-            exit();
-        }
-
         error_log("Rmenu::delete called for ID: $id");
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             try {
                 if (empty($id)) {
                     throw new Exception('No ID provided for deletion');
                 }
-                $item = $this->menuModel->getMenuItemById($id, $_SESSION['restaurant_id']);
+                $item = $this->menuModel->getMenuItemById($id);
                 if (!$item) {
                     throw new Exception('Menu item not found with ID: ' . $id);
                 }
-                if ($this->menuModel->deleteMenuItem($id, $_SESSION['restaurant_id'])) {
+                if ($this->menuModel->deleteMenuItem($id)) {
                     error_log("Rmenu::delete successful for ID: $id");
                     echo json_encode(['success' => true]);
                 } else {
@@ -167,17 +134,6 @@ class Rmenu extends Controller {
     }
 
     public function toggle($id = '') {
-        // Start session if not already started
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
-
-        if (!isset($_SESSION['restaurant_id'])) {
-            error_log("Session Error: restaurant_id not set in session.");
-            echo json_encode(['success' => false, 'error' => 'Unauthorized']);
-            exit();
-        }
-
         ob_start();
         error_log("Rmenu::toggle called for ID: $id");
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -202,12 +158,12 @@ class Rmenu extends Controller {
                 $is_active = filter_var($is_active_raw, FILTER_VALIDATE_BOOLEAN) ? 1 : 0;
                 error_log("Toggling availability for ID: $id to: $is_active");
 
-                $item = $this->menuModel->getMenuItemById($id, $_SESSION['restaurant_id']);
+                $item = $this->menuModel->getMenuItemById($id);
                 if (!$item) {
                     throw new Exception('Menu item not found with ID: ' . $id);
                 }
 
-                if ($this->menuModel->toggleAvailability($id, $is_active, $_SESSION['restaurant_id'])) {
+                if ($this->menuModel->toggleAvailability($id, $is_active)) {
                     error_log("Rmenu::toggle successful for ID: $id");
                     ob_clean();
                     header('Content-Type: application/json');
@@ -231,21 +187,10 @@ class Rmenu extends Controller {
     }
 
     public function get($id = '') {
-        // Start session if not already started
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
-
-        if (!isset($_SESSION['restaurant_id'])) {
-            error_log("Session Error: restaurant_id not set in session.");
-            echo json_encode(['success' => false, 'error' => 'Unauthorized']);
-            exit();
-        }
-
         error_log("Rmenu::get called for ID: $id");
         if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             try {
-                $item = $this->menuModel->getMenuItemById($id, $_SESSION['restaurant_id']);
+                $item = $this->menuModel->getMenuItemById($id);
                 if ($item) {
                     error_log("Rmenu::get successful");
                     echo json_encode($item);

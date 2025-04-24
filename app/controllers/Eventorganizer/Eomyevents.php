@@ -9,7 +9,7 @@ class Eomyevents extends Controller {
         // Debug: Check if organizer_id is set
         if (!isset($_SESSION['organizer_id'])) {
             error_log("Session Error: organizer_id not set in session. Redirecting to login.");
-            header("Location: " . ROOT . "/Eventorganizer/Login");
+            header("Location: " . ROOT . "/traveler/Login");
             exit();
         }
 
