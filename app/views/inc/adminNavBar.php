@@ -20,38 +20,38 @@
             <i class="fas fa-calendar-check"></i>Bookings
         </a>
 
-        <div class="submenu" id="bookingsSubmenu">
+        <!-- <div class="submenu" id="bookingsSubmenu">
             <a href="<?= ROOT?>/admin/C_bookings_travellers">Travellers</a>
             <a href="<?= ROOT?>/admin/C_bookings_carRentals">Car Rentals</a>
             <a href="<?= ROOT?>/admin/C_bookings_tourGuides">Tour Guides</a>
             <a href="<?= ROOT?>/admin/C_bookings_eventOrganizers">Event Organizers</a>
             <a href="<?= ROOT?>/admin/C_bookings_hotels">Hotels & Restaurants</a>
-        </div>
+        </div> -->
     </div>
 
     <div class="linkHolder">
         <a href="<?= ROOT?>/admin/C_commissions" id="earningsLink" class="linkItem">
             <i class="fas fa-dollar-sign"></i>Earnings
         </a>
-        <div class="submenu" id="earningsSubmenu">
+        <!-- <div class="submenu" id="earningsSubmenu">
             <a href="<?= ROOT?>/admin/C_earnings_carRentals">Car Rentals</a>
             <a href="<?= ROOT?>/admin/C_earnings_tourGuides">Tour Guides</a>
             <a href="<?= ROOT?>/admin/C_earnings_eventOrganizers">Event Organizers</a>
             <a href="<?= ROOT?>/admin/C_earnings_hotelsRestaurants">Hotels & Restaurants</a>
-        </div>
+        </div> -->
     </div>
 
     <div class="linkHolder">
         <a href="<?= ROOT?>/admin/C_users" id="usersLink" class="linkItem">
             <i class="fas fa-users"></i>Users
         </a>
-        <div class="submenu" id="usersSubmenu">
+        <!-- <div class="submenu" id="usersSubmenu">
             <a href="<?= ROOT?>/admin/C_users_travellers">Travellers</a>
             <a href="<?= ROOT?>/admin/C_users_carRentals">Car Rentals</a>
             <a href="<?= ROOT?>/admin/C_users_tourGuides">Tour Guides</a>
             <a href="<?= ROOT?>/admin/C_users_eventOrganizers">Event Organizers</a>
             <a href="<?= ROOT?>/admin/C_users_hotelsRestaurants">Hotels & Restaurants</a>
-        </div>
+        </div> -->
     </div>
 
     <div class="linkHolder">

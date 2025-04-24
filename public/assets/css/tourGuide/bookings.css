@@ -1,0 +1,275 @@
+body {
+    overflow-x: hidden;
+    margin: 0;
+    background-color: #f8f9fa;
+}
+
+.main-container {
+    margin: 2% 2% 2% 7.5%;
+    margin-left: 22%;
+    width: 76%;
+}
+
+.page-header {
+    margin-bottom: 2%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.page-header h1 {
+    font-size: 2.25rem;
+    color: #333;
+}
+
+.search-bar {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 1em;
+}
+
+.tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.tab {
+    padding: 8px 16px;
+    background-color: #002D40;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    color: #ffffff;
+    font-size: 0.9em;
+}
+
+.tab.active {
+    background-color: #1E7A8F;
+    font-weight: bold;
+}
+
+.booking-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.booking-item {
+    display: flex;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.booking-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.booking-details {
+    flex: 1;
+    padding: 20px;
+}
+
+.status {
+    font-size: 0.8em;
+    padding: 4px 10px;
+    border-radius: 12px;
+    display: inline-block;
+    margin-bottom: 8px;
+    font-weight: 500;
+}
+
+.status.upcoming {
+    background-color: #FFF3CD;
+    color: #856404;
+}
+
+.status.completed {
+    background-color: #D4EDDA;
+    color: #155724;
+}
+
+.status.cancelled {
+    background-color: #F8D7DA;
+    color: #721C24;
+}
+
+.status.started {
+    background-color: #CFE2FF;
+    color: #084298;
+}
+
+.title {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.package-name {
+    font-size: 0.9em;
+    color: #666;
+    margin-bottom: 5px;
+}
+
+.location, .date {
+    font-size: 0.9em;
+    color: #666;
+    margin-bottom: 5px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.location i, .date i {
+    color: #1E7A8F;
+}
+
+.booking-tourist-info {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.9em;
+    margin-top: 10px;
+    color: #555;
+}
+
+.booking-tourist-info img {
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.details-button {
+    padding: 8px 16px;
+    background-color: #002D40;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.9em;
+    text-decoration: none;
+    color: white;
+    margin-top: 15px;
+    display: inline-block;
+    transition: background-color 0.3s;
+}
+
+.details-button:hover {
+    background-color: #1E7A8F;
+}
+
+.booking-image {
+    width: 200px;
+    overflow: hidden;
+}
+
+.booking-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Modal/Popup Styles */
+.modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    padding: 25px;
+    width: 400px;
+    max-width: 90%;
+    text-align: center;
+    animation: modalAppear 0.3s ease-out;
+}
+
+@keyframes modalAppear {
+    from {
+        opacity: 0;
+        transform: translateY(-50px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.modal-icon {
+    font-size: 48px;
+    margin-bottom: 15px;
+    color: #28a745;
+}
+
+.modal-title {
+    font-size: 22px;
+    color: #002D40;
+    margin-bottom: 10px;
+}
+
+.modal-message {
+    color: #555;
+    margin-bottom: 20px;
+}
+
+.modal-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.modal-btn {
+    padding: 10px 20px;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.2s;
+}
+
+.modal-btn-primary {
+    background-color: #28a745;
+    color: white;
+}
+
+.modal-btn-primary:hover {
+    background-color: #28a745;
+}
+
+.modal-btn-secondary {
+    background-color: #e0e0e0;
+    color: #333;
+}
+
+.modal-btn-secondary:hover {
+    background-color: #d0d0d0;
+}
+
+@media (max-width: 768px) {
+    .booking-item {
+        flex-direction: column;
+    }
+    
+    .booking-image {
+        width: 100%;
+        height: 150px;
+    }
+}

@@ -1,120 +1,281 @@
+<?php
+    $bookingDetails = $data['bookingDetails'];
+    $tourPackage = $data['tourPackage'];
+    $traveler = $data['traveler'];
+    $image = $data['image'];
+    $tourPackageItineraries = $data['tourPackageItinerary'];
+    $dayActivities = $data['dayActivities'];
+    // show($image);
+?>
+
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <title>ExploreLK Tour Guide</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="<?= ROOT ?>/assets/css/tourGuide/tourGuide.css?v=1.0">
-    <link href='https://fonts.googleapis.com/css?family=Poppins' rel='stylesheet'>
-    <script src="https://kit.fontawesome.com/d11f03c652.js" crossorigin="anonymous"></script>
+    <title>ExploreLK Tour Guide</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap">
+    <link rel="stylesheet" href="<?= ROOT ?>/assets/css/tourGuide/tourGuide.css">
+    <link rel="stylesheet" href="<?= ROOT ?>/assets/css/tourGuide/bookingDetails.css">
+    <link rel="icon" href="<?= IMAGES ?>/logos/logoWhite.svg">
+    <script src="https://kit.fontawesome.com/f35c1c7a11.js" crossorigin="anonymous"></script>
+    <style>
+    
+    </style>
 </head>
 
 <body>
     <div class="flexContainer">
-        
-        <?php include_once APPROOT.'\views\inc\tourGuideNavBar.php'; ?>
+        <?php include_once APPROOT . '\views\inc\tourGuideNavBar.php'; ?>
 
-        <div class="body-container">
+        <div class="main-container">
             <div class="sub-heading">
-                <a class="back_button" href="<?= ROOT?>/tourGuide/C_bookings">&larr; Back</a>
+                <a class="back_button" href="<?= ROOT ?>/tourGuide/C_bookings"><i class="fas fa-arrow-left"></i> Back to
+                    Bookings</a>
             </div>
 
-            <div class="booking-info">
-                <div class="profile-image">
-                    <div>
-                        <img src="<?= ROOT ?>/assets/images/tourGuide/profile.png" alt="Profile Photo">
+            <div class="booking-detail-container">
+                <div class="booking-header">
+                    <h1 class="booking-title"><?= $tourPackage['0']->name ?> - <?= $tourPackage['0']->duration_days ?>
+                        Day</h1>
+                    <span
+                        class="booking-status <?= $bookingDetails['0']->status ?>"><?= $bookingDetails['0']->status ?></span>
+                </div>
+
+                <img src="<?= ROOT . '/' .$image->image_path ?>" alt="Elia Adventure" class="tour-image">
+
+                <div class="booking-content">
+                    <div class="tourist-info-section">
+                        <h3 class="section-title"><i class="fas fa-user"></i> Tourist Information</h3>
+
+                        <div class="info-grid">
+                            <div class="info-item">
+                                <p class="info-label">Name</p>
+                                <p class="info-value"><?= $traveler['0']->fName . ' ' . $traveler['0']->lName ?></p>
+                            </div>
+
+                            <div class="info-item">
+                                <p class="info-label">Email</p>
+                                <p class="info-value"><?= $traveler['0']->travelerEmail ?></p>
+                            </div>
+
+                            <div class="info-item">
+                                <p class="info-label">Phone</p>
+                                <p class="info-value"><?= $traveler['0']->travelerMobileNum ?></p>
+                            </div>
+
+                            <div class="info-item">
+                                <p class="info-label">Language</p>
+                                <p class="info-value"><?= $tourPackage['0']->languages ?></p>
+                            </div>
+
+                            <div class="info-item">
+                                <p class="info-label">Number of Guests</p>
+                                <p class="info-value"><?= $tourPackage['0']->group_size ?></p>
+                            </div>
+                        </div>
+
+                        <?php if($bookingDetails['0']->special_instructions): ?>
+                        <div class="special-instructions">
+                            <p class="instructions-title"><i class="fas fa-exclamation-circle"></i> Special Instructions
+                            </p>
+                            <p class="instructions-content"><?= $bookingDetails['0']->special_instructions ?></p>
+                        </div>
+                        <?php endif; ?>
                     </div>
 
-                    <div class="profile-name">
-                        <h3 style="padding-top: 5%;">Ramesh</h3>
-                        <span><p>Colombo, Western Province</p></span>
+                    <div class="tour-info-section">
+                        <h3 class="section-title"><i class="fas fa-map-marked-alt"></i> Tour Information</h3>
+
+                        <div class="info-grid">
+                            <div class="info-item">
+                                <p class="info-label">Package Name</p>
+                                <p class="info-value"><?= $tourPackage['0']->name; ?></p>
+                            </div>
+
+                            <div class="info-item">
+                                <p class="info-label">Duration</p>
+                                <p class="info-value"><?= $tourPackage['0']->duration_days; ?> days</p>
+                            </div>
+
+                            <div class="info-item">
+                                <p class="info-label">Date</p>
+                                <p class="info-value"><?= $bookingDetails['0']->tour_date ?></p>
+                            </div>
+
+                            <div class="info-item">
+                                <p class="info-label">Start Time</p>
+                                <p class="info-value"><?= $bookingDetails['0']->start_time ?></p>
+                            </div>
+
+                            <div class="info-item">
+                                <p class="info-label">Meeting Point</p>
+                                <p class="info-value">Elia Bus Station</p>
+                            </div>
+
+                            <div class="info-item">
+                                <p class="info-label">Price</p>
+                                <p class="info-value">LKR <?= $tourPackage['0']->package_price; ?>
+                                    (<?= $bookingDetails['0']->payment_status ?>)</p>
+                            </div>
+                        </div>
+
+                        <h3 class="section-title" style="margin-top: 30px;"><i class="fas fa-route"></i> Itinerary</h3>
+
+                        <?php foreach($tourPackageItineraries as $tourPackageItinerary): 
+                            $currentDayId = $tourPackageItinerary->day_id;
+                            $currentDayActivities = $dayActivities[$currentDayId] ?? [];
+                        ?>
+                        <div style="margin-top: 15px;">
+                            <h4 style="color: #002D40; margin-bottom: 10px;">Day
+                                <?= $tourPackageItinerary->day_number ?></h4>
+
+                            <ul style="list-style-type: none;">
+                                <?php foreach($currentDayActivities as $activity): ?>
+                                <li style="margin-bottom: 10px; padding-left: 20px; position: relative;">
+                                    <i class="fas fa-sun" style="position: absolute; left: 0; color: #28a745;"></i>
+                                    <strong><?= $activity->activity_time ?>:</strong> <?= $activity->title ?>
+                                </li>
+                                <?php endforeach; ?>
+                            </ul>
+                        </div>
+                        <?php endforeach; ?>
                     </div>
                 </div>
 
-                <div class="details">
-                    <div class="heading">
-                        <h2>Booking Details</h2>
-                    </div>
+                <div class="action-buttons">
+                    <button class="action-button contact-button"><i class="fas fa-comment-dots"></i> Contact
+                        Tourist</button>
 
-                    <div class="light-text">
-                        <p>Tourist Information</p>
-                    </div>
+                    <?php if(!($bookingDetails['0']->status == 'completed')): ?>
+                    <button class="action-button cancel-button"><i class="fas fa-times-circle"></i> Cancel Tour</button>
+                    <?php endif; ?>
 
-                    <div class="tourist-details">
-                        <div class="tourist-info">
-                            <h4>Name:</h6>
-                            <p>Alice Smith</p>
-                        </div>
-
-                        <div class="tourist-info">
-                            <h4>Email:</h6>
-                            <p>alicesmith@gmail.com</p>
-                        </div>
-            
-                        <div class="tourist-info">
-                            <h4>Phone:</h6>
-                            <p>0772030722</p>
-                        </div>
-
-                        <div class="tourist-info">
-                            <h4>Language:</h6>
-                            <p>Sinhala</p>
-                        </div>
-                    </div>
-
-                    <div class="sub-heading">
-                        <h3>Special Instructions</h3>
-                    </div>
-
-                    <div class="light-text">
-                        <p style="color: black;">I'm allergic to peanuts. Please don't include peanuts in the meals.</p>
-                    </div>
-
-                    <div class="sub-heading">
-                        <h3>Tour Information</h3>
-                    </div>
-
-                    <div class="tourist-details">
-                        <div class="tourist-info">
-                            <h4>Tour Name:</h6>
-                            <p>Gartmore Falls</p>
-                        </div>
-
-                        <div class="tourist-info">
-                            <h4>Date:</h6>
-                            <p>24.01.2024</p>
-                        </div>
-        
-                        <div class="tourist-info">
-                            <h4>Time:</h6>
-                            <p>8.30 A.M</p>
-                        </div>
-
-                        <div class="tourist-info">
-                            <h4>Duration:</h6>
-                            <p>1 Day</p>
-                        </div>
-
-                        <div class="tourist-info">
-                            <h4>Meetup Location:</h6>
-                            <p>Hatton</p>
-                        </div>
-
-                        <div class="tourist-info">
-                            <h4>Guide:</h6>
-                            <p>Lalithra</p>
-                        </div>
-                    </div>
-
-                    <div class="button-container">
-                        <button class="contact-button">Contact tourist</button>
-                        <button class="cancel-button">Cancel tour</button>
-                    </div>
-                    
+                    <?php if($bookingDetails['0']->status == 'started'): ?>
+                    <button class="action-button complete-button"><i class="fas fa-check-circle"></i> Mark as
+                        Completed</button>
+                    <?php elseif($bookingDetails['0']->status == 'upcoming'): ?>
+                    <button class="action-button complete-button"><i class="fas fa-check-circle"></i> Start
+                        tour</button>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>
-
     </div>
+
+    <!-- //Modal for start tour and end tour -->
+    <div class="modal-overlay" id="customModal">
+        <div class="modal">
+            <div class="modal-icon">
+                <i id="modalIcon" class="fas fa-check-circle"></i>
+            </div>
+            <h3 class="modal-title" id="modalTitle">Start Tour</h3>
+            <p class="modal-message" id="modalMessage">Are you sure you want to start this tour?</p>
+            <div class="modal-buttons">
+                <button class="modal-btn modal-btn-secondary" id="modalCancel">Cancel</button>
+                <button class="modal-btn modal-btn-primary" id="modalConfirm">Confirm</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Get elements
+        const modal = document.getElementById('customModal');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalMessage = document.getElementById('modalMessage');
+        const modalIcon = document.getElementById('modalIcon');
+        const modalConfirm = document.getElementById('modalConfirm');
+        const modalCancel = document.getElementById('modalCancel');
+
+        // Get booking ID from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const bookingId = urlParams.get('booking_id');
+
+        console.log(`Loading details for booking ${bookingId}`);
+
+        // Cancel button event
+        document.querySelector('.cancel-button').addEventListener('click', function() {
+            showModal(
+                'Cancel Tour',
+                'Are you sure you want to cancel this tour?',
+                'fa-times-circle',
+                'red',
+                function() {
+                    // Here you would make an API call to cancel the booking
+                    // For example: window.location.href = `<?= ROOT ?>/tourGuide/cancelTour?id=${bookingId}`;
+                    alert('Tour cancellation request sent.');
+                    hideModal();
+                }
+            );
+        });
+
+        // Complete/Start tour button event
+        document.querySelector('.complete-button').addEventListener('click', function() {
+            const status = this.textContent.trim().includes('Start') ? 'start' : 'complete';
+
+            if (status === 'start') {
+                showModal(
+                    'Start Tour',
+                    'Are you ready to start this tour?',
+                    'fa-play-circle',
+                    '#28a745',
+                    function() {
+                        // Here you would make an API call to start the tour
+                        window.location.href =
+                            `<?= ROOT ?>/tourGuide/C_bookingDetails/startTour?id=${bookingId}`;
+                        // alert('Tour marked as started.');
+                        hideModal();
+                    }
+                );
+            } else {
+                showModal(
+                    'Complete Tour',
+                    'Mark this tour as completed?',
+                    'fa-check-circle',
+                    '#28a745',
+                    function() {
+                        // Here you would make an API call to complete the tour
+                        window.location.href =
+                            `<?= ROOT ?>/tourGuide/C_bookingDetails/completeTour?id=${bookingId}`;
+                        // alert('Tour marked as completed.');
+                        hideModal();
+                    }
+                );
+            }
+        });
+
+        // Modal cancel button event
+        modalCancel.addEventListener('click', hideModal);
+
+        // Function to show modal
+        function showModal(title, message, iconClass, iconColor, confirmCallback) {
+            modalTitle.textContent = title;
+            modalMessage.textContent = message;
+            modalIcon.className = `fas ${iconClass}`;
+            modalIcon.style.color = iconColor;
+
+            // Set confirm button action
+            modalConfirm.onclick = confirmCallback;
+
+            // Show modal
+            modal.style.display = 'flex';
+        }
+
+        // Function to hide modal
+        function hideModal() {
+            modal.style.display = 'none';
+        }
+
+        // Close modal when clicking outside
+        modal.addEventListener('click', function(e) {
+            if (e.target === modal) {
+                hideModal();
+            }
+        });
+    });
+    </script>
 </body>
+
 </html>

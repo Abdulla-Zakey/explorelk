@@ -1,0 +1,305 @@
+body {
+    overflow-x: hidden;
+    margin: 0;
+    background-color: #f8f9fa;
+}
+
+.main-container {
+    margin: 2% 2% 2% 7.5%;
+    margin-left: 22%;
+    width: 76%;
+}
+
+.page-header {
+    margin-bottom: 2%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.page-header h1 {
+    font-size: 2.25em; /* Changed from rem to em */
+    color: #333;
+}
+
+.earnings-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.25%; /* Approximately 20px based on typical base */
+    margin-bottom: 1.875%; /* Approximately 30px */
+}
+
+.earnings-stat-card {
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 0.125% 0.625% rgba(0, 0, 0, 0.05); /* 2px/10px */
+    padding: 1.25%; /* Approximately 20px */
+    text-align: center;
+}
+
+.earnings-stat-card h3 {
+    font-size: 0.875em; /* Approximately 14px */
+    color: #7a8999;
+    margin-bottom: 0.625%; /* Approximately 10px */
+    text-transform: uppercase;
+}
+
+.earnings-stat-card .value {
+    font-size: 1.5em; /* Approximately 24px */
+    font-weight: bold;
+    color: #2c3e50;
+}
+
+.earnings-card {
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 0.125% 0.625% rgba(0, 0, 0, 0.05);
+    padding: 1.25%; /* Approximately 20px */
+    margin-bottom: 1.875%; /* Approximately 30px */
+}
+
+.earnings-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.25%; /* Approximately 20px */
+}
+
+.earnings-card-title {
+    font-size: 1.125em; /* Approximately 18px */
+    color: #2c3e50;
+}
+
+.earnings-btn {
+    padding: 1% 2%; /* Approximately 8px/16px */
+    border-radius: 6px;
+    font-size: 0.875em; /* Approximately 14px */
+    cursor: pointer;
+    border: none;
+    font-weight: 500;
+}
+
+.earnings-btn-primary {
+    background-color: #002D40;
+    color: white;
+}
+
+.earnings-btn-outline {
+    background-color: transparent;
+    color: #09b290;
+    border: 1px solid #09b290;
+}
+
+.earnings-btn-sm {
+    padding: 0.375% 0.75%; /* Approximately 6px/12px */
+    font-size: 0.75em; /* Approximately 12px */
+}
+
+.earnings-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.earnings-table th,
+.earnings-table td {
+    padding: 0.9375%; /* Approximately 15px */
+    text-align: left;
+    border-bottom: 1px solid #e7ebf0;
+}
+
+.earnings-table th {
+    color: #5a6978;
+    font-weight: 600;
+    font-size: 0.875em; /* Approximately 14px */
+    background-color: #f7f9fc;
+}
+
+.earnings-table tr:hover {
+    background-color: #f9fafb;
+}
+
+.commission-negative {
+    color: #e74c3c;
+}
+
+.earnings-tabs {
+    display: flex;
+    border-bottom: 1px solid #e1e5eb;
+    margin-bottom: 1.25%; /* Approximately 20px */
+    background-color: #f7f9fc;
+    border-radius: 4px 4px 0 0;
+}
+
+.earnings-tab {
+    padding: 0.9375% 1.875%; /* Approximately 15px/30px */
+    cursor: pointer;
+    font-size: 1em; /* Approximately 16px */
+    font-weight: 600;
+    color: #5a6978;
+    border-bottom: 3px solid transparent;
+    position: relative;
+}
+
+.earnings-tab.active {
+    color: #09b290;
+    border-bottom: 3px solid #09b290;
+}
+
+.earnings-tab-content {
+    display: none;
+}
+
+.earnings-tab-content.active {
+    display: block;
+}
+
+.earnings-commission-payment {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1.25%; /* Approximately 20px */
+    padding: 1.25%; /* Approximately 20px */
+    background-color: #f8f9fa;
+    border-radius: 8px;
+}
+
+.earnings-payment-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3125%; /* Approximately 5px */
+}
+
+.earnings-payment-label {
+    font-size: 0.875em; /* Approximately 14px */
+    color: #7a8999;
+}
+
+.earnings-payment-amount {
+    font-size: 1.5em; /* Approximately 24px */
+    font-weight: bold;
+    color: #2c3e50;
+}
+
+.earnings-payment-due {
+    font-size: 0.875em; /* Approximately 14px */
+    color: #7a8999;
+}
+
+.earnings-status {
+    padding: 0.8% 1.5%; /* Approximately 4px/8px */
+    border-radius: 4px;
+    font-size: 0.75em; /* Approximately 12px */
+    font-weight: 500;
+}
+
+.earnings-status-approved {
+    background-color: #e6f7f1;
+    color: #09b290;
+}
+
+.earnings-status-pending {
+    background-color: #FFF3CD; /* Light amber background */
+    color: #856404; /* Dark amber text for contrast */
+}
+
+.earnings-status-rejected {
+    background-color: #F8D7DA; /* Light red/pink background */
+    color: #721C24; /* Dark red text for contrast */
+}
+
+/* Modal styles */
+.payment-modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.payment-modal-content {
+    background-color: #fff;
+    margin: 2% auto;
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    width: 90%;
+    max-width: 500px;
+    position: relative;
+}
+
+.payment-modal-close {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+    color: #666;
+}
+
+.payment-modal-close:hover {
+    color: #000;
+}
+
+.form-group {
+    margin-bottom: 18px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 500;
+    color: #333;
+}
+
+.form-group input[type="text"],
+.form-group input[type="date"],
+.form-group textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-family: 'Poppins', sans-serif;
+}
+
+.form-group input[type="file"] {
+    width: 100%;
+    padding: 8px 0;
+}
+
+.form-group textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+.form-group small {
+    display: block;
+    margin-top: 5px;
+    color: #777;
+    font-size: 12px;
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.earnings-btn-secondary {
+    background-color: #e0e0e0;
+    color: #333;
+}
+
+.earnings-btn-secondary:hover {
+    background-color: #d0d0d0;
+}
+
+/* Prevent body from scrolling when modal is open */
+body.modal-open {
+    overflow: hidden;
+}
