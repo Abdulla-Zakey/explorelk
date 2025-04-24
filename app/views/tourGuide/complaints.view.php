@@ -1,3 +1,9 @@
+<?php
+    $pendingComplaints = $data['pendingComplaints'] ;
+    $resolvedComplaints = $data['resolvedComplaints'];
+    // show($resolvedComplaints);
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -29,63 +35,59 @@
             <div class="complaints-container">
                 <h2 class="complaints-header">Your Complaints</h2>
 
-                <!-- Complaint Card 1 -->
-                <div class="complaint-card">
-                    <div class="complaint-header">
-                        <span class="complaint-id">#CP2003</span>
-                        <span class="status status-resolved">Resolved</span>
-                    </div>
-                    <div class="complaint-date">Submitted on April 3, 2025</div>
-                    <div class="complaint-subject">Payment dispute with customer</div>
-                    <div class="complaint-message">
-                        Customer BK5789 refused to pay the full amount after the tour, claiming the service wasn't as
-                        described. We provided all services as agreed in the booking, including the extended hike they
-                        requested. The customer only paid 70% of the agreed amount.
-                    </div>
-
-                    <div class="resolution-section">
-                        <div class="resolution-header">Resolution</div>
-                        <div class="resolution-date">Resolved on April 5, 2025</div>
-                        <div class="resolution-message">
-                            After reviewing the case, we've determined that the service was provided as agreed. The
-                            remaining 30% has been charged to the customer's payment method as per our terms of service.
-                            A $20 credit has been applied to their account as a goodwill gesture for any
-                            misunderstanding.
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Complaint Card 2 -->
-                <div class="complaint-card">
-                    <div class="complaint-header">
-                        <span class="complaint-id">#CP2001</span>
-                        <span class="status status-resolved">Resolved</span>
-                    </div>
-                    <div class="complaint-date">Submitted on March 28, 2025</div>
-                    <div class="complaint-subject">Platform commission calculation error</div>
-                    <div class="complaint-message">
-                        The platform incorrectly calculated our commission for booking BK5214. Instead of the agreed
-                        15%, the system deducted 20% from our payment. This has happened with 3 bookings this month.
-                    </div>
-
-                    <div class="resolution-section">
-                        <div class="resolution-header">Resolution</div>
-                        <div class="resolution-date">Resolved on March 30, 2025</div>
-                        <div class="resolution-message">
-                            Our technical team identified a bug in the commission calculation module that affected
-                            certain account types. The overcharged commission (5% difference) has been refunded to your
-                            account. A system update has been deployed to prevent this issue in future transactions. We
-                            appreciate you bringing this to our attention.
-                        </div>
-                    </div>
-                </div>
-
+                <?php if(empty($pendingComplaints) || empty($resolvedComplaints)): ?>
                 <!-- Empty State -->
-                <!-- <div class="no-complaints">
-                <i class="fas fa-check-circle" style="font-size: 40px; color: var(--success); margin-bottom: 15px;"></i>
-                <h3>No Complaints</h3>
-                <p>You haven't submitted any complaints yet.</p>
-            </div> -->
+                <div class="no-complaints">
+                    <i class="fas fa-check-circle"
+                        style="font-size: 40px; color: var(--success); margin-bottom: 15px;"></i>
+                    <h3>No Complaints</h3>
+                    <p>You haven't submitted any complaints yet.</p>
+                </div>
+                <?php else: ?>
+                <?php foreach($pendingComplaints as $complaint): ?>
+                <div class="complaint-card">
+                    <div class="complaint-header">
+                        <span class="complaint-id">Complaint ID: <?= $complaint->complaint_id ?></span>
+                        <span
+                            class="status <?= $complaint->status=='Pending' ? 'status-pending':'status-resolved'?>"><?= $complaint->status ?></span>
+                    </div>
+                    <div class="complaint-date"><?= $complaint->date_submitted ?></div>
+                    <div class="complaint-subject"><?= $complaint->subject ?></div>
+                    <div class="complaint-message"><?= $complaint->message ?></div>
+
+                    <?php if(!empty($complaint->resolution_details)): ?>
+                    <div class="resolution-section">
+                        <div class="resolution-header">Resolution</div>
+                        <div class="resolution-date">Resolved on <?= $complaint->date_resolved ?></div>
+                        <div class="resolution-message"><?= $complaint->resolution_details ?></div>
+                    </div>
+                    <?php endif; ?>
+                </div>
+                <?php endforeach; ?>
+
+                <?php foreach($resolvedComplaints as $complaint): ?>
+                <div class="complaint-card">
+                    <div class="complaint-header">
+                        <span class="complaint-id">Complaint ID: <?= $complaint->complaint_id ?></span>
+                        <span
+                            class="status <?= $complaint->status=='Pending' ? 'status-pending':'status-resolved'?>"><?= $complaint->status ?></span>
+                    </div>
+                    <div class="complaint-date"><?= $complaint->date_submitted ?></div>
+                    <div class="complaint-subject"><?= $complaint->subject ?></div>
+                    <div class="complaint-message"><?= $complaint->message ?></div>
+
+                    <?php if(!empty($complaint->resolution_details)): ?>
+                    <div class="resolution-section">
+                        <div class="resolution-header">Resolution</div>
+                        <div class="resolution-date">Resolved on <?= $complaint->date_resolved ?></div>
+                        <div class="resolution-message"><?= $complaint->resolution_details ?></div>
+                    </div>
+                    <?php endif; ?>
+                </div>
+                <?php endforeach; ?>
+                <?php endif; ?>
+
+
             </div>
         </div>
     </div>
@@ -98,38 +100,21 @@
                 <button class="modal-close" onclick="closeModal('complaintModal')">&times;</button>
             </div>
             <div class="modal-body">
-                <form id="complaintForm">
+                <form id="complaintForm" method='post' action="<?= ROOT ?>/tourGuide/C_complaints/newComplaint">
                     <div class="form-group">
                         <label for="subject">Subject *</label>
-                        <input type="text" id="subject" placeholder="Brief description of your complaint" required>
+                        <input type="text" id="subject" name="subject" placeholder="Brief description of your complaint" required>
                     </div>
 
                     <div class="form-group">
                         <label for="booking-id">Related Booking ID (if applicable)</label>
-                        <input type="text" id="booking-id" placeholder="Enter booking reference">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="complaint-type">Complaint Type *</label>
-                        <select id="complaint-type" required>
-                            <option value="">Select complaint type</option>
-                            <option value="customer">Customer Issue</option>
-                            <option value="payment">Payment Dispute</option>
-                            <option value="service">Service Problem</option>
-                            <option value="platform">Platform Issue</option>
-                            <option value="other">Other</option>
-                        </select>
+                        <input type="text" id="booking-id" name="booking_id" placeholder="Enter booking reference">
                     </div>
 
                     <div class="form-group">
                         <label for="message">Detailed Description *</label>
-                        <textarea id="message" placeholder="Please describe your complaint in detail..."
+                        <textarea id="message" name="message" placeholder="Please describe your complaint in detail..."
                             required></textarea>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="attachments">Attachments (if any)</label>
-                        <input type="file" id="attachments" multiple>
                     </div>
                 </form>
             </div>
@@ -174,31 +159,17 @@
         // Get form values
         const subject = document.getElementById('subject').value;
         const bookingId = document.getElementById('booking-id').value;
-        const complaintType = document.getElementById('complaint-type').value;
         const message = document.getElementById('message').value;
 
         // Validate required fields
-        if (!subject || !complaintType || !message) {
+        if (!subject || !message) {
             alert('Please fill in all required fields');
             return;
         }
-
-        // In a real application, you would send this data to the server
-        console.log('Complaint submitted:', {
-            subject,
-            bookingId,
-            complaintType,
-            message
-        });
-
-        // Close complaint modal
-        closeModal('complaintModal');
-
-        // Show success modal
         document.getElementById('successModal').style.display = 'flex';
-
-        // Reset form
-        document.getElementById('complaintForm').reset();
+        // Submit the form
+        document.getElementById('complaintForm').submit();
+        
     }
 
     // Close modals when clicking outside
