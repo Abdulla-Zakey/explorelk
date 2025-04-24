@@ -54,7 +54,7 @@ body {
 }
 
 .linkHolder{
-    width: 85%;
+    width: 90%;
     height: 5%;
     margin-bottom: 8%;
     padding-top: 0.5rem;
@@ -62,16 +62,34 @@ body {
 }
 
 /*This style I added to display unread notifications, this will be implemented lately*/
-.linkHolder span{
-    margin-left: 0.25rem;
-    border-radius: 50%;
-    background-color: #E63946;
+
+.notificationCountIndicator{
     color: white;
-    font-weight: 400;
-    padding: 0.5rem 1rem;
-    box-sizing: border-box;
-    font-size: 1.5rem;
+    /* margin-left: 2.5rem; */
+    background-color: rgba(250, 85, 85, 0.9);
+    animation: pulse 2s infinite ease-in-out;
+    width: auto;
+    margin-left: 0.15rem;
+    padding: 0.25rem 1rem;
+    border-radius: 50%;
+    display: inline-block;
 }
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.1);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+
 
 .linkHolder:hover, #activeLink{
     background-color: #B3D9FF;

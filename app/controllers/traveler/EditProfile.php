@@ -4,10 +4,12 @@ class EditProfile extends Controller {
     public $errors = [];
     private $travelerModel;
     private $bankAccountModel;
+    private $notificationsModel;
 
     public function __construct() {
         $this->travelerModel = new Traveler();
         $this->bankAccountModel = new TravelerBankAccount();
+        $this->notificationsModel = new NotificationsModel();
     }
 
     public function index() {
@@ -21,7 +23,23 @@ class EditProfile extends Controller {
         // Fetch current user's profile data
         $userData = $this->getCurrentUserData();
         
-        $this->view('traveler/editProfile', $userData);
+        $data['traveler'] = $userData['traveler'];
+        $data['accountDetails'] = $userData['accountDetails'];
+
+        $notifications = $this->notificationsModel->getNotifications('traveler', $_SESSION['traveler_id']);
+        $unreadNotifications = 0;
+
+        foreach ($notifications as $notification) {
+            if($notification->is_read == 0){
+                $unreadNotifications++;
+            }  
+        }
+
+        $data['unreadNotifications'] = $unreadNotifications;
+        
+
+                
+        $this->view('traveler/editProfile', $data);
     }
 
     private function getCurrentUserData() {

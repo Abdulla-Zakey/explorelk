@@ -14,8 +14,18 @@
         body {
             background-color: #fff;
             overflow-x: hidden;
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Poppins';
         }
+
+        /* body {
+            width: 100%;
+            height: 100%;
+            --color: #E1E1E1;
+            background-color: #F3F3F3;
+            background-image: linear-gradient(0deg, transparent 24%, var(--color) 25%, var(--color) 26%, transparent 27%,transparent 74%, var(--color) 75%, var(--color) 76%, transparent 77%,transparent),
+                linear-gradient(90deg, transparent 24%, var(--color) 25%, var(--color) 26%, transparent 27%,transparent 74%, var(--color) 75%, var(--color) 76%, transparent 77%,transparent);
+            background-size: 55px 55px;
+        } */
 
         a{
             text-decoration: none;
@@ -24,7 +34,7 @@
         h1, ul {
             margin: 0;
             padding: 0;
-            font-family: Arial, sans-serif;
+            
             color: #042A3B;
         }
 
@@ -107,13 +117,13 @@
     
         <ul class="nav-menu">
             <li><a href = "<?= ROOT ?>/Eventorganizer/Eodashboard"><i class="fas fa-home"></i> Dashboard</a></li>
-            <li><a href = "<?= ROOT ?>/Eventorganizer/Eoevents"><i class="fas fa-hourglass-half"></i> Pending Events</a></li>
-            <li><a href = "<?= ROOT ?>/Eventorganizer/Eomyevents"><i class="fas fa-check-circle"></i>Approved Events</a></li>
-
+            <li><a href = "<?= ROOT ?>/Eventorganizer/ViewPendingEvents"><i class="fas fa-hourglass-half"></i> Pending Events</a></li>
+            <li><a href = "<?= ROOT ?>/Eventorganizer/ViewApprovedEvents"><i class="fas fa-check-circle"></i>Approved Events</a></li>
+            <li><a href = "<?= ROOT ?>/Eventorganizer/ViewCancelledEvents"><i class="fas fa-ban"></i>Cancelled Events</a></li>
             <!--Here we have to display the events with the status of completed in the database, Also we have to have link to view the earnings of the event-->
-            <li><a href = "<?= ROOT ?>/Eventorganizer/Eomyevents"><i class="fas fa-flag-checkered"></i>Completed Events</a></li>    
+            <li><a href = "<?= ROOT ?>/Eventorganizer/ViewCompletedEvents"><i class="fas fa-flag-checkered"></i>Completed Events</a></li>    
             
-            <li><a href = "<?= ROOT ?>/Eventorganizer/Eopayments"><i class="fa-solid fa-money-check-dollar"></i> Payments</a></li>  
+            <li><a href = "<?= ROOT ?>/Eventorganizer/Eopayments"><i class="fa-solid fa-money-check-dollar"></i> MyEarning</a></li>  
             <li><a href = "<?= ROOT ?>/Eventorganizer/Eosettings"><i class="fas fa-cog"></i> Settings</a></li>
             <li><a href = "<?= ROOT ?>/traveler/Login/logout"><i class="fas fa-sign-out-alt"></i> Logout</a></li>"
         </ul>

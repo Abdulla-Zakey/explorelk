@@ -7,7 +7,9 @@ class Hmyrooms extends Controller {
     private $hotelRoomTypeAmenitiesModel;
     private $roomsModel;
     private $data;
-    
+    private $hotelModel;
+
+       
 
     public function __construct(){
         $this->hotelRoomTypesModel = new HotelRoomTypesModel();
@@ -15,6 +17,7 @@ class Hmyrooms extends Controller {
         $this->commonRoomAmenitiesModel = new commonRoomAmenitiesModel();
         $this->hotelRoomTypeAmenitiesModel = new HotelRoomTypeAmenitiesModel();
         $this->roomsModel = new RoomsModel();
+        $this->hotelModel = new Hotel();
     }
 
     public function index(){
@@ -25,6 +28,8 @@ class Hmyrooms extends Controller {
             exit;
         }
     
+        $data['hotelBasic'] = $this->hotelModel->first(['hotel_Id' => $_SESSION['hotel_id']]);
+
         $data['hotelRoomTypes'] = $this->hotelRoomTypesModel->getHotelRoomTypesByHotelId($_SESSION['hotel_id']);
 
         $data['commonlyAvailableRoomTypesForAllHotels'] = $this->commonRoomTypesModel->getAllRoomTypes();
@@ -36,6 +41,7 @@ class Hmyrooms extends Controller {
             $data['hotelRoomTypesNames'][$i] = $this->commonRoomTypesModel->getGenericRoomTypeDetailsByTypeId($hotelRoomType->roomType_Id);
             $i++;
         }
+
 
         $this->view('hotel/myrooms', $data);
     }

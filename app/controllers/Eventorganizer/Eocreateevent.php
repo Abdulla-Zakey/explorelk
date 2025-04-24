@@ -9,6 +9,17 @@ class Eocreateevent extends Controller{
 
 
         public function index($a = '', $b = '', $c = ''){
+            // Start session if not already started
+            if (session_status() === PHP_SESSION_NONE) {
+                session_start();
+            }   
+            
+            if (!isset($_SESSION['organizer_id'])) {
+                error_log("Session Error: organizer_id not set in session. Redirecting to login.");
+                header("Location: " . ROOT . "/traveler/Login");
+                exit();
+            }
+
 
             $this->view('eventorganizer/eocreateevent');
         }
@@ -21,7 +32,7 @@ class Eocreateevent extends Controller{
         private function handleEventBannerUpload() {
             if (isset($_FILES['eventWebBanner']) && $_FILES['eventWebBanner']['error'] === UPLOAD_ERR_OK) {
                 // Use absolute server path instead of ROOT constant
-                $uploadDir = $_SERVER['DOCUMENT_ROOT'] . '/gitexplorelk/explorelk/public/assets/images/events/';
+                $uploadDir = $_SERVER['DOCUMENT_ROOT'] . '/gitexplorelk/explorelk/public/assets/images/events/eventWebBannerPics/';
                 
                 // Generate a unique filename
                 $fileName = uniqid() . '_' . basename($_FILES['eventWebBanner']['name']);
@@ -55,7 +66,9 @@ class Eocreateevent extends Controller{
                 $organizer_Id = $_SESSION['organizer_id'];
                 $eventWebBannerPath = $this->handleEventBannerUpload();
                 $eventName = $_POST['eventName'];
+                $eventType = $_POST['eventType'];
                 $aboutEvent = $_POST['aboutEvent'];
+                $eventType = $_POST['eventType'];
                 $eventDate = $_POST['eventDate'];
                 $eventStartTime = $_POST['eventStartTime'];
                 $eventEndTime = $_POST['eventEndTime'];
@@ -68,7 +81,9 @@ class Eocreateevent extends Controller{
                     $organizer_Id,
                     $eventWebBannerPath,
                     $eventName,
+                    $eventType,
                     $aboutEvent,
+                    $eventType,
                     $eventDate,
                     $eventStartTime,
                     $eventEndTime,
@@ -97,7 +112,7 @@ class Eocreateevent extends Controller{
                     ]);
                 }
             
-                redirect("eventorganizer/Eoevents");
+                redirect("eventorganizer/PendingEvents");
         
             }
         }

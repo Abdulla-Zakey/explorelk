@@ -33,26 +33,24 @@
 
     <header>
         <nav class="navbar">
-
             <div class="backToHome">
-                <a href="<?= ROOT ?>/traveler/ViewAllEvents">
+                <a href="javascript:void(0);" onclick="window.history.back();">
                     <i class="fa-solid fa-arrow-left"></i>
                     <span>Back</span>
                 </a>
             </div>
-
         </nav>
     </header>
 
     <div class="event-banner">
 
-        <img src = "<?= IMAGES ?>/events/eventWebBannerPics/<?php echo htmlspecialchars($data['eventDetails'][0]->eventWebBannerPath); ?>" alt="Whimsical Wonderfest Banner" class="banner-image">
+        <img src = "<?= IMAGES ?>/events/eventWebBannerPics/<?php echo htmlspecialchars($data['eventDetails']->eventWebBannerPath); ?>" alt="Whimsical Wonderfest Banner" class="banner-image">
 
         <div class="event-info">
 
             <div class="event-details">
 
-                <h1><?php echo htmlspecialchars($data['eventDetails'][0]->eventName); ?></h1>
+                <h1><?php echo htmlspecialchars($data['eventDetails']->eventName); ?></h1>
 
                 <button id="bookNowButton" class="book-now-button">Book Now</button>
 
@@ -62,13 +60,13 @@
 
             <div class="event-details">
                 <div class="icon">
-                    &#x1F4CD;</span><?php echo htmlspecialchars($data['eventDetails'][0]->eventLocation); ?></span>
+                    &#x1F4CD;</span><?php echo htmlspecialchars($data['eventDetails']->eventLocation); ?></span>
                 </div>
 
                 <!--To convert 24 hour time into 12 hour format-->
                 <?php
-                    $startTime24 = htmlspecialchars($data['eventDetails'][0]->eventStartTime); 
-                    $endTime24 = htmlspecialchars($data['eventDetails'][0]->eventEndTime);
+                    $startTime24 = htmlspecialchars($data['eventDetails']->eventStartTime); 
+                    $endTime24 = htmlspecialchars($data['eventDetails']->eventEndTime);
 
                     // Convert to 12-hour format with AM/PM
                     $startTime12 = date("h:i A", strtotime($startTime24));
@@ -77,7 +75,7 @@
                 ?>
 
                 <div class="icon">
-                    &#x1F4C5;</span> <?php echo htmlspecialchars($data['eventDetails'][0]->eventDate); ?> </span>
+                    &#x1F4C5;</span> <?php echo htmlspecialchars($data['eventDetails']->eventDate); ?> </span>
                 </div>
 
                 <div class="icon">
@@ -94,11 +92,11 @@
 
         <div class="about-event">
             <h1 style="text-align: left;">
-                What is <?php echo htmlspecialchars($data['eventDetails'][0]->eventName); ?> ?
+                What is <?php echo htmlspecialchars($data['eventDetails']->eventName); ?> ?
             </h1>
 
             <span>
-                <?php echo htmlspecialchars($data['eventDetails'][0]->aboutEvent); ?>
+                <?php echo htmlspecialchars($data['eventDetails']->aboutEvent); ?>
             </span>
 
         </div>
@@ -291,7 +289,7 @@
 
         navigator.geolocation.getCurrentPosition(
             (position) => {
-                const eventLocation = "<?php echo urlencode($data['eventDetails'][0]->eventLocation); ?>";
+                const eventLocation = "<?php echo urlencode($data['eventDetails']->eventLocation); ?>";
                 const latitude = position.coords.latitude;
                 console.log(latitude);
                 const longitude = position.coords.longitude;

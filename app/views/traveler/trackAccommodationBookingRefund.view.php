@@ -456,9 +456,9 @@
                                 </h2>
 
                                 <div class="info-group">
-                                    <div class="info-label">Account Number (Hidden)</div>
+                                    <div class="info-label">Account Number</div>
                                     <div class="info-value" id="accountNumber">
-                                        <?= isset($data['refundBankAccountDetails']->account_number) ? htmlspecialchars($data['refundBankAccountDetails']->account_number) : 'N/A' ?>
+                                        <?= isset($data['refundBankAccountDetails']->traveler_accountNum) ? htmlspecialchars($data['refundBankAccountDetails']->traveler_accountNum) : 'N/A' ?>
                                     </div>
                                 </div>
 
@@ -472,14 +472,14 @@
                                 <div class="info-group">
                                     <div class="info-label">Bank Name</div>
                                     <div class="info-value" id="bankName">
-                                        <?= isset($data['refundBankAccountDetails']->bank_name) ? htmlspecialchars($data['refundBankAccountDetails']->bank_name) : 'N/A' ?>
+                                        <?= isset($data['refundBankAccountDetails']->traveler_bankName) ? htmlspecialchars($data['refundBankAccountDetails']->traveler_bankName) : 'N/A' ?>
                                     </div>
                                 </div>
 
                                 <div class="info-group">
                                     <div class="info-label">Branch</div>
                                     <div class="info-value" id="bankBranch">
-                                        <?= isset($data['refundBankAccountDetails']->bank_branch) ? htmlspecialchars($data['refundBankAccountDetails']->bank_branch) : 'N/A' ?>
+                                        <?= isset($data['refundBankAccountDetails']->traveler_bankBranch) ? htmlspecialchars($data['refundBankAccountDetails']->traveler_bankBranch) : 'N/A' ?>
                                     </div>
                                 </div>
                             </div>

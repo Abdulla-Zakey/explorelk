@@ -7,11 +7,12 @@ class CancelAccommodationBooking extends Controller
     private $hotelRoomTypesModel;
     private $commonRoomTypesModel;
     private $hotelGuestModel;
-
     private $roomBookingRefundBankDetailsModel;
     private $travelerBankAccountModel;
-
     private $roomBookingCancellationModel;
+    private $hotelCommissionsModel;
+    private $notificationsModel;
+    private $accommodationBookingNotificationsModel;
 
     public function __construct()
     {
@@ -23,6 +24,9 @@ class CancelAccommodationBooking extends Controller
         $this->travelerBankAccountModel = new TravelerBankAccount();
         $this->roomBookingRefundBankDetailsModel = new RoomBookingRefundBankDetails();
         $this->roomBookingCancellationModel = new RoomBookingCancellationsModel();
+        $this->hotelCommissionsModel = new HotelCommissionsModel();
+        $this->notificationsModel = new NotificationsModel();
+        $this->accommodationBookingNotificationsModel = new AccommodationBookingNotifications();
     }
 
     public function index($roomBookingId)
@@ -56,23 +60,23 @@ class CancelAccommodationBooking extends Controller
 
                 $refundBankData = [
                     'traveler_Id' => $_SESSION['traveler_id'],
-                    'account_number' => $_POST['bankAccountNumber'],
+                    'traveler_accountNum' => $_POST['bankAccountNumber'],
                     'account_holder_name' => $_POST['bankAccountHolderName'],
-                    'bank_name' => $_POST['bankName'],
-                    'bank_branch' => $_POST['bankBranch']
+                    'traveler_bankName' => $_POST['bankName'],
+                    'traveler_bankBranch' => $_POST['bankBranch']
                 ];
 
-                $existingBankAccountData = $this->roomBookingRefundBankDetailsModel->first([
+                $existingRefundBankAccountData = $this->roomBookingRefundBankDetailsModel->first([
                     'traveler_Id' => $_SESSION['traveler_id'], 
-                    'account_number' => $_POST['bankAccountNumber']
+                    'traveler_accountNum' => $_POST['bankAccountNumber']
                 ]);
 
-                if(!$existingBankAccountData){
+                if(!$existingRefundBankAccountData){
                 
                     $bankDetailsId = $this->roomBookingRefundBankDetailsModel->insert($refundBankData);
                 
-                    if(!$bankDetailsId){
-                        header("Location: " . ROOT . "/traveler/CancelAccommodationBooking/" . $roomBookingId . "?error=failed_to_save_bank_details");
+                    if(!$existingRefundBankAccountData && !$bankDetailsId){
+                        header("Location: " . ROOT . "/traveler/CancelAccommodationBooking/index/" . $roomBookingId . "?error=failed_to_save_bank_details");
                         exit();
                     }
                 }
@@ -100,8 +104,52 @@ class CancelAccommodationBooking extends Controller
                 $result = $this->roomBookingFinalModel->update($roomBookingId, ['booking_status' => 'Cancelled'], 'room_booking_Id');
                 
                 if($result){
-                    header("Location: " . ROOT . "/traveler/MyBookings?success=booking_cancelled_successfully&refund_status=" . urlencode($refundStatus));
-                    exit();
+                    $result  = $this->hotelCommissionsModel->update(
+                                                                    $roomBookingId, 
+                                                                    ['is_applicable_for_commission' => 0, 'if_not_applicable_reason' => 'Cancelled by traveler'], 
+                                                                    'room_booking_Id'
+                                                                );
+                    if($result){
+
+                        $hotelData = $this->hotelModel->first(['hotel_Id' => $booking->hotel_Id]);
+                        
+                        $notificationData = [
+                            'recipient_type' => 'traveler',
+                            'recipient_Id' => $_SESSION['traveler_id'],
+                            'notification_type' => 'accommodation_related',
+                            'notification_title' => 'Booking Canceled for ' . $hotelData->hotelName,
+                            'notification_text' => 'Your booking at ' . $hotelData->hotelName . ' has been successfully canceled. If eligible, you can track your refund status in the "My Bookings" section.'
+                        ];
+
+                        $notificationId = $this->notificationsModel->insert($notificationData);
+
+                        if($notificationId){
+                            $accommodationBookingNotificationData = [
+                                'notification_Id' => $notificationId,
+                                'room_booking_Id' => $roomBookingId
+                            ];
+
+                            $result = $this->accommodationBookingNotificationsModel->insert($accommodationBookingNotificationData);
+
+                            if($result){
+                                header("Location: " . ROOT . "/traveler/MyBookings?success=booking_cancelled_successfully&refund_status=" . urlencode($refundStatus));
+                                exit();
+                            }
+                            else{
+                                header("Location: " . ROOT . "/traveler/MyBookings?error=booking_cancelled_successfully_but_failed_to_generate_accommodation_notification&refund_status=" . urlencode($refundStatus));
+                                exit();
+                            }
+                        }
+                        else{
+                            header("Location: " . ROOT . "/traveler/MyBookings?error=booking_cancelled_successfully_but_failed_to_generate_notification&refund_status=" . urlencode($refundStatus));
+                            exit();
+                        }
+                        
+                    }
+                    else{
+                        header("Location: " . ROOT . "/traveler/MyBookings?error=booking_cancelled_successfully_failed_to_update_commission_status&refund_status=" . urlencode($refundStatus));
+                        exit();
+                    }
                 }
                 else{
                     header("Location: " . ROOT . "/traveler/CancelAccommodationBooking/index/" . $roomBookingId . "?error=failed_to_update_booking_status");

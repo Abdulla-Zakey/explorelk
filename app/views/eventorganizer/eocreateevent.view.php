@@ -93,7 +93,17 @@
                 
                 <h1>Event title</h1>
                 <p>Name of the event, which should be clear and descriptive.</p>
-                <input type="text" name="eventName" class="event-title" placeholder="Enter event title" style = "width: 95%; margin-bottom: 1rem;" >
+                <div style="display: flex; gap: 1rem; width: 95%; margin-bottom: 1rem;">
+                    <input type="text" name="eventName" class="event-title" placeholder="Enter event title" style="flex: 2;">
+                    <select name="eventType" class="event-title" style="flex: 1;">
+                        <option value="">Select Event Type</option>
+                        <option value="carnivals">Carnivals</option>
+                        <option value="music">Music Concerts</option>
+                        <option value="sports">Sports</option>
+                        <option value="educational">Educational</option>
+                        <option value="others">Others</option>
+                    </select>
+                </div>
                 
             </div>
 
@@ -361,6 +371,7 @@
     
             // Get all required fields
             const eventTitle = document.querySelector('.event-title').value.trim();
+            const eventType = document.querySelector('[name="eventType"]').value;
             const aboutEvent = document.querySelector('[name="aboutEvent"]').value.trim();
             const eventDate = document.querySelector('#event-date').value;
             const startTime = document.querySelector('#start-time').value;
@@ -510,3 +521,4 @@
     </script>
 
 </html>
+
