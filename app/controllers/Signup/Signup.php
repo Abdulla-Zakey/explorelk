@@ -178,11 +178,29 @@ class Signup extends Controller {
                 break;
 
             case 'dining':
-                $user = new Restaurant(); // Create this model
+                $user = new Restaurant();
+                $insertData = [
+                    'restaurantName' => $data['company_name'],
+                    'ownerName' => $data['name'],
+                    'restaurantEmail' => $data['email'],
+                    'restaurantPassword' => $data['password'],
+                    'restaurantMobileNum' => $data['mobileNum'],
+                    'restaurantAddress' => $data['address'],
+                    'district' => $data['district'],
+                    'province' => $data['province'],
+                    'BRNum' => $data['BRNum'],
+                    'yearStarted' => $data['yearStarted']
+                ];
 
-                $isInserted = $user->insert($data);
+                $isInserted = $user->insert($insertData);
                 if ($isInserted) {
-                    // Add session and redirect logic
+                    $newUser = $user->first(['restaurantEmail' => $data['email']]);
+                    if (!empty($newUser)) {
+                        redirect('traveler/Login');
+                        exit();
+                    } else {
+                        throw new Exception('Could not retrieve inserted user');
+                    }
                 } else {
                     throw new Exception('Failed to insert dining provider');
                 }

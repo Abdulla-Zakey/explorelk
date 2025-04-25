@@ -5,6 +5,7 @@ class Traveler
     use Model;
 
     protected $table = 'traveler';
+    public $errors;
 
     protected $allowedColumns = [
         'fName',
@@ -15,9 +16,12 @@ class Traveler
         'username',
         'profilePicture',
         'bio',
+        'emailVerified',
+        'verificationToken',
+        'tokenExpiry',
+        'status',
         'created_at',
         'updated_at',
-        'status'
     ];
 
     public function validate($data)

@@ -25,11 +25,21 @@
                     }
                 }
             }
+
+            // Get purchaser details from URL parameters
+            $purchaserDetails = [
+                'fullName' => isset($_GET['name']) ? htmlspecialchars($_GET['name']) : '',
+                'nic' => isset($_GET['nic']) ? htmlspecialchars($_GET['nic']) : '',
+                'email' => isset($_GET['email']) ? htmlspecialchars($_GET['email']) : '',
+                'mobileNum' => isset($_GET['mobile']) ? htmlspecialchars($_GET['mobile']) : ''
+               
+            ];
     
             // Store details in session for QR generation
             $_SESSION['event_details'] = $_SESSION['current_event'];
             $_SESSION['ticket_details'] = $ticketDetails;
             $_SESSION['total_amount'] = $totalAmount;
+            $_SESSION['purchaser_details'] = $purchaserDetails; // Store purchaser details in session
     
             // Create data array for view
             $data = [

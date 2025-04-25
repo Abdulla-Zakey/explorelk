@@ -4,15 +4,15 @@ class RestaurantStatus {
 
     protected $table = "restaurant_status";
 
-    public function getStatus() {
-        $query = "SELECT id, status, open_time, close_time, updated_at 
+    public function getStatus($restaurant_id) {
+        $query = "SELECT id, restaurant_id, status, open_time, close_time, updated_at 
                   FROM {$this->table} 
-                  WHERE id = 1 
+                  WHERE restaurant_id = :restaurant_id 
                   LIMIT 1";
-        $result = $this->query($query);
+        $result = $this->query($query, ['restaurant_id' => $restaurant_id]);
 
         if ($result === false) {
-            error_log("Database query failed for restaurant status");
+            error_log("Database query failed for restaurant status, restaurant_id: $restaurant_id");
             return null;
         }
 
@@ -20,32 +20,34 @@ class RestaurantStatus {
             $result = $result[0];
         }
 
-        error_log("Debug - Model: Status fetched: " . json_encode($result));
+        error_log("Debug - Model: Status fetched for restaurant_id $restaurant_id: " . json_encode($result));
         return $result;
     }
 
-    public function updateStatus($status, $open_time, $close_time) {
-        $existingStatus = $this->getStatus();
+    public function updateStatus($restaurant_id, $status, $open_time, $close_time) {
+        $existingStatus = $this->getStatus($restaurant_id);
 
         $data = [
+            'restaurant_id' => $restaurant_id,
             'status' => $status,
             'open_time' => $open_time,
             'close_time' => $close_time
         ];
 
         if ($existingStatus) {
-            $result = $this->update(1, $data, 'id');
+            // Update existing status
+            $result = $this->update($existingStatus->id, $data, 'id');
         } else {
-            $data['id'] = 1;
+            // Insert new status
             $result = $this->insert($data);
         }
 
         if ($result === false) {
-            error_log("Failed to update/insert restaurant status: " . json_encode($data));
+            error_log("Failed to update/insert restaurant status for restaurant_id $restaurant_id: " . json_encode($data));
             return false;
         }
 
-        error_log("Debug - Model: Status updated/inserted: " . json_encode($data));
+        error_log("Debug - Model: Status updated/inserted for restaurant_id $restaurant_id: " . json_encode($data));
         return true;
     }
 }

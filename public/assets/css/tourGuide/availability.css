@@ -1,0 +1,357 @@
+/* tourGuide.css */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins';
+}
+
+body {
+    overflow-x: hidden;
+    margin: 0;
+    background-color: #f8f9fa;
+    font-family: 'Poppins', sans-serif;
+    font-size: 16px; /* Base font size for rem calculations */
+}
+
+.flexContainer {
+    display: flex;
+    width: 100%;
+}
+
+.body-container {
+    margin: 2% 2% 2% 7.5%;
+    margin-left: 22%;
+    width: 76%;
+}
+
+/* Page header styling */
+.page-header {
+    margin-bottom: 2%;
+    display: block;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.page-header h1 {
+    font-size: 2.25rem;
+    color: #333;
+}
+
+.subtitle {
+    color: #666;
+    font-size: 1rem;
+}
+
+/* Main content layout */
+.content-wrapper {
+    display: flex;
+    gap: 1.5625rem;
+    margin-bottom: 1.875rem;
+}
+
+/* Card styling for form and calendar */
+.form-card, .calendar-card {
+    background-color: #fff;
+    border-radius: 0.625rem;
+    box-shadow: 0 0.125rem 0.625rem rgba(0,0,0,0.08);
+    padding: 1.25rem;
+    flex: 1;
+    min-width: 18.75rem;
+}
+
+.card-title {
+    color: #002D40;
+    font-size: 1.125rem;
+    margin-bottom: 1.25rem;
+    padding-bottom: 0.625rem;
+    border-bottom: 0.0625rem solid #eee;
+}
+
+/* Form styling */
+.form-fields {
+    display: flex;
+    flex-direction: column;
+    gap: 0.9375rem;
+}
+
+.form-group {
+    margin-bottom: 0.3125rem;
+}
+
+label {
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    display: block;
+    color: #444;
+    font-size: 0.875rem;
+}
+
+.input-with-icon {
+    position: relative;
+}
+
+.input-with-icon i {
+    position: absolute;
+    left: 0.625rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #aaa;
+}
+
+input[type="date"], input[type="text"] {
+    width: 100%;
+    padding: 0.625rem 0.625rem 0.625rem 2.1875rem;
+    border: 0.0625rem solid #ddd;
+    border-radius: 0.375rem;
+    font-size: 0.875rem;
+    transition: border 0.3s ease;
+}
+
+input[type="date"]:focus, input[type="text"]:focus {
+    border-color: #002D40;
+    outline: none;
+    box-shadow: 0 0 0 0.125rem rgba(0,45,64,0.1);
+}
+
+.add-period-btn {
+    background-color: #002D40;
+    color: #fff;
+    padding: 0.75rem;
+    border: none;
+    border-radius: 0.375rem;
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 0.875rem;
+    transition: background-color 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 0.625rem;
+}
+
+.add-period-btn:hover {
+    background-color: #014966;
+}
+
+/* Calendar styling */
+.calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.9375rem;
+}
+
+.calendar-nav-btn {
+    background: none;
+    border: 0.0625rem solid #ddd;
+    border-radius: 50%;
+    width: 1.875rem;
+    height: 1.875rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: #555;
+    transition: all 0.2s ease;
+}
+
+.calendar-nav-btn:hover {
+    background-color: #f0f0f0;
+    color: #002D40;
+}
+
+.calendar-header h3 {
+    font-size: 1rem;
+    font-weight: 500;
+    color: #333;
+}
+
+.calendar-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0.1875rem;
+}
+
+.calendar-table th {
+    padding: 0.625rem 0;
+    text-align: center;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #666;
+}
+
+.calendar-table td {
+    padding: 0.625rem 0;
+    text-align: center;
+    font-size: 0.875rem;
+    border-radius: 0.375rem;
+    transition: background-color 0.2s ease;
+    cursor: pointer;
+}
+
+.calendar-table td:not(.empty-day):hover {
+    background-color: #e6f2ff;
+}
+
+.calendar-table td.empty-day {
+    background-color: transparent;
+    cursor: default;
+}
+
+.calendar-table td.highlight {
+    background-color: #002D40;
+    color: white;
+    font-weight: 500;
+}
+
+.calendar-table td.booked {
+    background-color: #ffc107;
+    color: #333;
+    font-weight: 500;
+}
+
+.calendar-legend {
+    display: flex;
+    justify-content: center;
+    gap: 1.25rem;
+    margin-top: 0.9375rem;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.3125rem;
+    font-size: 0.75rem;
+    color: #666;
+}
+
+.legend-color {
+    display: inline-block;
+    width: 0.75rem;
+    height: 0.75rem;
+    border-radius: 0.1875rem;
+}
+
+.legend-color.highlight {
+    background-color: #002D40;
+}
+
+.legend-color.booked {
+    background-color: #ffc107;
+}
+
+/* Unavailability section styling */
+.unavailability-section {
+    background-color: #fff;
+    border-radius: 0.625rem;
+    box-shadow: 0 0.125rem 0.625rem rgba(0,0,0,0.08);
+    padding: 1.25rem;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.9375rem;
+    flex-wrap: wrap;
+    gap: 0.9375rem;
+}
+
+.sub-heading {
+    color: #002D40;
+    font-size: 1.125rem;
+    font-weight: 600;
+    margin: 0;
+}
+
+.table-container {
+    overflow-x: auto;
+}
+
+.unavailability-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin-top: 0.625rem;
+}
+
+.unavailability-table th, .unavailability-table td {
+    padding: 0.75rem 0.9375rem;
+    text-align: left;
+    border-bottom: 0.0625rem solid #eee;
+}
+
+.unavailability-table th {
+    background-color: #f9f9f9;
+    font-weight: 500;
+    color: #555;
+    font-size: 0.875rem;
+}
+
+.unavailability-table tr:hover td {
+    background-color: #f9f9f9;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 0.625rem;
+}
+
+.edit-btn, .delete-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #666;
+    transition: color 0.2s ease;
+    padding: 0.3125rem;
+}
+
+.edit-btn:hover {
+    color: #002D40;
+}
+
+.delete-btn:hover {
+    color: #ff6b6b;
+}
+
+/* Responsive adjustments */
+@media (max-width: 62rem) { /* ~992px */
+    .content-wrapper {
+        flex-direction: column;
+    }
+    
+    .body-container {
+        width: 90%;
+        margin-left: 10%;
+    }
+}
+
+@media (max-width: 48rem) { /* ~768px */
+    .section-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .leftPanel {
+        width: 25%;
+    }
+    
+    .body-container {
+        width: 70%;
+        margin-left: 27%;
+    }
+}
+
+@media (max-width: 36rem) { /* ~576px */
+    .leftPanel {
+        width: 30%;
+    }
+    
+    .body-container {
+        width: 65%;
+        margin-left: 32%;
+        padding: 0.625rem;
+    }
+}

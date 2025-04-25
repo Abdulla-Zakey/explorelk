@@ -11,6 +11,7 @@ class Event {
       'eventThumnailPic',
       'eventName',
       'aboutEvent',
+      'eventType',
       'eventDate',
       'eventStartTime',
       'eventEndTime',
@@ -18,13 +19,14 @@ class Event {
       'eventStatus'
   ];
 
-  public function insert_event($organizer_Id, $eventWebBannerPath, $eventName, $aboutEvent, $eventDate, $eventStartTime, $eventEndTime, $eventLocation, $eventStatus = "pending"){
+  public function insert_event($organizer_Id, $eventWebBannerPath, $eventName, $aboutEvent, $eventType, $eventDate, $eventStartTime, $eventEndTime, $eventLocation, $eventStatus = "pending"){
     
     return $this->insert([
       'organizer_Id' => $organizer_Id,
       'eventWebBannerPath' => $eventWebBannerPath,
       'eventName' => $eventName,
       'aboutEvent' => $aboutEvent,
+      'eventType' => $eventType,
       'eventDate' => $eventDate,
       'eventStartTime' => $eventStartTime,
       'eventEndTime' => $eventEndTime,

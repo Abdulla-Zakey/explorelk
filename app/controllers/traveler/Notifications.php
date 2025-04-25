@@ -94,11 +94,12 @@ class Notifications extends Controller
                     if ($eventOrganizer) {
                         $notification->profilePic = $eventOrganizer->company_logo;
                     }
-                }
 
-                $notification->buttonIconClass = 'fa-solid fa-eye';
-                $notification->buttonAction = 'View Booking';
-                $notification->buttonHyperLink = ROOT . '/traveler/ViewEventBooking/index/' . $eventNotification->booking_Id;
+                    $notification->buttonIconClass = 'fa-solid fa-eye';
+                    $notification->buttonAction = 'View Booking';
+                    $notification->buttonHyperLink = ROOT . '/traveler/ViewEventBooking/index/' . $eventNotification->booking_Id;
+
+                }
 
             }
 

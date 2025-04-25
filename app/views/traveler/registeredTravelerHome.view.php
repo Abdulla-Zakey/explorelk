@@ -73,6 +73,10 @@
             </div>
 
             <div class="linkHolder">
+                <a href="<?= ROOT ?>/traveler/Restaurant" class="linkItem"><i class="fa-solid fa-bell"></i>Rest</a>
+            </div>
+
+            <div class="linkHolder">
                 <a href="<?= ROOT ?>/traveler/ViewProfile" class="linkItem"><i class="fa-solid fa-user"></i>View Profile</a>
             </div>
 
@@ -89,7 +93,7 @@
 
         <div class="rightContainer">
             <h1>
-                <?php echo "Welcome back, " . htmlspecialchars($data['userData']->username) . "! Ready for your next adventure?";?>
+                <?php echo "Welcome " . htmlspecialchars($data['userData']->username) . "! ready for your next adventure?";?>
             </h1>
             <div class="contentContainer">
                 <h2>

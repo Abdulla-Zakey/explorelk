@@ -3,20 +3,26 @@ include '../app/views/traveler/vendor_qr/endroid/qr-code/TicketQRGenerator.php';
 // QRGenerator Controller
 class QRGenerator extends Controller {
 
+    private $eventModel;
     private $eventBookingModel;
     private $SoldEventTicketsModel;
     private $EventTicketTypeModel;
     private $notificationsModel;
     private $eventBookingNotificationsModel;
+    private $eventTicketPurchasersModel;
+    private $eventBookingCommissionModel;
 
 
     public function __construct() {
         // Initialize the model in the constructor
+        $this->eventModel = new Event();
         $this->eventBookingModel = new EventBookingModel();
         $this->SoldEventTicketsModel = new SoldEventTicketsModel();
         $this->EventTicketTypeModel = new EventTicketType();
         $this->notificationsModel = new NotificationsModel();
         $this->eventBookingNotificationsModel = new EventBookingNotificationModel();
+        $this->eventTicketPurchasersModel = new EventTicketPurchasersModel();
+        $this->eventBookingCommissionModel = new EventBookingCommissionModel;
     }
 
     public function index() {
@@ -58,6 +64,7 @@ class QRGenerator extends Controller {
             // Generate QR code
             $qrImage = $qrGenerator->generateTicketQR($ticketData, $filename);
             
+            //This is to insert an event booking instance to the event_booking table
             $booking_Id = $this->eventBookingModel->insert_eventBooking( 
                 $_SESSION['current_event']['eventId'], 
                 $_SESSION['traveler_id'], 
@@ -69,6 +76,54 @@ class QRGenerator extends Controller {
             );
 
             if($booking_Id){
+
+                $ticketPurchaserData = $_SESSION['purchaser_details'];
+                $ticketPurchaserData['booking_Id'] = $booking_Id;
+
+                //This will insert the ticket purchaser details to event_ticket_purchaser table
+                $result = $this->eventTicketPurchasersModel->insert($ticketPurchaserData);
+                if (!$result) {
+                    throw new Exception('Payment received, but failed to store ticket purchaser details');
+                }
+
+                //This is to check are there any commission record created for the event.
+                $existingCommissionRecord = $this->eventBookingCommissionModel->first(['event_Id' => $_SESSION['current_event']['eventId']]);
+                $event = $this->eventModel->first(['event_Id' => $_SESSION['current_event']['eventId']]);
+
+                //if not, it means this is the first booking for the event. So we will insert a new record
+                if(!$existingCommissionRecord){
+
+                    $eventCommissionData = [
+                        'event_Id' => $event->event_Id,
+                        'organizer_Id' => $event->organizer_Id,
+                        'totalSalesAmount' => $_SESSION['total_amount'],
+                        'commissionPercentage' => 8,
+                        'commissionAmount' => $_SESSION['total_amount'] * 0.08,
+                        'payableAmount' => $_SESSION['total_amount'] * 0.92,
+    
+                    ];
+
+                    $result = $this->eventBookingCommissionModel->insert($eventCommissionData);
+                }
+
+                //If exixsts it means this is not the first booking for the event.
+                //Therefor simply we update the total amount, commision amount and payable amount, which will ease the automated commission calculation process admins
+                else {
+                    $existingCommissionRecord->commissionAmount += $_SESSION['total_amount'] * 0.08;
+                    $existingCommissionRecord->totalSalesAmount += $_SESSION['total_amount'];
+                    $existingCommissionRecord->payableAmount = $existingCommissionRecord->totalSalesAmount -  $existingCommissionRecord->commissionAmount;
+
+                    $result = $this->eventBookingCommissionModel->update(
+                        $event->event_Id, 
+                        [
+                            'totalSalesAmount' => $existingCommissionRecord->totalSalesAmount, 
+                            'commissionAmount' => $existingCommissionRecord->commissionAmount, 
+                            'payableAmount' =>$existingCommissionRecord->payableAmount
+                        ],
+                        'event_Id'
+                    );
+                }
+
                 $notificationData = [
                     'recipient_type' => 'traveler',
                     'recipient_Id' => $_SESSION['traveler_id'],

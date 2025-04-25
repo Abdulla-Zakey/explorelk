@@ -6,7 +6,7 @@
 
 class TicketQRGenerator {
     private $errorCorrectionLevel = 'H'; // Higher error correction for better reliability
-    private $size = 5; // Larger size for more data
+    private $size = 4; // Larger size for more data
     private $margin = 2;
     private $storageBasePath = 'assets/images/Travelers/generatedEventTickets';
     

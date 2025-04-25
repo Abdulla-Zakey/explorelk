@@ -1,7 +1,3 @@
-<?php
-// var_dump($data);
-?>
-
 <!DOCTYPE html>
 <html>
 
@@ -113,10 +109,6 @@
 </head>
 
 <body>
-    <?php
-        // show($data);
-        // exit();
-    ?>
 
     <header>
         <nav class="navbar">

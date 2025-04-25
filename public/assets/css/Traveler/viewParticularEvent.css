@@ -365,6 +365,7 @@ button:hover {
 }
 
 .popup-content {
+    min-width: 600px;
     background: white;
     padding: 2rem;
     border-radius: 1rem;
