@@ -22,7 +22,8 @@
     <script src="https://kit.fontawesome.com/f35c1c7a11.js" crossorigin="anonymous"></script>
     <style>
     /* Add this to your CSS file or in the head section */
-    .delete-package-btn , .edit-package-btn {
+    .delete-package-btn,
+    .edit-package-btn {
         display: inline-flex;
         align-items: center;
         justify-content: center;
@@ -40,7 +41,24 @@
     }
 
     .delete-package-btn {
-        background-color:rgb(212, 6, 6);
+        background-color: rgb(212, 6, 6);
+    }
+
+    .delete-package-btn {
+        background-color: #e74c3c;
+        color: white;
+        border: none;
+        padding: 8px 12px;
+        border-radius: 4px;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 14px;
+    }
+
+    .delete-package-btn:hover {
+        background-color: #c0392b;
     }
 
     .edit-package-btn:hover {
@@ -98,11 +116,11 @@
                 <?php endif; ?>
             </div>
             <div class="action-buttons">
-                <a href="<?= ROOT ?>/tourGuide/C_tourPackageDetails/deletePackage/<?= $tourPackage['0']->package_id ?>"
-                    class="delete-package-btn">
-                    <i class="fas fa-edit"></i> Delete Package
+                <!-- Replace your existing delete button with this -->
+                <a href="#" class="delete-package-btn" data-package-id="<?= $tourPackage['0']->package_id ?>" onclick="deletePackage(<?= $tourPackage['0']->package_id ?>)">
+                    <i class="fas fa-trash"></i> Delete Package
                 </a>
-                <a href="<?= ROOT ?>/tourGuide/C_editTourPackage/<?= $tourPackage['0']->package_id ?>"
+                <a href="<?= ROOT ?>/tourGuide/C_editTour?package_id=<?= $tourPackage['0']->package_id ?>"
                     class="edit-package-btn">
                     <i class="fas fa-edit"></i> Edit Package
                 </a>
@@ -178,7 +196,7 @@
                 <div class="day-container">
                     <div class="day-header">
                         <h3>Day <?= $tourPackageItinerary->day_number ?></h3>
-                        <span class="day-tag">Full Day</span>
+                        <!-- <span class="day-tag">Full Day</span> -->
                     </div>
                     <div class="day-content">
                         <?php foreach($currentDayActivities as $activity): ?>
@@ -253,6 +271,17 @@
             });
         });
     });
+
+
+
+    function deletePackage(id) {
+        if (confirm(
+                'Are you sure you want to delete this tour package? This action cannot be undone.'
+            )) {
+            window.location.href =
+                "<?= ROOT ?>/tourGuide/C_tourPackageDetails/deleteTourPackage?package_id=" + id;
+        }
+    }
     </script>
 </body>
 
