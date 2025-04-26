@@ -42,13 +42,13 @@ include_once APPROOT . '/views/hotel/hotelhead.php';
                                 <div class="review-header">
                                     <span class="reviewer"><?= htmlspecialchars($review->username ?: ($review->fname . ' ' . $review->lname)) ?></span>
                                     <span class="rating"><?= str_repeat('★', $review->rating) . str_repeat('☆', 5 - $review->rating) ?></span>
-                                    <div class="more-options">
+                                    <!-- <div class="more-options">
                                         <i class="fas fa-ellipsis-v"></i>
                                         <div class="options-popup">
                                             <div>Edit</div>
                                             <div>Delete</div>
                                         </div>
-                                    </div>
+                                    </div> -->
                                 </div>
                                 <p class="review-text"><?= htmlspecialchars($review->review_text) ?></p>
                                 <small class="review-date"><?= date('F j, Y', strtotime($review->created_at)) ?></small>

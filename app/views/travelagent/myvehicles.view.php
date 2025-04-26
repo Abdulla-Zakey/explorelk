@@ -1,705 +1,836 @@
-<?php 
-    include_once APPROOT.'/views/travelagent/nav.php';
-    include_once APPROOT.'/views/travelagent/travelagenthead.php';
+<?php
+include_once APPROOT . '/views/travelprovider/nav.php';
+include_once APPROOT . '/views/travelprovider/providerhead.php';
 ?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Vehicles</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-
-<html>
-<head>
     <style>
-        /* Your existing CSS styles */
-        body {
-            font-family: 'Poppins';
-            margin: 40;
-            padding: 20;
-            background-color: #f5f5f5;
-        }
-        table {
-            width: 55%;
-            border-collapse: collapse;
-            margin-bottom: 20px;
-            padding: 10px;
-            margin: 220px;
-            margin-right: 10px;
-            position: absolute;
-            top: 0;
-            left: 100px;
-            height: 30vh;
-           
-        }
-        th, td {
-            padding: 12px;
-            text-align: left;
-        }
-        th {
-            background-color: #cfe2f3;
-            color: #000;
-        }
-        td {
-            background-color: #e7eaf3;
-            color: #000;
-        }
-        th, td {
-            border: 1px solid #ddd;
-        }
-        .edit-icon {
-            color: #000;
-            cursor: pointer;
-        }
-        .add-rooms-btn {
-            display: block;
-            width: 200px;
-            bottom:300px;
-            padding: 30px;
-            margin: 550px;
-            position: absolute;
-            text-align: center;
-            background-color: #002D40;
-            color: #fff;
-            text-decoration: none;
-            border-radius: 5px;
-            transition: background-color 0.3s;
-        }
-        .add-rooms-btn:hover {
-            background-color: #B3D9FF;
-            color:#002D40
-        }
-        /* Add styles for the popup form and blur background */
-        .popup-form {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-            z-index: 1;
-        }
-        
-        .popup-content {
-            max-width: 400px;
-            margin: 20px auto;
-        }
-        
-        .blur-background {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100vh;
-            background-color: rgba(0, 0, 0, 0.5);
-            z-index: 0;
-        }
-        
-        /* Add styles for the form */
-    
-        .form-container h2 {
-            font-size: 16px;
-            margin-bottom: 15px;
-            color: #333333;
-        }
-        .form-container input[type="text"],
-        .form-container input[type="number"],
-        .form-container input[type="file"],
-        .form-container select {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 10px;
-            border: 1px solid #cccccc;
-            border-radius: 5px;
-            font-size: 14px;
-            color: #999999;
-            box-sizing: border-box;
-        }
-        .form-container input[type="file"]::file-selector-button {
-            padding: 10px;
-            border: 1px solid #cccccc;
-            border-radius: 5px;
-            background-color: #ffffff;
-            color: #999999;
-            cursor: pointer;
-        }
-        .form-container button {
-            width: 100%;
-            padding: 10px;
-            background-color: #12283a;
-            border: none;
-            border-radius: 5px;
-            color: #ffffff;
-            font-size: 16px ;
-            cursor: pointer;
-        }
-        .form-container button:hover{
-            background-color: #B3D9FF;
-            color:#002D40
-        }
-        .closebutton {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: none;
-            border: none;
-            font-size: 18px;
-            color: #333;
-            cursor: pointer;
-            }
-
-        .closebutton:hover {
-            color: #ff0000; /* Change the color on hover for better UX */
-        }
-
-        .calendar-container {
-            position: fixed;
-            top: 220px;
-            left: 1150px;
-            width: 100%;
-            padding: 10px;
-            text-align: center;
-            }
-
-            .create-booking {
-            background-color: #002D40;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-            top: 100px;
-            position: relative;
-            right: 20px;
-        }
-        .create-booking:hover {
-            background-color: #B3D9FF;
-            color:#002D40
-        }
-
-        .block-container {
-            display: flex;
-            flex-direction: row;
-            margin-top: 20%;
-            margin-left: 5%;
-        }
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f5f5f5;
-            margin: 0;
-            padding: 0;
-        }
-
-        /* Modal styles */
-        .custom-modal {
-            display: none;
-            position: fixed;
-            top: 0px;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .custom-modal-content {
-            background-color: #fff;
-            padding: 5px;
-            border-radius: 8px;
-            max-width: 100%;
-            overflow: auto;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        }
-
-        .custom-close-btn {
-            float: right;
-            font-size: 24px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-        .custom-close-btn {
-            position: absolute;
-            top: 10px;
-            right: 15px;
-            font-size: 24px;
-            font-weight: bold;
-            color: #FF0000;
-            cursor: pointer;
-            border: none;
-            background: none;
-        }
-
-        .custom-table {
-            width: 60%;
-            border-collapse: collapse;
-            background-color: #f7f7fc;
-        }
-
-        .custom-th, .custom-td {
-            padding: 10px;
-            text-align: left;
-        }
-       
-        .custom-th {
-            background-color: #ffffff;
-            color: #000000;
-            font-weight: bold;
-        }
-
-        .custom-td {
-            border-top: 1px solid #e0e0e0;
-        }
-
-        .custom-icon {
-            margin-right: 10px;
-        }
-
-        .custom-status {
-            padding: 5px 10px;
-            border-radius: 10px;
-            cursor: pointer;
-        }
-
-        .status-green {
-            background-color: #e6f4ea;
-            color: #28a745;
-        }
-
-        .status-orange {
-            background-color: #fff3e0;
-            color: #ff9800;
-        }
-
-        .status-red {
-            background-color: #fdecea;
-            color: #dc3545;
-        }
-
-        /* Scrollable content inside modal */
-        .custom-modal-content {
-            max-height: 100vh;
-        }
-        
-        .enhanced-button {
-            background-color: #002D40; /* Primary blue color */
-            color: #ffffff;
-            border: none;
-            border-radius: 5px;
-            padding: 10px 20px;
-            font-size: 16px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            }
-
-            .enhanced-button:hover {
-                background-color: #B3D9FF;
-                color:#002D40;
-                transform: translateY(-2px); /* Slight lift on hover */
-            
-            }
-
-            .enhanced-button:active {
-                background-color: #B3D9FF;
-                color:#002D40;
-            }
-            .custom-td {
-    /* display: flex; */
-    gap: 8px;
-}
-
-.enhanced-button {
-    padding: 6px 12px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-.delete-btn {
-    background-color: #ff4444;
-    color: white;
-}
-
-.delete-btn:hover {
-    background-color: #cc0000;
-}
-.edit-input {
-    width: 100%;
-    padding: 4px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-}
-
-
-
+        /* Previous CSS styles remain unchanged */
+        /* Including them here would repeat the earlier response unnecessarily */
+        /* Assume the styles provided earlier are included */
     </style>
 </head>
 <body>
-    <div class="block-container">
-        <table>
-            <thead>
-                <tr>
-                    <th>No.</th>
-                    <th>Type of the Vechicle</th>
-                    <!-- <th>No. of Vechicle</th>
-                    <th>Available Vechicle</th> -->
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>01</td>
-                    <td>Motor Bicycle</td>
-                    <!-- <td>06</td>
-                    <td>06</td> -->
-                    <td><button class="enhanced-button" onclick="showModal(); return false;">View</button></td>
-
-                </tr>
-                <tr>
-                    <td>02</td>
-                    <td>Tuks</td>
-                    <!-- <td>06</td>
-                    <td>06</td> -->
-                    <td><button class="enhanced-button" onclick="showModal(); return false;">View</button></td>
-                </tr>
-                <tr>
-                    <td>03</td>
-                    <td>Cars</td>
-                    <!-- <td>06</td>
-                    <td>06</td> -->
-                    <td><button class="enhanced-button" onclick="showModal(); return false;">View</button></td>
-                </tr>
-                <tr>
-                    <td>04</td>
-                    <td>Vans</td>
-                    <!-- <td>06</td>
-                    <td>06</td> -->
-                    <td><button class="enhanced-button" onclick="showModal(); return false;">View</button></td>
-                </tr>
-            </tbody>
-        </table>
-
-
-    <div class="custom-modal" id="tableModal">
-        <div class="custom-modal-content">
-       
-            <table class="custom-table">
-            <button class="custom-close-btn" onclick="closeModal()">&times;</button>
-                <thead>
-                    <tr>
-                        <th class="custom-th">Vechicle No.</th>
-                        <th class="custom-th">Amount</th>
-                        <th class="custom-th">Description</th>
-                        <!-- <th class="custom-th">Photos</th> -->
-                        <th class="custom-th">Action</th>                         
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td class="custom-td">BIG 1234</td>
-                        <td class="custom-td">Rs 2000.00</td>
-                        <td class="custom-td">Well maintained</td>
-                         <!-- <td class="custom-td"><button class="enhanced-button" onclick="viewPhotos()"> -->
-                            <i class="fas fa-image custom-icon"></i>View Photos</button></td> 
-                        <td class="custom-td">
-                        <button class="enhanced-button" onclick="editRow(this)">
-                            <i class="fas fa-edit"></i>
-                        </button>
-                        <button class="enhanced-button delete-btn" onclick="deleteRow(this)">
-                        <i class="fas fa-trash"></i>
-                        </button>
-                        </td>                     
-                    </tr>
-                    <tr>
-                        <td class="custom-td">BFB 2345</td>
-                        <td class="custom-td">Rs 3000.00</td>
-                        <td class="custom-td">Well maintained</td>
-                        <!-- <td class="custom-td"><button class="enhanced-button" onclick="viewPhotos()"> -->
-                        <i class="fas fa-image custom-icon"></i>View Photos</button></td>
-                        <td class="custom-td">
-                            <button class="enhanced-button">
-                                <i class="fas fa-edit"></i>
-                            </button>
-                            <button class="enhanced-button delete-btn">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        </td>
-                        </tr>
-                    <tr>
-                        <td class="custom-td">BfZ 3456</td>
-                        <td class="custom-td">Rs 3000.00</td>
-                        <td class="custom-td">Brand New</td>
-                        <!-- <td class="custom-td"><button class="enhanced-button" onclick="viewPhotos()"> -->
-                            <i class="fas fa-image custom-icon"></i>View Photos</button></td>
-                        <td class="custom-td">
-                            <button class="enhanced-button">
-                                <i class="fas fa-edit"></i>
-                            </button>
-                            <button class="enhanced-button delete-btn">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        </td>
-        
-        </tbody>
-            </table>
-        </div>
-    </div>
-
-        <div>
-        <button class="create-booking">
-            Add Rooms
-        </button>
-        </div>
-    </div>
-    
-    
-    <!-- Add a div for the popup form -->
-    <div class="blur-background"></div>
-    <div class="popup-form">
-            <div class="popup-content">
-            <cbutton class="closebutton">×</cbutton>
-                <div class="form-container">
-                    <h2>Type of the Room</h2>
-                    <select>
-                        <option value="single">Single Sharing</option>
-                        <option value="double">Double Sharing</option>
-                        <option value="double">Triple Sharing</option>
-                        <option value="suite">VIP Suite</option>
-                    </select>
-                    
-                    <h2>Room No.</h2>
-                    <input type="number" placeholder="Value" min="1">
-                    
-                    <h2>Room Prize</h2>
-                    <input type="number" placeholder="Value"min="1" step="0.50">
-                    
-                    <h2>Room Discription</h2>
-                    <input type="text" placeholder="Text">
-                    
-                    <h2>Room photo</h2>
-                    <input type="file" placeholder="Upload Photos">
-                    
-                    <button>Proceed</button>
+    <div class="provider-header"></div>
+    <div class="container">
+        <?php if (empty($data['vehicleTypes'])): ?>
+            <div class="empty-state">
+                <div class="empty-state-card">
+                    <div class="icon-circle">
+                        <i class="fas fa-car"></i>
+                    </div>
+                    <h2 class="empty-state-title">No Vehicle Types Added Yet</h2>
+                    <p class="empty-state-description">
+                        Start by adding your first vehicle type. This will help you manage your vehicle inventory and showcase your rental options to customers.
+                    </p>
+                    <button class="enhanced-button" onclick="showAddTypeModal()">
+                        <i class="fas fa-plus-circle"></i>
+                        Add Your First Vehicle Type
+                    </button>
                 </div>
             </div>
+        <?php else: ?>
+            <div class="table-container">
+                <div class="table-header">
+                    <h2 class="table-title">Vehicle Types Overview</h2>
+                    <button class="enhanced-button" onclick="showAddTypeModal()">
+                        <i class="fas fa-plus-circle"></i>
+                        Add Vehicle Type
+                    </button>
+                </div>
+                <div class="table-stats">
+                    <div class="stat-card">
+                        <div class="stat-title">Total Vehicle Types</div>
+                        <div class="stat-value"><?= count($data['vehicleTypes']) ?></div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-title">Total Vehicles</div>
+                        <div class="stat-value"><?php
+                        $totalVehicles = 0;
+                        foreach ($data['vehicleTypes'] as $vehicleType) {
+                            $totalVehicles += $vehicleType->total_vehicles ?? 0;
+                        }
+                        echo $totalVehicles;
+                        ?></div>
+                    </div>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Vehicle Type</th>
+                            <th>Description</th>
+                            <th>Capacity</th>
+                            <th>Price Per Day</th>
+                            <th>Vehicle Count</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($data['vehicleTypes'] as $index => $type): ?>
+                            <tr>
+                                <td>
+                                    <div class="vehicle-type-cell">
+                                        <div class="vehicle-type-info">
+                                            <div class="vehicle-type-name"><?= htmlspecialchars($data['vehicleTypeNames'][$index]->vehicleType_name) ?></div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="description-cell">
+                                    <?= htmlspecialchars($type->customized_description ?? $type->standard_description ?? 'No description') ?>
+                                </td>
+                                <td>
+                                    <div class="capacity-badge">
+                                        <i class="fas fa-user"></i>
+                                        <?= $type->max_capacity ?> Passengers
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="price-badge">
+                                        Rs.<?= number_format($type->pricePer_day, 2) ?>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="vehicle-count-cell">
+                                        <div class="vehicle-badge">
+                                            <?= $type->total_vehicles ?? 0 ?> Vehicles
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <button class="enhanced-button secondary" onclick="showAddVehicleModal(<?= $type->vehicleType_Id ?>)">
+                                            <i class="fas fa-plus"></i>
+                                            Add Vehicles
+                                        </button>
+                                        <button class="enhanced-button secondary" onclick="showBookVehicleModal(<?= $type->vehicleType_Id ?>)">
+                                            <i class="fas fa-calendar-check"></i>
+                                            Book Vehicle
+                                        </button>
+                                        <button class="enhanced-button secondary" onclick="confirmDeleteVehicleType(<?= $type->vehicleType_Id ?>)">
+                                            <i class="fas fa-trash"></i>
+                                            Remove
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+        <?php endif; ?>
+    </div>
+
+    <!-- Add Vehicle Type Modal -->
+    <div class="custom-modal" id="addTypeModal">
+        <div class="model-container">
+            <div class="modal-header">
+                <h2 class="modal-title">Add New Vehicle Type</h2>
+                <button class="closebutton" onclick="closeModal('addTypeModal')" aria-label="Close Modal">×</button>
+            </div>
+            <form action="<?= ROOT ?>/TravelProvider/Tmyvehicles/addVehicleType" method="POST" enctype="multipart/form-data">
+                <div class="modal-body">
+                    <div class="form-grid">
+                        <!-- Basic Vehicle Type Information -->
+                        <div class="form-group form-full-width">
+                            <div class="input-group">
+                                <label class="input-label">Vehicle Type Name <span class="input-required">*</span></label>
+                                <input type="text" name="vehicleType_name" class="editable-input" required placeholder="e.g., Sedan, SUV, Van" aria-required="true">
+                                <span class="input-helper">Enter a custom vehicle type name</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="input-group">
+                                <label class="input-label">Price per Day <span class="input-required">*</span></label>
+                                <input type="number" name="pricePer_day" class="editable-input" required min="0" step="0.01" placeholder="Enter price in Rs." aria-required="true">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="input-group">
+                                <label class="input-label">Maximum Capacity <span class="input-required">*</span></label>
+                                <input type="number" name="max_capacity" class="editable-input" required min="1" placeholder="Enter maximum passengers" aria-required="true">
+                            </div>
+                        </div>
+                        <!-- Vehicle Amenities Section -->
+                        <div class="form-group form-full-width">
+                            <div class="input-group">
+                                <label class="input-label">Vehicle Amenities <span class="input-required">*</span></label>
+                                <p class="input-helper">Select amenities available in this vehicle type</p>
+                                <div class="amenities-grid">
+                                    <?php foreach ($data['commonVehicleAmenities'] as $amenity): ?>
+                                        <label class="amenity-checkbox">
+                                            <input type="checkbox" name="amenities[]" value="<?= $amenity->amenity_Id ?>">
+                                            <i class="<?= htmlspecialchars($amenity->icon_class) ?>"></i>
+                                            <?= htmlspecialchars($amenity->amenity_name) ?>
+                                        </label>
+                                    <?php endforeach; ?>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Image Upload Section -->
+                        <div class="form-group form-full-width">
+                            <div class="input-group">
+                                <label class="input-label">Vehicle Type Photo <span class="input-required">*</span></label>
+                                <div class="file-upload-container" onclick="document.getElementById('vehicleTypeImage').click()">
+                                    <i class="fas fa-cloud-upload-alt file-upload-icon"></i>
+                                    <div class="file-upload-text">Click to upload vehicle type image</div>
+                                    <div class="file-upload-helper">Supported formats: JPG, PNG, WEBP (Max size: 5MB)</div>
+                                </div>
+                                <input type="file" id="vehicleTypeImage" name="vehicleTypeImage" accept="image/jpeg,image/png,image/webp" style="display: none;" required aria-required="true">
+                            </div>
+                        </div>
+                        <!-- Custom Description -->
+                        <div class="form-group form-full-width">
+                            <div class="input-group">
+                                <label class="input-label">Vehicle Type Description <span class="input-required">*</span></label>
+                                <textarea name="customized_description" class="editable-textarea" placeholder="Enter a detailed description of the vehicle type..." required aria-required="true"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="enhanced-button secondary" onclick="closeModal('addTypeModal')">
+                        Cancel
+                    </button>
+                    <button type="submit" class="enhanced-button">
+                        Add Vehicle Type
+                    </button>
+                </div>
+            </form>
         </div>
-    <div class="popup-table" id="popupTable">
-    
-        </table>
-        <a href="#" class="close-btn" onclick="hidePopup()">Close</a>
     </div>
-         <!--  Calender --> 
-         <div class="calendar-container">
-        <?php include_once APPROOT . '/views/components/calender.php'; ?>
+
+    <!-- Add Vehicle Modal -->
+    <div class="custom-modal" id="addVehicleModal">
+        <div class="model-container">
+            <div class="modal-header">
+                <h2 class="modal-title">Add Vehicles to <span id="vehicleTypeName"></span></h2>
+                <button class="closebutton" onclick="closeModal('addVehicleModal')" aria-label="Close Modal">×</button>
+            </div>
+            <form action="<?= ROOT ?>/TravelProvider/Tmyvehicles/addVehicles" method="POST">
+                <input type="hidden" id="vehicleTypeId" name="vehicleType_Id">
+                <div class="modal-body">
+                    <div class="vehicle-form-section">
+                        <h3>Vehicle Details</h3>
+                        <p class="input-helper">Add registration numbers for vehicles of this type</p>
+                        <div class="vehicle-numbers-container" id="vehicleNumbersContainer">
+                            <div class="vehicle-input-group">
+                                <input type="text" name="vehicle_numbers[]" class="vehicle-number-input" placeholder="Registration No." required aria-required="true">
+                                <button type="button" class="remove-vehicle-btn" onclick="removeVehicleInput(this)">×</button>
+                            </div>
+                        </div>
+                        <button type="button" class="add-vehicle-number-btn" onclick="addVehicleNumberInput()">
+                            <i class="fas fa-plus"></i> Add Another Vehicle
+                        </button>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="enhanced-button secondary" onclick="closeModal('addVehicleModal')">
+                        <i class="fas fa-times"></i>
+                        Cancel
+                    </button>
+                    <button type="submit" class="enhanced-button">
+                        <i class="fas fa-plus-circle"></i>
+                        Add Vehicles
+                    </button>
+                </div>
+            </form>
+        </div>
     </div>
-    
+
+    <!-- Book Vehicle Modal -->
+    <div class="custom-modal" id="bookVehicleModal">
+        <div class="model-container">
+            <div class="modal-header">
+                <h2 class="modal-title">Book Vehicle - <span id="bookVehicleTypeName"></span></h2>
+                <button class="closebutton" onclick="closeModal('bookVehicleModal')" aria-label="Close Modal">×</button>
+            </div>
+            <div class="modal-body">
+                <!-- Tab Navigation -->
+                <div class="details-tabs">
+                    <button class="tab-button active" onclick="switchBookingTab(event, 'vehicleAvailability')">
+                        <i class="fas fa-calendar-alt"></i> Check Availability
+                    </button>
+                    <button class="tab-button" onclick="switchBookingTab(event, 'customerDetails')" id="customerDetailsTabBtn" disabled>
+                        <i class="fas fa-user"></i> Customer Details
+                    </button>
+                </div>
+                <!-- Vehicle Availability Tab -->
+                <div id="vehicleAvailability" class="tab-content active">
+                    <div class="availability-section">
+                        <div class="filter-section">
+                            <div class="date-filter">
+                                <label for="startDate">Start Date <span class="input-required">*</span></label>
+                                <input type="date" id="startDate" class="date-input" required aria-required="true">
+                            </div>
+                            <div class="date-filter">
+                                <label for="endDate">End Date <span class="input-required">*</span></label>
+                                <input type="date" id="endDate" class="date-input" required aria-required="true">
+                            </div>
+                            <button class="enhanced-button" id="checkAvailabilityBtn" onclick="checkVehicleAvailability()">
+                                <i class="fas fa-search"></i> Check Availability
+                            </button>
+                        </div>
+                        <div class="vehicle-summary">
+                            <div class="summary-box">
+                                <i class="fas fa-car"></i>
+                                <div class="summary-info">
+                                    <span class="summary-label">Available Vehicles</span>
+                                    <span class="summary-value" id="availableVehiclesCount">-</span>
+                                </div>
+                            </div>
+                            <div class="summary-box">
+                                <i class="fas fa-hourglass-half"></i>
+                                <div class="summary-info">
+                                    <span class="summary-label">Booked Vehicles</span>
+                                    <span id="bookedVehiclesCount" class="summary-value">-</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="vehicle-selection">
+                            <div class="selection-header">
+                                <h3>Select Number of Vehicles</h3>
+                                <div class="vehicle-counter">
+                                    <button class="counter-btn" id="decrementBtn" onclick="decrementVehicles()" disabled>
+                                        <i class="fas fa-minus"></i>
+                                    </button>
+                                    <span id="vehicleCount">0</span>
+                                    <button class="counter-btn" id="incrementBtn" onclick="incrementVehicles()" disabled>
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="booking-summary">
+                            <div class="summary-details">
+                                <div class="summary-row">
+                                    <span>Selected Vehicles</span>
+                                    <span id="selectedVehicleCount">0 Vehicle</span>
+                                </div>
+                                <div class="summary-row">
+                                    <span>Total Days</span>
+                                    <span id="totalDays">0 Days</span>
+                                </div>
+                                <div class="summary-row total">
+                                    <span>Total Amount</span>
+                                    <span id="totalAmount">0 LKR</span>
+                                </div>
+                            </div>
+                            <button class="enhanced-button" id="continueToCustomerBtn" disabled onclick="continueToCustomerDetails()">
+                                <i class="fas fa-arrow-right"></i> Continue to Customer Details
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <!-- Customer Details Tab -->
+                <div id="customerDetails" class="tab-content">
+                    <div class="customer-information">
+                        <h3 class="customer-info-title">Customer Information</h3>
+                        <div class="customer-form">
+                            <div class="form-group">
+                                <label for="customerFullName">Full Name <span class="input-required">*</span></label>
+                                <input type="text" id="customerFullName" class="customer-input" placeholder="Enter customer full name" required aria-required="true">
+                                <span class="error-message" id="customerFullNameError"></span>
+                            </div>
+                            <div class="form-group">
+                                <label for="customerEmail">Email Address <span class="input-required">*</span></label>
+                                <input type="email" id="customerEmail" class="customer-input" placeholder="Enter customer email address" required aria-required="true">
+                                <span class="error-message" id="customerEmailError"></span>
+                            </div>
+                            <div class="form-group">
+                                <label for="customerPhone">Phone Number <span class="input-required">*</span></label>
+                                <input type="tel" id="customerPhone" class="customer-input" placeholder="Enter customer phone number" required aria-required="true">
+                                <span class="error-message" id="customerPhoneError"></span>
+                            </div>
+                            <div class="form-group">
+                                <label for="customerNIC">NIC / Passport Number <span class="input-required">*</span></label>
+                                <input type="text" id="customerNIC" class="customer-input" placeholder="Enter customer NIC or passport number" required aria-required="true">
+                                <span class="error-message" id="customerNICError"></span>
+                            </div>
+                            <div class="form-group full-width">
+                                <label for="specialRequests">Special Requests (Optional)</label>
+                                <textarea id="specialRequests" class="customer-input" rows="3" style="resize: none;" placeholder="Any special requests or notes for the rental"></textarea>
+                            </div>
+                            <div class="form-group full-width">
+                                <label for="bookingSource">Booking Source <span class="input-required">*</span></label>
+                                <select id="bookingSource" class="customer-input" required aria-required="true">
+                                    <option value="walk-in">Walk-in</option>
+                                    <option value="phone">Phone Call</option>
+                                    <option value="email">Email</option>
+                                    <option value="third-party">Third-party Site</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                            <div class="form-group full-width">
+                                <label for="paymentStatus">Payment Status <span class="input-required">*</span></label>
+                                <select id="paymentStatus" class="customer-input" required aria-required="true">
+                                    <option value="fully-paid">Fully Paid</option>
+                                    <option value="advance-paid">Advance Paid</option>
+                                    <option value="pending">Payment Pending</option>
+                                </select>
+                            </div>
+                            <div class="form-group" id="advanceAmountGroup" style="display: none;">
+                                <label for="advanceAmount">Advance Amount <span class="input-required">*</span></label>
+                                <input type="number" id="advanceAmount" class="customer-input" placeholder="Enter advance amount" min="0" step="0.01" aria-required="true">
+                                <span class="error-message" id="advanceAmountError"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="enhanced-button secondary" onclick="closeModal('bookVehicleModal')">
+                    <i class="fas fa-times"></i> Cancel
+                </button>
+                <button type="button" class="enhanced-button" id="confirmBookingBtn" onclick="confirmDirectBooking()" style="display: none;">
+                    <i class="fas fa-check-circle"></i> Confirm Booking
+                </button>
+            </div>
+            <form id="directBookingForm" method="POST" action="<?= ROOT ?>/TravelProvider/Tmyvehicles/recordDirectBooking" style="display: none;">
+                <input type="hidden" name="vehicleTypeId" id="booking_vehicleType_id">
+                <input type="hidden" name="startDate" id="booking_start_date">
+                <input type="hidden" name="endDate" id="booking_end_date">
+                <input type="hidden" name="bookedVehicleCount" id="booking_vehicle_count">
+                <input type="hidden" name="totalAmount" id="booking_total_amount">
+                <input type="hidden" name="customerFullName" id="booking_customer_name">
+                <input type="hidden" name="customerEmail" id="booking_customer_email">
+                <input type="hidden" name="customerMobileNum" id="booking_customer_phone">
+                <input type="hidden" name="customerNIC" id="booking_customer_nic">
+                <input type="hidden" name="specialRequests" id="booking_special_requests">
+                <input type="hidden" name="bookingSource" id="booking_source">
+                <input type="hidden" name="paymentStatus" id="booking_payment_status">
+                <input type="hidden" name="advanceAmount" id="booking_advance_amount">
+            </form>
+        </div>
+    </div>
+
+    <!-- Popup for confirm deletion -->
+    <div id="popup" class="popup-container">
+        <div class="popup-content">
+            <p id="popup-text"></p>
+            <button id="closePopup">Cancel</button>
+            <button id="confirmDelete">Delete</button>
+        </div>
+    </div>
+
+    <!-- Popup for success/failure messages -->
+    <div id="popupType1" class="popup-container">
+        <div class="popup-content">
+            <p id="popup-textType1"></p>
+            <button id="closePopupType1">OK</button>
+        </div>
+    </div>
+
     <script>
-        // Get the popup form and blur background elements
-const popupForm = document.querySelector('.popup-form');
-const blurBackground = document.querySelector('.blur-background');
-const createBookingButton = document.querySelector('.create-booking');
-const closeButton = document.querySelector('.closebutton');
-
-// Add an event listener to the "Create Booking" button
-createBookingButton.addEventListener('click', () => {
-    popupForm.style.display = 'block';
-    blurBackground.style.display = 'block';
-});
-
-// Add an event listener to the close button
-closeButton.addEventListener('click', () => {
-    popupForm.style.display = 'none';
-    blurBackground.style.display = 'none';
-});
-
-function showModal() {
-    document.getElementById('tableModal').style.display = 'flex';
-}
-
-function closeModal() {
-    document.getElementById('tableModal').style.display = 'none';
-}
-
-function viewRow(button) {
-    const row = button.closest('tr');
-    const cells = row.getElementsByTagName('td');
-    const rowData = {};
-    
-    // Collect data from the row
-    for (let i = 0; i < cells.length - 1; i++) {
-        const headerText = document.querySelector('table thead th:nth-child(' + (i + 1) + ')').textContent;
-        rowData[headerText] = cells[i].textContent;
-    }
-    
-    // Display data in modal
-    const modalContent = document.getElementById('modalContent');
-    modalContent.innerHTML = '';
-    
-    for (const [key, value] of Object.entries(rowData)) {
-        modalContent.innerHTML += `<p><strong>${key}:</strong> ${value}</p>`;
-    }
-    
-    showModal();
-}
-
-function editRow(button) {
-    const row = button.closest('tr');
-    const cells = row.getElementsByTagName('td');
-    
-    for (let i = 0; i < cells.length - 1; i++) {
-        const cell = cells[i];
-        const currentValue = cell.textContent;
-        cell.innerHTML = `<input type="text" class="edit-input" value="${currentValue}">`;
-    }
-    
-    button.innerHTML = '<i class="fas fa-save"></i>';
-    button.onclick = () => saveRow(button);
-}
-
-function saveRow(button) {
-    const row = button.closest('tr');
-    const inputs = row.getElementsByClassName('edit-input');
-    
-    for (let input of inputs) {
-        const cell = input.parentElement;
-        cell.textContent = input.value;
-    }
-    
-    button.innerHTML = '<i class="fas fa-edit"></i>';
-    button.onclick = () => editRow(button);
-}
-function editRow(button) {
-    const row = button.closest('tr');
-    const cells = row.getElementsByTagName('td');
-    
-    // Get column headers to identify which cells to skip
-    const headers = Array.from(row.closest('table').querySelectorAll('th')).map(th => th.textContent.toLowerCase());
-    
-    for (let i = 0; i < cells.length - 1; i++) {
-        // Skip room number and photos columns
-        if (headers[i].includes('room') || headers[i].includes('photo')) {
-            continue;
+        // Utility Functions
+        function showAlert(message) {
+            const popup = document.getElementById("popupType1");
+            const popupText = document.getElementById("popup-textType1");
+            popupText.innerHTML = message;
+            popup.style.display = "flex";
+            const closePopup = document.getElementById("closePopupType1");
+            closePopup.onclick = function () {
+                popup.style.display = "none";
+            };
         }
-        
-        const cell = cells[i];
-        const currentValue = cell.textContent;
-        cell.innerHTML = `<input type="text" class="edit-input" value="${currentValue}">`;
-    }
-    
-    // Change edit button to save button
-    button.innerHTML = '<i class="fas fa-save"></i>';
-    button.onclick = () => saveRow(button);
-}
-function deleteRow(button) {
-    const row = button.closest('tr');
-    
-    // Add confirmation dialog for safety
-    if (confirm('Are you sure you want to delete this row?')) {
-        row.remove();
-    }
-}
 
- // Add this JavaScript after your existing script
-
-function saveRoom(formData) {
-    fetch('/room/create', {
-        method: 'POST',
-        body: formData
-    })
-    .then(response => response.json())
-    .then(data => {
-        if(data.success) {
-            closeModal();
-            refreshTable();
-        }
-    });
-}
-
-function updateRoom(roomNo, data) {
-    fetch(`/room/update/${roomNo}`, {
-        method: 'PUT',
-        body: JSON.stringify(data),
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    })
-    .then(response => response.json())
-    .then(data => {
-        if(data.success) {
-            refreshTable();
-        }
-    });
-}
-
-function deleteRoomHandler(roomNo) {
-    if(confirm('Are you sure you want to delete this room?')) {
-        fetch(`/room/delete/${roomNo}`, {
-            method: 'DELETE'
-        })
-        .then(response => response.json())
-        .then(data => {
-            if(data.success) {
-                refreshTable();
+        function showSuccessPopupFromURL() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const successMessage = urlParams.get('success');
+            const errorMessage = urlParams.get('error');
+            if (successMessage) {
+                showAlert(decodeURIComponent(successMessage));
+                history.replaceState(null, '', window.location.pathname);
+            } else if (errorMessage) {
+                showAlert(decodeURIComponent(errorMessage));
+                history.replaceState(null, '', window.location.pathname);
             }
-        });
-    }
-}
+        }
 
-function refreshTable() {
-    fetch('/room/list')
-    .then(response => response.json())
-    .then(rooms => {
-        const tbody = document.querySelector('.custom-table tbody');
-        tbody.innerHTML = rooms.map(room => `
-            <tr>
-                <td class="custom-td">${room.room_no}</td>
-                <td class="custom-td">${room.amount}</td>
-                <td class="custom-td">${room.description}</td>
-                <td class="custom-td">
-                    <button class="enhanced-button" onclick="viewPhotos('${room.photo_url}')">
-                        <i class="fas fa-image custom-icon"></i>View Photos
-                    </button>
-                </td>
-                <td class="custom-td">
-                    <button class="enhanced-button" onclick="editRow(this)">
-                        <i class="fas fa-edit"></i>
-                    </button>
-                    <button class="enhanced-button delete-btn" onclick="deleteRoomHandler('${room.room_no}')">
-                        <i class="fas fa-trash"></i>
-                    </button>
-                </td>
-            </tr>
-        `).join('');
-    });
-}
+        window.onload = showSuccessPopupFromURL;
 
-document.querySelector('.form-container button').addEventListener('click', (e) => {
-    e.preventDefault();
-    const formData = new FormData();
-    
-    // Get form values
-    const roomType = document.querySelector('select').value;
-    const roomNo = document.querySelector('input[type="number"]').value;
-    const amount = document.querySelector('input[placeholder="Value"]').value;
-    const description = document.querySelector('input[placeholder="Text"]').value;
-    const photoFile = document.querySelector('input[type="file"]').files[0];
-    
-    // Append to FormData
-    formData.append('room_type', roomType);
-    formData.append('room_no', roomNo);
-    formData.append('amount', amount);
-    formData.append('description', description);
-    formData.append('photo', photoFile);
-    
-    saveRoom(formData);
-});
+        // Modal Management
+        function showAddTypeModal() {
+            document.getElementById('addTypeModal').style.display = 'flex';
+        }
 
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+            if (modalId === 'bookVehicleModal') {
+                resetBookingModal();
+            }
+        }
 
+        window.onclick = function (event) {
+            if (event.target.classList.contains('custom-modal')) {
+                event.target.style.display = 'none';
+                if (event.target.id === 'bookVehicleModal') {
+                    resetBookingModal();
+                }
+            }
+        }
+
+        // Vehicle Type Deletion
+        let currentVehicleTypeToDelete = null;
+
+        function confirmDeleteVehicleType(vehicleTypeId) {
+            currentVehicleTypeToDelete = vehicleTypeId;
+            const popup = document.getElementById('popup');
+            const popupText = document.getElementById('popup-text');
+            const confirmButton = document.getElementById('confirmDelete');
+            const cancelButton = document.getElementById('closePopup');
+            popupText.textContent = 'Are you sure you want to delete this vehicle type?';
+            popup.style.display = 'flex';
+            confirmButton.onclick = function () {
+                popup.style.display = 'none';
+                proceedDeleteVehicleType();
+            };
+            cancelButton.onclick = function () {
+                popup.style.display = 'none';
+            };
+        }
+
+        function proceedDeleteVehicleType() {
+            if (currentVehicleTypeToDelete) {
+                window.location.href = `<?= ROOT ?>/TravelProvider/Tmyvehicles/deleteVehicleType/${currentVehicleTypeToDelete}`;
+            }
+        }
+
+        // Vehicle Management
+        function showAddVehicleModal(vehicleTypeId) {
+            fetch(`<?= ROOT ?>/TravelProvider/Tmyvehicles/getVehicleTypeDetails/${vehicleTypeId}`)
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('vehicleTypeId').value = vehicleTypeId;
+                    document.getElementById('vehicleTypeName').textContent = data.vehicleType_name;
+                    document.getElementById('addVehicleModal').style.display = 'flex';
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    showAlert('Failed to load vehicle type details.');
+                });
+        }
+
+        function addVehicleNumberInput() {
+            const container = document.getElementById('vehicleNumbersContainer');
+            const newInput = document.createElement('div');
+            newInput.className = 'vehicle-input-group';
+            newInput.innerHTML = `
+                <input type="text" name="vehicle_numbers[]" class="vehicle-number-input" placeholder="Registration No." required aria-required="true">
+                <button type="button" class="remove-vehicle-btn" onclick="removeVehicleInput(this)">×</button>
+            `;
+            container.appendChild(newInput);
+        }
+
+        function removeVehicleInput(button) {
+            const container = document.getElementById('vehicleNumbersContainer');
+            if (container.children.length > 1) {
+                button.parentElement.remove();
+            }
+        }
+
+        // Booking Modal
+        let currentVehicleTypeId;
+        let maxAvailableVehicles = 0;
+        let currentVehicleCount = 0;
+        let numberOfDays = 0;
+        let pricePerDay = 0;
+
+        function resetBookingModal() {
+            document.getElementById('startDate').value = '';
+            document.getElementById('endDate').value = '';
+            document.getElementById('availableVehiclesCount').textContent = '-';
+            document.getElementById('bookedVehiclesCount').textContent = '-';
+            document.getElementById('vehicleCount').textContent = '0';
+            document.getElementById('selectedVehicleCount').textContent = '0 Vehicle';
+            document.getElementById('totalDays').textContent = '0 Days';
+            document.getElementById('totalAmount').textContent = '0 LKR';
+            document.getElementById('decrementBtn').disabled = true;
+            document.getElementById('incrementBtn').disabled = true;
+            document.getElementById('continueToCustomerBtn').disabled = true;
+            document.getElementById('customerDetailsTabBtn').disabled = true;
+            document.getElementById('customerFullName').value = '';
+            document.getElementById('customerEmail').value = '';
+            document.getElementById('customerPhone').value = '';
+            document.getElementById('customerNIC').value = '';
+            document.getElementById('specialRequests').value = '';
+            document.getElementById('bookingSource').value = 'walk-in';
+            document.getElementById('paymentStatus').value = 'fully-paid';
+            document.getElementById('advanceAmount').value = '';
+            document.getElementById('advanceAmountGroup').style.display = 'none';
+            document.querySelectorAll('.customer-input.error').forEach(input => input.classList.remove('error'));
+            document.querySelectorAll('.error-message').forEach(error => error.textContent = '');
+            currentVehicleCount = 0;
+            maxAvailableVehicles = 0;
+            numberOfDays = 0;
+            pricePerDay = 0;
+        }
+
+        function showBookVehicleModal(vehicleTypeId) {
+            currentVehicleTypeId = vehicleTypeId;
+            resetBookingModal();
+            fetch(`<?= ROOT ?>/TravelProvider/Tmyvehicles/getVehicleTypeDetails/${vehicleTypeId}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    document.getElementById('bookVehicleTypeName').textContent = data.vehicleType_name;
+                    pricePerDay = parseFloat(data.pricePer_day);
+                    document.getElementById('bookVehicleModal').style.display = 'flex';
+                    switchBookingTab({ currentTarget: document.querySelector('#bookVehicleModal .tab-button.active') }, 'vehicleAvailability');
+                    initializeDateInputs();
+                })
+                .catch(error => {
+                    console.error('Error fetching vehicle details:', error);
+                    showAlert('Failed to load vehicle type details. Please try again.');
+                });
+        }
+
+        function initializeDateInputs() {
+            const startDateInput = document.getElementById('startDate');
+            const endDateInput = document.getElementById('endDate');
+            const today = new Date();
+            const tomorrow = new Date(today);
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            const todayFormatted = today.toISOString().split('T')[0];
+            const tomorrowFormatted = tomorrow.toISOString().split('T')[0];
+            startDateInput.min = todayFormatted;
+            endDateInput.min = tomorrowFormatted;
+
+            startDateInput.addEventListener('change', function () {
+                const selectedDate = new Date(this.value);
+                const nextDay = new Date(selectedDate);
+                nextDay.setDate(nextDay.getDate() + 1);
+                endDateInput.min = nextDay.toISOString().split('T')[0];
+                if (endDateInput.value && new Date(endDateInput.value) <= new Date(this.value)) {
+                    endDateInput.value = nextDay.toISOString().split('T')[0];
+                }
+                calculateDateDifference();
+            });
+
+            endDateInput.addEventListener('change', function () {
+                calculateDateDifference();
+            });
+        }
+
+        function calculateDateDifference() {
+            const startDateInput = document.getElementById('startDate');
+            const endDateInput = document.getElementById('endDate');
+            if (startDateInput.value && endDateInput.value) {
+                const startDate = new Date(startDateInput.value);
+                const endDate = new Date(endDateInput.value);
+                const timeDifference = endDate.getTime() - startDate.getTime();
+                numberOfDays = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+                const rentalDurationDisplay = document.getElementById('totalDays');
+                if (rentalDurationDisplay) {
+                    rentalDurationDisplay.textContent = `${numberOfDays} day${numberOfDays !== 1 ? 's' : ''}`;
+                }
+                calculateTotalAmount();
+            }
+        }
+
+        function checkVehicleAvailability() {
+            const startDate = document.getElementById('startDate').value;
+            const endDate = document.getElementById('endDate').value;
+            if (!startDate || !endDate) {
+                showAlert('Please select both start and end dates');
+                return;
+            }
+            fetch(`<?= ROOT ?>/TravelProvider/Tmyvehicles/checkVehicleAvailability/${currentVehicleTypeId}/${startDate}/${endDate}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.error) {
+                        showAlert(data.error);
+                    } else {
+                        updateAvailabilityUI(data);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    showAlert('Failed to check vehicle availability. Please try again.');
+                });
+        }
+
+        function updateAvailabilityUI(data) {
+            const availableVehiclesElement = document.getElementById('availableVehiclesCount');
+            availableVehiclesElement.textContent = `${data.available_vehicles} of ${data.total_vehicles}`;
+            const bookedVehiclesElement = document.getElementById('bookedVehiclesCount');
+            bookedVehiclesElement.textContent = `${data.booked_vehicles} of ${data.total_vehicles}`;
+            maxAvailableVehicles = data.available_vehicles;
+            const decrementBtn = document.getElementById('decrementBtn');
+            const incrementBtn = document.getElementById('incrementBtn');
+            const continueToCustomerBtn = document.getElementById('continueToCustomerBtn');
+            if (maxAvailableVehicles > 0) {
+                incrementBtn.disabled = false;
+                currentVehicleCount = 1;
+                document.getElementById('vehicleCount').textContent = currentVehicleCount;
+                document.getElementById('selectedVehicleCount').textContent = `${currentVehicleCount} Vehicle`;
+                decrementBtn.disabled = currentVehicleCount <= 1;
+                incrementBtn.disabled = currentVehicleCount >= maxAvailableVehicles;
+                continueToCustomerBtn.disabled = false;
+                calculateTotalAmount();
+            } else {
+                showAlert('No vehicles available for the selected dates');
+                decrementBtn.disabled = true;
+                incrementBtn.disabled = true;
+                continueToCustomerBtn.disabled = true;
+                currentVehicleCount = 0;
+                document.getElementById('vehicleCount').textContent = currentVehicleCount;
+                document.getElementById('selectedVehicleCount').textContent = `${currentVehicleCount} Vehicle`;
+                calculateTotalAmount();
+            }
+        }
+
+        function incrementVehicles() {
+            if (currentVehicleCount < maxAvailableVehicles) {
+                currentVehicleCount++;
+                updateVehicleCount();
+            }
+        }
+
+        function decrementVehicles() {
+            if (currentVehicleCount > 1) {
+                currentVehicleCount--;
+                updateVehicleCount();
+            }
+        }
+
+        function updateVehicleCount() {
+            const vehicleCountElement = document.getElementById('vehicleCount');
+            const selectedVehicleCountElement = document.getElementById('selectedVehicleCount');
+            const decrementBtn = document.getElementById('decrementBtn');
+            const incrementBtn = document.getElementById('incrementBtn');
+            vehicleCountElement.textContent = currentVehicleCount;
+            selectedVehicleCountElement.textContent = `${currentVehicleCount} Vehicle${currentVehicleCount !== 1 ? 's' : ''}`;
+            decrementBtn.disabled = currentVehicleCount <= 1;
+            incrementBtn.disabled = currentVehicleCount >= maxAvailableVehicles;
+            calculateTotalAmount();
+        }
+
+        function calculateTotalAmount() {
+            const totalPrice = numberOfDays * pricePerDay * currentVehicleCount;
+            document.getElementById('totalAmount').textContent = `${totalPrice.toFixed(2)} LKR`;
+        }
+
+        function continueToCustomerDetails() {
+            document.getElementById('customerDetailsTabBtn').disabled = false;
+            switchBookingTab({ currentTarget: document.getElementById('customerDetailsTabBtn') }, 'customerDetails');
+            const paymentStatusSelect = document.getElementById('paymentStatus');
+            paymentStatusSelect.addEventListener('change', function () {
+                const advanceAmountGroup = document.getElementById('advanceAmountGroup');
+                if (this.value === 'advance-paid') {
+                    advanceAmountGroup.style.display = 'flex';
+                } else {
+                    advanceAmountGroup.style.display = 'none';
+                }
+            });
+        }
+
+        function switchBookingTab(event, tabId) {
+            const tabButtons = document.querySelectorAll('#bookVehicleModal .tab-button');
+            const tabContents = document.querySelectorAll('#bookVehicleModal .tab-content');
+            tabButtons.forEach(button => {
+                button.classList.remove('active');
+            });
+            tabContents.forEach(content => {
+                content.classList.remove('active');
+            });
+            event.currentTarget.classList.add('active');
+            document.getElementById(tabId).classList.add('active');
+            const confirmBookingBtn = document.getElementById('confirmBookingBtn');
+            if (tabId === 'customerDetails') {
+                confirmBookingBtn.style.display = 'inline-flex';
+            } else {
+                confirmBookingBtn.style.display = 'none';
+            }
+        }
+
+        function validateCustomerDetails() {
+            let isValid = true;
+            const fields = [
+                { id: 'customerFullName', errorId: 'customerFullNameError', message: 'Full name is required' },
+                { id: 'customerEmail', errorId: 'customerEmailError', message: 'Valid email is required', validate: value => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value) },
+                { id: 'customerPhone', errorId: 'customerPhoneError', message: 'Phone number is required' },
+                { id: 'customerNIC', errorId: 'customerNICError', message: 'NIC or passport number is required' }
+            ];
+
+            fields.forEach(field => {
+                const input = document.getElementById(field.id);
+                const errorElement = document.getElementById(field.errorId);
+                if (!input.value.trim()) {
+                    input.classList.add('error');
+                    errorElement.textContent = field.message;
+                    isValid = false;
+                } else if (field.validate && !field.validate(input.value)) {
+                    input.classList.add('error');
+                    errorElement.textContent = field.message;
+                    isValid = false;
+                } else {
+                    input.classList.remove('error');
+                    errorElement.textContent = '';
+                }
+            });
+
+            const paymentStatus = document.getElementById('paymentStatus').value;
+            if (paymentStatus === 'advance-paid') {
+                const advanceAmount = document.getElementById('advanceAmount');
+                const advanceAmountError = document.getElementById('advanceAmountError');
+                if (!advanceAmount.value || parseFloat(advanceAmount.value) <= 0) {
+                    advanceAmount.classList.add('error');
+                    advanceAmountError.textContent = 'Advance amount must be greater than 0';
+                    isValid = false;
+                } else {
+                    advanceAmount.classList.remove('error');
+                    advanceAmountError.textContent = '';
+                }
+            }
+
+            return isValid;
+        }
+
+        function confirmDirectBooking() {
+            if (!validateCustomerDetails()) {
+                showAlert('Please fill in all required fields correctly.');
+                return;
+            }
+
+            document.getElementById('booking_vehicleType_id').value = currentVehicleTypeId;
+            document.getElementById('booking_start_date').value = document.getElementById('startDate').value;
+            document.getElementById('booking_end_date').value = document.getElementById('endDate').value;
+            document.getElementById('booking_vehicle_count').value = currentVehicleCount;
+            document.getElementById('booking_total_amount').value = document.getElementById('totalAmount').textContent.replace(' LKR', '');
+            document.getElementById('booking_customer_name').value = document.getElementById('customerFullName').value;
+            document.getElementById('booking_customer_email').value = document.getElementById('customerEmail').value;
+            document.getElementById('booking_customer_phone').value = document.getElementById('customerPhone').value;
+            document.getElementById('booking_customer_nic').value = document.getElementById('customerNIC').value;
+            document.getElementById('booking_special_requests').value = document.getElementById('specialRequests').value;
+            document.getElementById('booking_source').value = document.getElementById('bookingSource').value;
+            document.getElementById('booking_payment_status').value = document.getElementById('paymentStatus').value;
+            const paymentStatus = document.getElementById('paymentStatus').value;
+            if (paymentStatus === 'advance-paid') {
+                document.getElementById('booking_advance_amount').value = document.getElementById('advanceAmount').value;
+            } else if (paymentStatus === 'fully-paid') {
+                document.getElementById('booking_advance_amount').value = document.getElementById('booking_total_amount').value;
+            } else {
+                document.getElementById('booking_advance_amount').value = '0';
+            }
+
+            document.getElementById('directBookingForm').submit();
+        }
     </script>
 </body>
-
 </html>

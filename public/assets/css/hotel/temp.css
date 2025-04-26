@@ -394,11 +394,11 @@ ul {
 .finance-cards {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 2rem;
+    gap: 1rem;
 }
 
 .finance-card {
-    padding: 5px;
+    padding: 1rem;
     border-radius: var(--radius);
     border: 1px solid var(--border-color);
 }
@@ -425,8 +425,7 @@ ul {
 .review-list {
     display: flex;
     flex-direction: column;
-    /* gap: 1rem; */
-    padding: 1rem;
+    gap: 1rem;
 }
 
 .review-item {
@@ -438,8 +437,7 @@ ul {
 .review-header {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 2rem;
-    padding: 5px;
+    margin-bottom: 0.75rem;
 }
 
 .reviewer-info {
