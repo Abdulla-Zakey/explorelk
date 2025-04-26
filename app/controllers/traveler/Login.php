@@ -27,10 +27,6 @@ class Login extends Controller
             redirect('Hotel/Hdashboard');
             exit();
         }
-        elseif (isset($_SESSION['restaurant_id'])) {
-            redirect('Restaurant/Rdashboard');
-            exit();
-        }
 
 
         // Check if the form is submitted
@@ -66,13 +62,12 @@ class Login extends Controller
                     $user = new Hotel;
                     $passwordField = 'hotelPassword';
                     break;
-                
-                case 'diningSP':
-                    $data = ['restaurantEmail' => $email];
-                    $user = new Restaurant;
-                    $passwordField = 'restaurantPassword';
-                    break;
 
+                case 'travelSP':
+                    $data = ['travelagentEmail' => $email];
+                    $user = new TravelAgent();
+                    $passwordField = 'travelagentPassword';
+                    break;
 
                 default:
                     $this->redirectWithError("Invalid user role");
@@ -80,23 +75,15 @@ class Login extends Controller
             }
 
             // Query the database for the user
-            $result = $user->first($data);
+            $result = $user->where($data);
 
             if (!empty($result)) {
-
-                // Check if email is verified
-                if ($userRole == 'traveler' && $result->emailVerified != 1) {
-                    // Email not verified
-                    redirect('traveler/VerificationPending');
-                    exit();
-                }
-
                 // Verify password using the correct password field
-                if (password_verify($password, $result->$passwordField)) {
+                if (password_verify($password, $result[0]->$passwordField)) {
                     switch($userRole){
                         case 'traveler':
                             // Set session variables
-                            $_SESSION['traveler_id'] = $result->traveler_Id;
+                            $_SESSION['traveler_id'] = $result[0]->traveler_Id;
 
                             // Redirect to Traveler's dashboard
                             redirect('traveler/RegisteredTravelerHome');
@@ -104,14 +91,14 @@ class Login extends Controller
 
                         case 'eventOrganizer':
                             // Set session variables
-                            $_SESSION['organizer_id'] = $result->organizer_Id;
+                            $_SESSION['organizer_id'] = $result[0]->organizer_Id;
     
                             // Redirect to Event Organizer's dashboard
                             redirect('Eventorganizer/Eodashboard');
                             exit();
 
                         case 'accommodationSP':
-                            $_SESSION['hotel_id'] = $result->hotel_Id;
+                            $_SESSION['hotel_id'] = $result[0]->hotel_Id;
 
                             // Redirect to Accommodation service provider's dashboard
                             redirect('Hotel/Hdashboard');
@@ -120,19 +107,18 @@ class Login extends Controller
 
                         case 'tourGuide':
                             // Set session variables
-                            $_SESSION['guide_id'] = $result->guide_Id;
+                            $_SESSION['guide_id'] = $result[0]->guide_Id;
 
                             // Redirect to Tour Guide's dashboard
                             $this->view('tourguide/dashboard');
                             exit();
+                        
+                        case 'travelSP':
+                            $_SESSION['travelagent_Id'] = $result[0]->travelagent_Id;
+                             // Redirect to Tour Guide's dashboard
+                             $this->view('travelagent/dashboard');
+                             exit();
 
-                        case 'diningSP':
-                            // Set session variables
-                            $_SESSION['restaurant_id'] = $result[0]->restaurant_id;
-
-                            // Redirect to Restaurant service provider's dashboard
-                            redirect('Restaurant/Rdashboard');
-                            exit();
                     }
                 } else {
                     // Redirect with error message

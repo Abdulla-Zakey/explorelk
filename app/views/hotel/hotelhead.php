@@ -5,7 +5,7 @@
  <link rel="stylesheet" href="<?= ROOT ?>/assets/css/hotel/hotelhead.css?v=1.0">
  </head>
  <body>
-    <main>
+    <main class = "main-style">
         <div class="content">
         <div class="image-container">
             <img alt="Hotel entrance with greenery and lights" src="<?=ROOT?>/assets/images/serviceProviders/hotelCover.jpg"/>
