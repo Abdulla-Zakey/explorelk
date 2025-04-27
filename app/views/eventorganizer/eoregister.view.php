@@ -58,23 +58,6 @@
             position: relative;
         }
 
-        .logo-area {
-            display: flex;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .logo-area img {
-            height: 40px;
-            margin-right: 10px;
-        }
-
-        .logo-area h2 {
-            font-size: 18px;
-            font-weight: 600;
-            color: var(--primary-color);
-        }
-
         .form-header {
             margin-bottom: 30px;
         }
@@ -231,7 +214,6 @@
 
         .feature-item i {
             font-size: 18px;
-            /* color: var(--secondary-color); */
             color: #eee;
         }
 
@@ -261,13 +243,34 @@
             animation: popupFadeIn 0.3s ease;
         }
 
+        .popup-content.success {
+            border-top: 4px solid var(--success);
+        }
+
+        .popup-content.error {
+            border-top: 4px solid var(--error);
+        }
+
         @keyframes popupFadeIn {
             from { opacity: 0; transform: scale(0.9); }
             to { opacity: 1; transform: scale(1); }
         }
 
+        .popup-content h2 {
+            font-size: 22px;
+            margin-bottom: 10px;
+        }
+
+        .popup-content.success h2 {
+            color: var(--success);
+        }
+
+        .popup-content.error h2 {
+            color: var(--error);
+        }
+
         .popup-content p {
-            font-size: 18px;
+            font-size: 16px;
             margin-bottom: 20px;
             color: var(--text-dark);
         }
@@ -301,12 +304,12 @@
             border-radius: 20px;
             transition: all 0.3s ease;
         }
-        
+
         .back-home:hover {
             background-color: rgba(0, 0, 0, 0.5);
             text-decoration: none;
         }
-        
+
         .back-home i {
             margin-right: 5px;
         }
@@ -339,11 +342,9 @@
             <a href="<?= ROOT ?>" class="back-home">
                 <i class="fa-solid fa-home"></i> Back to Home
             </a>
-
             <img src="<?php echo ROOT; ?>/assets/images/eo/Events-amico.png" alt="Event illustration">
             <h2>Organize Amazing Events</h2>
             <p>Join ExploreLK and showcase your events to thousands of potential attendees</p>
-            
             <div class="features">
                 <div class="feature-item">
                     <i class="fas fa-check-circle"></i>
@@ -360,21 +361,18 @@
             </div>
         </div>
         <div class="form-side">
-            
             <div class="form-header">
                 <h1>Event Organizer Registration</h1>
                 <p>Create your account to start hosting amazing events</p>
             </div>
-            
             <form id="eventOrganizerForm" method="post" action="<?php echo ROOT; ?>/eventorganizer/Eosignup">
-                <?php if(!empty($error)): ?>
+                <?php if (!empty($error)): ?>
                     <div class="error-container">
-                        <?php foreach($error as $field => $message): ?>
+                        <?php foreach ($error as $field => $message): ?>
                             <p class="error-message"><?php echo htmlspecialchars($message); ?></p>
                         <?php endforeach; ?>
                     </div>
                 <?php endif; ?>
-                
                 <div class="input-group">
                     <label for="companyname">Company Name</label>
                     <input 
@@ -386,7 +384,6 @@
                         placeholder="Enter your company name"
                     />
                 </div>
-                
                 <div class="input-group">
                     <label for="companyemail">Company Email</label>
                     <input 
@@ -398,7 +395,6 @@
                         placeholder="Enter your company email"
                     />
                 </div>
-                
                 <div class="input-group">
                     <label for="contact-number">Contact Number</label>
                     <input 
@@ -406,11 +402,12 @@
                         name="company_MobileNum" 
                         type="text" 
                         required 
+                        pattern="\d{10}"
                         value="<?php echo htmlspecialchars($data['company_MobileNum'] ?? ''); ?>"
-                        placeholder="Enter your contact number"
+                        placeholder="Enter your 10-digit mobile number"
+                        title="Mobile number must be exactly 10 digits"
                     />
                 </div>
-                
                 <div class="input-group">
                     <label for="companyaddress">Company Address</label>
                     <input 
@@ -422,7 +419,6 @@
                         placeholder="Enter your company address"
                     />
                 </div>
-                
                 <div class="input-group">
                     <label for="password">Password</label>
                     <input 
@@ -434,7 +430,6 @@
                         placeholder="Create a password (min. 8 characters)"
                     />
                 </div>
-                
                 <div class="input-group">
                     <label for="confirm-password">Confirm Password</label>
                     <input 
@@ -446,30 +441,28 @@
                         placeholder="Confirm your password"
                     />
                 </div>
-                
                 <button type="submit" class="submit-btn" onclick="return validate()">
                     <i class="fas fa-user-plus"></i> Register as an Event Organizer
                 </button>
             </form>
         </div>
-        
     </div>
-    
     <!-- Pop-Up Message -->
     <div id="popup" class="popup-container">
-        <div class="popup-content">
-            <p id="popup-text">Please fill in all required fields</p>
+        <div class="popup-content" id="popup-content">
+            <h2 id="popup-title"></h2>
+            <p id="popup-text"></p>
             <button id="closePopup" class="popup-btn">OK</button>
         </div>
     </div>
-    
     <script>
         // Validation function
         function validate() {
             const form = document.getElementById('eventOrganizerForm');
             const inputs = form.querySelectorAll('input[required]');
+            const mobileNumber = document.getElementById('contact-number');
             let isValid = true;
-            
+
             // Check if all required fields are filled
             inputs.forEach(input => {
                 if (!input.value.trim()) {
@@ -479,36 +472,66 @@
                     input.style.borderColor = '#e2e8f0';
                 }
             });
-            
+
+            // Validate mobile number (exactly 10 digits)
+            if (!/^\d{10}$/.test(mobileNumber.value.trim())) {
+                isValid = false;
+                mobileNumber.style.borderColor = '#ef4444';
+                showPopup('Mobile number must be exactly 10 digits', 'Error', 'error');
+                return false;
+            }
+
             // Check if passwords match
             const password = document.getElementById('password');
             const confirmPassword = document.getElementById('confirm-password');
-            
             if (password.value !== confirmPassword.value) {
                 isValid = false;
                 confirmPassword.style.borderColor = '#ef4444';
-                showPopup('Passwords do not match');
+                showPopup('Passwords do not match', 'Error', 'error');
                 return false;
             }
-            
+
             if (!isValid) {
-                showPopup('Please fill in all required fields');
+                showPopup('Please fill in all required fields correctly', 'Error', 'error');
                 return false;
             }
-            
+
             return true;
         }
-        
+
         // Show popup function
-        function showPopup(message) {
-            document.getElementById('popup-text').textContent = message;
-            document.getElementById('popup').style.display = 'flex';
+        function showPopup(message, title = 'Error', type = 'error') {
+            const popup = document.getElementById('popup');
+            const popupContent = document.getElementById('popup-content');
+            const popupTitle = document.getElementById('popup-title');
+            const popupText = document.getElementById('popup-text');
+            popupTitle.textContent = title;
+            popupText.textContent = message;
+            popupContent.className = `popup-content ${type}`;
+            popup.style.display = 'flex';
         }
-        
+
         // Close popup
         document.getElementById('closePopup').addEventListener('click', function() {
             document.getElementById('popup').style.display = 'none';
         });
+
+        // Check for success message from PHP
+        <?php if (isset($success) && $success): ?>
+            showPopup('Your account has been created successfully. Redirecting to dashboard...', 'Success', 'success');
+            setTimeout(function() {
+                window.location.href = '<?php echo ROOT; ?>/eventorganizer/eodashboard';
+            }, 3000);
+        <?php endif; ?>
+
+        // Check for specific errors from PHP
+        <?php if (isset($error['company_Email'])): ?>
+            showPopup('<?php echo htmlspecialchars($error['company_Email']); ?>', 'Error', 'error');
+        <?php elseif (isset($error['company_MobileNum'])): ?>
+            showPopup('<?php echo htmlspecialchars($error['company_MobileNum']); ?>', 'Error', 'error');
+        <?php elseif (!empty($error)): ?>
+            showPopup('Please check your input and try again', 'Error', 'error');
+        <?php endif; ?>
     </script>
 </body>
 </html>

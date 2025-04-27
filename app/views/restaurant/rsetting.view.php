@@ -1,6 +1,5 @@
 <?php 
-  include '../app/views/components/rnav.php';
-
+include '../app/views/components/rnav.php';
 ?>
 
 <!DOCTYPE html>
@@ -8,8 +7,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Account - Hotel Management</title>
+    <title>My Account - Restaurant Management</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <!-- Removed Inputmask and jQuery to avoid potential conflicts; add back if needed -->
     <style>
         :root {
             --primary-color: #002D40;
@@ -32,15 +32,6 @@
             line-height: 1.6;
         }
 
-        /* .container {
-            max-width: 800px;
-            margin: 20px auto;
-            margin-left: 265px;
-            padding: 30px;
-            background-color: #ffffff;
-            border-radius: 10px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-        } */
         .container {
             max-width: 900px;
             margin: 20px auto;
@@ -50,7 +41,6 @@
             border-radius: 10px;
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
         }
-
 
         h1 {
             font-size: 28px;
@@ -87,6 +77,10 @@
         textarea:focus {
             outline: none;
             border-color: var(--primary-color);
+        }
+
+        input.invalid {
+            border-color: var(--error-color);
         }
 
         textarea {
@@ -164,9 +158,23 @@
             margin-top: 5px;
         }
 
+        .success {
+            color: green;
+            font-size: 14px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .preview-image {
+            max-width: 100px;
+            margin: 10px;
+            border-radius: 5px;
+        }
+
         @media (max-width: 768px) {
             .container {
                 padding: 20px;
+                margin-left: 20px;
             }
 
             .buttons {
@@ -182,62 +190,81 @@
 <body>
     <div class="container">
         <h1>My Account</h1>
-        <form id="accountForm">
+        <?php if (isset($_SESSION['success'])): ?>
+            <div class="success"><?php echo $_SESSION['success']; unset($_SESSION['success']); ?></div>
+        <?php endif; ?>
+        <?php if (isset($_SESSION['error'])): ?>
+            <div class="error"><?php echo $_SESSION['error']; unset($_SESSION['error']); ?></div>
+        <?php endif; ?>
+        <form id="accountForm" enctype="multipart/form-data" method="POST">
             <div class="form-group">
                 <label for="profile-photo">Profile Photo</label>
                 <div class="file-upload" id="profile-photo-upload">
                     <i class="fas fa-cloud-upload-alt"></i>
-                    <span>Click or drag to upload your profile photo</span>
+                    <span data-default-text="Click or drag to upload your profile photo">
+                        <?php echo !empty($restaurant->profilePhoto) ? basename($restaurant->profilePhoto) : 'Click or drag to upload your profile photo'; ?>
+                    </span>
                     <input type="file" id="profile-photo" name="profile-photo" accept="image/*" hidden>
                 </div>
+                <?php if (!empty($restaurant->profilePhoto)): ?>
+                    <img src="/gitexplorelk/explorelk/public<?php echo htmlspecialchars($restaurant->profilePhoto); ?>" alt="Profile Photo" class="preview-image">
+                <?php endif; ?>
             </div>
             <div class="form-group">
-                <label for="hotel-photos">Hotel Photos</label>
+                <label for="hotel-photos">Restaurant Photos</label>
                 <div class="file-upload" id="hotel-photos-upload">
                     <i class="fas fa-images"></i>
-                    <span>Click or drag to upload hotel photos</span>
+                    <span data-default-text="Click or drag to upload restaurant photos">Click or drag to upload restaurant photos</span>
                     <input type="file" id="hotel-photos" name="hotel-photos[]" accept="image/*" multiple hidden>
                 </div>
+                <?php if (!empty($restaurant->hotelPhotos)): ?>
+                    <?php $photos = json_decode($restaurant->hotelPhotos, true); ?>
+                    <?php if (is_array($photos)): ?>
+                        <?php foreach ($photos as $photo): ?>
+                            <img src="/gitexplorelk/explorelk/public<?php echo htmlspecialchars($photo); ?>" alt="Restaurant Photo" class="preview-image">
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+                <?php endif; ?>
             </div>
             <div class="form-group">
-                <label for="hotel-name">Hotel Name</label>
-                <input type="text" id="hotel-name" name="hotel-name" placeholder="Enter your hotel name">
+                <label for="hotel-name">Restaurant Name</label>
+                <input type="text" id="hotel-name" name="hotel-name" placeholder="Enter your restaurant name" value="<?php echo htmlspecialchars($restaurant->restaurantName ?? ''); ?>">
                 <div class="error" id="hotel-name-error"></div>
             </div>
             <div class="form-group">
                 <label for="email">Email</label>
-                <input type="email" id="email" name="email" placeholder="Enter your email">
+                <input type="email" id="email" name="email" readonly placeholder="Enter your email" value="<?php echo htmlspecialchars($restaurant->restaurantEmail ?? ''); ?>">
                 <div class="error" id="email-error"></div>
             </div>
             <div class="form-group">
-                <label for="owner-name">Owner Name</label>
-                <input type="text" id="owner-name" name="owner-name" placeholder="Enter owner's name">
-                <div class="error" id="owner-name-error"></div>
-            </div>
-            <div class="form-group">
                 <label for="phone-number">Phone Number</label>
-                <input type="text" id="phone-number" name="phone-number" placeholder="+94 Enter your phone number">
+                <input type="text" id="phone-number" name="phone-number" placeholder="+94712345678" value="<?php echo htmlspecialchars($restaurant->restaurantMobileNum ?? ''); ?>">
                 <div class="error" id="phone-number-error"></div>
             </div>
             <div class="form-group">
                 <label for="district">District</label>
-                <input type="text" id="district" name="district" placeholder="Enter your district">
+                <input type="text" id="district" name="district" placeholder="Enter your district" value="<?php echo htmlspecialchars($restaurant->district ?? ''); ?>">
                 <div class="error" id="district-error"></div>
             </div>
             <div class="form-group">
                 <label for="province">Province</label>
-                <input type="text" id="province" name="province" placeholder="Enter your province">
+                <input type="text" id="province" name="province" placeholder="Enter your province" value="<?php echo htmlspecialchars($restaurant->province ?? ''); ?>">
                 <div class="error" id="province-error"></div>
             </div>
             <div class="form-group">
                 <label for="address">Address</label>
-                <input type="text" id="address-line-1" name="address-line-1" placeholder="Address Line 1">
-                <input type="text" id="address-line-2" name="address-line-2" placeholder="Address Line 2">
+                <?php
+                $addressParts = explode(', ', $restaurant->restaurantAddress ?? '');
+                $addressLine1 = $addressParts[0] ?? '';
+                $addressLine2 = $addressParts[1] ?? '';
+                ?>
+                <input type="text" id="address-line-1" name="address-line-1" placeholder="Address Line 1" value="<?php echo htmlspecialchars($addressLine1); ?>">
+                <input type="text" id="address-line-2" name="address-line-2" placeholder="Address Line 2" value="<?php echo htmlspecialchars($addressLine2); ?>">
                 <div class="error" id="address-error"></div>
             </div>
             <div class="form-group">
                 <label for="description">Description</label>
-                <textarea id="description" name="description" placeholder="Write about your business"></textarea>
+                <textarea id="description" name="description" placeholder="Write about your business"><?php echo htmlspecialchars($restaurant->description ?? ''); ?></textarea>
                 <div class="error" id="description-error"></div>
             </div>
             <div class="buttons">
@@ -253,6 +280,20 @@
             const form = document.getElementById('accountForm');
             const resetBtn = document.getElementById('resetBtn');
             const fileUploads = document.querySelectorAll('.file-upload');
+            const phoneNumberInput = document.getElementById('phone-number');
+            const phoneNumberError = document.getElementById('phone-number-error');
+
+            // Real-time phone number validation on keyup
+            phoneNumberInput.addEventListener('keyup', function() {
+                const phone = phoneNumberInput.value.trim();
+                if (phone && !isValidPhoneNumber(phone)) {
+                    phoneNumberError.textContent = 'Phone number must start with +94 followed by 9 digits (e.g., +94712345678)';
+                    phoneNumberInput.classList.add('invalid');
+                } else {
+                    phoneNumberError.textContent = '';
+                    phoneNumberInput.classList.remove('invalid');
+                }
+            });
 
             fileUploads.forEach(upload => {
                 upload.addEventListener('click', () => {
@@ -266,11 +307,8 @@
             });
 
             form.addEventListener('submit', function(e) {
-                e.preventDefault();
-                if (validateForm()) {
-                    // Here you would typically send the form data to the server
-                    console.log('Form submitted successfully');
-                    alert('Profile updated successfully!');
+                if (!validateForm()) {
+                    e.preventDefault();
                 }
             });
 
@@ -280,17 +318,19 @@
                 fileUploads.forEach(upload => {
                     upload.querySelector('span').textContent = upload.querySelector('span').dataset.defaultText;
                 });
+                phoneNumberInput.classList.remove('invalid');
             });
 
             function validateForm() {
                 clearErrors();
                 let isValid = true;
 
-                const requiredFields = ['hotel-name', 'email', 'owner-name', 'phone-number', 'district', 'province', 'address-line-1', 'description'];
+                const requiredFields = ['hotel-name', 'email', 'phone-number', 'district', 'province', 'address-line-1', 'description'];
                 requiredFields.forEach(field => {
                     const input = document.getElementById(field);
                     if (!input.value.trim()) {
                         showError(field, 'This field is required');
+                        input.classList.add('invalid');
                         isValid = false;
                     }
                 });
@@ -298,12 +338,14 @@
                 const email = document.getElementById('email');
                 if (email.value && !isValidEmail(email.value)) {
                     showError('email', 'Please enter a valid email address');
+                    email.classList.add('invalid');
                     isValid = false;
                 }
 
                 const phoneNumber = document.getElementById('phone-number');
                 if (phoneNumber.value && !isValidPhoneNumber(phoneNumber.value)) {
-                    showError('phone-number', 'Please enter a valid phone number');
+                    showError('phone-number', 'Phone number must start with +94 followed by 9 digits (e.g., +94712345678)');
+                    phoneNumber.classList.add('invalid');
                     isValid = false;
                 }
 
@@ -318,6 +360,8 @@
             function clearErrors() {
                 const errorElements = document.querySelectorAll('.error');
                 errorElements.forEach(element => element.textContent = '');
+                const inputs = document.querySelectorAll('input, textarea');
+                inputs.forEach(input => input.classList.remove('invalid'));
             }
 
             function isValidEmail(email) {
@@ -326,7 +370,7 @@
             }
 
             function isValidPhoneNumber(phone) {
-                const re = /^\+?[0-9]{10,14}$/;
+                const re = /^\+94[0-9]{9}$/;
                 return re.test(phone);
             }
         });

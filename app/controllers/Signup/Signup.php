@@ -1,6 +1,11 @@
 <?php
 class Signup extends Controller {
 
+    private $travelProvider;
+
+    public function __construct() {
+        $this->travelProvider = new TravelAgent();
+    }
     public function index() {
         // Initialize an empty error array
         $data = [
@@ -9,6 +14,9 @@ class Signup extends Controller {
 
         // Handle form submission
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+
+            // show($_POST);
+            // exit();
             
             // Sanitize and validate input data
             $data = [
@@ -34,7 +42,7 @@ class Signup extends Controller {
 
             // Validate input data
             $data['errors'] = $this->validateSignup($data);
-            
+            show($data['errors']);
             // If no errors, proceed with registration
             if (empty($data['errors'])) {
                 try {
@@ -74,9 +82,7 @@ class Signup extends Controller {
         // Personal Information Validation
         if (empty($data['name'])) {
             $errors['name'] = 'Please enter the Service Provider Name';
-        } elseif (strlen($data['name']) < 5) {
-            $errors['name'] = 'Service Provider Name must be at least 5 characters long';
-        }
+        } 
 
         if (empty($data['email'])) {
             $errors['email'] = 'Please enter an email address';
@@ -207,10 +213,28 @@ class Signup extends Controller {
                 break;
 
             case 'travel':
-                $user = new TravelProvider(); // Create this model
-                $isInserted = $user->insert($data);
-                if ($isInserted) {
-                    // Add session and redirect logic
+                // $user = new TravelProvider(); // Create this model
+                
+                $insertData = [
+                    'travelagentName' => $data['company_name'],
+                    'serviceProviderName' => $data['name'],
+                    'travelagentEmail' => $data['email'],
+                    'travelagentPassword' => $data['password'],
+                    'travelagentMobileNum' => $data['mobileNum'],
+                    'travelagentAddress' => $data['address'],
+                    'district' => $data['district'],
+                    'province' => $data['province'],
+                    'BRNum' => $data['BRNum'],
+                    'yearStarted' => $data['yearStarted']
+                ];
+                // show($insertData);
+                // exit();
+
+                $travelagent_Id= $this->travelProvider->insert($insertData);
+                
+                if ($travelagent_Id) {
+                    redirect('traveler/Login?success=profile_created');
+                    exit();
                 } else {
                     throw new Exception('Failed to insert travel provider');
                 }

@@ -2,8 +2,8 @@
 // Start session if not already started
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
-} ?>
-
+}
+?>
 
 <?php include '../app/views/components/rnav.php'; ?>
 <!DOCTYPE html>
@@ -19,7 +19,7 @@ if (session_status() === PHP_SESSION_NONE) {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+      /* font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; */
     }
 
     :root {
@@ -195,8 +195,8 @@ if (session_status() === PHP_SESSION_NONE) {
         grid-template-columns: repeat(2, 1fr);
       }
       
-      .form-grid-3 {
-        grid-template-columns: repeat(3, 1fr);
+      .form-grid-4 {
+        grid-template-columns: repeat(4, 1fr);
       }
     }
 
@@ -710,11 +710,27 @@ if (session_status() === PHP_SESSION_NONE) {
       display: block;
       width: 100%;
     }
+
+    .dining-head {
+      font-size: 45px;
+      font-weight: 600;
+      margin-bottom: 16px;
+      z-index: 10;
+      display: flex;
+      height: 64px;
+      align-items: center;
+      gap: 16px;
+      border-bottom: 1px solid var(--border);
+      background-color: var(--background);
+      padding: 0 16px;
+    }
   </style>
 </head>
 <body>
+  
   <div class="container">
     <main>
+      <h1 class="dining-head">Restaurant Menu</h1>
       <!-- Server errors -->
       <?php if (isset($data['error'])): ?>
         <div class="error-message"><?php echo htmlspecialchars($data['error']); ?></div>
@@ -750,7 +766,7 @@ if (session_status() === PHP_SESSION_NONE) {
                 <input type="hidden" name="add_table" value="1">
                 <input type="hidden" name="tab" value="tables">
                 <input type="hidden" name="date" value="<?php echo htmlspecialchars($data['selectedDate']); ?>">
-                <div class="form-grid form-grid-3">
+                <div class="form-grid form-grid-4">
                   <div class="form-group">
                     <label for="table-number">Table Number</label>
                     <input id="table-number" name="number" type="number" placeholder="Enter table number" value="<?php echo htmlspecialchars($_POST['number'] ?? ''); ?>">
@@ -775,6 +791,13 @@ if (session_status() === PHP_SESSION_NONE) {
                     </select>
                     <?php if (isset($data['errors']['table']['location'])): ?>
                       <div class="error-message"><?php echo htmlspecialchars($data['errors']['table']['location']); ?></div>
+                    <?php endif; ?>
+                  </div>
+                  <div class="form-group">
+                    <label for="price">Price ($)</label>
+                    <input id="price" name="price" type="number" step="0.01" placeholder="Enter price" value="<?php echo htmlspecialchars($_POST['price'] ?? ''); ?>">
+                    <?php if (isset($data['errors']['table']['price'])): ?>
+                      <div class="error-message"><?php echo htmlspecialchars($data['errors']['table']['price']); ?></div>
                     <?php endif; ?>
                   </div>
                 </div>
@@ -874,6 +897,12 @@ if (session_status() === PHP_SESSION_NONE) {
                           <circle cx="12" cy="10" r="3"></circle>
                         </svg>
                         <span>Location: <?php echo htmlspecialchars($table->location); ?></span>
+                      </div>
+                      <div class="table-info-item">
+                        <svg class="icon table-info-icon" viewBox="0 0 24 24">
+                          <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                        </svg>
+                        <span>Price: $<?php echo htmlspecialchars(number_format($table->price, 2)); ?></span>
                       </div>
                     </div>
                     
@@ -1034,6 +1063,12 @@ if (session_status() === PHP_SESSION_NONE) {
                             ?>
                           </span>
                         </div>
+                        <div class="reservation-detail">
+                          <svg class="icon reservation-detail-icon" viewBox="0 0 24 24">
+                            <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                          </svg>
+                          <span>Price: $<?php echo htmlspecialchars(number_format($reservation->table_price, 2)); ?></span>
+                        </div>
                         <?php if (!empty($reservation->notes)): ?>
                           <div class="reservation-detail">
                             <svg class="icon reservation-detail-icon" viewBox="0 0 24 24">
@@ -1061,7 +1096,7 @@ if (session_status() === PHP_SESSION_NONE) {
             <div class="modal">
               <div class="modal-header">
                 <h2 class="modal-title">Reserve Table #<?php echo htmlspecialchars($data['add_reservation_form']['table_number']); ?></h2>
-                <p class="modal-description">Enter the customer details to reserve this table.</p>
+                <p class="modal-description">Enter the customer details to reserve this table for $<?php echo htmlspecialchars(number_format($data['add_reservation_form']['table_price'], 2)); ?>.</p>
               </div>
               <div class="modal-body">
                 <form method="POST" action="">
@@ -1151,7 +1186,7 @@ if (session_status() === PHP_SESSION_NONE) {
                   <input type="hidden" name="table_id" value="<?php echo htmlspecialchars($data['update_table_form']['id']); ?>">
                   <input type="hidden" name="tab" value="<?php echo htmlspecialchars($data['tab']); ?>">
                   <input type="hidden" name="date" value="<?php echo htmlspecialchars($data['selectedDate']); ?>">
-                  <div class="form-grid form-grid-3">
+                  <div class="form-grid form-grid-4">
                     <div class="form-group">
                       <label for="update-table-number">Table Number</label>
                       <input id="update-table-number" name="number" type="number" placeholder="Enter table number" value="<?php echo htmlspecialchars($_POST['number'] ?? $data['update_table_form']['number']); ?>">
@@ -1178,6 +1213,13 @@ if (session_status() === PHP_SESSION_NONE) {
                         <div class="error-message"><?php echo htmlspecialchars($data['errors']['table']['location']); ?></div>
                       <?php endif; ?>
                     </div>
+                    <div class="form-group">
+                      <label for="update-price">Price ($)</label>
+                      <input id="update-price" name="price" type="number" step="0.01" placeholder="Enter price" value="<?php echo htmlspecialchars($_POST['price'] ?? $data['update_table_form']['price']); ?>">
+                      <?php if (isset($data['errors']['table']['price'])): ?>
+                        <div class="error-message"><?php echo htmlspecialchars($data['errors']['table']['price']); ?></div>
+                      <?php endif; ?>
+                    </div>
                   </div>
                   <div class="modal-footer">
                     <a href="?tab=<?php echo htmlspecialchars($data['tab']); ?>&date=<?php echo htmlspecialchars($data['selectedDate']); ?>" class="btn btn-outline">Cancel</a>
@@ -1195,7 +1237,7 @@ if (session_status() === PHP_SESSION_NONE) {
             <div class="modal">
               <div class="modal-header">
                 <h2 class="modal-title">Edit Reservation for Table #<?php echo htmlspecialchars($data['edit_reservation']['table_number']); ?></h2>
-                <p class="modal-description">Update the reservation details.</p>
+                <p class="modal-description">Update the reservation details for $<?php echo htmlspecialchars(number_format($data['edit_reservation']['table_price'], 2)); ?>.</p>
               </div>
               <div class="modal-body">
                 <form method="POST" action="">
@@ -1213,7 +1255,7 @@ if (session_status() === PHP_SESSION_NONE) {
                         </svg>
                         Customer Name
                       </label>
-                      <input id="edit-customer-name" name="customer_name" type="text" placeholder="Enter customer name" value="<?php echo htmlspecialchars($data['edit_reservation']['customer_name']); ?>">
+                      <input id="edit-customer-name" name="customer_name" type="text" placeholder="Enter customer name" value="<?php echo htmlspecialchars($_POST['customer_name'] ?? $data['edit_reservation']['customer_name']); ?>">
                       <?php if (isset($data['errors']['reservation']['customer_name'])): ?>
                         <div class="error-message"><?php echo htmlspecialchars($data['errors']['reservation']['customer_name']); ?></div>
                       <?php endif; ?>
@@ -1227,7 +1269,7 @@ if (session_status() === PHP_SESSION_NONE) {
                           </svg>
                           Start Time
                         </label>
-                        <input id="edit-start-time" name="start_time" type="time" value="<?php echo htmlspecialchars($data['edit_reservation']['start_time']); ?>">
+                        <input id="edit-start-time" name="start_time" type="time" value="<?php echo htmlspecialchars($_POST['start_time'] ?? $data['edit_reservation']['start_time']); ?>">
                         <?php if (isset($data['errors']['reservation']['start_time'])): ?>
                           <div class="error-message"><?php echo htmlspecialchars($data['errors']['reservation']['start_time']); ?></div>
                         <?php endif; ?>
@@ -1240,7 +1282,7 @@ if (session_status() === PHP_SESSION_NONE) {
                           </svg>
                           End Time
                         </label>
-                        <input id="edit-end-time" name="end_time" type="time" value="<?php echo htmlspecialchars($data['edit_reservation']['end_time']); ?>">
+                        <input id="edit-end-time" name="end_time" type="time" value="<?php echo htmlspecialchars($_POST['end_time'] ?? $data['edit_reservation']['end_time']); ?>">
                         <?php if (isset($data['errors']['reservation']['end_time'])): ?>
                           <div class="error-message"><?php echo htmlspecialchars($data['errors']['reservation']['end_time']); ?></div>
                         <?php endif; ?>
@@ -1256,7 +1298,7 @@ if (session_status() === PHP_SESSION_NONE) {
                         </svg>
                         Notes
                       </label>
-                      <textarea id="edit-notes" name="notes" placeholder="Any special requests or notes" rows="3"><?php echo htmlspecialchars($data['edit_reservation']['notes'] ?? ''); ?></textarea>
+                      <textarea id="edit-notes" name="notes" placeholder="Any special requests or notes" rows="3"><?php echo htmlspecialchars($_POST['notes'] ?? $data['edit_reservation']['notes'] ?? ''); ?></textarea>
                       <?php if (isset($data['errors']['reservation']['notes'])): ?>
                         <div class="error-message"><?php echo htmlspecialchars($data['errors']['reservation']['notes']); ?></div>
                       <?php endif; ?>

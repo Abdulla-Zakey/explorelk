@@ -15,12 +15,15 @@ class Hmessages extends Controller {
         $this->view('hotel/messages', $data);
     }
     
-    public function api_getConversation($hotel_id = null, $traveler_id = null) {
+    public function api_getConversation() {
         if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH'] !== 'XMLHttpRequest') {
             http_response_code(403);
             echo json_encode(['error' => 'Invalid request']);
             exit;
         }
+        
+        $hotel_id = isset($_GET['hotel_id']) ? $_GET['hotel_id'] : null;
+        $traveler_id = isset($_GET['traveler_id']) ? $_GET['traveler_id'] : null;
         
         if (!$hotel_id || !$traveler_id || $hotel_id != $_SESSION['hotel_id']) {
             http_response_code(403);
@@ -43,6 +46,7 @@ class Hmessages extends Controller {
     public function api_sendMessage() {
         if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH'] !== 'XMLHttpRequest') {
             http_response_code(403);
+            header('Content-Type: application/json');
             echo json_encode(['error' => 'Invalid request']);
             exit;
         }
@@ -51,12 +55,14 @@ class Hmessages extends Controller {
         
         if (!isset($data['hotel_id']) || !isset($data['traveler_id']) || !isset($data['content']) || empty(trim($data['content']))) {
             http_response_code(400);
+            header('Content-Type: application/json');
             echo json_encode(['error' => 'Missing or invalid required fields']);
             exit;
         }
         
         if ($data['hotel_id'] != $_SESSION['hotel_id']) {
             http_response_code(403);
+            header('Content-Type: application/json');
             echo json_encode(['error' => 'Access denied']);
             exit;
         }
@@ -73,11 +79,13 @@ class Hmessages extends Controller {
                 echo json_encode(['success' => true, 'message_id' => $message_id]);
             } else {
                 http_response_code(500);
+                header('Content-Type: application/json');
                 echo json_encode(['error' => 'Failed to send message']);
             }
         } catch (Exception $e) {
             error_log('Error sending message: ' . $e->getMessage());
             http_response_code(500);
+            header('Content-Type: application/json');
             echo json_encode(['error' => 'Failed to send message']);
         }
     }
@@ -114,12 +122,14 @@ class Hmessages extends Controller {
         }
     }
     
-    public function api_getUnreadCounts($hotel_id = null) {
+    public function api_getUnreadCounts() {
         if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH'] !== 'XMLHttpRequest') {
             http_response_code(403);
             echo json_encode(['error' => 'Invalid request']);
             exit;
         }
+        
+        $hotel_id = isset($_GET['hotel_id']) ? $_GET['hotel_id'] : null;
         
         if (!$hotel_id || $hotel_id != $_SESSION['hotel_id']) {
             http_response_code(403);
@@ -140,5 +150,12 @@ class Hmessages extends Controller {
             http_response_code(500);
             echo json_encode(['error' => 'Failed to fetch unread counts']);
         }
+    }
+    
+    // Simple test endpoint for debugging routing
+    public function test() {
+        header('Content-Type: application/json');
+        echo json_encode(['status' => 'success', 'message' => 'Test endpoint working']);
+        exit;
     }
 }

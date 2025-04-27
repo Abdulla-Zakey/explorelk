@@ -333,7 +333,7 @@
             <button id="addBankDetailsBtn">Add Bank Details</button>
         </header>
 
-        <div class="metrics-grid">
+        <!-- <div class="metrics-grid">
             <div class="metric-card">
                 <h3>Total Earnings</h3>
                 <p class="metric-value">Rs45,231.89</p>
@@ -350,9 +350,9 @@
                 <h3>Current Event Earning</h3>
                 <p class="metric-value">Rs25,000</p>
             </div>
-        </div>
+        </div> -->
 
-        <div class="charts-container">
+        <!-- <div class="charts-container">
             <div class="chart-card">
                 <h3>Income Details</h3>
                 <div class="chart-container">
@@ -365,7 +365,7 @@
                     <canvas id="earningsChart">Your browser does not support the canvas element.</canvas>
                 </div>
             </div>
-        </div>
+        </div> -->
 
         <!-- Bank Details Table -->
         <div class="table-container">

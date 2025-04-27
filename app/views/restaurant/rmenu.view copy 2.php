@@ -1,5 +1,5 @@
 <?php
-include '../app/views/components/rnav.php';
+ include '../app/views/components/rnav.php';
 ?>
 
 <!DOCTYPE html>
@@ -16,6 +16,7 @@ include '../app/views/components/rnav.php';
             --text-color: #333;
             --background-color: #f4f4f4;
             --white: #ffffff;
+            --success-color: #28a745;
         }
 
         * {
@@ -215,7 +216,7 @@ include '../app/views/components/rnav.php';
             top: 0;
             width: 100%;
             height: 100%;
-            overflow: auto;
+            overflow:auto;
             background-color: rgba(0,0,0,0.4);
         }
 
@@ -275,9 +276,54 @@ include '../app/views/components/rnav.php';
             margin-bottom: 10px;
             display: none;
         }
+
+        .success-popup {
+            display: none;
+            position: fixed;
+            z-index: 2;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.4);
+        }
+
+        .success-popup-content {
+            background-color: var(--white);
+            margin: 20% auto;
+            padding: 20px;
+            width: 80%;
+            max-width: 400px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            position: relative;
+        }
+
+        .success-popup-content p {
+            color: var(--success-color);
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+        }
+
+        .success-popup-content button {
+            background-color: var(--secondary-color);
+            color: var(--white);
+            border: none;
+            padding: 8px 16px;
+            font-size: 1rem;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .success-popup-content button:hover {
+            background-color: var(--primary-color);
+        }
     </style>
 </head>
 <body>
+    
     <div class="container">
         <header>
             <h1>Restaurant Menu</h1>
@@ -287,13 +333,20 @@ include '../app/views/components/rnav.php';
         <div id="menuItems">
             <?php foreach ($data['menuItems'] as $item): ?>
                 <div class="menu-item" data-id="<?php echo $item->id; ?>">
-                    <img src="<?php echo ROOT . $item->image; ?>" alt="<?php echo $item->name; ?>" class="menu-item-image">
+                    <?php
+                        $imagePath = ROOT . $item->image;
+
+                        // Log the image path to debug
+                        error_log("Rendering image for item {$item->id}: {$imagePath}");
+                    ?>
+                    
+                    <img src="<?php echo htmlspecialchars($imagePath); ?>" alt="<?php echo htmlspecialchars($item->name); ?>" class="menu-item-image" onerror="console.error('Failed to load image: <?php echo htmlspecialchars($imagePath); ?>')">
                     <div class="menu-item-details">
-                        <h3><?php echo $item->name; ?></h3>
-                        <p><?php echo $item->description; ?></p>
+                        <h3><?php echo htmlspecialchars($item->name); ?></h3>
+                        <p><?php echo htmlspecialchars($item->description); ?></p>
                         <p><strong>Price:</strong> $<?php echo number_format($item->price, 2); ?></p>
-                        <p><strong>Category:</strong> <?php echo $item->category; ?></p>
-                        <p><strong>Availability:</strong> <?php echo $item->availability; ?></p>
+                        <p><strong>Category:</strong> <?php echo htmlspecialchars($item->category); ?></p>
+                        <p><strong>Availability:</strong> <?php echo htmlspecialchars($item->availability); ?></p>
                     </div>
                     <div class="menu-item-actions">
                         <label class="switch">
@@ -318,7 +371,7 @@ include '../app/views/components/rnav.php';
             <span class="close">×</span>
             <h2 id="modalTitle">Add New Menu Item</h2>
             <div id="errorMessage" class="error-message"></div>
-            <form id="itemForm">
+            <form id="itemForm" method="post" action="<?= ROOT ?>/restaurant/Rmenu/createMenuItem" enctype="multipart/form-data">
                 <input type="hidden" id="itemId">
                 <input type="text" id="itemName" name="name" placeholder="Item Name" required>
                 <textarea id="itemDescription" name="description" placeholder="Description" required></textarea>
@@ -343,187 +396,81 @@ include '../app/views/components/rnav.php';
         </div>
     </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const baseUrl = '<?php echo defined("ROOT") ? ROOT : ""; ?>/restaurant/rmenu';
-            console.log('Base URL for AJAX requests:', baseUrl);
+    <div id="successPopup" class="success-popup">
+        <div class="success-popup-content">
+            <p id="successMessage"></p>
+            <button id="successPopupClose">OK</button>
+        </div>
+    </div>
 
-            const addItemBtn = document.getElementById('addItemBtn');
-            const itemModal = document.getElementById('itemModal');
-            const closeBtn = itemModal.querySelector('.close');
-            const itemForm = document.getElementById('itemForm');
-            const menuItemsContainer = document.getElementById('menuItems');
-            const modalTitle = document.getElementById('modalTitle');
-            const errorMessage = document.getElementById('errorMessage');
+    <!-- Keep the rest of your HTML and PHP code as is -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const baseUrl = '<?php echo defined("ROOT") ? ROOT : ""; ?>/restaurant/rmenu';
 
-            addItemBtn.onclick = function() {
-                modalTitle.textContent = 'Add New Menu Item';
-                itemForm.reset();
-                document.getElementById('itemId').value = '';
-                errorMessage.style.display = 'none';
-                itemModal.style.display = 'block';
-            }
+        // Modal handling
+        const addItemBtn = document.getElementById('addItemBtn');
+        const itemModal = document.getElementById('itemModal');
+        const closeBtn = itemModal.querySelector('.close');
 
-            closeBtn.onclick = function() {
-                itemModal.style.display = 'none';
-            }
+        // Toggle availability functionality
+        document.querySelectorAll('.toggle-availability').forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                const menuItem = this.closest('.menu-item');
+                const id = menuItem.dataset.id;
+                const isActive = this.checked;
 
-            window.onclick = function(event) {
-                if (event.target == itemModal) {
-                    itemModal.style.display = 'none';
-                }
-            }
-
-            itemForm.addEventListener('submit', function(e) {
-                e.preventDefault();
-                const formData = new FormData(itemForm);
-                const itemId = document.getElementById('itemId').value;
-                const url = itemId ? `${baseUrl}/update/${itemId}` : `${baseUrl}/create`;
-                console.log('Submitting to URL:', url);
-                console.log('Form data:', [...formData.entries()]);
-
-                fetch(url, {
+                fetch(`${baseUrl}/toggle/${id}`, {
                     method: 'POST',
-                    body: formData
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ is_active: isActive })
                 })
-                .then(response => {
-                    console.log('Create/Update response status:', response.status, response.statusText);
-                    if (!response.ok) {
-                        throw new Error(`Network response was not ok: ${response.status} ${response.statusText}`);
-                    }
-                    return response.json();
-                })
+                .then(response => response.json())
                 .then(data => {
-                    console.log('Create/Update response data:', data);
-                    if (data.success) {
-                        location.reload();
-                    } else {
-                        errorMessage.textContent = data.error || 'An error occurred';
-                        errorMessage.style.display = 'block';
+                    if (!data.success) {
+                        this.checked = !isActive;
+                        alert('Failed to update availability');
                     }
                 })
                 .catch(error => {
-                    console.error('Create/Update fetch error:', error);
-                    errorMessage.textContent = `An error occurred: ${error.message}`;
-                    errorMessage.style.display = 'block';
+                    console.error('Error:', error);
+                    this.checked = !isActive;
                 });
             });
-
-            menuItemsContainer.addEventListener('click', function(e) {
-                if (e.target.classList.contains('menu-options-btn')) {
-                    const content = e.target.nextElementSibling;
-                    content.style.display = content.style.display === 'block' ? 'none' : 'block';
-                } else if (e.target.classList.contains('edit-btn')) {
-                    e.preventDefault();
-                    const menuItem = e.target.closest('.menu-item');
-                    const id = menuItem.dataset.id;
-
-                    fetch(`${baseUrl}/get/${id}`)
-                        .then(response => {
-                            console.log('Get response status:', response.status, response.statusText);
-                            if (!response.ok) {
-                                throw new Error(`Failed to fetch item: ${response.status} ${response.statusText}`);
-                            }
-                            return response.json();
-                        })
-                        .then(item => {
-                            console.log('Fetched item:', item);
-                            modalTitle.textContent = 'Edit Menu Item';
-                            document.getElementById('itemId').value = item.id;
-                            document.getElementById('itemName').value = item.name;
-                            document.getElementById('itemDescription').value = item.description;
-                            document.getElementById('itemPrice').value = item.price;
-                            document.getElementById('itemCategory').value = item.category;
-                            document.getElementById('itemAvailability').value = item.availability;
-                            errorMessage.style.display = 'none';
-                            itemModal.style.display = 'block';
-                        })
-                        .catch(error => {
-                            console.error('Get fetch error:', error);
-                            errorMessage.textContent = `Failed to load item: ${error.message}`;
-                            errorMessage.style.display = 'block';
-                        });
-                } else if (e.target.classList.contains('delete-btn')) {
-                    e.preventDefault();
-                    const menuItem = e.target.closest('.menu-item');
-                    const id = menuItem.dataset.id;
-                    console.log('Attempting to delete item with ID:', id);
-                    if (confirm('Are you sure you want to delete this item?')) {
-                        fetch(`${baseUrl}/delete/${id}`, {
-                            method: 'POST'
-                        })
-                        .then(response => {
-                            console.log('Delete response status:', response.status, response.statusText);
-                            if (!response.ok) {
-                                throw new Error(`Failed to delete item: ${response.status} ${response.statusText}`);
-                            }
-                            return response.json();
-                        })
-                        .then(data => {
-                            console.log('Delete response data:', data);
-                            if (data.success) {
-                                menuItem.remove();
-                            } else {
-                                alert(data.error || 'Failed to delete item');
-                            }
-                        })
-                        .catch(error => {
-                            console.error('Delete fetch error:', error);
-                            alert(`Failed to delete item: ${error.message}`);
-                        });
-                    }
-                } else if (e.target.classList.contains('toggle-availability')) {
-                    const menuItem = e.target.closest('.menu-item');
-                    const id = menuItem.dataset.id;
-                    const originalState = e.target.checked;
-                    // Send is_active as a string "true" or "false"
-                    const is_active = originalState ? "true" : "false";
-
-                    console.log('Toggling availability for ID:', id, 'to:', is_active);
-                    fetch(`${baseUrl}/toggle/${id}`, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({ is_active })
-                    })
-                    .then(response => {
-                        console.log('Toggle response status:', response.status, response.statusText);
-                        if (!response.ok) {
-                            throw new Error(`Failed to toggle availability: ${response.status} ${response.statusText}`);
-                        }
-                        return response.text().then(text => {
-                            console.log('Raw toggle response:', text);
-                            try {
-                                return JSON.parse(text);
-                            } catch (err) {
-                                throw new Error(`Invalid JSON response: ${err.message}`);
-                            }
-                        });
-                    })
-                    .then(data => {
-                        console.log('Toggle response data:', data);
-                        if (!data.success) {
-                            throw new Error(data.error || 'Failed to toggle availability');
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Toggle fetch error:', error);
-                        alert(error.message);
-                        e.target.checked = !originalState;
-                    });
-                }
-            });
-
-            document.addEventListener('click', function(event) {
-                if (!event.target.matches('.menu-options-btn')) {
-                    const dropdowns = document.getElementsByClassName('menu-options-content');
-                    for (let i = 0; i < dropdowns.length; i++) {
-                        dropdowns[i].style.display = 'none';
-                    }
-                }
-            });
         });
-    </script>
+
+        // Open modal for new item
+        addItemBtn.onclick = function() {
+            itemModal.style.display = 'block';
+        }
+
+        // Close modal
+        closeBtn.onclick = function() {
+            itemModal.style.display = 'none';
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            if (event.target == itemModal) {
+                itemModal.style.display = 'none';
+            }
+        }
+
+        // Options menu toggle
+        document.addEventListener('click', function(event) {
+            if (event.target.matches('.menu-options-btn')) {
+                const content = event.target.nextElementSibling;
+                content.style.display = content.style.display === 'block' ? 'none' : 'block';
+            } else {
+                const dropdowns = document.getElementsByClassName('menu-options-content');
+                for (let i = 0; i < dropdowns.length; i++) {
+                    dropdowns[i].style.display = 'none';
+                }
+            }
+        });
+    });
+</script>
 </body>
 </html>

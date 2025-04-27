@@ -1,6 +1,4 @@
 <?php
-// show($data);
-// exit();
 $title = "EO - Pending Events";
 include '../app/views/components/eonavbar.php';
 
@@ -24,7 +22,7 @@ function renderTicketTypes($ticketTypes)
     $html = '<div class="ticket-types">';
     foreach ($ticketTypes as $ticket) {
         $html .= '<div class="ticket-type">';
-        $html .= '<div class="ticket-name">' . $ticket->ticketTypeName . '</div>';
+        $html .= '<div class="ticket-name">' . htmlspecialchars($ticket->ticketTypeName) . '</div>';
         $html .= '<div class="ticket-details">';
         $html .= '<span class="price">Rs. ' . number_format($ticket->pricePerTicket, 2) . '</span>';
         $html .= '<span class="available">' . $ticket->availableTickets . '/' . $ticket->totalTickets . ' available</span>';
@@ -49,7 +47,6 @@ function renderTicketTypes($ticketTypes)
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCFbprhDc_fKXUHl-oYEVGXKD1HciiAsz0&libraries=places"></script>
 
     <style>
-        /* Primary Styles */
         body {
             font-family: 'Poppins', sans-serif;
             background-color: #f8f9fa;
@@ -60,11 +57,9 @@ function renderTicketTypes($ticketTypes)
 
         .content-wrapper {
             margin-left: 18%;
-            /* Match the width of the left navbar */
             padding: 2rem;
         }
 
-        /* Event Container Styles */
         .events-container {
             background-color: #fff;
             border-radius: 12px;
@@ -97,7 +92,6 @@ function renderTicketTypes($ticketTypes)
             font-size: 0.95rem;
         }
 
-        /* Empty State Styles */
         .empty-state {
             text-align: center;
             padding: 3rem 1rem;
@@ -118,7 +112,6 @@ function renderTicketTypes($ticketTypes)
             margin-bottom: 1.5rem;
         }
 
-        /* Event Card Styles */
         .events-list {
             padding: 1.5rem;
         }
@@ -174,43 +167,6 @@ function renderTicketTypes($ticketTypes)
             object-fit: cover;
         }
 
-        .events-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 1.5rem;
-            padding: 1.5rem;
-        }
-
-        .grid-event-card {
-            background-color: #fff;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-
-        .grid-event-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-        }
-
-        .event-image {
-            width: 100%;
-            height: 300px;
-            object-fit: cover;
-        }
-
-        .grid-event-content {
-            padding: 1rem;
-        }
-
-        .grid-event-title {
-            font-size: 1.1rem;
-            font-weight: 600;
-            margin: 0 0 0.5rem;
-            color: #002D40;
-        }
-
         .event-meta {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -239,21 +195,6 @@ function renderTicketTypes($ticketTypes)
             line-height: 1.5;
         }
 
-        .event-price {
-            font-weight: 600;
-            color: #007bff;
-            font-size: 1.1rem;
-            margin-top: 0.5rem;
-        }
-
-        .event-actions {
-            display: flex;
-            justify-content: flex-end;
-            gap: 0.8rem;
-            margin-top: 1rem;
-        }
-
-        /* Ticket Types Styles */
         .ticket-types {
             margin: 1rem 0;
             border-top: 1px solid #e9ecef;
@@ -292,7 +233,6 @@ function renderTicketTypes($ticketTypes)
             font-size: 0.9rem;
         }
 
-        /* Form Styles */
         .form-section {
             margin: 1.5rem 0;
             padding-top: 1rem;
@@ -313,7 +253,6 @@ function renderTicketTypes($ticketTypes)
             margin-bottom: 1rem;
         }
 
-        /* Button Styles */
         .btn {
             display: flex;
             padding: 0.5rem 2rem;
@@ -330,7 +269,6 @@ function renderTicketTypes($ticketTypes)
         }
 
         .btn i {
-          
             margin-right: 0.125rem;
             font-size: 1rem;
         }
@@ -362,7 +300,6 @@ function renderTicketTypes($ticketTypes)
             background-color: #c82333;
         }
 
-        /* Modal Styles */
         .modal {
             display: none;
             position: fixed;
@@ -421,7 +358,6 @@ function renderTicketTypes($ticketTypes)
             color: #333;
         }
 
-        /* Form Styles */
         .form-group {
             margin-bottom: 1.2rem;
         }
@@ -443,6 +379,7 @@ function renderTicketTypes($ticketTypes)
         input[type="date"],
         input[type="time"],
         input[type="number"],
+        select,
         textarea {
             width: 100%;
             resize: none;
@@ -461,6 +398,7 @@ function renderTicketTypes($ticketTypes)
         }
 
         input:focus,
+        select:focus,
         textarea:focus {
             outline: none;
             border-color: #002D40;
@@ -474,96 +412,93 @@ function renderTicketTypes($ticketTypes)
             margin-top: 1.5rem;
         }
 
-        /* Notification Popup Styles */
-    .notification-popup {
-        display: none;
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        min-width: 300px;
-        max-width: 450px;
-        z-index: 2000;
-        border-radius: 8px;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-        animation: slideIn 0.3s ease-out;
-    }
-
-    @keyframes slideIn {
-        from {
-            transform: translateX(100%);
-            opacity: 0;
+        .notification-popup {
+            display: none;
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            min-width: 300px;
+            max-width: 450px;
+            z-index: 2000;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            animation: slideIn 0.3s ease-out;
         }
-        to {
-            transform: translateX(0);
-            opacity: 1;
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
         }
-    }
 
-    @keyframes slideOut {
-        from {
-            transform: translateX(0);
-            opacity: 1;
+        @keyframes slideOut {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateX(100%);
+                opacity: 0;
+            }
         }
-        to {
-            transform: translateX(100%);
-            opacity: 0;
+
+        .notification-content {
+            display: flex;
+            align-items: center;
+            padding: 15px 20px;
+            border-radius: 8px;
+            background-color: white;
         }
-    }
 
-    .notification-content {
-        display: flex;
-        align-items: center;
-        padding: 15px 20px;
-        border-radius: 8px;
-        background-color: white;
-    }
+        .notification-icon {
+            font-size: 20px;
+            margin-right: 15px;
+            flex-shrink: 0;
+        }
 
-    .notification-icon {
-        font-size: 20px;
-        margin-right: 15px;
-        flex-shrink: 0;
-    }
+        .notification-success .notification-content {
+            border-left: 4px solid #28a745;
+        }
 
-    .notification-success .notification-content {
-        border-left: 4px solid #28a745;
-    }
+        .notification-error .notification-content {
+            border-left: 4px solid #dc3545;
+        }
 
-    .notification-error .notification-content {
-        border-left: 4px solid #dc3545;
-    }
+        .notification-success .notification-icon:before {
+            content: '✓';
+            color: #28a745;
+        }
 
-    .notification-success .notification-icon:before {
-        content: '✓';
-        color: #28a745;
-    }
+        .notification-error .notification-icon:before {
+            content: '✕';
+            color: #dc3545;
+        }
 
-    .notification-error .notification-icon:before {
-        content: '✕';
-        color: #dc3545;
-    }
+        #notification-message {
+            flex-grow: 1;
+            margin: 0;
+            font-size: 0.95rem;
+            color: #333;
+        }
 
-    #notification-message {
-        flex-grow: 1;
-        margin: 0;
-        font-size: 0.95rem;
-        color: #333;
-    }
+        .notification-close {
+            font-size: 20px;
+            font-weight: bold;
+            color: #aaa;
+            cursor: pointer;
+            margin-left: 15px;
+            transition: color 0.2s;
+        }
 
-    .notification-close {
-        font-size: 20px;
-        font-weight: bold;
-        color: #aaa;
-        cursor: pointer;
-        margin-left: 15px;
-        transition: color 0.2s;
-    }
+        .notification-close:hover {
+            color: #333;
+        }
 
-    .notification-close:hover {
-        color: #333;
-    }
-
-
-        /* Responsive Adjustments */
         @media (max-width: 992px) {
             .content-wrapper {
                 margin-left: 0;
@@ -576,10 +511,6 @@ function renderTicketTypes($ticketTypes)
         }
 
         @media (max-width: 768px) {
-            .events-grid {
-                grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-            }
-
             .modal-content {
                 width: 90%;
                 padding: 1.5rem;
@@ -619,7 +550,6 @@ function renderTicketTypes($ticketTypes)
 
 <body>
     <div class="content-wrapper">
-        <!-- Pending Events Section -->
         <div class="events-container pending">
             <div class="events-header">
                 <h2><i class="fas fa-hourglass-half"></i> Pending Events</h2>
@@ -636,16 +566,16 @@ function renderTicketTypes($ticketTypes)
                         ?>
                         <div class="event-card" id="event-<?= $event->event_Id ?>">
                             <div class="event-header">
-                                <h3 class="event-title"><?= $event->eventName ?></h3>
+                                <h3 class="event-title"><?= htmlspecialchars($event->eventName) ?></h3>
                                 <span class="event-status">Pending Approval</span>
                             </div>
 
                             <div class="event-image">
-                                <img src="<?= IMAGES ?>/events/eventWebBannerPics/<?= $event->eventWebBannerPath ?>" alt="<?= $event->eventName ?>">
+                                <img src="<?= IMAGES ?>/events/eventWebBannerPics/<?= htmlspecialchars($event->eventWebBannerPath) ?>" alt="<?= htmlspecialchars($event->eventName) ?>">
                             </div>
 
                             <div class="event-description">
-                                <?= $event->aboutEvent ?>
+                                <?= htmlspecialchars($event->aboutEvent) ?>
                             </div>
 
                             <div class="event-meta">
@@ -660,11 +590,11 @@ function renderTicketTypes($ticketTypes)
                                 </div>
                                 <div class="meta-item">
                                     <i class="fas fa-map-marker-alt"></i>
-                                    <span><?= $event->eventLocation ?></span>
+                                    <span><?= htmlspecialchars($event->eventLocation) ?></span>
                                 </div>
                                 <div class="meta-item">
                                     <i class="fas fa-tag"></i>
-                                    <span><?= $event->eventType ?></span>
+                                    <span><?= htmlspecialchars($event->eventType) ?></span>
                                 </div>
                             </div>
 
@@ -691,23 +621,21 @@ function renderTicketTypes($ticketTypes)
                         <i class="fas fa-calendar-times fa-3x"></i>
                         <h3>No pending events</h3>
                         <p>Your events will appear here once submitted for approval</p>
-                            <a href="<?= ROOT ?>/Eventorganizer/Eocreateevent" >
-                                <button class="btn btn-primary">
+                        <a href="<?= ROOT ?>/Eventorganizer/Eocreateevent">
+                            <button class="btn btn-primary">
                                 <i class="fa-solid fa-plus"></i>Create New Event
-                                </button>
-                            </a>
+                            </button>
+                        </a>
                     </div>
                 <?php endif; ?>
             </div>
         </div>
-
     </div>
 
-    <!-- Event Edit Modal -->
     <?php if (isset($data['pendingEvents']) && !empty($data['pendingEvents'])): ?>
         <div id="event-edit-modal" class="modal">
             <div class="modal-content">
-                <span class="close-button" onclick="closeModals()">&times;</span>
+                <span class="close-button" onclick="closeModals()">×</span>
                 <h2>Edit Event</h2>
                 <form id="edit-event-form" method="post" action="<?= ROOT ?>/eventorganizer/ViewPendingEvents/updateEvent">
                     <input type="hidden" id="modal-event-id" name="id" value="">
@@ -724,13 +652,19 @@ function renderTicketTypes($ticketTypes)
 
                     <div class="form-group">
                         <label for="modal-event-type">Event Type</label>
-                        <input type="text" id="modal-event-type" name="eventType" required value="">
+                        <select id="modal-event-type" name="eventType" required>
+                            <option value="Carnival">Carnival</option>
+                            <option value="Music Concert">Music Concert</option>
+                            <option value="Magic Show">Magic Show</option>
+                            <option value="Sports">Sports</option>
+                            <option value="Other">Other</option>
+                        </select>
                     </div>
 
                     <div class="form-row">
                         <div class="form-group">
                             <label for="modal-event-date">Date</label>
-                            <input type="date" id="modal-event-date" name="eventDate" required value="">
+                            <input type="date" id="modal-event-date" name="eventDate" required value="" min="<?= date('Y-m-d') ?>">
                         </div>
 
                         <div class="form-group">
@@ -751,7 +685,6 @@ function renderTicketTypes($ticketTypes)
 
                     <div class="form-section" id="ticket-types-container">
                         <h3>Ticket Types</h3>
-                        <!-- Ticket types will be dynamically added here -->
                     </div>
 
                     <div class="form-actions">
@@ -762,10 +695,9 @@ function renderTicketTypes($ticketTypes)
             </div>
         </div>
 
-        <!-- Delete Confirmation Modal -->
         <div id="delete-confirm-modal" class="modal">
             <div class="modal-content delete-modal">
-                <span class="close-button" onclick="closeModals()">&times;</span>
+                <span class="close-button" onclick="closeModals()">×</span>
                 <h2>Confirm Deletion</h2>
                 <p>Are you sure you want to delete <strong id="delete-event-name"></strong>?</p>
                 <p>This action cannot be undone.</p>
@@ -784,21 +716,18 @@ function renderTicketTypes($ticketTypes)
         <div class="notification-content">
             <span class="notification-icon"></span>
             <p id="notification-message"></p>
-            <span class="notification-close">&times;</span>
+            <span class="notification-close">×</span>
         </div>
     </div>
 
     <script>
-        // Store events and ticket types data for modal use
         const pendingEvents = <?= json_encode($data['pendingEvents'] ?? []) ?>;
         const eventTicketTypes = <?= json_encode($data['eventTicketTypes'] ?? []) ?>;
 
-        // Function to open the edit modal with event data
         function openEditModal(eventId, index) {
             const event = pendingEvents[index];
             if (!event) return;
 
-            // Set event data in the modal form
             document.getElementById('modal-event-id').value = event.event_Id;
             document.getElementById('modal-event-name').value = event.eventName;
             document.getElementById('modal-about-event').value = event.aboutEvent;
@@ -808,7 +737,6 @@ function renderTicketTypes($ticketTypes)
             document.getElementById('modal-end-time').value = event.eventEndTime.substring(0, 5);
             document.getElementById('modal-event-location').value = event.eventLocation;
 
-            // Generate ticket type forms
             const ticketTypesContainer = document.getElementById('ticket-types-container');
             ticketTypesContainer.innerHTML = '<h3>Ticket Types</h3>';
 
@@ -820,52 +748,43 @@ function renderTicketTypes($ticketTypes)
                     ticketFormGroup.className = 'ticket-form-group';
                     ticketFormGroup.innerHTML = `
                     <input type="hidden" name="ticketIds[]" value="${ticket.eventTicketType_Id}">
-                    
                     <div class="form-row">
                         <div class="form-group">
                             <label for="ticket-name-${i}">Ticket Name</label>
                             <input type="text" id="ticket-name-${i}" name="ticketNames[]" required value="${ticket.ticketTypeName}">
                         </div>
-                        
                         <div class="form-group">
                             <label for="ticket-price-${i}">Price (Rs)</label>
                             <input type="number" id="ticket-price-${i}" name="ticketPrices[]" step="0.01" min="0" required value="${ticket.pricePerTicket}">
                         </div>
-                        
                         <div class="form-group">
                             <label for="ticket-quantity-${i}">Total Tickets</label>
                             <input type="number" id="ticket-quantity-${i}" name="ticketQuantities[]" min="1" required value="${ticket.totalTickets}">
                         </div>
                     </div>
-                    
                     <div class="form-group">
                         <label for="ticket-desc-${i}">Description</label>
                         <textarea id="ticket-desc-${i}" name="ticketDescriptions[]" required>${ticket.ticketTypeDescription}</textarea>
                     </div>
                 `;
-
                     ticketTypesContainer.appendChild(ticketFormGroup);
                 });
             }
 
-            // Show the modal
             document.getElementById('event-edit-modal').style.display = 'block';
         }
 
-        // Function to open the delete confirmation modal
         function openDeleteModal(eventId, eventName) {
             document.getElementById('delete-event-id').value = eventId;
             document.getElementById('delete-event-name').textContent = eventName;
             document.getElementById('delete-confirm-modal').style.display = 'block';
         }
 
-        // Function to close all modals
         function closeModals() {
             document.getElementById('event-edit-modal').style.display = 'none';
             document.getElementById('delete-confirm-modal').style.display = 'none';
         }
 
-        // Close modals when clicking outside
         window.addEventListener('click', function (event) {
             if (event.target === document.getElementById('event-edit-modal')) {
                 closeModals();
@@ -874,79 +793,80 @@ function renderTicketTypes($ticketTypes)
                 closeModals();
             }
         });
+
+        // Client-side validation for start and end time, and past date
+        document.getElementById('edit-event-form').addEventListener('submit', function (e) {
+            const startTime = document.getElementById('modal-start-time').value;
+            const endTime = document.getElementById('modal-end-time').value;
+            const eventDate = document.getElementById('modal-event-date').value;
+
+            // Validate past date
+            const today = new Date().toISOString().split('T')[0]; // Get today's date in YYYY-MM-DD format
+            if (eventDate < today) {
+                e.preventDefault();
+                showNotification('Event date cannot be in the past', 'error');
+                return;
+            }
+
+            // Validate start and end time
+            if (startTime && endTime && startTime >= endTime) {
+                e.preventDefault();
+                showNotification('End time must be after start time', 'error');
+            }
+        });
     </script>
 
-    <!-- This is to initialize the Google map auto complete -->
     <script>
         function initAutocomplete() {
             var newLocationInput = document.getElementById('modal-event-location');
-
-            // Restrict to Sri Lanka (country code 'LK')
             var options = {
                 componentRestrictions: {
                     country: 'LK'
                 }
             };
-
-            // Create autocomplete objects and apply the restriction
             var autocomplete = new google.maps.places.Autocomplete(newLocationInput, options);
-            
         }
 
         google.maps.event.addDomListener(window, 'load', initAutocomplete);
     </script>
 
-<script>
-    // Notification functions
-    function showNotification(message, type) {
-        const popup = document.getElementById('notification-popup');
-        const messageEl = document.getElementById('notification-message');
-        
-        // Set message content
-        messageEl.textContent = message;
-        
-        // Set notification type (success or error)
-        popup.className = 'notification-popup notification-' + type;
-        
-        // Show the notification
-        popup.style.display = 'block';
-        
-        // Auto hide after 5 seconds
-        setTimeout(() => {
-            hideNotification();
-        }, 5000);
-    }
-    
-    function hideNotification() {
-        const popup = document.getElementById('notification-popup');
-        popup.style.animation = 'slideOut 0.3s ease-out forwards';
-        
-        setTimeout(() => {
-            popup.style.display = 'none';
-            popup.style.animation = 'slideIn 0.3s ease-out';
-        }, 300);
-    }
-    
-    // Close button functionality
-    document.addEventListener('DOMContentLoaded', function() {
-        const closeBtn = document.querySelector('.notification-close');
-        closeBtn.addEventListener('click', hideNotification);
-    });
+    <script>
+        function showNotification(message, type) {
+            const popup = document.getElementById('notification-popup');
+            const messageEl = document.getElementById('notification-message');
+            messageEl.textContent = message;
+            popup.className = 'notification-popup notification-' + type;
+            popup.style.display = 'block';
+            setTimeout(() => {
+                hideNotification();
+            }, 5000);
+        }
 
-    // Check for session messages on page load
-    document.addEventListener('DOMContentLoaded', function() {
-        <?php if (isset($_SESSION['success'])): ?>
-            showNotification('<?= htmlspecialchars($_SESSION['success']) ?>', 'success');
-            <?php unset($_SESSION['success']); ?>
-        <?php endif; ?>
-        
-        <?php if (isset($_SESSION['error'])): ?>
-            showNotification('<?= htmlspecialchars($_SESSION['error']) ?>', 'error');
-            <?php unset($_SESSION['error']); ?>
-        <?php endif; ?>
-    });
-</script>
+        function hideNotification() {
+            const popup = document.getElementById('notification-popup');
+            popup.style.animation = 'slideOut 0.3s ease-out forwards';
+            setTimeout(() => {
+                popup.style.display = 'none';
+                popup.style.animation = 'slideIn 0.3s ease-out';
+            }, 300);
+        }
 
+        document.addEventListener('DOMContentLoaded', function () {
+            const closeBtn = document.querySelector('.notification-close');
+            closeBtn.addEventListener('click', hideNotification);
+        });
+
+        document.addEventListener('DOMContentLoaded', function () {
+            <?php if (isset($_SESSION['success'])): ?>
+                showNotification('<?= htmlspecialchars($_SESSION['success']) ?>', 'success');
+                <?php unset($_SESSION['success']); ?>
+            <?php endif; ?>
+            <?php if (isset($_SESSION['error'])): ?>
+                showNotification('<?= htmlspecialchars($_SESSION['error']) ?>', 'error');
+                <?php unset($_SESSION['error']); ?>
+            <?php endif; ?>
+        });
+    </script>
 </body>
 
 </html>

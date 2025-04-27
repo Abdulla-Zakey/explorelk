@@ -123,7 +123,7 @@
             <!--Here we have to display the events with the status of completed in the database, Also we have to have link to view the earnings of the event-->
             <li><a href = "<?= ROOT ?>/Eventorganizer/ViewCompletedEvents"><i class="fas fa-flag-checkered"></i>Completed Events</a></li>    
             
-            <li><a href = "<?= ROOT ?>/Eventorganizer/Eopayments"><i class="fa-solid fa-money-check-dollar"></i> MyEarning</a></li>  
+            <li><a href = "<?= ROOT ?>/Eventorganizer/Eopayments"><i class="fa-solid fa-money-check-dollar"></i> Payments</a></li>  
             <li><a href = "<?= ROOT ?>/Eventorganizer/Eosettings"><i class="fas fa-cog"></i> Settings</a></li>
             <li><a href = "<?= ROOT ?>/traveler/Login/logout"><i class="fas fa-sign-out-alt"></i> Logout</a></li>"
         </ul>

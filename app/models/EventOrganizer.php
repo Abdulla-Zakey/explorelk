@@ -12,6 +12,7 @@ class Eventorganizer {
         'company_MobileNum',
         'company_Name',
         'company_Address',
+        'company_logo', // Added to support profile image
         'status'
     ];
 
@@ -22,8 +23,8 @@ class Eventorganizer {
         // Validate company name (required for insert, optional for update)
         if (!$update && empty($data['company_Name'])) {
             $this->errors['company_Name'] = "Company name is required.";
-        } elseif (!empty($data['company_Name']) && strlen($data['company_Name']) > 50) {
-            $this->errors['company_Name'] = "Company name cannot exceed 50 characters.";
+        } elseif (!empty($data['company_Name']) && strlen($data['company_Name']) > 100) { // Adjusted to match DB schema
+            $this->errors['company_Name'] = "Company name cannot exceed 100 characters.";
         }
 
         // Validate company email (required for insert, optional for update)
@@ -31,20 +32,18 @@ class Eventorganizer {
             $this->errors['company_Email'] = "Email is required.";
         } elseif (!empty($data['company_Email']) && !filter_var($data['company_Email'], FILTER_VALIDATE_EMAIL)) {
             $this->errors['company_Email'] = "Email is not valid.";
-        } elseif (!empty($data['company_Email']) && $update && $this->checkExistingEmail($data['company_Email'], $data['organizer_Id'] ?? null)) {
+        } elseif (!empty($data['company_Email']) && $this->checkExistingEmail($data['company_Email'], $data['organizer_Id'] ?? null)) {
             $this->errors['company_Email'] = "Email is already registered.";
         }
 
         // Validate company mobile number (optional)
-        if (!empty($data['company_MobileNum']) && strlen($data['company_MobileNum']) > 12) {
-            $this->errors['company_MobileNum'] = "Mobile number cannot exceed 12 characters.";
+        if (!empty($data['company_MobileNum']) && !preg_match('/^[0-9]{10}$/', $data['company_MobileNum'])) { // Match DB schema (10 digits)
+            $this->errors['company_MobileNum'] = "Mobile number must be exactly 10 digits.";
         }
 
         // Validate company address (optional)
-        if (!empty($data['company_Address']) && strlen($data['company_Address']) < 10) {
-            $this->errors['company_Address'] = "Address must be at least 10 characters long.";
-        } elseif (!empty($data['company_Address']) && strlen($data['company_Address']) > 50) {
-            $this->errors['company_Address'] = "Address cannot exceed 50 characters.";
+        if (!empty($data['company_Address']) && strlen($data['company_Address']) > 255) { // Match DB schema
+            $this->errors['company_Address'] = "Address cannot exceed 255 characters.";
         }
 
         // Validate password (required for insert, optional for update)
@@ -61,33 +60,9 @@ class Eventorganizer {
             $this->errors['confirm_Password'] = "Password and Confirm Password do not match.";
         }
 
-        // Validate optional fields
-        if (!empty($data['website']) && !filter_var($data['website'], FILTER_VALIDATE_URL)) {
-            $this->errors['website'] = "Invalid website URL.";
-        }
-
-        if (!empty($data['blog']) && !filter_var($data['blog'], FILTER_VALIDATE_URL)) {
-            $this->errors['blog'] = "Invalid blog URL.";
-        }
-
-        if (!empty($data['experience']) && (!is_numeric($data['experience']) || $data['experience'] < 0)) {
-            $this->errors['experience'] = "Experience must be a positive number.";
-        }
-
-        if (!empty($data['first_Name']) && strlen($data['first_Name']) > 50) {
-            $this->errors['first_Name'] = "First name cannot exceed 50 characters.";
-        }
-
-        if (!empty($data['last_Name']) && strlen($data['last_Name']) > 50) {
-            $this->errors['last_Name'] = "Last name cannot exceed 50 characters.";
-        }
-
-        if (!empty($data['job_Title']) && strlen($data['job_Title']) > 100) {
-            $this->errors['job_Title'] = "Job title cannot exceed 100 characters.";
-        }
-
-        if (!empty($data['event_Type']) && strlen($data['event_Type']) > 255) {
-            $this->errors['event_Type'] = "Event type cannot exceed 255 characters.";
+        // Validate company logo (optional)
+        if (!empty($data['company_logo']) && strlen($data['company_logo']) > 255) { // Match DB schema
+            $this->errors['company_logo'] = "Logo file path cannot exceed 255 characters.";
         }
 
         return empty($this->errors);
@@ -135,4 +110,5 @@ class Eventorganizer {
         }
         return false;
     }
+    
 }

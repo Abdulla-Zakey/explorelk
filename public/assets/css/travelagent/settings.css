@@ -1,0 +1,231 @@
+main {
+    margin: 0;
+    padding: 0;
+    position: relative;
+    min-height: 100%;
+    overflow-y: auto;
+}
+body {
+    font-family: 'poppins';
+    background-color: #f0f2f5;
+    justify-content: center;
+    align-items: center;
+    padding-bottom: 10px;
+    
+    
+}
+.container {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+    width: 150%;
+    /* height: auto; */
+    max-width: 1100px;
+    margin-left: 290px;
+    margin-top: 220px;
+    top: 150px;
+    left: 20px;
+}
+.container h1 {
+    font-size: 24px;
+    padding: 10px;
+    color: #333;
+    margin: 0 0 20px;
+    text-align: center;
+}
+.form-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    color: #555;
+}
+.form-group input, .form-group textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background-color: #f9f9f9;
+}
+.form-group textarea {
+    resize: none;
+    height: 100px;
+}
+.form-group .half-width {
+    width: 48%;
+}
+.buttons {
+    display: flex;
+    justify-content: flex-start;
+    gap: 10px;
+}
+.buttons button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+}
+.buttons .update-profile {
+    background-color: #002D40;
+    color: #fff;
+}
+.buttons .update-profile:hover {
+    background-color: #B3D9FF;
+    color: #002D40;
+}
+.buttons .reset {
+    background-color: #ccc;
+    color: #333;
+}
+.buttons .reset:hover {
+    background-color: #B3D9FF;
+    color: #002D40;
+}
+.error {
+    color: red;
+    font-size: 12px;
+    margin-top: 5px;
+}
+.alert {
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+}
+
+.alert-success {
+    color: #3c763d;
+    background-color: #dff0d8;
+    border-color: #d6e9c6;
+}
+
+.alert-danger {
+    color: #a94442;
+    background-color: #f2dede;
+    border-color: #ebccd1;
+}
+.popup {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+    z-index: 1000;
+}
+
+.popup-content {
+    position: relative;
+    background-color: white;
+    margin: 15% auto;
+    padding: 20px;
+    border-radius: 5px;
+    width: 50%;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.close-btn {
+    position: absolute;
+    right: 20px;
+    top: 10px;
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.error {
+    color: red;
+    font-size: 0.8rem;
+    margin-top: 5px;
+}
+
+input.invalid, textarea.invalid {
+    border: 1px solid red;
+}
+/* Popup background */
+
+/* Popup overlay */
+.popup {
+  display: none;
+  position: fixed;
+  z-index: 999;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+/* Popup content box */
+.popup-content {
+  background: #ffffff;
+  border-radius: 15px;
+  padding: 30px 40px;
+  max-width: 400px;
+  margin: 15% auto;
+  text-align: center;
+  position: relative;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+  animation: slideDown 0.4s ease;
+}
+
+/* Heading */
+.popup-content h2 {
+  margin-top: 0;
+  color: #333;
+}
+
+/* Message */
+.popup-content p {
+  margin: 15px 0;
+  font-size: 16px;
+  color: #666;
+}
+
+/* Close icon */
+.close-btn {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  font-size: 24px;
+  color: #aaa;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+.close-btn:hover {
+  color: #ff5c5c;
+}
+
+/* OK button */
+.ok-btn {
+  margin-top: 10px;
+  padding: 10px 25px;
+  background-color: #002D40;
+  color: white;
+  border: none;
+  border-radius: 25px;
+  font-size: 15px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+.ok-btn:hover {
+  background-color: #B3D9FF;
+}
+
+/* Fade and slide animations */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes slideDown {
+  from { transform: translateY(-30px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
