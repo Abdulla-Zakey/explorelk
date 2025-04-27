@@ -11,7 +11,6 @@ class Table
         'number',
         'capacity',
         'location',
-        'price',
         'created_at',
         'updated_at'
     ];
@@ -48,13 +47,6 @@ class Table
             $this->errors['location'] = "Invalid location.";
         }
 
-        // Validate price
-        if (!isset($data['price']) || $data['price'] === '') {
-            $this->errors['price'] = "Price is required.";
-        } elseif (!is_numeric($data['price']) || $data['price'] < 0) {
-            $this->errors['price'] = "Price must be a non-negative number.";
-        }
-
         if (!empty($this->errors)) {
             error_log('Table validation failed: ' . json_encode($this->errors));
         }
@@ -78,7 +70,10 @@ class Table
 
     public function getAllTables($restaurant_id)
     {
-        return $this->where(['restaurant_id' => $restaurant_id]);
+        error_log("Table model: getAllTables called for restaurant_id: {$restaurant_id}");
+        $result = $this->where(['restaurant_id' => $restaurant_id]);
+        error_log("Table model: getAllTables result: " . json_encode($result));
+        return $result;
     }
 
     public function getTableById($id, $restaurant_id)

@@ -40,6 +40,7 @@ class Rdining extends Controller
                 $table = $tableModel->getTableById($reservation->table_id, $restaurant_id);
                 $reservation->table_number = $table ? $table->number : 'Unknown';
                 $reservation->table_location = $table ? $table->location : 'Unknown';
+                $reservation->table_price = $table ? $table->price : 0.00;
             }
 
             // Initialize errors and form data
@@ -55,7 +56,8 @@ class Rdining extends Controller
                     'restaurant_id' => $restaurant_id,
                     'number' => $_POST['number'] ?? '',
                     'capacity' => $_POST['capacity'] ?? '',
-                    'location' => $_POST['location'] ?? ''
+                    'location' => $_POST['location'] ?? '',
+                    'price' => $_POST['price'] ?? ''
                 ];
 
                 error_log('Received addTable request: ' . json_encode($data));
@@ -75,6 +77,7 @@ class Rdining extends Controller
                             $table = $tableModel->getTableById($reservation->table_id, $restaurant_id);
                             $reservation->table_number = $table ? $table->number : 'Unknown';
                             $reservation->table_location = $table ? $table->location : 'Unknown';
+                            $reservation->table_price = $table ? $table->price : 0.00;
                         }
                     } else {
                         error_log('Table insert failed: ' . json_encode($tableModel->errors));
@@ -93,7 +96,8 @@ class Rdining extends Controller
                 if ($table) {
                     $addReservationForm = [
                         'table_id' => $table->id,
-                        'table_number' => $table->number
+                        'table_number' => $table->number,
+                        'table_price' => $table->price
                     ];
                 } else {
                     $errors['reservation'] = ['general' => 'Table not found or does not belong to this restaurant'];
@@ -102,6 +106,7 @@ class Rdining extends Controller
 
             // Handle reservation addition
             if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_reservation'])) {
+                $table = $tableModel->getTableById($_POST['table_id'] ?? '', $restaurant_id);
                 $data = [
                     'table_id' => $_POST['table_id'] ?? '',
                     'customer_name' => $_POST['customer_name'] ?? '',
@@ -117,11 +122,12 @@ class Rdining extends Controller
                     $result = $reservationModel->insert($data);
                     if ($result) {
                         error_log('Reservation added successfully: ' . json_encode($data));
-                        $successMessage = 'Table reserved successfully';
+                        $successMessage = 'Table reserved successfully for $' . number_format($table->price, 2);
                         $table = $tableModel->getTableById($data['table_id'], $restaurant_id);
                         $addReservationForm = [
                             'table_id' => $data['table_id'],
-                            'table_number' => $table ? $table->number : 'Unknown'
+                            'table_number' => $table ? $table->number : 'Unknown',
+                            'table_price' => $table ? $table->price : 0.00
                         ];
                         // Refresh tables and reservations
                         $tables = $tableModel->getAllTables($restaurant_id);
@@ -133,6 +139,7 @@ class Rdining extends Controller
                             $table = $tableModel->getTableById($reservation->table_id, $restaurant_id);
                             $reservation->table_number = $table ? $table->number : 'Unknown';
                             $reservation->table_location = $table ? $table->location : 'Unknown';
+                            $reservation->table_price = $table ? $table->price : 0.00;
                         }
                     } else {
                         error_log('Reservation insert failed: ' . json_encode($reservationModel->errors));
@@ -140,7 +147,8 @@ class Rdining extends Controller
                         $table = $tableModel->getTableById($data['table_id'], $restaurant_id);
                         $addReservationForm = [
                             'table_id' => $data['table_id'],
-                            'table_number' => $table ? $table->number : 'Unknown'
+                            'table_number' => $table ? $table->number : 'Unknown',
+                            'table_price' => $table ? $table->price : 0.00
                         ];
                     }
                 } else {
@@ -149,7 +157,8 @@ class Rdining extends Controller
                     $table = $tableModel->getTableById($data['table_id'], $restaurant_id);
                     $addReservationForm = [
                         'table_id' => $data['table_id'],
-                        'table_number' => $table ? $table->number : 'Unknown'
+                        'table_number' => $table ? $table->number : 'Unknown',
+                        'table_price' => $table ? $table->price : 0.00
                     ];
                 }
             }
@@ -163,7 +172,8 @@ class Rdining extends Controller
                         'id' => $table->id,
                         'number' => $table->number,
                         'capacity' => $table->capacity,
-                        'location' => $table->location
+                        'location' => $table->location,
+                        'price' => $table->price
                     ];
                 } else {
                     $errors['table'] = ['general' => 'Table not found or does not belong to this restaurant'];
@@ -177,7 +187,8 @@ class Rdining extends Controller
                     'restaurant_id' => $restaurant_id,
                     'number' => $_POST['number'] ?? '',
                     'capacity' => $_POST['capacity'] ?? '',
-                    'location' => $_POST['location'] ?? ''
+                    'location' => $_POST['location'] ?? '',
+                    'price' => $_POST['price'] ?? ''
                 ];
 
                 error_log('Received updateTable request: ' . json_encode($data));
@@ -186,7 +197,8 @@ class Rdining extends Controller
                     $result = $tableModel->update($data['id'], [
                         'number' => $data['number'],
                         'capacity' => $data['capacity'],
-                        'location' => $data['location']
+                        'location' => $data['location'],
+                        'price' => $data['price']
                     ]);
                     if ($result) {
                         error_log('Table updated successfully: ' . json_encode($data));
@@ -196,7 +208,8 @@ class Rdining extends Controller
                             'id' => $table->id,
                             'number' => $table->number,
                             'capacity' => $table->capacity,
-                            'location' => $table->location
+                            'location' => $table->location,
+                            'price' => $table->price
                         ];
                         // Refresh tables and reservations
                         $tables = $tableModel->getAllTables($restaurant_id);
@@ -208,6 +221,7 @@ class Rdining extends Controller
                             $table = $tableModel->getTableById($reservation->table_id, $restaurant_id);
                             $reservation->table_number = $table ? $table->number : 'Unknown';
                             $reservation->table_location = $table ? $table->location : 'Unknown';
+                            $reservation->table_price = $table ? $table->price : 0.00;
                         }
                     } else {
                         error_log('Table update failed');
@@ -217,7 +231,8 @@ class Rdining extends Controller
                             'id' => $data['id'],
                             'number' => $data['number'],
                             'capacity' => $data['capacity'],
-                            'location' => $data['location']
+                            'location' => $data['location'],
+                            'price' => $data['price']
                         ];
                     }
                 } else {
@@ -228,7 +243,8 @@ class Rdining extends Controller
                         'id' => $data['id'],
                         'number' => $data['number'],
                         'capacity' => $data['capacity'],
-                        'location' => $data['location']
+                        'location' => $data['location'],
+                        'price' => $data['price']
                     ];
                 }
             }
@@ -253,6 +269,7 @@ class Rdining extends Controller
                             $table = $tableModel->getTableById($reservation->table_id, $restaurant_id);
                             $reservation->table_number = $table ? $table->number : 'Unknown';
                             $reservation->table_location = $table ? $table->location : 'Unknown';
+                            $reservation->table_price = $table ? $table->price : 0.00;
                         }
                     } else {
                         error_log('Table deletion failed: ID=' . $tableId);
@@ -274,6 +291,7 @@ class Rdining extends Controller
                         'id' => $reservation->id,
                         'table_id' => $reservation->table_id,
                         'table_number' => $table ? $table->number : 'Unknown',
+                        'table_price' => $table ? $table->price : 0.00,
                         'customer_name' => $reservation->customer_name,
                         'date' => $reservation->date,
                         'start_time' => $reservation->start_time,
@@ -286,6 +304,7 @@ class Rdining extends Controller
                         $table = $tableModel->getTableById($reservation->table_id, $restaurant_id);
                         $reservation->table_number = $table ? $table->number : 'Unknown';
                         $reservation->table_location = $table ? $table->location : 'Unknown';
+                        $reservation->table_price = $table ? $table->price : 0.00;
                     }
                 } else {
                     $errors['reservation'] = ['general' => 'Reservation not found or does not belong to this restaurant'];
@@ -294,6 +313,7 @@ class Rdining extends Controller
 
             // Handle reservation update
             if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_reservation'])) {
+                $table = $tableModel->getTableById($_POST['table_id'] ?? '', $restaurant_id);
                 $data = [
                     'id' => $_POST['reservation_id'] ?? '',
                     'table_id' => $_POST['table_id'] ?? '',
@@ -310,7 +330,7 @@ class Rdining extends Controller
                     $result = $reservationModel->update($data['id'], $data);
                     if ($result) {
                         error_log('Reservation updated successfully: ' . json_encode($data));
-                        $successMessage = 'Reservation updated successfully';
+                        $successMessage = 'Reservation updated successfully for $' . number_format($table->price, 2);
                         // Refresh tables and reservations
                         $tables = $tableModel->getAllTables($restaurant_id);
                         foreach ($tables as &$table) {
@@ -321,6 +341,7 @@ class Rdining extends Controller
                             $table = $tableModel->getTableById($reservation->table_id, $restaurant_id);
                             $reservation->table_number = $table ? $table->number : 'Unknown';
                             $reservation->table_location = $table ? $table->location : 'Unknown';
+                            $reservation->table_price = $table ? $table->price : 0.00;
                         }
                     } else {
                         error_log('Reservation update failed');
@@ -331,6 +352,7 @@ class Rdining extends Controller
                             'id' => $reservation->id,
                             'table_id' => $reservation->table_id,
                             'table_number' => $table ? $table->number : 'Unknown',
+                            'table_price' => $table ? $table->price : 0.00,
                             'customer_name' => $data['customer_name'],
                             'date' => $data['date'],
                             'start_time' => $data['start_time'],
@@ -343,6 +365,7 @@ class Rdining extends Controller
                             $table = $tableModel->getTableById($reservation->table_id, $restaurant_id);
                             $reservation->table_number = $table ? $table->number : 'Unknown';
                             $reservation->table_location = $table ? $table->location : 'Unknown';
+                            $reservation->table_price = $table ? $table->price : 0.00;
                         }
                     }
                 } else {
@@ -354,6 +377,7 @@ class Rdining extends Controller
                         'id' => $reservation->id,
                         'table_id' => $reservation->table_id,
                         'table_number' => $table ? $table->number : 'Unknown',
+                        'table_price' => $table ? $table->price : 0.00,
                         'customer_name' => $data['customer_name'],
                         'date' => $data['date'],
                         'start_time' => $data['start_time'],
@@ -366,6 +390,7 @@ class Rdining extends Controller
                         $table = $tableModel->getTableById($reservation->table_id, $restaurant_id);
                         $reservation->table_number = $table ? $table->number : 'Unknown';
                         $reservation->table_location = $table ? $table->location : 'Unknown';
+                        $reservation->table_price = $table ? $table->price : 0.00;
                     }
                 }
             }
@@ -390,6 +415,7 @@ class Rdining extends Controller
                             $table = $tableModel->getTableById($reservation->table_id, $restaurant_id);
                             $reservation->table_number = $table ? $table->number : 'Unknown';
                             $reservation->table_location = $table ? $table->location : 'Unknown';
+                            $reservation->table_price = $table ? $table->price : 0.00;
                         }
                     } else {
                         error_log('Reservation cancellation failed: ID=' . $reservationId);

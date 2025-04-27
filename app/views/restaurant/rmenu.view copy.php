@@ -1,12 +1,5 @@
 <?php
-  include '../app/views/components/rnav.php';
-
-// Simulating database data
-$menuItems = [
-    ['id' => 1, 'name' => 'Spicy Chicken Curry', 'description' => 'Tender chicken in a spicy curry sauce', 'price' => 12.99, 'category' => 'Main Course', 'availability' => 'alltime', 'image' => ROOT .'/assets/images/resturant/menu-item/menu1.jpg'],
-    ['id' => 2, 'name' => 'Vegetable Stir Fry', 'description' => 'Fresh vegetables stir-fried in a savory sauce', 'price' => 9.99, 'category' => 'Main Course', 'availability' => 'lunch,dinner', 'image' => ROOT . '/assets/images/resturant/menu-item/menu2.jpg'],
-    ['id' => 3, 'name' => 'Chocolate Lava Cake', 'description' => 'Warm chocolate cake with a gooey center', 'price' => 6.99, 'category' => 'Dessert', 'availability' => 'dinner', 'image' => ROOT . '/assets/images/resturant/menu-item/menu3.jpg'],
-];
+ include '../app/views/components/rnav.php';
 ?>
 
 <!DOCTYPE html>
@@ -14,7 +7,7 @@ $menuItems = [
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Restaurant Menu Management</title>
+    <title><?php echo $data['title']; ?></title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -23,6 +16,7 @@ $menuItems = [
             --text-color: #333;
             --background-color: #f4f4f4;
             --white: #ffffff;
+            --success-color: #28a745;
         }
 
         * {
@@ -36,7 +30,6 @@ $menuItems = [
             line-height: 1.6;
             background-color: var(--background-color);
             color: var(--text-color);
-            
         }
 
         .container {
@@ -223,7 +216,7 @@ $menuItems = [
             top: 0;
             width: 100%;
             height: 100%;
-            overflow: auto;
+            overflow:auto;
             background-color: rgba(0,0,0,0.4);
         }
 
@@ -277,9 +270,60 @@ $menuItems = [
             background-color: var(--primary-color);
             transform: translateY(-2px);
         }
+
+        .error-message {
+            color: red;
+            margin-bottom: 10px;
+            display: none;
+        }
+
+        .success-popup {
+            display: none;
+            position: fixed;
+            z-index: 2;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.4);
+        }
+
+        .success-popup-content {
+            background-color: var(--white);
+            margin: 20% auto;
+            padding: 20px;
+            width: 80%;
+            max-width: 400px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            position: relative;
+        }
+
+        .success-popup-content p {
+            color: var(--success-color);
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+        }
+
+        .success-popup-content button {
+            background-color: var(--secondary-color);
+            color: var(--white);
+            border: none;
+            padding: 8px 16px;
+            font-size: 1rem;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .success-popup-content button:hover {
+            background-color: var(--primary-color);
+        }
     </style>
 </head>
 <body>
+    
     <div class="container">
         <header>
             <h1>Restaurant Menu</h1>
@@ -287,19 +331,26 @@ $menuItems = [
         </header>
 
         <div id="menuItems">
-            <?php foreach ($menuItems as $item): ?>
-                <div class="menu-item" data-id="<?php echo $item['id']; ?>">
-                    <img src="<?php echo $item['image']; ?>" alt="<?php echo $item['name']; ?>" class="menu-item-image">
+            <?php foreach ($data['menuItems'] as $item): ?>
+                <div class="menu-item" data-id="<?php echo $item->id; ?>">
+                    <?php
+                        $imagePath = ROOT . $item->image;
+
+                        // Log the image path to debug
+                        error_log("Rendering image for item {$item->id}: {$imagePath}");
+                    ?>
+                    
+                    <img src="<?php echo htmlspecialchars($imagePath); ?>" alt="<?php echo htmlspecialchars($item->name); ?>" class="menu-item-image" onerror="console.error('Failed to load image: <?php echo htmlspecialchars($imagePath); ?>')">
                     <div class="menu-item-details">
-                        <h3><?php echo $item['name']; ?></h3>
-                        <p><?php echo $item['description']; ?></p>
-                        <p><strong>Price:</strong> $<?php echo number_format($item['price'], 2); ?></p>
-                        <p><strong>Category:</strong> <?php echo $item['category']; ?></p>
-                        <p><strong>Availability:</strong> <?php echo $item['availability']; ?></p>
+                        <h3><?php echo htmlspecialchars($item->name); ?></h3>
+                        <p><?php echo htmlspecialchars($item->description); ?></p>
+                        <p><strong>Price:</strong> $<?php echo number_format($item->price, 2); ?></p>
+                        <p><strong>Category:</strong> <?php echo htmlspecialchars($item->category); ?></p>
+                        <p><strong>Availability:</strong> <?php echo htmlspecialchars($item->availability); ?></p>
                     </div>
                     <div class="menu-item-actions">
                         <label class="switch">
-                            <input type="checkbox" <?php echo $item['availability'] === 'alltime' ? 'checked' : ''; ?>>
+                            <input type="checkbox" class="toggle-availability" <?php echo $item->is_active ? 'checked' : ''; ?>>
                             <span class="slider"></span>
                         </label>
                         <div class="menu-options">
@@ -315,129 +366,248 @@ $menuItems = [
         </div>
     </div>
 
-    <div id="addItemModal" class="modal">
+    <div id="itemModal" class="modal">
         <div class="modal-content">
-            <span class="close">&times;</span>
-            <h2>Add New Menu Item</h2>
-            <form id="addItemForm">
-                <input type="text" id="itemName" placeholder="Item Name" required>
-                <textarea id="itemDescription" placeholder="Description" required></textarea>
-                <input type="number" id="itemPrice" placeholder="Price" step="0.01" required>
-                <select id="itemCategory" required>
+            <span class="close">×</span>
+            <h2 id="modalTitle">Add New Menu Item</h2>
+            <div id="errorMessage" class="error-message"></div>
+            <form id="itemForm">
+                <input type="hidden" id="itemId">
+                <input type="text" id="itemName" name="name" placeholder="Item Name" required>
+                <textarea id="itemDescription" name="description" placeholder="Description" required></textarea>
+                <input type="number" id="itemPrice" name="price" placeholder="Price" step="0.01" required>
+                <select id="itemCategory" name="category" required>
                     <option value="">Select Category</option>
                     <option value="Appetizer">Appetizer</option>
                     <option value="Main Course">Main Course</option>
                     <option value="Dessert">Dessert</option>
                     <option value="Beverage">Beverage</option>
                 </select>
-                <select id="itemAvailability" required>
+                <select id="itemAvailability" name="availability" required>
                     <option value="">Select Availability</option>
                     <option value="breakfast">Breakfast</option>
                     <option value="lunch">Lunch</option>
                     <option value="dinner">Dinner</option>
                     <option value="alltime">All Time</option>
                 </select>
-                <input type="file" id="itemImage" accept="image/*">
-                <button type="submit">Add Item</button>
+                <input type="file" id="itemImage" name="image" accept="image/*">
+                <button type="submit">Save</button>
             </form>
         </div>
     </div>
 
+    <div id="successPopup" class="success-popup">
+        <div class="success-popup-content">
+            <p id="successMessage"></p>
+            <button id="successPopupClose">OK</button>
+        </div>
+    </div>
+
     <script>
-        // The JavaScript remains the same as in the previous version
         document.addEventListener('DOMContentLoaded', function() {
+            const baseUrl = '<?php echo defined("ROOT") ? ROOT : ""; ?>/restaurant/rmenu';
+            console.log('Base URL for AJAX requests:', baseUrl);
+
             const addItemBtn = document.getElementById('addItemBtn');
-            const addItemModal = document.getElementById('addItemModal');
-            const closeBtn = addItemModal.querySelector('.close');
-            const addItemForm = document.getElementById('addItemForm');
+            const itemModal = document.getElementById('itemModal');
+            const closeBtn = itemModal.querySelector('.close');
+            const itemForm = document.getElementById('itemForm');
             const menuItemsContainer = document.getElementById('menuItems');
+            const modalTitle = document.getElementById('modalTitle');
+            const errorMessage = document.getElementById('errorMessage');
+
+            const successPopup = document.getElementById('successPopup');
+            const successMessage = document.getElementById('successMessage');
+            const successPopupClose = document.getElementById('successPopupClose');
+
+            function showSuccessPopup(message) {
+                successMessage.textContent = message;
+                successPopup.style.display = 'block';
+            }
+
+            successPopupClose.onclick = function() {
+                successPopup.style.display = 'none';
+            }
+
+            window.addEventListener('click', function(event) {
+                if (event.target === successPopup) {
+                    successPopup.style.display = 'none';
+                }
+            });
 
             addItemBtn.onclick = function() {
-                addItemModal.style.display = "block";
+                modalTitle.textContent = 'Add New Menu Item';
+                itemForm.reset();
+                document.getElementById('itemId').value = '';
+                errorMessage.style.display = 'none';
+                itemModal.style.display = 'block';
             }
 
             closeBtn.onclick = function() {
-                addItemModal.style.display = "none";
+                itemModal.style.display = 'none';
             }
 
             window.onclick = function(event) {
-                if (event.target == addItemModal) {
-                    addItemModal.style.display = "none";
+                if (event.target == itemModal) {
+                    itemModal.style.display = 'none';
                 }
             }
 
-            addItemForm.addEventListener('submit', function(e) {
+            itemForm.addEventListener('submit', function(e) {
                 e.preventDefault();
-                const newItem = {
-                    id: Date.now(),
-                    name: document.getElementById('itemName').value,
-                    description: document.getElementById('itemDescription').value,
-                    price: parseFloat(document.getElementById('itemPrice').value),
-                    category: document.getElementById('itemCategory').value,
-                    availability: document.getElementById('itemAvailability').value,
-                    image: document.getElementById('itemImage').files[0] ? URL.createObjectURL(document.getElementById('itemImage').files[0]) : 'https://via.placeholder.com/300x200.png?text=New+Item'
-                };
-                addMenuItemToDOM(newItem);
-                addItemForm.reset();
-                addItemModal.style.display = "none";
+                const formData = new FormData(itemForm);
+                const itemId = document.getElementById('itemId').value;
+                const url = itemId ? `${baseUrl}/update/${itemId}` : `${baseUrl}/create`;
+                console.log('Submitting to URL:', url);
+                console.log('Form data:', [...formData.entries()]);
+
+                fetch(url, {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => {
+                    console.log('Create/Update response status:', response.status, response.statusText);
+                    if (!response.ok) {
+                        throw new Error(`Network response was not ok: ${response.status} ${response.statusText}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Create/Update response data:', data);
+                    if (data.success) {
+                        itemModal.style.display = 'none';
+                        showSuccessPopup(itemId ? 'Successfully menu is edited' : 'Successfully menu is added');
+                        setTimeout(() => {
+                            location.reload();
+                        }, 1500);
+                    } else {
+                        errorMessage.textContent = data.error || 'An error occurred';
+                        errorMessage.style.display = 'block';
+                    }
+                })
+                .catch(error => {
+                    console.error('Create/Update fetch error:', error);
+                    errorMessage.textContent = `An error occurred: ${error.message}`;
+                    errorMessage.style.display = 'block';
+                });
             });
 
             menuItemsContainer.addEventListener('click', function(e) {
                 if (e.target.classList.contains('menu-options-btn')) {
                     const content = e.target.nextElementSibling;
-                    content.style.display = content.style.display === "block" ? "none" : "block";
+                    content.style.display = content.style.display === 'block' ? 'none' : 'block';
                 } else if (e.target.classList.contains('edit-btn')) {
-                    console.log('Edit item', e.target.closest('.menu-item').dataset.id);
-                    // Implement edit functionality
+                    e.preventDefault();
+                    const menuItem = e.target.closest('.menu-item');
+                    const id = menuItem.dataset.id;
+
+                    fetch(`${baseUrl}/get/${id}`)
+                        .then(response => {
+                            console.log('Get response status:', response.status, response.statusText);
+                            if (!response.ok) {
+                                throw new Error(`Failed to fetch item: ${response.status} ${response.statusText}`);
+                            }
+                            return response.json();
+                        })
+                        .then(item => {
+                            console.log('Fetched item:', item);
+                            modalTitle.textContent = 'Edit Menu Item';
+                            document.getElementById('itemId').value = item.id;
+                            document.getElementById('itemName').value = item.name;
+                            document.getElementById('itemDescription').value = item.description;
+                            document.getElementById('itemPrice').value = item.price;
+                            document.getElementById('itemCategory').value = item.category;
+                            document.getElementById('itemAvailability').value = item.availability;
+                            errorMessage.style.display = 'none';
+                            itemModal.style.display = 'block';
+                        })
+                        .catch(error => {
+                            console.error('Get fetch error:', error);
+                            errorMessage.textContent = `Failed to load item: ${error.message}`;
+                            errorMessage.style.display = 'block';
+                        });
                 } else if (e.target.classList.contains('delete-btn')) {
-                    e.target.closest('.menu-item').remove();
-                    // Here you would typically send a delete request to the server
+                    e.preventDefault();
+                    const menuItem = e.target.closest('.menu-item');
+                    const id = menuItem.dataset.id;
+                    console.log('Attempting to delete item with ID:', id);
+                    if (confirm('Are you sure you want to delete this item?')) {
+                        fetch(`${baseUrl}/delete/${id}`, {
+                            method: 'POST'
+                        })
+                        .then(response => {
+                            console.log('Delete response status:', response.status, response.statusText);
+                            if (!response.ok) {
+                                throw new Error(`Failed to delete item: ${response.status} ${response.statusText}`);
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            console.log('Delete response data:', data);
+                            if (data.success) {
+                                menuItem.remove();
+                                showSuccessPopup('Successfully menu is deleted');
+                            } else {
+                                alert(data.error || 'Failed to delete item');
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Delete fetch error:', error);
+                            alert(`Failed to delete item: ${error.message}`);
+                        });
+                    }
+                } else if (e.target.classList.contains('toggle-availability')) {
+                    const menuItem = e.target.closest('.menu-item');
+                    const id = menuItem.dataset.id;
+                    const originalState = e.target.checked;
+                    const is_active = originalState ? "true" : "false";
+
+                    console.log('Toggling availability for ID:', id, 'to:', is_active);
+                    const payload = { is_active };
+                    console.log('Toggle payload:', JSON.stringify(payload));
+                    fetch(`${baseUrl}/toggle/${id}`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(payload)
+                    })
+                    .then(response => {
+                        console.log('Toggle response status:', response.status, response.statusText);
+                        if (!response.ok) {
+                            throw new Error(`Failed to toggle availability: ${response.status} ${response.statusText}`);
+                        }
+                        return response.text().then(text => {
+                            console.log('Raw toggle response:', text);
+                            try {
+                                return JSON.parse(text);
+                            } catch (err) {
+                                throw new Error(`Invalid JSON response: ${err.message}`);
+                            }
+                        });
+                    })
+                    .then(data => {
+                        console.log('Toggle response data:', data);
+                        if (!data.success) {
+                            throw new Error(data.error || 'Failed to toggle availability');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Toggle fetch error:', error);
+                        alert(error.message);
+                        e.target.checked = !originalState;
+                    });
                 }
             });
 
-            // Close the dropdown if the user clicks outside of it
-            window.onclick = function(event) {
+            document.addEventListener('click', function(event) {
                 if (!event.target.matches('.menu-options-btn')) {
-                    var dropdowns = document.getElementsByClassName("menu-options-content");
-                    for (var i = 0; i < dropdowns.length; i++) {
-                        var openDropdown = dropdowns[i];
-                        if (openDropdown.style.display === "block") {
-                            openDropdown.style.display = "none";
-                        }
+                    const dropdowns = document.getElementsByClassName('menu-options-content');
+                    for (let i = 0; i < dropdowns.length; i++) {
+                        dropdowns[i].style.display = 'none';
                     }
                 }
-            }
-
-            function addMenuItemToDOM(item) {
-                const itemElement = document.createElement('div');
-                itemElement.className = 'menu-item';
-                itemElement.dataset.id = item.id;
-                itemElement.innerHTML = `
-                    <img src="${item.image}" alt="${item.name}" class="menu-item-image">
-                    <div class="menu-item-details">
-                        <h3>${item.name}</h3>
-                        <p>${item.description}</p>
-                        <p><strong>Price:</strong> $${item.price.toFixed(2)}</p>
-                        <p><strong>Category:</strong>$${item.price.toFixed(2)}</p>
-                        <p><strong>Category:</strong> ${item.category}</p>
-                        <p><strong>Availability:</strong> ${item.availability}</p>
-                    </div>
-                    <div class="menu-item-actions">
-                        <label class="switch">
-                            <input type="checkbox" ${item.availability === 'alltime' ? 'checked' : ''}>
-                            <span class="slider"></span>
-                        </label>
-                        <div class="menu-options">
-                            <button class="menu-options-btn">⋮</button>
-                            <div class="menu-options-content">
-                                <a href="#" class="edit-btn">Edit</a>
-                                <a href="#" class="delete-btn">Delete</a>
-                            </div>
-                        </div>
-                    </div>
-                `;
-                menuItemsContainer.appendChild(itemElement);
-            }
+            });
         });
     </script>
 </body>
