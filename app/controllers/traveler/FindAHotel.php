@@ -4,7 +4,13 @@
 
         public function index(){
 
-            $this->view('traveler/findAHotel');
+             // Check if the user is already logged in
+        if (!isset($_SESSION['traveler_id'])) {
+            redirect('traveler/Login');
+            exit();
+        }
+        
+        $this->view('traveler/findAHotel');
             
         }
     }

@@ -21,32 +21,35 @@ class Trip
 
     public function validate($data)
     {
-        $this->errors = [];
+        $errors = [];
 
         // Validate trip name
         if (empty($data['tripName'])) {
-            $this->errors['tripName'] = "Trip Name is required.";
-        } elseif (strlen($data['tripName']) > 25) {
-            $this->errors['tripName'] = "Trip Name cannot exceed 25 characters.";
+            $errors['tripName'] = "Trip Name is required.";
+        } elseif (strlen($data['tripName']) > 20) {
+            $errors['tripName'] = "Trip Name cannot exceed 20 characters.";
         }
 
         // Validate starting location
         if (empty($data['startingLocation'])) {
-            $this->errors['startingLocation'] = "Starting Location is required.";
+            $errors['startingLocation'] = "Starting Location is required.";
         }
 
         // Validate destination
         if (empty($data['destination'])) {
-            $this->errors['destination'] = "Destination is required.";
+            $errors['destination'] = "Destination is required.";
         }
 
         // Validate dates
         if (empty($data['startDate'])) {
-            $this->errors['startDate'] = "Start date is required.";
+            $errors['startDate'] = "Start date is required.";
+        }
+        else if($data['startDate'] < date('Y-m-d')){
+            $errors['startDate'] = "Start date cannot be in the past!";
         }
 
         if (empty($data['endDate'])) {
-            $this->errors['endDate'] = "End date is required.";
+            $errors['endDate'] = "End date is required.";
         }
 
         if (!empty($data['startDate']) && !empty($data['endDate'])) {
@@ -54,19 +57,20 @@ class Trip
             $endDate = strtotime($data['endDate']);
 
             if ($startDate > $endDate) {
-                $this->errors['endDate'] = "End date must be after start date.";
+                $errors['endDate'] = "End date must be after start date.";
             }
         }
 
         // Optional validations
         if (!empty($data['numberOfTravelers']) && $data['numberOfTravelers'] <= 0) {
-            $this->errors['numberOfTravelers'] = "No of travelers must be positive.";
+            $errors['numberOfTravelers'] = "No of travelers must be positive.";
         }
 
         if (!empty($data['budgetPerPerson']) && $data['budgetPerPerson'] < 0) {
-            $this->errors['budgetPerPerson'] = "Budget per person can't be negative.";
+            $errors['budgetPerPerson'] = "Budget per person can't be negative.";
         }
 
-        return empty($this->errors);
+        // return empty($errors);
+        return $errors;
     }
 }

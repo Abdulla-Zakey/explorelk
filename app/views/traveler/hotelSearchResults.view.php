@@ -3,239 +3,586 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel = "stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap">
-    <link rel = "stylesheet" href = "<?= ROOT ?>/assets/css/Traveler/navbar.css">
-    <link rel = "stylesheet" href = "<?= ROOT ?>/assets/css/Traveler/nearbyAttractions.css">
-    <link rel = "stylesheet" href = "<?= ROOT ?>/assets/css/Traveler/hotelSearchResults.css">
-    <link rel = "icon" href = "<?= ROOT ?>/assets/images/logos/logoBlack.svg">
-    <title>ExploreLK | Find a Hotel - Search Results</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap">
+    <link rel="stylesheet" href="<?= CSS ?>/Traveler/navbar.css">
+    <link rel="icon" href="<?= IMAGES ?>/logos/logoBlack.svg">
+    <title>ExploreLK | Hotel Search Results</title>
     <script src="https://kit.fontawesome.com/f35c1c7a11.js" crossorigin="anonymous"></script>
+    
+    <style>
+        :root {
+            --primary-color: #1E7A8F;
+            --primary-hover: #3DA4BF;
+            --primary-light: rgba(30, 122, 143, 0.1);
+            --background-color: #f8fafc;
+            --card-color: #ffffff;
+            --text-color: #333333;
+            --text-light: #666666;
+            --text-muted: #94a3b8;
+            --accent-color: #FF6B6B;
+            --success-color: #10b981;
+            --shadow: 0 10px 25px rgba(0,0,0,0.06);
+            --shadow-hover: 0 15px 35px rgba(0,0,0,0.08);
+            --border-radius: 16px;
+            --transition: all 0.3s ease;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--background-color);
+            margin: 0;
+            padding: 0;
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 2.5rem 1.5rem;
+        }
+
+        /* Header Styles
+        header {
+            background-color: #ffffff;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .navbar {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 1rem 1.5rem;
+        }
+
+        .backToHome a {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            color: var(--primary-color);
+            font-weight: 600;
+            text-decoration: none;
+            transition: var(--transition);
+            font-size: 1rem;
+        }
+
+        .backToHome a:hover {
+            color: var(--primary-hover);
+            transform: translateX(-5px);
+        } */
+
+        .search-header {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 2.5rem;
+            background: linear-gradient(to right, #ffffff, var(--primary-light));
+            padding: 1.5rem 2rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            margin-top: 100px;
+        }
+
+        .search-header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .search-header h1 {
+            font-size: 2.2rem;
+            margin: 0;
+            background: linear-gradient(120deg, var(--primary-color), #0ea5e9);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-weight: 700;
+        }
+
+        .search-summary {
+            color: var(--text-light);
+            font-size: 1.05rem;
+            display: flex;
+            gap: 1.5rem;
+            font-weight: 500;
+            
+        }
+
+        .search-summary p {
+            margin: 0.5rem 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            min-width: 600px;
+        }
+
+        .search-summary i {
+            color: var(--primary-color);
+        }
+
+        .search-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .new-search-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.8rem 1.5rem;
+            background: linear-gradient(to right, var(--primary-color), var(--primary-hover));
+            color: white;
+            border: none;
+            border-radius: var(--border-radius);
+            font-weight: 600;
+            text-decoration: none;
+            transition: var(--transition);
+            box-shadow: 0 4px 10px rgba(30, 122, 143, 0.2);
+            min-width: 125px;
+        }
+
+        .new-search-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 14px rgba(30, 122, 143, 0.25);
+        }
+
+        /* Results Grid */
+        .results-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 2.5rem;
+        }
+
+        /* Hotel Card */
+        .hotel-card {
+            background-color: var(--card-color);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .hotel-card:hover {
+            transform: translateY(-7px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .hotel-image-container {
+            position: relative;
+            height: 220px;
+            overflow: hidden;
+        }
+
+        .hotel-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .hotel-card:hover .hotel-image {
+            transform: scale(1.05);
+        }
+
+        .hotel-info {
+            padding: 1.8rem;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .hotel-name {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 0.8rem;
+            color: var(--text-color);
+            line-height: 1.3;
+        }
+
+        .hotel-location {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-light);
+            margin-bottom: 1.2rem;
+            font-size: 0.95rem;
+        }
+
+        .hotel-location i {
+            color: var(--primary-color);
+        }
+
+        .hotel-description {
+            font-size: 0.95rem;
+            color: var(--text-light);
+            margin-bottom: 1.5rem;
+            flex-grow: 1;
+            line-height: 1.6;
+        }
+
+        .hotel-amenities {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .amenity {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .amenity i {
+            color: var(--success-color);
+        }
+
+        .hotel-action {
+            margin-top: auto;
+        }
+
+        .view-hotel-btn {
+            display: inline-block;
+            width: 100%;
+            padding: 1rem 0;
+            background: linear-gradient(to right, var(--primary-color), var(--primary-hover));
+            color: white;
+            text-align: center;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: var(--transition);
+            box-shadow: 0 4px 10px rgba(30, 122, 143, 0.2);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .view-hotel-btn:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            transition: var(--transition);
+            z-index: -1;
+        }
+
+        .view-hotel-btn:hover:before {
+            width: 100%;
+        }
+
+        .view-hotel-btn:hover {
+            box-shadow: 0 6px 15px rgba(30, 122, 143, 0.3);
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 5rem 2rem;
+            background-color: var(--card-color);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .empty-state img {
+            max-width: 300px;
+            margin-bottom: 2.5rem;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        .empty-state h2 {
+            font-size: 1.8rem;
+            margin-bottom: 1.2rem;
+            color: var(--primary-color);
+            font-weight: 700;
+        }
+
+        .empty-state p {
+            color: var(--text-light);
+            margin-bottom: 2.5rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            font-size: 1.05rem;
+            line-height: 1.7;
+        }
+
+        .empty-state-actions {
+            display: flex;
+            justify-content: center;
+            gap: 1.2rem;
+        }
+
+        .empty-state-btn {
+            padding: 1rem 2rem;
+            background: linear-gradient(to right, var(--primary-color), var(--primary-hover));
+            color: white;
+            border: none;
+            border-radius: var(--border-radius);
+            font-weight: 600;
+            text-decoration: none;
+            transition: var(--transition);
+            box-shadow: 0 4px 10px rgba(30, 122, 143, 0.2);
+        }
+
+        .empty-state-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(30, 122, 143, 0.3);
+        }
+
+        .empty-state-btn.secondary {
+            background: transparent;
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+            box-shadow: none;
+        }
+
+        .empty-state-btn.secondary:hover {
+            background-color: var(--primary-light);
+            transform: translateY(-3px);
+        }
+
+        /* Loader */
+        .loader {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 300px;
+        }
+
+        .loader-spinner {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            position: relative;
+            animation: rotate 1s linear infinite;
+        }
+
+        .loader-spinner::before,
+        .loader-spinner::after {
+            content: "";
+            box-sizing: border-box;
+            position: absolute;
+            inset: 0px;
+            border-radius: 50%;
+            border: 5px solid var(--primary-color);
+            animation: prixClipFix 2s linear infinite;
+        }
+
+        .loader-spinner::after {
+            border-color: var(--accent-color);
+            animation: prixClipFix 2s linear infinite, rotate 0.5s linear infinite reverse;
+            inset: 6px;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes prixClipFix {
+            0% { clip-path: polygon(50% 50%, 0 0, 0 0, 0 0, 0 0, 0 0); }
+            25% { clip-path: polygon(50% 50%, 0 0, 100% 0, 100% 0, 100% 0, 100% 0); }
+            50% { clip-path: polygon(50% 50%, 0 0, 100% 0, 100% 100%, 100% 100%, 100% 100%); }
+            75% { clip-path: polygon(50% 50%, 0 0, 100% 0, 100% 100%, 0 100%, 0 100%); }
+            100% { clip-path: polygon(50% 50%, 0 0, 100% 0, 100% 100%, 0 100%, 0 0); }
+        }
+
+        /* Responsive Adjustments */
+        @media screen and (max-width: 992px) {
+            .results-container {
+                grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            }
+        }
+
+        @media screen and (max-width: 768px) {
+            .search-header {
+                padding: 1.25rem 1.5rem;
+            }
+            
+            .search-header-top {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+
+            .search-header h1 {
+                font-size: 1.8rem;
+            }
+
+            .search-summary {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .search-actions {
+                width: 100%;
+            }
+
+            .new-search-btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .results-container {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .empty-state {
+                padding: 3rem 1.5rem;
+            }
+
+            .empty-state img {
+                max-width: 220px;
+            }
+
+            .empty-state-actions {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .empty-state-btn {
+                width: 100%;
+                text-align: center;
+            }
+        }
+    </style>
 </head>
 <body>
     <header>
         <nav class="navbar">
-
             <div class="backToHome">
-                <a  href="<?= ROOT ?>/traveler/FindAHotel">
+                <a href="<?= ROOT ?>/traveler/findAHotel">
                     <i class="fa-solid fa-arrow-left"></i>
-                    <span>Back</span>
+                    <span>Back to Search</span>
                 </a>
             </div>
-
         </nav>
     </header>
 
-    <section id = "main">
-        <h1>
-            Available Results
-        </h1>
-
-        <div class = "row">
-            <div class = "img-container">
-                <img src = "<?= ROOT ?>/assets/images/travelers/findaHotel/hotelSearchRS/Delhousie Hotel.jpg">
+    <div class="container">
+        <div class="search-header">
+            <div class="search-header-top">
+                <h1>Hotel Search Results</h1>
+                <div class="search-actions">
+                    <a href="<?= ROOT ?>/traveler/findAHotel" class="new-search-btn">
+                        <i class="fa-solid fa-search"></i>
+                        New Search
+                    </a>
+                </div>
             </div>
-
-            <div class = "desc-container">
-                <span class = "sub-heading">
-                    Delhousie Hotel
-                </span>
-
-                <span class = "rating-info">
-                    <i class="fa-solid fa-star" id = "ratingYellow"></i>
-                    <i class="fa-solid fa-star" id = "ratingYellow"></i>
-                    <i class="fa-solid fa-star" id = "ratingYellow"></i>
-                    <i class="fa-solid fa-star" id = "ratingYellow"></i>
-                    <i class="fa-solid fa-star" id = "ratingYellow"></i>
-                </span>
-
-                <span class = "review-info">
-                    <i class="fa-solid fa-comment"></i>25 Reviews
-                </span>
-                    
-                <p>
-                    Delhousie offers a blend of modern elegance and warm hospitality. 
-                    Enjoy spacious rooms with stunning views, top-notch amenities, 
-                    and easy access to popular attractions...
-                </p>
-
-                <a href = "delhousieHotel.html">
-                    <button class = "btn">
-                        Book Now
-                    </button>
-                </a>
+            <div class="search-summary">
+                <?php if(isset($data['district']) && isset($data['province'])): ?>
+                    <p><i class="fa-solid fa-map-marker-alt"></i> Showing hotels in <?= $data['district'] ?>, <?= $data['province'] .' Province' ?></p>
+                <?php endif; ?>
                 
-            </div>
-
-            <div class = "mapHolder">
-                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3961.5407478542697!2d80.52024937499564!3d6.825570693172273!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ae3975fc799729f%3A0xbecca7abd30d2f79!2sDelhousie%20Hotel%20-%20Nallathanniya!5e0!3m2!1sen!2slk!4v1726895214148!5m2!1sen!2slk" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                <?php if(isset($data['hotels']) && count($data['hotels']) > 0): ?>
+                    <p><i class="fa-solid fa-hotel"></i> <?= count($data['hotels']) ?> hotels found</p>
+                <?php endif; ?>
             </div>
         </div>
 
-        <div class = "row">
-            <div class = "img-container">
-                <img src = "<?= ROOT ?>/assets/images/travelers/findaHotel/hotelSearchRS/adamsPeekIN.jpg">
+        <?php if(isset($data['hotels']) && count($data['hotels']) > 0): ?>
+            <!-- Hotel Results Grid -->
+            <div class="results-container">
+                <?php foreach($data['hotels'] as $index => $hotel): ?>
+                    <div class="hotel-card">
+                        <div class="hotel-image-container">
+                            <img src="<?= $hotel->image_path ? ROOT . '/'. $hotel->image_path : ROOT . '/assets/images/default_hotel.jpg' ?>" alt="<?= $hotel->hotelName ?>" class="hotel-image">
+                            <?php if($index < 3): ?>
+                                <div class="hotel-badge">Popular</div>
+                            <?php endif; ?>
+                        </div>
+                        <div class="hotel-info">
+                            <h3 class="hotel-name"><?= $hotel->hotelName ?></h3>
+                            
+                            <div class="hotel-description">
+                                <?= substr($hotel->description_para1, 0, 120) ?>...
+                            </div>
+
+                            <div class="hotel-location">
+                                <i class="fa-solid fa-location-dot"></i>
+                                <span><?= $hotel->hotelAddress ?>, <?= $hotel->district ?></span>
+                            </div>
+                            
+                            <div class="hotel-action">
+                                <a href="<?= ROOT ?>/traveler/ViewParticularHotel/index/<?= $hotel->hotel_Id ?>" class="view-hotel-btn">View Hotel</a>
+                            </div>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
             </div>
-
-            <div class = "desc-container">
-
-                <span class = "sub-heading">
-                    Adams Peak Inn
-                </span>
-
-                <span class = "rating-info">
-                    <i class="fa-solid fa-star" id = "ratingYellow"></i>
-                    <i class="fa-solid fa-star" id = "ratingYellow"></i>
-                    <i class="fa-solid fa-star" id = "ratingYellow"></i>
-                    <i class="fa-solid fa-star" id = "ratingWhite"></i>
-                    <i class="fa-solid fa-star" id = "ratingWhite"></i>
-                </span>
-
-                <span class = "review-info">
-                    <i class="fa-solid fa-comment"></i>12 Reviews
-                </span>
-                    
+        <?php else: ?>
+            <!-- Empty State -->
+            <div class="empty-state">
+                <img src="<?= IMAGES ?>/illustrations/no_results.svg" alt="No results found">
+                <h2>No Hotels Found</h2>
                 <p>
-                    Discover boutique luxury just a stone's throw from Adam's Peak at 
-                    Adams Peak Inn Hotel. Which offers a personalized experience in a 
-                    serene mountain setting.
+                    We couldn't find any hotels registered in the selected district. 
+                    Please try searching in a different district or check back later as our hotel network is continuously expanding.
                 </p>
+                <div class="empty-state-actions">
+                    <a href="<?= ROOT ?>/traveler/findAHotel" class="empty-state-btn">
+                        New Search
+                    </a>
+                    <a href="<?= ROOT ?>/traveler/RegisteredTravelerHome" class="empty-state-btn secondary">
+                        Return to Home
+                    </a>
+                </div>
+            </div>
+        <?php endif; ?>
+    </div>
 
-                <a href = "">
-                    <button class = "btn">
-                        Book Now
-                    </button>
-                </a>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Fade in the results with staggered animation
+            const resultsContainer = document.querySelector('.results-container');
+            if (resultsContainer) {
+                const hotelCards = document.querySelectorAll('.hotel-card');
                 
-            </div>
-
-            <div class = "mapHolder">
-                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d7923.079729941019!2d80.51827739128761!3d6.825677372688635!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ae397176b899ddd%3A0xf5c494544b444598!2sAdams%20peak%20Inn!5e0!3m2!1sen!2slk!4v1726895713880!5m2!1sen!2slk" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-            </div>
-        </div>
-
-        <div class = "row">
-            <div class = "img-container">
-                <img src = "<?= ROOT ?>/assets/images/travelers/findaHotel/hotelSearchRS/Tree Breeze.jpg">
-            </div>
-
-            <div class = "desc-container">
-
-                <span class = "sub-heading">
-                    Tree Breeze Motel
-                </span>
-
-                <span class = "rating-info">
-                    <i class="fa-solid fa-star" id = "ratingYellow"></i>
-                    <i class="fa-solid fa-star" id = "ratingYellow"></i>
-                    <i class="fa-solid fa-star" id = "ratingYellow"></i>
-                    <i class="fa-solid fa-star" id = "ratingYellow"></i>
-                    <i class="fa-solid fa-star" id = "ratingWhite"></i>
-                </span>
-
-                <span class = "review-info">
-                    <i class="fa-solid fa-comment"></i>17 Reviews
-                </span>
+                hotelCards.forEach((card, index) => {
+                    card.style.opacity = '0';
+                    card.style.transform = 'translateY(20px)';
                     
-                <p>
-                    Experience the timeless beauty of the region at Tree Breeze Motel, 
-                    a charming historic hotel with its classic architecture and offers a 
-                    unique blend of old-world elegance and contemporary convenience.
-                </p>
-
-                <a href = "">
-                    <button class = "btn">
-                        Book Now
-                    </button>
-                </a>
+                    setTimeout(() => {
+                        card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                        card.style.opacity = '1';
+                        card.style.transform = 'translateY(0)';
+                    }, 100 + (index * 100)); // Staggered animation
+                });
+            }
+            
+            // Enhance empty state animation if present
+            const emptyState = document.querySelector('.empty-state');
+            if (emptyState) {
+                emptyState.style.opacity = '0';
+                emptyState.style.transform = 'translateY(20px)';
                 
-            </div>
-
-            <div class = "mapHolder">
-                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d253538.10183739153!2d80.21841379453127!3d6.826526000000011!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ae3975fc6973431%3A0xcf7f09f1b716b862!2sTea%20Breeze%20Motel%20in%20Adam&#39;s%20Peek!5e0!3m2!1sen!2slk!4v1726895890293!5m2!1sen!2slk" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-            </div>
-        </div>
-
-        <div class = "row">
-            <div class = "img-container">
-                <img src = "<?= ROOT ?>/assets/images/travelers/findaHotel/hotelSearchRS/white house.jpg">
-            </div>
-
-            <div class = "desc-container">
-                <span class = "sub-heading">
-                    White House Hotel
-                </span>
-
-                <span class = "rating-info">
-                    <i class="fa-solid fa-star" id = "ratingYellow"></i>
-                    <i class="fa-solid fa-star" id = "ratingYellow"></i>
-                    <i class="fa-solid fa-star" id = "ratingYellow"></i>
-                    <i class="fa-solid fa-star" id = "ratingWhite"></i>
-                    <i class="fa-solid fa-star" id = "ratingWhite"></i>
-                </span>
-
-                <span class = "review-info">
-                    <i class="fa-solid fa-comment"></i>15 Reviews
-                </span>
-                    
-                <p>
-                    White House Hotel offers a tranquil retreat for nature lovers and spiritual 
-                    seekers alike. Wake up to breathtaking mountain views, relax in our cozy 
-                    rooms, and enjoy locally-sourced meals at our on-site restaurant.
-                </p>
-
-                <a href = "">
-                    <button class = "btn">
-                        Book Now
-                    </button>
-                </a>
-                
-            </div>
-
-            <div class = "mapHolder">
-                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3961.533942940641!2d80.52278477499566!3d6.8263928931714535!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ae3999ec4705c57%3A0x96b87289e84dc448!2sWhite%20House%20Adam%60s%20Peak!5e0!3m2!1sen!2slk!4v1726896080588!5m2!1sen!2slk" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-            </div>
-        </div>
-
-        <div class = "row">
-            <div class = "img-container">
-                <img src = "<?= ROOT ?>/assets/images/travelers/findaHotel/hotelSearchRS/MAngo Treee.jpg">
-            </div>
-
-            <div class = "desc-container">
-                <span class = "sub-heading">
-                    Mango Tree Hotel
-                </span>
-
-                <span class = "rating-info">
-                    <i class="fa-solid fa-star" id = "ratingYellow"></i>
-                    <i class="fa-solid fa-star" id = "ratingYellow"></i>
-                    <i class="fa-solid fa-star" id = "ratingYellow"></i>
-                    <i class="fa-solid fa-star" id = "ratingYellow"></i>
-                    <i class="fa-solid fa-star" id = "ratingWhite"></i>
-                </span>
-
-                <span class = "review-info">
-                    <i class="fa-solid fa-comment"></i>22 Reviews
-                </span>
-                    
-                <p>
-                    Mango Tree Hotel is the ideal base for your mountain adventures. 
-                    Our modern, comfortable rooms provide the perfect place to rest 
-                    after a day of exploring.
-                </p>
-
-                <a href = "">
-                    <button class = "btn">
-                        Book Now
-                    </button>
-                </a>
-                
-            </div>
-
-            <div class = "mapHolder">
-                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3961.5515933092556!2d80.51686177499565!3d6.824260093173532!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ae39760e32b06e7%3A0xa0d280a0484d7d18!2sHotel%20mango%20tree%20nearest%20Adam&#39;s%20peak!5e0!3m2!1sen!2slk!4v1726896280784!5m2!1sen!2slk" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-            </div>
-        </div>
-    </section>
+                setTimeout(() => {
+                    emptyState.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                    emptyState.style.opacity = '1';
+                    emptyState.style.transform = 'translateY(0)';
+                }, 100);
+            }
+        });
+    </script>
 </body>
 </html>

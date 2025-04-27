@@ -34,14 +34,16 @@ class CreateTrip extends Controller
                 'startDate' => $_POST['startDate'],
                 'endDate' => $_POST['endDate'],
                 'departureTime' => $_POST['departureTime'],
-                'transportationMode' => $_POST['transportation'],
+                'transportationMode' => isset($_POST['transportation']) ? $_POST['transportation'] : 'Not specified',
                 'numberOfTravelers' => !empty($_POST['travelersCount']) ? intval($_POST['travelersCount']) : null,
                 'budgetPerPerson' => !empty($_POST['budgetPerPerson']) ? floatval($_POST['budgetPerPerson']) : null,
                 'errors' => []
             ];
 
             // Validate trip data
-            if ($trip->validate($tripData)) {
+            $validationErrors = $trip->validate($tripData);
+
+            if (!$validationErrors) {
                 // Insert trip and get the ID
                 $tripId = $trip->insert($tripData);
 
@@ -63,7 +65,7 @@ class CreateTrip extends Controller
                 }
             } else {
                 // Validation failed
-                $data['errors'] = $trip->errors;
+                $data['errors'] = $validationErrors;
                 $this->view('traveler/createTrip', $data);
             }
         } else {

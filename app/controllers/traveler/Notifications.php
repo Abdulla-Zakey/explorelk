@@ -16,6 +16,12 @@ class Notifications extends Controller
     private $eventModel;
     private $eventOrganizerModel;
 
+    //tour gudie related
+    private $tourBookingNotificationModel;
+    private $tourBookingModel;
+    private $tourPackagesModel;
+    private $tourGuideModel;
+
     public function __construct()
     {
         $this->notificationsModel = new NotificationsModel();
@@ -27,6 +33,12 @@ class Notifications extends Controller
         $this->eventBookingModel = new EventBookingModel();
         $this->eventModel = new Event();
         $this->eventOrganizerModel = new Eventorganizer();
+
+        $this->tourBookingNotificationModel = new TourBookingNotificationModel();
+        $this->tourBookingModel = new TourBookings();
+        $this->tourPackagesModel = new TourPackages;
+        $this->tourGuideModel = new TourGuide_M();
+        
     }
 
     public function index()
@@ -101,6 +113,27 @@ class Notifications extends Controller
 
                 }
 
+            }
+            else if($notification->notification_type == 'tourguide_related'){
+                $tourNotification = $this->tourBookingNotificationModel->first([
+                    'notification_Id' => $notification->notification_Id
+                ]);
+
+                if($tourNotification){
+                    $booking = $this->tourBookingModel->first(['booking_id' => $tourNotification->booking_Id]);
+                    $tourPackage =  $this->tourPackagesModel->first(['package_id' => $booking->package_id]);
+
+                    $guide = $this->tourGuideModel->first(['guide_Id' => $tourPackage->guide_id]);
+
+                    if( $guide){
+                        $notification->profilePic = 'assets/images/tourGuide/tourGuideProfilePhotos/' . $guide->profilePhoto;
+                    }
+
+                    $notification->buttonIconClass = 'fa-solid fa-eye';
+                    $notification->buttonAction = 'View Booking';
+                    $notification->buttonHyperLink = ROOT . '/traveler/ViewEventBooking/index/' . $tourNotification->booking_Id;
+
+                }
             }
 
             // Categorize into today, this week, or this month

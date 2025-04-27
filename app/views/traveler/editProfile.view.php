@@ -153,8 +153,8 @@
 
                     <div class="profilePicHolder">
                         <img id = "profileImage" src="<?= !empty($data['traveler']->profilePicture) 
-                            ? ROOT . '/assets/images/Travelers/userProfilePics/' . $data['traveler']->profilePicture 
-                            : ROOT . '/assets/images/Travelers/viewProfile/defaultUserIcon.png' ?>">
+                            ? UPLOADS . '/travelers/userProfilePics/' . $data['traveler']->profilePicture 
+                            : UPLOADS . '/travelers/userProfilePics/defaultUserIcon.png' ?>">
                     </div>
 
                     <div class="username-Conatiner">
@@ -219,7 +219,7 @@
                             <label for="email">Email:</label>
                             <input type="email" id="email" name="email" 
                                    value = "<?= htmlspecialchars($data['traveler']->travelerEmail ?? '') ?>"
-                                   required>
+                                   readonly>
                         </div>
 
                         <div class="row-Item">

@@ -34,12 +34,11 @@
 
         <div class="leftPanel">
             <div class="logo">
-                <!-- <img src="<?= ROOT ?>/assets/images/logos/logoWhite.svg" alt="Logo"> -->
+
                 <img src="<?= !empty($data['userData']->profilePicture) 
-                                ?  ROOT . '/assets/images/Travelers/userProfilePics/' . $data['userData']->profilePicture 
-                                : ROOT . '/assets/images/Travelers/userProfilePics/defaultUserIcon.png' ?>" alt="Logo">
+                                ? UPLOADS . '/travelers/userProfilePics/' . $data['userData']->profilePicture 
+                                : UPLOADS . '/travelers/userProfilePics/defaultUserIcon.png' ?>" alt="Logo">
                 <h1>
-                    <!-- ExploreLK -->
                      <?= $data['userData']->username ?> 
                 </h1>
             </div>
@@ -72,13 +71,25 @@
                 </a>
             </div>
 
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
             <div class="linkHolder">
                 <a href="<?= ROOT ?>/traveler/TRestaurant" class="linkItem"><i class="fa-solid fa-bell"></i>Rest</a>
             </div>
+=======
+            <!-- <div class="linkHolder">
+                <a href="<?= ROOT ?>/traveler/Restaurant" class="linkItem"><i class="fa-solid fa-bell"></i>Rest</a>
+            </div> -->
+>>>>>>> Stashed changes
 
             <div class="linkHolder">
                 <a href="<?= ROOT ?>/traveler/Allrestaurant" class="linkItem"><i class="fa-solid fa-bell"></i>Allrest</a>
             </div>
+=======
+            <!-- <div class="linkHolder">
+                <a href="<?= ROOT ?>/traveler/Restaurant" class="linkItem"><i class="fa-solid fa-bell"></i>Rest</a>
+            </div> -->
+>>>>>>> Stashed changes
 
             <div class="linkHolder">
                 <a href="<?= ROOT ?>/traveler/ViewProfile" class="linkItem"><i class="fa-solid fa-user"></i>View Profile</a>
@@ -158,7 +169,7 @@
 
                     <div class="leftImg">
 
-                        <a href = "<?= ROOT ?>/traveler/ViewParticularTour">
+                        <a href = "<?= ROOT ?>/traveler/ViewParticularTour/index/1">
                             <img src="<?= ROOT ?>/assets/images/travelers/dashboard/guidedNatureHikes.jpg">
                             <p>
                                 Ella Adventure

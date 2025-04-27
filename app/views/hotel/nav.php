@@ -23,7 +23,7 @@
 
         <ul class="nav-menu">
             <li><a href="<?=ROOT?>/Hotel/Hdashboard" class="<?= strpos($current_page, '/Hotel/Hdashboard') !== false ? 'active' : '' ?>"><i class="fas fa-th-large"></i> Dashboard</a></li>
-            <li><a href="<?=ROOT?>/Hotel/Hmyrooms" class="<?= strpos($current_page, '/Hotel/Hmyrooms') !== false ? 'active' : '' ?>"><i class="fas fa-bed"></i> My Rooms</a></li>
+            <li><a href="<?=ROOT?>/Hotel/TestController" class="<?= strpos($current_page, '/Hotel/Hmyrooms') !== false ? 'active' : '' ?>"><i class="fas fa-bed"></i> My Rooms</a></li>
             <li><a href="<?=ROOT?>/Hotel/Hguest" class="<?= strpos($current_page, '/Hotel/Hguest') !== false ? 'active' : '' ?>"><i class="fa-solid fa-users"></i> Guests</a></li>
             <li><a href="<?=ROOT?>/Hotel/Hnotifications" class="<?= strpos($current_page, '/Hotel/Hnotifications') !== false ? 'active' : '' ?>"><i class="fas fa-bell"></i> Notifications</a></li>
             <li><a href="<?=ROOT?>/Hotel/Hpaymentdetails" class="<?= strpos($current_page, '/Hotel/Hpaymentdetails') !== false ? 'active' : '' ?>"><i class="fas fa-credit-card"></i> Payment Details</a></li>

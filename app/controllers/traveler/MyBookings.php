@@ -18,6 +18,10 @@ class MyBookings extends Controller{
     private $eventBookingModel;
     private $eventTicketTypesModel;
     private $soldEventTicketsModel;
+
+    //Tour booking related models
+    private $tourBookingModel;
+    private $tourPackageModel;
     
 
     public function __construct(){
@@ -37,6 +41,10 @@ class MyBookings extends Controller{
         $this->eventBookingModel = new EventBookingModel();
         $this->eventTicketTypesModel = new EventTicketType();
         $this->soldEventTicketsModel = new SoldEventTicketsModel();
+
+        ////Tour booking related models
+        $this->tourBookingModel = new TourBookings();
+        $this->tourPackageModel = new TourPackageModel();
     }
 
     public function index(){
@@ -46,12 +54,14 @@ class MyBookings extends Controller{
             header("Location: " . ROOT . "/traveler/Login");
             exit();
         }
-
-        $accommodationBookings = $this->roomBookingFinalModel->getRoomBookingByTravelerId($_SESSION['traveler_id']);
-        $eventBookings = $this->eventBookingModel->getEventBookingsByTravelerId($_SESSION['traveler_id']);
         
+        $data['archivedBookingsData'] = [];
         $data['accommodationBookingsData'] = [];
         $data['eventBookingsData'] = [];
+        $data['tourBookingsData'] = [];
+        $data['vehicleBookingsData'] = [];
+
+        $accommodationBookings = $this->roomBookingFinalModel->getRoomBookingByTravelerId($_SESSION['traveler_id']);
 
         foreach($accommodationBookings as $booking){
             
@@ -70,10 +80,19 @@ class MyBookings extends Controller{
             $bookingData->hotelInfo = $hotelInfo;
             $bookingData->hotelPic = $hotelPic;
             $bookingData->refund_status = $refundStatus;
+
+            if($bookingData->is_archived == 1){
+                $data['archivedBookingsData'][] = $bookingData;
+            }
+            else{
+                 // Add this complete booking to our data array
+                $data['accommodationBookingsData'][] = $bookingData;
+            }
             
-            // Add this complete booking to our data array
-            $data['accommodationBookingsData'][] = $bookingData;
         }
+
+        //Event related
+        $eventBookings = $this->eventBookingModel->getEventBookingsByTravelerId($_SESSION['traveler_id']);
 
         if($eventBookings){
            
@@ -89,6 +108,24 @@ class MyBookings extends Controller{
             }
         }
 
+       //Tour related
+        $tourBookings = $this->tourBookingModel->where(['traveler_Id' => $_SESSION['traveler_id']]);
+        if($tourBookings){
+
+            foreach($tourBookings as $booking){
+
+                $bookingData = $booking;
+                
+                $tourInfo = $this->tourPackageModel->first( ['package_id' => $booking->package_id]);
+                $bookingData->tourInfo = $eventInfo;
+
+                $data['tourBookingsData'][] = $bookingData;
+                
+            }
+
+        }
+
+
         $notifications = $this->notificationsModel->getNotifications('traveler', $_SESSION['traveler_id']);
         $unreadNotifications = 0;
 
@@ -99,6 +136,8 @@ class MyBookings extends Controller{
         }
 
         $data['unreadNotifications'] = $unreadNotifications;
+
+        
 
         $this->view('traveler/myBookings', $data);
     }
@@ -166,4 +205,6 @@ class MyBookings extends Controller{
             header("Location: " . ROOT . "/traveler/MyBookings?error=failed_to_unarchive_booking");
         }
     }
+
+   
 }

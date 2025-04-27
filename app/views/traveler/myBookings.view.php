@@ -265,9 +265,9 @@
                 <?php else: ?>
                     <div class="empty-bookings">
                         <i class="fa-solid fa-hotel"></i>
-                        <h3>No Accommodation Bookings Yet</h3>
+                        <h3>No Active Accommodation Bookings</h3>
                         <p>Find and book comfortable stays for your next adventure.</p>
-                        <a href="<?= ROOT ?>/traveler/SearchAccommodations">
+                        <a href="<?= ROOT ?>/traveler/FindAHotel">
                             <button class="buttonStyle" style="font-family: poppins;">
                                 Find Accommodations
                             </button>
@@ -313,119 +313,22 @@
 
             <!-- Car Rentals Section -->
             <div id="car-rentals" class="bookings-section">
-                <div class="bookingContainer">
-                    <div class="bookingItemImage-Container">
-                        <img src="<?= IMAGES ?>/travelers/carRental/Alto.jpeg">
-                    </div>
-
-                    <div class="bookingItemDetails">
-                        <h2>
-                            Suzuki Alto 800
-                            <span class="status-badge approved">Approved</span>
-                        </h2>
-
-                        <div class="bookingKeyInfo-Holder">
-                            <div class="firstKid">
-                                <i class="fa fa-calendar-o" aria-hidden="true"></i>Pickup Date:
-                            </div>
-                            <div class="secondKid">
-                                15-11-2024
-                            </div>
-                        </div>
-
-                        <div class="bookingKeyInfo-Holder">
-                            <div class="firstKid">
-                                <i class="fa fa-calendar-o" aria-hidden="true"></i>Return Date:
-                            </div>
-                            <div class="secondKid">
-                                18-11-2024
-                            </div>
-                        </div>
-
-                        <div class="bookingKeyInfo-Holder">
-                            <div class="firstKid">
-                                <i class="fas fa-credit-card"></i>Payment Status:
-                            </div>
-                            <div class="secondKid">
-                                Pending
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="bookingActionBtn-Holder">
-                        <a href="<?= ROOT ?>/traveler/ViewBookings/carRental/1">
-                            <button id="viewBookingBtn" class="actionButtons">
-                                <i class="fas fa-eye"></i>View Details
+                <?php if(empty($data['vehicleBookingsData'])):?>
+                    <div class="empty-bookings">
+                        <i class="fa-solid fa-car"></i>
+                        <h3>No Vehicles Booked Yet</h3>
+                        <p>Explore our vehicle options and book your ride for an unforgettable journey.</p>
+                        <a href="<?= ROOT ?>/traveler/ViewAllEvents">
+                            <button class="buttonStyle" style="font-family: poppins;">
+                                Browse Vehicles
                             </button>
                         </a>
-
-                        <button id="editBookingBtn" class="actionButtons">
-                            <i class="fas fa-edit"></i>Edit Booking
-                        </button>
-
-                        <button id="deleteBookingBtn" class="actionButtons">
-                            <i class="fas fa-ban"></i>Cancel Booking
-                        </button>
-                    </div>
-                </div>
-
-                <div class="bookingContainer">
-                    <div class="bookingItemImage-Container">
-                        <img src="<?= IMAGES ?>/travelers/carRental/Aqua.jpg">
                     </div>
 
-                    <div class="bookingItemDetails">
-                        <h2>
-                            Toyota Aqua
-                            <span class="status-badge pending">Pending</span>
-                        </h2>
-
-                        <div class="bookingKeyInfo-Holder">
-                            <div class="firstKid">
-                                <i class="fa fa-calendar-o" aria-hidden="true"></i>Pickup Date:
-                            </div>
-                            <div class="secondKid">
-                                10-04-2025
-                            </div>
-                        </div>
-
-                        <div class="bookingKeyInfo-Holder">
-                            <div class="firstKid">
-                                <i class="fa fa-calendar-o" aria-hidden="true"></i>Return Date:
-                            </div>
-                            <div class="secondKid">
-                                15-04-2025
-                            </div>
-                        </div>
-
-                        <div class="bookingKeyInfo-Holder">
-                            <div class="firstKid">
-                                <i class="fas fa-credit-card"></i>Payment Status:
-                            </div>
-                            <div class="secondKid">
-                                Not Paid
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="bookingActionBtn-Holder">
-                        <a href="<?= ROOT ?>/traveler/ViewBookings/carRental/2">
-                            <button id="viewBookingBtn" class="actionButtons">
-                                <i class="fas fa-eye"></i>View Details
-                            </button>
-                        </a>
-
-                        <button id="editBookingBtn" class="actionButtons">
-                            <i class="fas fa-edit"></i>Edit Booking
-                        </button>
-
-                        <button id="deleteBookingBtn" class="actionButtons">
-                            <i class="fas fa-ban"></i>Cancel Booking
-                        </button>
-                    </div>
-                </div>
+                <?php endif; ?>
             </div>
 
+            <!--Event bookings section  -->
             <div id="event-tickets" class="bookings-section">
                 <?php if (!empty($data['eventBookingsData'])): ?>
                     <!-- Search and filter section -->
@@ -567,84 +470,14 @@
 
             <!-- Tour Guides Section -->
             <div id="tour-guides" class="bookings-section">
-                <?php if (!empty($data['tourBookingsData'])): ?>
-                    <!-- Search and filter section -->
-                    <div class="search-filter">
-                        <input type="text" placeholder="Search bookings...">
-                        <select>
-                            <option value="all">All Statuses</option>
-                            <option value="pending">Pending</option>
-                            <option value="confirmed">Confirmed</option>
-                            <option value="completed">Completed</option>
-                            <option value="cancelled">Cancelled</optio>
-                        </select>
-                        <button><i class="fa-solid fa-search"></i> Search</button>
-                    </div>
-
-                    <?php foreach ($data['tourBookingsData'] as $tourBooking): ?>
-                        <div class="bookingContainer">
-                            <div class="bookingItemImage-Container">
-                                <img src="<?= IMAGES ?>/travelers/tourGuides/guide1.jpg">
-                            </div>
-
-                            <div class="bookingItemDetails">
-                                <h2>
-                                    Sigiriya Tour with John Perera
-                                    <span class="status-badge pending">Pending</span>
-                                </h2>
-
-                                <div class="bookingKeyInfo-Holder">
-                                    <div class="firstKid">
-                                        <i class="fa fa-calendar-o" aria-hidden="true"></i>Tour Date:
-                                    </div>
-                                    <div class="secondKid">
-                                        25-04-2025
-                                    </div>
-                                </div>
-
-                                <div class="bookingKeyInfo-Holder">
-                                    <div class="firstKid">
-                                        <i class="fa fa-clock-o" aria-hidden="true"></i>Duration:
-                                    </div>
-                                    <div class="secondKid">
-                                        Full Day (8 hours)
-                                    </div>
-                                </div>
-
-                                <div class="bookingKeyInfo-Holder">
-                                    <div class="firstKid">
-                                        <i class="fas fa-credit-card"></i>Payment Status:
-                                    </div>
-                                    <div class="secondKid">
-                                        Not Paid
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="bookingActionBtn-Holder">
-                                <a href="<?= ROOT ?>/traveler/ViewBookings/tourGuide/1">
-                                    <button id="viewBookingBtn" class="actionButtons">
-                                        <i class="fas fa-eye"></i>View Details
-                                    </button>
-                                </a>
-
-                                <button id="editBookingBtn" class="actionButtons">
-                                    <i class="fas fa-edit"></i>Edit Booking
-                                </button>
-
-                                <button id="deleteBookingBtn" class="actionButtons">
-                                    <i class="fas fa-ban"></i>Cancel Booking
-                                </button>
-                            </div>
-                        </div>
-                    <?php endforeach; ?>
-                <?php else: ?>
+                
+                <?php if(empty($data['tourBookingsData'])): ?>
 
                     <!-- Empty state for tour guides if needed -->
-                    <div class="empty-bookings" style="display: none;">
+                    <div class="empty-bookings">
                         <i class="fa-solid fa-map-marked-alt"></i>
-                        <h3>No Tour Guide Bookings Yet</h3>
-                        <p>Enhance your travel experience by booking a local guide for your next adventure.</p>
+                        <h3>No Guided Tours Booked Yet</h3>
+                        <p>Discover and join exciting guided tours to enhance your travel experience.</p>
                         <a href="<?= ROOT ?>/traveler/SearchTourGuides">
                             <button class="buttonStyle">Find Tour Guides</button>
                         </a>
