@@ -96,9 +96,12 @@
 
                     <div class = "profilePic-Holder">
                         <!-- <img src = "<?= ROOT ?>/assets/images/Travelers/viewProfile/defaultUserIcon.png"> -->
-                        <img src = "<?= !empty($data['traveler']->profilePicture) 
+                        <!-- <img src = "<?= !empty($data['traveler']->profilePicture) 
                             ? ROOT . '/assets/images/Travelers/userProfilePics/' . $data['traveler']->profilePicture 
-                            : ROOT . '/assets/images/Travelers/viewProfile/defaultUserIcon.png' ?>">
+                            : ROOT . '/assets/images/Travelers/viewProfile/defaultUserIcon.png' ?>"> -->
+                        <img src = "<?= !empty($data['traveler']->profilePicture) 
+                            ? UPLOADS . '/travelers/userProfilePics/' . $data['traveler']->profilePicture 
+                            : UPLOADS . '/travelers/userProfilePics/defaultUserIcon.png' ?>">
                     </div>
     
                     <div class="personalInfo">

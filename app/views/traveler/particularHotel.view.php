@@ -863,8 +863,8 @@
                             <div class="review-footer">
                                 <img src="' . 
                                     (!empty($review->travelerProfilePicture) 
-                                        ? IMAGES . '/Travelers/userProfilePics/' . $review->travelerProfilePicture 
-                                        : IMAGES . '/Travelers/viewProfile/defaultUserIcon.png'
+                                        ? UPLOADS . '/travelers/userProfilePics/' . $review->travelerProfilePicture 
+                                        : UPLOADS . '/travelers/userProfilePics/defaultUserIcon.png'
                                     ) . '" alt="Traveler Profile Picture" class="review-dp">
                                         
                                 <div class="user-info">

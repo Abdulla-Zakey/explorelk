@@ -23,7 +23,8 @@ class RoomBookingsFinalModel {
         'booking_status',
         'requested_date',
         'advance_payment_deadline',
-        'is_archived'
+        'is_archived',
+        'booking_source'
     ];
 
     public function getRoomBookingByTravelerId($traveler_id){

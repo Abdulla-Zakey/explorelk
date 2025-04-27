@@ -240,10 +240,15 @@ class MyTrips extends Controller
                 'budgetPerPerson' => !empty($_POST['budgetPerPerson']) ? floatval($_POST['budgetPerPerson']) : null
             ];
 
-            if ($tripModel->validate($data)) {
+            
+            // Validate trip data
+            $validationErrors = $tripModel->validate($data);
+
+            if (!$validationErrors) {
                 $result = $tripModel->update($trip_Id, $data, 'trip_Id');
                 
                 if ($result) {
+                    $_SESSION['success'] = [ucfirst($data['tripName']) . ' details updated Successfully'];
                     header("Location: " . ROOT . "/traveler/MyTrips/viewTrip/" . $trip_Id . "?success=Trip Updated Successfully!");
                     exit();
                 } else {
@@ -251,7 +256,7 @@ class MyTrips extends Controller
                     exit();
                 }
             } else {
-                $errors = $tripModel->errors;
+                $errors = $validationErrors;
                 header("Location: " . ROOT . "/traveler/MyTrips/viewTrip/" . $trip_Id . "?error=" . urlencode(implode(', ', $errors)));
                 exit();
             }

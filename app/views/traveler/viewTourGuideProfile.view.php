@@ -24,12 +24,16 @@
 </head>
 
 <body>
+    <?php
+        // show($data);
+        // exit();
+    ?>
 
     <header>
         <nav class="navbar">
 
             <div class="backToHome">
-                <a href="<?= ROOT ?>/traveler/ViewParticularTour">
+                <a href="javascript:void(0);" onclick="window.history.back();">
                     <i class="fa-solid fa-arrow-left"></i>
                     <span>Back</span>
                 </a>
@@ -49,14 +53,11 @@
             <div class="profileDetails-container">
 
                 <span id="guideName" class="guideName">
-                    Maahela Udawatte
+                    <?= $data['guideData']->firstName . $data['guideData']->lastName ?>
                 </span>
 
                 <p id="guideBio" class="guideBio">
-                    I’m a hiking guide with 10+ years of experience exploring Sri Lanka's Central Highlands.
-                    Whether you’re a seasoned trekker or a beginner, I’ll share my knowledge of trails, wildlife,
-                    and culture. Let’s embark on an unforgettable journey to discover the hidden gems of these majestic
-                    highlands!
+                    <?= $data['guideData']->guideBio ?>
                 </p>
 
                 <div class="basicInfo">
@@ -64,25 +65,16 @@
                     <div class="row">
 
                         <div>
-                            <i class="fas fa-birthday-cake"></i><span class="highlight">Age:</span> &nbsp;40
+                            <i class="fas fa-birthday-cake"></i><span class="highlight">Age:</span> &nbsp;<?= $data['guideData']->age ?>
                         </div>
 
                         <div>
-                            <i class="fas fa-award"></i><span class="highlight">Experience:</span> &nbsp;10 Years
+                            <i class="fas fa-award"></i><span class="highlight">Experience:</span> &nbsp;<?= $data['guideData']->experience ?> Years
                         </div>
-
-                        <div>
-                            <i class="fas fa-language"></i><span class="highlight">Languages Spoken:</span>
-                            &nbsp;Sinhala, English, Hindhi, French
-                        </div>
-
-                    </div>
-
-                    <div class="row">
 
                         <div>
                             <i class="fas fa-route"></i><span class="highlight">Field of Expertise:</span>
-                            &nbsp;&nbsp;&nbsp;<i class="fas fa-hiking"></i>Hiking & Trekking &nbsp;&nbsp;&nbsp;
+                            &nbsp;&nbsp;&nbsp;<i class="fas fa-hiking"></i><?= $data['guideData']->fieldsOfExpertise ?> &nbsp;&nbsp;&nbsp;
                         </div>
                         
                     </div>
@@ -95,36 +87,60 @@
 
         <div class="upcomingTours">
             <span class="subTopic">
-                Upcoming Tours of Maahela Udawatte
+                Upcoming Tours of <?= $data['guideData']->firstName . $data['guideData']->lastName ?>
             </span>
-
 
             <div class="imageContainer">
 
-                <div class="leftImg">
-                    
-                    <a href = "<?= ROOT ?>/traveler/ViewParticularTour">
-                        <img src = "<?= ROOT ?>/assets/images/travelers/dashboard/guidedNatureHikes.jpg" alt = "Tour Image">
-                        <p>
-                            Ella Adventure
-                        </p>
-                    </a>
+                <?php
+                    if(!empty($data['upcomingTours'])){
+                        $counter = 0;
+                        
+                        foreach($data['upcomingTours'] as $upcomingTour){
+                            if($counter % 3 == 0){
+                                echo '<div class="imageContainer">';
+                            }
+                ?>
+                            <div class="<?= ($counter % 3 == 0) ? 'leftImg' : (($counter % 3 == 1) ? 'midImg' : 'rightImg') ?>">    
+                                <a href = "<?= ROOT ?>/traveler/ViewParticularTour/index/<?= $upcomingTour->package_id?>">  
+                                    <img src="<?= ROOT . $upcomingTour->primaryImage ?>">
+                                    <p>
+                                        <?= $upcomingTour->name ?>
+                                    </p>
+                                </a>
+                            </div>
+                <?php
 
-                </div>
+                            $counter++;
 
-                <div class="midImg">
-                    <img src="knuckles.jpg">
-                    <p>
-                        Hike to the Heart of Knuckles
-                    </p>
-                </div>
+                            if($counter == count($data['upcomingTours'])){                          
+                                
+                                echo '</div>';
 
-                <div class="rightImg">
-                    <img src="ravana falls.jpg">
-                    <p>
-                        Exploring Ravana's Hidden Gem
-                    </p>
-                </div>
+                            }
+                            
+                        }
+
+                    }else{
+                        echo '<div class="no-events-container">';
+
+                            echo '<div class="no-events-content">';
+
+                                echo '<div class="calendar-icon">';
+                                    echo '<div class="calendar-top"></div>';
+                                    echo '<div class="calendar-body">';
+                                        echo '<div class="cross">×</div>';
+                                    echo '</div>';
+                                echo '</div>';
+
+                                echo '<h3>Currently No Upcoming Events</h3>';
+                                echo '<p class = "para">We are working on bringing exciting new experiences your way. Check back soon!</p>';
+        
+                            echo '</div>';
+                        echo '</div>';
+                    }
+                        
+                ?>
 
             </div>
 

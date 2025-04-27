@@ -108,7 +108,7 @@
                             <?php echo "\t" . (isset($errors['tripName']) ? "*" . $errors['tripName'] : ''); ?>
                             
                         </div>
-                        <input type="text" name="tripName" id="tripName" placeholder="Eg. Winter Vacation" required>
+                        <input type="text" name="tripName" id="tripName" placeholder="Eg. Winter Vacation" >
 
                     </div>
 
@@ -120,7 +120,7 @@
                             
                         </div>
                         
-                        <input type="text" name="startLocation" id="startLocation" placeholder="Eg. Colombo" required>
+                        <input type="text" name="startLocation" id="startLocation" placeholder="Eg. Colombo" >
                     </div>
 
                     <div class="longInputs">
@@ -130,7 +130,7 @@
                             
                         </div>
                         
-                        <input type="text" name="destination" id="destination" placeholder="Eg. Nuwara Eliya" required>
+                        <input type="text" name="destination" id="destination" placeholder="Eg. Nuwara Eliya" >
                     </div>
 
 
@@ -143,7 +143,7 @@
                                 
                             </div>
                             
-                            <input type="date" name="startDate" id="startDate" required>
+                            <input type="date" name="startDate" id="startDate" >
                         </div>
 
                         <div class="rightMediumInput-Conatiner">
@@ -153,7 +153,7 @@
                                 
                             </div>
                             
-                            <input type="date" name="endDate" id="endDate" required>
+                            <input type="date" name="endDate" id="endDate" >
                         </div>
 
                     </div>
@@ -162,17 +162,17 @@
 
                         <div class="leftMediumInput-Conatiner">
                             <label>Preferred Departure Time</label>
-                            <input type="time" name="departureTime" id="departureTime" required>
+                            <input type="time" name="departureTime" id="departureTime" >
                         </div>
 
                         <div class="rightMediumInput-Conatiner">
                             <label>Mode of Transportation:</label>
-                            <select name="transportation" id="transportation" required>
-                                <option value = "" disabled selected>Select Your Mode of Travel</option>
-                                <option>Car</option>
-                                <option>Van</option>
-                                <option>Bus</option>
-                                <option>Train</option>
+                            <select name="transportation" id="transportation" >
+                                <option value="" disabled selected>Select Your Mode of Travel</option>
+                                <option value="Car">Car</option>
+                                <option value="Van">Van</option>
+                                <option value="Bus">Bus</option>
+                                <option value="Train">Train</option>
                             </select>
                         </div>
 

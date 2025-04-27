@@ -34,12 +34,11 @@
 
         <div class="leftPanel">
             <div class="logo">
-                <!-- <img src="<?= ROOT ?>/assets/images/logos/logoWhite.svg" alt="Logo"> -->
+
                 <img src="<?= !empty($data['userData']->profilePicture) 
-                                ?  ROOT . '/assets/images/Travelers/userProfilePics/' . $data['userData']->profilePicture 
-                                : ROOT . '/assets/images/Travelers/userProfilePics/defaultUserIcon.png' ?>" alt="Logo">
+                                ? UPLOADS . '/travelers/userProfilePics/' . $data['userData']->profilePicture 
+                                : UPLOADS . '/travelers/userProfilePics/defaultUserIcon.png' ?>" alt="Logo">
                 <h1>
-                    <!-- ExploreLK -->
                      <?= $data['userData']->username ?> 
                 </h1>
             </div>
@@ -158,7 +157,7 @@
 
                     <div class="leftImg">
 
-                        <a href = "<?= ROOT ?>/traveler/ViewParticularTour">
+                        <a href = "<?= ROOT ?>/traveler/ViewParticularTour/index/1">
                             <img src="<?= ROOT ?>/assets/images/travelers/dashboard/guidedNatureHikes.jpg">
                             <p>
                                 Ella Adventure
