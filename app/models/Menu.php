@@ -35,16 +35,15 @@ class Menu {
         try {
             $requiredFields = ['restaurant_id', 'name', 'description', 'price', 'category', 'availability'];
             foreach ($requiredFields as $field) {
-                if (!isset($data[$field]) || empty($data[$field])) {
+                if (!isset($data[$field]) || empty(trim($data[$field]))) {
                     throw new Exception("Missing or empty required field: $field");
                 }
             }
 
-            // Initialize image path to null
-            $data['image'] = null;
-            if (!empty($data['image']) && is_array($data['image']) && $data['image']['size'] > 0) {
-                $uploadDir = ROOT . '/assets/images/restaurant/menu-item/';
-                error_log("Checking upload directory: $uploadDir");
+            // Handle image upload
+            $data['image'] = '/uploads/menuItems/default.jpg'; // Default image
+            if (!empty($data['image_file']) && is_array($data['image_file']) && $data['image_file']['size'] > 0) {
+                $uploadDir = $_SERVER['DOCUMENT_ROOT'] . '/Uploads/menuItems/';
                 if (!is_dir($uploadDir)) {
                     if (!mkdir($uploadDir, 0755, true)) {
                         throw new Exception("Failed to create upload directory: $uploadDir");
@@ -52,34 +51,17 @@ class Menu {
                     error_log("Created upload directory: $uploadDir");
                 }
 
-                // Use the original filename, handle conflicts
-                $originalFileName = basename($data['image']['name']);
-                $fileName = $originalFileName;
+                $originalFileName = basename($data['image_file']['name']);
+                $fileExtension = pathinfo($originalFileName, PATHINFO_EXTENSION);
+                $fileName = uniqid('', true) . '.' . $fileExtension;
                 $targetPath = $uploadDir . $fileName;
-                $counter = 1;
-
-                // Check for filename conflicts and append a suffix if needed
-                while (file_exists($targetPath)) {
-                    $fileInfo = pathinfo($originalFileName);
-                    $fileName = $fileInfo['filename'] . '_' . $counter . '.' . $fileInfo['extension'];
-                    $targetPath = $uploadDir . $fileName;
-                    $counter++;
-                    error_log("Filename conflict detected, trying new name: $fileName");
-                }
 
                 error_log("Attempting to upload image to: $targetPath");
-                if (!move_uploaded_file($data['image']['tmp_name'], $targetPath)) {
-                    error_log("Image upload failed with error code: " . $data['image']['error']);
-                    throw new Exception("Failed to upload image: " . $data['image']['error']);
+                if (!move_uploaded_file($data['image_file']['tmp_name'], $targetPath)) {
+                    throw new Exception("Failed to upload image: " . $data['image_file']['error']);
                 }
-                $data['image'] = '/assets/images/restaurant/menu-item/' . $fileName;
+                $data['image'] = '/Uploads/menuItems/' . $fileName;
                 error_log("Image uploaded successfully: " . $data['image']);
-            }
-
-            // Set default image only if no image was uploaded
-            if (empty($data['image'])) {
-                $data['image'] = '/assets/images/restaurant/menu-item/default.jpg';
-                error_log("No image uploaded, using default: " . $data['image']);
             }
 
             $data['is_active'] = 1;
@@ -94,54 +76,43 @@ class Menu {
             return $result;
         } catch (Exception $e) {
             error_log("Error creating menu item: " . $e->getMessage());
-            return false;
+            throw $e; // Re-throw to handle in controller
         }
     }
 
     public function updateMenuItem($id, $data, $restaurant_id) {
         error_log("Menu::updateMenuItem called for ID: $id, restaurant_id: $restaurant_id with data: " . json_encode($data));
         try {
-            // Verify the item belongs to the restaurant
             $existingItem = $this->getMenuItemById($id, $restaurant_id);
             if (!$existingItem) {
                 throw new Exception("Menu item not found or does not belong to restaurant_id: $restaurant_id");
             }
 
-            if (!empty($data['image']) && is_array($data['image']) && $data['image']['size'] > 0) {
-                $uploadDir = ROOT . '/assets/images/restaurant/menu-item/';
+            if (!empty($data['image_file']) && is_array($data['image_file']) && $data['image_file']['size'] > 0) {
+                $uploadDir = $_SERVER['DOCUMENT_ROOT'] . '/Uploads/menuItems/';
                 if (!is_dir($uploadDir)) {
                     mkdir($uploadDir, 0755, true);
                 }
 
-                // Use the original filename, handle conflicts
-                $originalFileName = basename($data['image']['name']);
-                $fileName = $originalFileName;
+                $originalFileName = basename($data['image_file']['name']);
+                $fileExtension = pathinfo($originalFileName, PATHINFO_EXTENSION);
+                $fileName = uniqid('menu_', true) . '.' . $fileExtension;
                 $targetPath = $uploadDir . $fileName;
-                $counter = 1;
-
-                while (file_exists($targetPath)) {
-                    $fileInfo = pathinfo($originalFileName);
-                    $fileName = $fileInfo['filename'] . '_' . $counter . '.' . $fileInfo['extension'];
-                    $targetPath = $uploadDir . $fileName;
-                    $counter++;
-                    error_log("Filename conflict detected, trying new name: $fileName");
-                }
 
                 error_log("Attempting to upload new image to: $targetPath");
-                if (move_uploaded_file($data['image']['tmp_name'], $targetPath)) {
-                    $data['image'] = '/assets/images/restaurant/menu-item/' . $fileName;
-                    if ($existingItem->image && file_exists(ROOT . $existingItem->image) && $existingItem->image !== '/assets/images/restaurant/menu-item/default.jpg') {
-                        error_log("Deleting old image: " . ROOT . $existingItem->image);
-                        unlink(ROOT . $existingItem->image);
+                if (move_uploaded_file($data['image_file']['tmp_name'], $targetPath)) {
+                    $data['image'] = '/Uploads/menuItems/' . $fileName;
+                    if ($existingItem->image && file_exists($_SERVER['DOCUMENT_ROOT'] . $existingItem->image) && $existingItem->image !== '/Uploads/menuItems/default.jpg') {
+                        error_log("Deleting old image: " . $_SERVER['DOCUMENT_ROOT'] . $existingItem->image);
+                        unlink($_SERVER['DOCUMENT_ROOT'] . $existingItem->image);
                     }
                     error_log("New image uploaded successfully: " . $data['image']);
                 } else {
-                    error_log("Image upload failed with error code: " . $data['image']['error']);
                     throw new Exception("Failed to upload image");
                 }
             } else {
-                // If no new image is uploaded, keep the existing image
                 unset($data['image']);
+                unset($data['image_file']);
                 error_log("No new image uploaded for item ID: $id");
             }
 
@@ -152,7 +123,7 @@ class Menu {
             return $result;
         } catch (Exception $e) {
             error_log("Error updating menu item: " . $e->getMessage());
-            return false;
+            throw $e;
         }
     }
 
@@ -163,20 +134,16 @@ class Menu {
             if (!$item) {
                 throw new Exception("Menu item not found with ID: $id for restaurant_id: $restaurant_id");
             }
-            if ($item->image && file_exists(ROOT . $item->image) && $item->image !== '/assets/images/restaurant/menu-item/default.jpg') {
-                error_log("Attempting to delete image: " . ROOT . $item->image);
-                if (!unlink(ROOT . $item->image)) {
-                    error_log("Failed to delete image file: " . ROOT . $item->image);
+            if ($item->image && file_exists($_SERVER['DOCUMENT_ROOT'] . $item->image) && $item->image !== '/Uploads/menuItems/default.jpg') {
+                error_log("Attempting to delete image: " . $_SERVER['DOCUMENT_ROOT'] . $item->image);
+                if (!unlink($_SERVER['DOCUMENT_ROOT'] . $item->image)) {
+                    error_log("Failed to delete image file: " . $_SERVER['DOCUMENT_ROOT'] . $item->image);
                 } else {
-                    error_log("Image deleted successfully: " . ROOT . $item->image);
+                    error_log("Image deleted successfully: " . $_SERVER['DOCUMENT_ROOT'] . $item->image);
                 }
-            } else {
-                error_log("No image to delete or image is default: " . ($item->image ?? 'none'));
             }
-            error_log("Executing database delete for ID: $id");
             $query = "DELETE FROM {$this->table} WHERE id = :id AND restaurant_id = :restaurant_id";
             $result = $this->query($query, ['id' => $id, 'restaurant_id' => $restaurant_id]);
-            error_log("Raw delete result: " . json_encode($result));
             $checkQuery = "SELECT COUNT(*) as count FROM {$this->table} WHERE id = :id AND restaurant_id = :restaurant_id";
             $checkResult = $this->query($checkQuery, ['id' => $id, 'restaurant_id' => $restaurant_id]);
             $count = $checkResult[0]->count ?? 1;
@@ -187,7 +154,7 @@ class Menu {
             return true;
         } catch (Exception $e) {
             error_log("Error deleting menu item: " . $e->getMessage());
-            return false;
+            throw $e;
         }
     }
 
@@ -201,7 +168,6 @@ class Menu {
             $data = ['is_active' => $is_active];
             error_log("Updating is_active for ID: $id to: $is_active");
             $result = $this->update($id, $data, 'id');
-            error_log("Raw update result: " . json_encode($result));
             $updatedItem = $this->getMenuItemById($id, $restaurant_id);
             if ($updatedItem && $updatedItem->is_active == $is_active) {
                 error_log("Menu::toggleAvailability successful for ID: $id");
@@ -211,7 +177,7 @@ class Menu {
             }
         } catch (Exception $e) {
             error_log("Error toggling availability: " . $e->getMessage());
-            return false;
+            throw $e;
         }
     }
 }

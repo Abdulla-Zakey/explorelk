@@ -1,3 +1,4 @@
+
 <?php
 
 class Reservation
@@ -16,6 +17,11 @@ class Reservation
         'created_at',
         'updated_at'
     ];
+
+    public function getAllowedColumns()
+    {
+        return $this->allowedColumns;
+    }
 
     public function validate($data, $restaurant_id)
     {

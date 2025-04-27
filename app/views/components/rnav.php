@@ -120,7 +120,7 @@
             <li><a href="Rmenu"><i class="fas fa-burger"></i> Menu</a></li>
             <li><a href="Rdining"><i class="fas fa-utensils"></i> Dining</a></li>
             <!-- <li><a href="Rpromotion"><i class="fas fa-bullhorn"></i> Promotions & Discounts</a></li> -->
-            <li><a href="Rpaymentdetails"><i class="fas fa-credit-card"></i> Payment Details</a></li>
+            <li><a href="Rpaymentdetails"><i class="fas fa-credit-card"></i>  Commision</a></li>
             <!-- <li><a href="Rreviews"><i class="fas fa-comments"></i> Reviews</a></li> -->
             <!-- <li><a href="Rnotifications"><i class="fas fa-bell"></i> Notifications</a></li> -->
             <li><a href="Rsetting"><i class="fas fa-cog"></i> Settings</a></li>

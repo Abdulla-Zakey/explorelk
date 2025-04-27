@@ -4,12 +4,11 @@ class Eosettings extends Controller
 {
     public function index($a = '', $b = '', $c = '')
     {
-        // Start session only if not already active
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
         }
 
-        // Ensure the user is logged in
+        // Check if organizer is logged in
         if (!isset($_SESSION['organizer_id'])) {
             header('Location: ' . ROOT . '/eventorganizer/login');
             exit();
@@ -21,75 +20,87 @@ class Eosettings extends Controller
         $data = [];
 
         // Fetch current organizer data
-        $organizerData = $eventOrganizer->where(['organizer_Id' => $organizerId])[0] ?? [];
+        $organizerData = $eventOrganizer->where(['organizer_Id' => $organizerId]);
+        if (empty($organizerData)) {
+            header('Location: ' . ROOT . '/eventorganizer/login');
+            exit();
+        }
+        $organizerData = $organizerData[0];
 
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $formType = $_POST['form_type'] ?? '';
 
-            if ($formType === 'personal') {
+            if ($formType === 'profile') {
+                // Sanitize inputs
                 $data = [
                     'organizer_Id' => $organizerId,
-                    'first_Name' => $_POST['first_name'] ?? '',
-                    'last_Name' => $_POST['last_name'] ?? '',
-                    'company_Email' => $_POST['company_email'] ?? '',
-                    'company_MobileNum' => $_POST['company_mobile'] ?? '',
-                    'company_Address' => $_POST['address'] ?? '',
-                    'website' => $_POST['website'] ?? '',
-                    'blog' => $_POST['blog'] ?? '',
+                    'company_Email' => filter_var($_POST['company_email'] ?? '', FILTER_SANITIZE_EMAIL),
+                    'company_MobileNum' => filter_var($_POST['company_mobile'] ?? '', FILTER_SANITIZE_STRING),
+                    'company_Name' => filter_var($_POST['company_name'] ?? '', FILTER_SANITIZE_STRING),
+                    'company_Address' => filter_var($_POST['company_address'] ?? '', FILTER_SANITIZE_STRING),
                 ];
 
-                // Handle profile image upload
+                // Clean mobile number
+                $cleanMobile = preg_replace('/[\s-]+/', '', $data['company_MobileNum']);
+
+                // Validate form fields
+                if (empty($data['company_Name'])) {
+                    $errors['company_name'] = 'Company name is required.';
+                }
+
+                if (!empty($data['company_Email']) && !filter_var($data['company_Email'], FILTER_VALIDATE_EMAIL)) {
+                    $errors['company_email'] = 'Invalid email format.';
+                }
+
+                if (!empty($cleanMobile) && !preg_match('/^0\d{9}$/', $cleanMobile)) {
+                    $errors['company_mobile'] = 'Mobile number must start with 0 and have 10 digits (e.g., 0771234567).';
+                }
+
+                if (empty($data['company_Address'])) {
+                    $errors['company_address'] = 'Company address is required.';
+                }
+
+                // Update mobile number with cleaned version
+                $data['company_MobileNum'] = $cleanMobile;
+
+                // Handle image upload
                 if (!empty($_FILES['profile_image']['name'])) {
-                    $uploadDir = 'Uploads/profile_images/';
+                    $uploadDir = 'Uploads/eventorganizer/';
                     if (!is_dir($uploadDir)) {
                         mkdir($uploadDir, 0755, true);
                     }
                     $fileName = $organizerId . '_' . time() . '_' . basename($_FILES['profile_image']['name']);
                     $uploadPath = $uploadDir . $fileName;
+                    $allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
+                    $maxSize = 2 * 1024 * 1024; // 2MB
 
-                    if (move_uploaded_file($_FILES['profile_image']['tmp_name'], $uploadPath)) {
-                        $data['profile_Image'] = $uploadPath;
+                    if (!in_array($_FILES['profile_image']['type'], $allowedTypes)) {
+                        $errors['profile_image'] = 'Only JPEG, PNG, or GIF files are allowed.';
+                    } elseif ($_FILES['profile_image']['size'] > $maxSize) {
+                        $errors['profile_image'] = 'File size must be under 2MB.';
+                    } elseif (!move_uploaded_file($_FILES['profile_image']['tmp_name'], $uploadPath)) {
+                        $errors['profile_image'] = 'Failed to upload image.';
                     } else {
-                        $errors['profile_image'] = 'Failed to upload profile image.';
+                        $data['company_logo'] = $uploadPath;
                     }
                 }
 
                 if (empty($errors) && $eventOrganizer->updateOrganizer($organizerId, $data)) {
-                    $_SESSION['success_message'] = 'Personal information updated successfully!';
+                    $_SESSION['success_message'] = 'Profile updated successfully!';
                     header('Location: ' . ROOT . '/eventorganizer/eosettings');
                     exit();
                 } else {
-                    $errors = array_merge($errors, $eventOrganizer->errors);
-                }
-
-            } elseif ($formType === 'professional') {
-                $data = [
-                    'organizer_Id' => $organizerId,
-                    'company_Name' => $_POST['company_name'] ?? '',
-                    'job_Title' => $_POST['job_title'] ?? '',
-                    'company_Address' => $_POST['company_address'] ?? '',
-                    'event_Type' => $_POST['event_type'] ?? '',
-                    'experience' => $_POST['experience'] ?? '',
-                ];
-
-                if ($eventOrganizer->updateOrganizer($organizerId, $data)) {
-                    $_SESSION['success_message'] = 'Professional information updated successfully!';
-                    header('Location: ' . ROOT . '/eventorganizer/eosettings');
-                    exit();
-                } else {
-                    $errors = $eventOrganizer->errors;
+                    $errors = array_merge($errors, $eventOrganizer->getErrors());
                 }
             }
         }
 
-        // Render the settings view
         $this->view('eventorganizer/eosettings', [
             'errors' => $errors,
             'data' => $organizerData,
             'success_message' => $_SESSION['success_message'] ?? null,
         ]);
 
-        // Clear success message
         unset($_SESSION['success_message']);
     }
 }
