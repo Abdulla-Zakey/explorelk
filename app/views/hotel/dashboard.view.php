@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
 </head>
 <body>
+    
     <div class="dashboard">
         <!-- Main Content -->
         <main class="content">
@@ -53,7 +54,7 @@
                     </div>
                     <div class="card-content">
                         <h3>Earnings</h3>
-                        <p class="card-value"><?= $data['earnings'] ?></p>
+                        <p class="card-value"><?= $data['earnings'] . ' LKR' ?></p>
                     </div>
                 </div>
                 <div class="card">

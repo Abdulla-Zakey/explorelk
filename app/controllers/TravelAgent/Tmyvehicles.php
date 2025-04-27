@@ -10,7 +10,7 @@ class Tmyvehicles extends Controller
 
     public function __construct()
     {
-        $this->travelAgentModel = $this->loadModel('TravelAgent');
+        $this->travelAgentModel = new TravelAgent();
         $this->vehicleTypeModel = $this->loadModel('VehicleType');
         $this->vehicleModel = $this->loadModel('Vehicle');
         $this->vehicleAmenityModel = $this->loadModel('VehicleAmenity');
@@ -38,6 +38,7 @@ class Tmyvehicles extends Controller
 
     public function addVehicleType()
     {
+        
         if (!isset($_SESSION['travelagent_Id'])) {
             redirect('traveler/Login');
             exit;
@@ -48,6 +49,8 @@ class Tmyvehicles extends Controller
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $errors = [];
 
+            show($_POST);
+            exit();
             // Validate required fields
             $requiredFields = ['vehicleType_name', 'pricePer_day', 'max_capacity'];
             foreach ($requiredFields as $field) {
@@ -125,7 +128,7 @@ class Tmyvehicles extends Controller
             }
 
             if (move_uploaded_file($_FILES['vehicleTypeImage']['tmp_name'], $uploadPath)) {
-                return 'uploads/travelproviders/' . $providerId . '/vehicleTypesImages/' . $fileName;
+                return 'uploads/travelagent/' . $providerId . '/vehicleTypesImages/' . $fileName;
             } else {
                 error_log("File upload failed. Path: " . $_FILES['vehicleTypeImage']['tmp_name'] . ", Destination: " . $uploadPath);
             }
@@ -142,7 +145,7 @@ class Tmyvehicles extends Controller
         }
 
         if ($_SERVER['REQUEST_METHOD'] != 'POST') {
-            redirect('TravelProvider/Tmyvehicles');
+            redirect('travelagent/Tmyvehicles');
             exit;
         }
 
@@ -211,7 +214,7 @@ class Tmyvehicles extends Controller
             $_SESSION['errors'] = $errors;
         }
 
-        redirect('TravelProvider/Tmyvehicles');
+        redirect('travelagent/Tmyvehicles');
         exit;
     }
 
@@ -272,7 +275,7 @@ class Tmyvehicles extends Controller
 
             if (!$vehicleType || $vehicleType->travelagent_Id != $_SESSION['travelagent_Id']) {
                 $_SESSION['errors'] = ["Vehicle type not found or access denied."];
-                redirect('TravelProvider/Tmyvehicles');
+                redirect('travelagent/Tmyvehicles');
                 exit;
             }
 
@@ -281,7 +284,7 @@ class Tmyvehicles extends Controller
 
             if (!empty($vehicles) || !empty($bookings)) {
                 $_SESSION['errors'] = ["Cannot delete vehicle type with associated vehicles or bookings."];
-                redirect('TravelProvider/Tmyvehicles');
+                redirect('travelagent/Tmyvehicles');
                 exit;
             }
 
@@ -305,7 +308,7 @@ class Tmyvehicles extends Controller
             $_SESSION['errors'] = ["Error occurred while deleting vehicle type: " . $e->getMessage()];
         }
 
-        redirect('TravelProvider/Tmyvehicles');
+        redirect('travelagent/Tmyvehicles');
         exit;
     }
 
@@ -368,7 +371,7 @@ class Tmyvehicles extends Controller
         }
 
         if ($_SERVER['REQUEST_METHOD'] != 'POST') {
-            redirect('TravelProvider/Tmyvehicles');
+            redirect('travelagent/Tmyvehicles');
             exit;
         }
 
@@ -442,7 +445,7 @@ class Tmyvehicles extends Controller
 
         if (!empty($errors)) {
             $_SESSION['errors'] = $errors;
-            redirect('TravelProvider/Tmyvehicles');
+            redirect('travelagent/Tmyvehicles');
             exit;
         }
 
@@ -470,10 +473,10 @@ class Tmyvehicles extends Controller
 
         if ($bookingId) {
             $_SESSION['success'] = ["Booking recorded successfully!"];
-            redirect('TravelProvider/Tmyvehicles?success=Booking+added+successfully');
+            redirect('travelagent/Tmyvehicles?success=Booking+added+successfully');
         } else {
             $_SESSION['errors'] = ["Failed to add booking"];
-            redirect('TravelProvider/Tmyvehicles?error=failed_to_add_booking');
+            redirect('travelagent/Tmyvehicles?error=failed_to_add_booking');
         }
         exit;
     }

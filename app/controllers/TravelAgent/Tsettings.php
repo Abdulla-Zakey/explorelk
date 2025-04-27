@@ -9,7 +9,7 @@ class Tsettings extends Controller {
     }
     
     public function index($a = '', $b = '', $c = '') {
-        $data['travelagentBasic'] = $this->travelagentModel->first(['travelagent_Id' => $_SESSION['travelagent_id']]);
+        $data['travelagentBasic'] = $this->travelagentModel->first(['travelagent_Id' => $_SESSION['travelagent_Id']]);
         $this->view('travelagent/settings', $data);
     }
 

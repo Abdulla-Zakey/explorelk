@@ -1,6 +1,6 @@
 <?php
-include_once APPROOT . '/views/travelprovider/nav.php';
-include_once APPROOT . '/views/travelprovider/providerhead.php';
+include_once APPROOT . '/views/travelagent/nav.php';
+include_once APPROOT . '/views/travelagent/travelagenthead.php';
 ?>
 
 <!DOCTYPE html>
@@ -11,6 +11,7 @@ include_once APPROOT . '/views/travelprovider/providerhead.php';
     <title>Manage Vehicles</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="<?= ROOT ?>/assets/css/travelagent/myvehicles.css?v=1.0">
     <style>
         /* Previous CSS styles remain unchanged */
         /* Including them here would repeat the earlier response unnecessarily */
@@ -134,7 +135,7 @@ include_once APPROOT . '/views/travelprovider/providerhead.php';
                 <h2 class="modal-title">Add New Vehicle Type</h2>
                 <button class="closebutton" onclick="closeModal('addTypeModal')" aria-label="Close Modal">×</button>
             </div>
-            <form action="<?= ROOT ?>/TravelProvider/Tmyvehicles/addVehicleType" method="POST" enctype="multipart/form-data">
+            <form action="<?= ROOT ?>/TravelAgent/Tmyvehicles/addVehicleType" method="POST" enctype="multipart/form-data">
                 <div class="modal-body">
                     <div class="form-grid">
                         <!-- Basic Vehicle Type Information -->
@@ -213,7 +214,7 @@ include_once APPROOT . '/views/travelprovider/providerhead.php';
                 <h2 class="modal-title">Add Vehicles to <span id="vehicleTypeName"></span></h2>
                 <button class="closebutton" onclick="closeModal('addVehicleModal')" aria-label="Close Modal">×</button>
             </div>
-            <form action="<?= ROOT ?>/TravelProvider/Tmyvehicles/addVehicles" method="POST">
+            <form action="<?= ROOT ?>/TravelAgent/Tmyvehicles/addVehicles" method="POST">
                 <input type="hidden" id="vehicleTypeId" name="vehicleType_Id">
                 <div class="modal-body">
                     <div class="vehicle-form-section">
@@ -392,7 +393,7 @@ include_once APPROOT . '/views/travelprovider/providerhead.php';
                     <i class="fas fa-check-circle"></i> Confirm Booking
                 </button>
             </div>
-            <form id="directBookingForm" method="POST" action="<?= ROOT ?>/TravelProvider/Tmyvehicles/recordDirectBooking" style="display: none;">
+            <form id="directBookingForm" method="POST" action="<?= ROOT ?>/TravelAgent/Tmyvehicles/recordDirectBooking" style="display: none;">
                 <input type="hidden" name="vehicleTypeId" id="booking_vehicleType_id">
                 <input type="hidden" name="startDate" id="booking_start_date">
                 <input type="hidden" name="endDate" id="booking_end_date">
@@ -498,13 +499,13 @@ include_once APPROOT . '/views/travelprovider/providerhead.php';
 
         function proceedDeleteVehicleType() {
             if (currentVehicleTypeToDelete) {
-                window.location.href = `<?= ROOT ?>/TravelProvider/Tmyvehicles/deleteVehicleType/${currentVehicleTypeToDelete}`;
+                window.location.href = `<?= ROOT ?>/TravelAgent/Tmyvehicles/deleteVehicleType/${currentVehicleTypeToDelete}`;
             }
         }
 
         // Vehicle Management
         function showAddVehicleModal(vehicleTypeId) {
-            fetch(`<?= ROOT ?>/TravelProvider/Tmyvehicles/getVehicleTypeDetails/${vehicleTypeId}`)
+            fetch(`<?= ROOT ?>/TravelAgent/Tmyvehicles/getVehicleTypeDetails/${vehicleTypeId}`)
                 .then(response => response.json())
                 .then(data => {
                     document.getElementById('vehicleTypeId').value = vehicleTypeId;
@@ -575,7 +576,7 @@ include_once APPROOT . '/views/travelprovider/providerhead.php';
         function showBookVehicleModal(vehicleTypeId) {
             currentVehicleTypeId = vehicleTypeId;
             resetBookingModal();
-            fetch(`<?= ROOT ?>/TravelProvider/Tmyvehicles/getVehicleTypeDetails/${vehicleTypeId}`)
+            fetch(`<?= ROOT ?>/TravelAgent/Tmyvehicles/getVehicleTypeDetails/${vehicleTypeId}`)
                 .then(response => {
                     if (!response.ok) {
                         throw new Error('Network response was not ok');
@@ -645,7 +646,7 @@ include_once APPROOT . '/views/travelprovider/providerhead.php';
                 showAlert('Please select both start and end dates');
                 return;
             }
-            fetch(`<?= ROOT ?>/TravelProvider/Tmyvehicles/checkVehicleAvailability/${currentVehicleTypeId}/${startDate}/${endDate}`)
+            fetch(`<?= ROOT ?>/TravelAgent/Tmyvehicles/checkVehicleAvailability/${currentVehicleTypeId}/${startDate}/${endDate}`)
                 .then(response => {
                     if (!response.ok) {
                         throw new Error('Network response was not ok');

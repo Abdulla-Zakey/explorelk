@@ -4,7 +4,7 @@ class Signup extends Controller {
     private $travelProvider;
 
     public function __construct() {
-        $this->travelProvider = new TravelProvider();
+        $this->travelProvider = new TravelAgent();
     }
     public function index() {
         // Initialize an empty error array

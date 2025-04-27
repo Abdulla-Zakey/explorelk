@@ -1,16 +1,40 @@
 <?php
 class Hpaymentdetails extends Controller {
+    private $hotelModel;
     public function index($a = '', $b = '', $c = '') {
         // Get the logged-in hotel ID
-        $hotelId = $this->getLoggedInHotelId();
+        $hotelId = isset($_SESSION['hotel_id']) ? $_SESSION['hotel_id'] : null;
         
         // Load the model
         $hotelCommissionsModel = new HotelCommissionsModel();
+        $hotelModel = new Hotel();
+
+        // Get all commissions for this hotel
+        $commissions = $hotelCommissionsModel->where(['hotel_id' => $_SESSION['hotel_id']]);
+        
+        // Since we can't filter by status in the database, let's do it in PHP
+        // Initialize empty arrays for different status categories
+        $approvedCommissions = $hotelCommissionsModel->where(['hotel_id' => $_SESSION['hotel_id'], 'status' => 'Approved']);
+        $pendingCommissions = $hotelCommissionsModel->where(['hotel_id' => $_SESSION['hotel_id'], 'status' => 'Pending']);
+        $rejectedCommissions = $hotelCommissionsModel->where(['hotel_id' => $_SESSION['hotel_id'], 'status' => 'Denied']);
+        $totalCommission = 0; // Initialize total commission
+        
+        // If there's a field in your commissions that indicates status, you could do:
+        // foreach ($commissions as $commission) {
+        //     if ($commission->some_status_field == 'approved') {
+        //         $approvedCommissions[] = $commission;
+        //         $totalCommission += $commission->commission_amount;
+        //     } else if ($commission->some_status_field == 'pending') {
+        //         $pendingCommissions[] = $commission;
+        //     } else if ($commission->some_status_field == 'rejected') {
+        //         $rejectedCommissions[] = $commission;
+        //     }
+        // }
         
         // Get filter parameters
         $month = isset($_GET['month']) ? $_GET['month'] : date('m');
         $year = isset($_GET['year']) ? $_GET['year'] : date('Y');
-        
+        // $hi = $this->hotelModel->first(['hotel_Id' => $_SESSION['hotel_id']]);
         // Get pagination parameters
         $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
         $perPage = 10;
@@ -24,29 +48,32 @@ class Hpaymentdetails extends Controller {
             'currentMonthRevenue' => $hotelCommissionsModel->getCurrentMonthRevenue($hotelId),
             'currentMonthCommission' => $hotelCommissionsModel->getCurrentMonthCommission($hotelId),
             'paymentHistory' => $hotelCommissionsModel->getFilteredPaymentHistory($hotelId, $month, $year),
+            'earningHistory' => $hotelCommissionsModel->getFilteredPaymentHistory($hotelId, $month, $year), // Assuming same data for earning
             'currentMonth' => $month,
             'currentYear' => $year,
-            'monthlyData' => $monthlyData
+            'monthlyData' => $monthlyData,
+            'commissions' => $commissions,
+            'approvedCommissions' => $approvedCommissions,
+            'pendingCommissions' => $pendingCommissions,
+            'rejectedCommissions' => $rejectedCommissions,
+            'totalCommission' => $totalCommission
         ];
         
         // Pass data to the view
         $this->view('hotel/paymentdetails', $data);
-    }
-    
+
+    }    
     /**
      * Get the logged-in hotel ID
-     * You'll need to adapt this to your authentication system
-     * 
      * @return int
      */
     private function getLoggedInHotelId() {
-        // This is a placeholder - replace with your actual authentication logic
-        if(isset($_SESSION['USER']) && isset($_SESSION['USER']->hotel_Id)) {
+        if (isset($_SESSION['USER']) && isset($_SESSION['USER']->hotel_Id)) {
             return $_SESSION['USER']->hotel_Id;
         }
-        
-        // Fallback - you might want to redirect to login instead
-        return 1; // Default hotel ID for testing
+        // Redirect to login if no hotel ID
+        redirect('traveler/login');
+        return 0;
     }
     
     /**
@@ -58,22 +85,36 @@ class Hpaymentdetails extends Controller {
         
         // Load necessary models
         $hotelCommissionsModel = new HotelCommissionsModel();
+        $roomBookingsModel = new RoomBookingsFinalModel();
         
         // Get booking details
         $bookingDetails = $hotelCommissionsModel->getBookingDetails($bookingId);
         
         // Verify the booking belongs to the logged-in hotel
         if (!$bookingDetails || $bookingDetails->hotel_Id != $hotelId) {
-            // Unauthorized or non-existent booking
             $_SESSION['error'] = "You don't have permission to view this booking or it doesn't exist.";
             redirect('Hpaymentdetails');
             return;
         }
         
-        // Pass data to a detailed view
-        $this->view('hotel/paymentdetails', [
-            'booking' => $bookingDetails
-        ]);
+        // Fetch additional room booking details
+        $roomBooking = $roomBookingsModel->getRoomBookingByBookingId($bookingId);
+        
+        // Prepare data for the view
+        $data = [
+            'bookingDetails' => $bookingDetails,
+            'roomBooking' => $roomBooking,
+            'totalRevenue' => $hotelCommissionsModel->getTotalRevenue($hotelId),
+            'currentMonthRevenue' => $hotelCommissionsModel->getCurrentMonthRevenue($hotelId),
+            'currentMonthCommission' => $hotelCommissionsModel->getCurrentMonthCommission($hotelId),
+            'paymentHistory' => $hotelCommissionsModel->getFilteredPaymentHistory($hotelId),
+            'earningHistory' => $hotelCommissionsModel->getFilteredPaymentHistory($hotelId),
+            'currentMonth' => date('m'),
+            'currentYear' => date('Y')
+        ];
+        
+        // Pass data to the view
+        $this->view('hotel/paymentdetails', $data);
     }
     
     /**
