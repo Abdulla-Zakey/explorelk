@@ -27,6 +27,7 @@
                     'serviceProviderName' => $_POST['owner-name'],
                     'hotelMobileNum' => $_POST['phone-number'],
                     'hotelAddress' => $_POST['address-line-1'],
+                    'hotelLogo' => $this->handleProfilePicUpload($_SESSION['hotel_id']),
                     'district' => $_POST['district'],
                     'province' => $_POST['province'],
                     'description_para1' => $_POST['description'][0],
@@ -47,24 +48,49 @@
                 if($updated) {
                     $_SESSION['success'] = "Your profile has been updated successfully!";
                     
-                    // Handle file uploads if needed (only if basic data update worked)
-                    if(isset($_FILES['profile-photo']) && $_FILES['profile-photo']['error'] == 0) {
-                        $this->handleLogoUpload($_SESSION['hotel_id']);
-                    }
+                    // Redirect back to settings page
+                    redirect('Hotel/Hsettings?success=Your profile has been updated successfully!');
                     
-                    if(isset($_FILES['hotel-photos']) && !empty($_FILES['hotel-photos']['name'][0])) {
-                        $this->handleHotelPhotosUpload($_SESSION['hotel_id']);
-                    }
                 } else {
                     $_SESSION['error'] = "Failed to update profile. Please try again.";
+                    redirect('Hotel/Hsettings');
                 }
                 
-                // Redirect back to settings page
-                redirect('Hotel/Hsettings');
+                
             } else {
-                // Handle GET request - redirect to settings page
                 redirect('Hotel/Hsettings');
+                
             }
+        }
+
+        private function handleProfilePicUpload($hotelId) {
+            if (isset($_FILES['profilePicture']) && $_FILES['profilePicture']['error'] === UPLOAD_ERR_OK) {
+                // Use absolute server path instead of ROOT constant
+                $uploadDir = $_SERVER['DOCUMENT_ROOT'] . '/gitexplorelk/explorelk/public/uploads/hotels/' . $hotelId . '/logo/';
+                
+                // Generate a unique filename
+                $fileName = uniqid() . '_' . basename($_FILES['profilePicture']['name']);
+                
+                // Full path for the uploaded file
+                $uploadPath = $uploadDir . $fileName;
+        
+                // Ensure upload directory exists
+                if (!is_dir($uploadDir)) {
+                    mkdir($uploadDir, 0755, true);
+                }
+        
+                // Move uploaded file
+                if (move_uploaded_file($_FILES['profilePicture']['tmp_name'], $uploadPath)) {
+                    // Return just the filename to be stored in the database
+                    return $fileName;
+                } else {
+                    // Add error logging
+                    error_log("File upload failed. Temp path: " . $_FILES['profilePicture']['tmp_name'] . ", Destination: " . $uploadPath);
+                }
+            }
+        
+            // Return existing profile picture if no new upload
+            return $_POST['existingProfilePic'] ?? null;
         }
         
       

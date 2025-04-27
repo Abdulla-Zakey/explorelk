@@ -49,7 +49,7 @@ include_once APPROOT.'/views/travelagent/travelagenthead.php';
                     </div>
                     <div class="half-width">
                         <label for="email">Email</label>
-                        <input type="email" id="email" name="email" placeholder="Enter your email" value="<?= htmlspecialchars($data['travelagentBasic']->travelagentEmail ?? '') ?>" readonly>
+                        <input type="email" id="email" name="email" placeholder="Enter your email" value="<?= htmlspecialchars($data['travelagentBasic']->travelagentEmail ?? '') ?>" readonly disabled>
                         <div class="error" id="email-error"></div>
                     </div>
                 </div>

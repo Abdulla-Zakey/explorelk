@@ -4,6 +4,7 @@
 class Hdashboard extends Controller {
     private $hotelModel;
     private $roomsModel;
+    private $hotelRoomTypesModel;
     private $travelerModel;
     private $hotelGuestsModel;
     private $bookedRoomsModel;
@@ -15,6 +16,7 @@ class Hdashboard extends Controller {
             // Initialize models by direct instantiation
             $this->hotelModel = new Hotel();
             $this->roomsModel = new Rooms();
+            $this->hotelRoomTypesModel = new HotelRoomTypesModel();
             $this->travelerModel = new Traveler();
             $this->hotelGuestsModel = new HotelGuestsModel();
             $this->bookedRoomsModel = new BookedRoomsModel();
@@ -27,9 +29,17 @@ class Hdashboard extends Controller {
     }
 
     public function index() {
+
+        if (!isset($_SESSION['hotel_id'])) {
+            header("Location: " . ROOT . "/traveler/Login");
+            exit();
+        }
         // Assuming hotel_id is stored in session after login
         $hotelId = $_SESSION['hotel_id'] ?? 1; // Replace with actual session logic
 
+
+        $data['hotelBasic'] = $this->hotelModel->first(['hotel_Id' => $_SESSION['hotel_id']]);
+        
         // Initialize default values
         $totalRooms = 0;
         $activeBookings = 0;
@@ -41,8 +51,13 @@ class Hdashboard extends Controller {
 
         try {
             // Fetch total rooms from Rooms model
-            $rooms = $this->roomsModel->where(['hotel_Id' => $hotelId]);
-            $totalRooms = count($rooms);
+            $hotelRoomTypes = $this->hotelRoomTypesModel->where(['hotel_Id' => $hotelId]);
+            foreach($hotelRoomTypes as $hotelRoomType) {
+                $totalRooms += $hotelRoomType->total_rooms;
+            }
+
+            // $rooms = $this->roomsModel->where(['hotel_Id' => $hotelId]);
+            // $totalRooms = count($rooms);
         } catch (PDOException $e) {
             // Log error and continue with default value
             error_log('Database error (rooms): ' . $e->getMessage());
@@ -113,11 +128,12 @@ class Hdashboard extends Controller {
         $data = [
             'totalRooms' => $totalRooms,
             'activeBookings' => $activeBookings,
-            'earnings' => '$' . number_format($earnings, 2),
-            'todayEarnings' => '$' . number_format($todayEarnings, 2),
+            'earnings' => number_format($earnings, 2),
+            'todayEarnings' => number_format($todayEarnings, 2),
             'avgRating' => $avgRating,
             'recentBookings' => $recentBookings,
             'recentReviews' => $recentReviews,
+            'hotelBasic'=> $this->hotelModel->first(['hotel_Id' => $_SESSION['hotel_id']]),
         ];
 
         // Load the view with data
