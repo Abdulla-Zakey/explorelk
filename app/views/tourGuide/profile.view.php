@@ -3,14 +3,14 @@
 </html>
 
 <head>
-    <title>ExploreLK Admin</title>
+    <title>ExploreLK</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="<?= ROOT ?>/assets/css/tourGuide/tourGuide.css?v=1.0">
     <link href='https://fonts.googleapis.com/css?family=Poppins' rel='stylesheet'>
     <script src="https://kit.fontawesome.com/d11f03c652.js" crossorigin="anonymous"></script>
     <script src="<?= ROOT ?>/assets/js/admin/admin.js?v=1.0"></script>
-
+    <link rel="icon" href="<?= IMAGES ?>/logos/logoBlack.svg">
     <style>
     html {
         font-size: 10px;
