@@ -1,3 +1,12 @@
+<?php
+    $guideBookingData = $data['guideBookingData'];
+    $tourPackages = $data['tourPackages'];
+    $travelers = $data['travelers'];
+    $holidays = $data['holidays'];
+    $bookingCount = count($guideBookingData);
+    // show($bookingCount);
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -26,7 +35,7 @@
                         <i class="fas fa-calendar-check"></i>
                     </div>
                     <div class="dashboard-stat-info">
-                        <h3>24</h3>
+                        <h3><?= $bookingCount > 0 ? $bookingCount : '0'; ?></h3>
                         <span>Active Bookings</span>
                     </div>
                 </div>
@@ -67,165 +76,109 @@
                     <div class="dashboard-card-header">
                         <h2 class="dashboard-card-title">Upcoming Bookings</h2>
                         <span class="see-all">
-                            See All <i class="fas fa-chevron-right"></i>
+                            <a href="<?= ROOT ?>/tourGuide/C_bookings"
+                                style="text-decoration: none; color: #09b290;">See All</a> <i
+                                class="fas fa-chevron-right"></i>
                         </span>
                     </div>
 
                     <ul class="dashboard-booking-list">
-                        <li class="dashboard-booking-item">
-                            <div class="dashboard-booking-date">
-                                <div class="day">23</div>
-                                <div class="month">Apr</div>
+                        <?php $count = 0; ?>
+                        <?php if(empty($guideBookingData)): ?>
+                        <div class="no-bookings-message">
+                            <div class="no-bookings-icon">
+                                <i class="fas fa-calendar-times"></i>
                             </div>
-                            <div class="dashboard-booking-info">
-                                <div class="dashboard-booking-title">Kandy Heritage Tour</div>
-                                <div class="dashboard-booking-details">
-                                    <span><i class="fas fa-user"></i> 2 Travelers</span>
-                                    <span><i class="fas fa-clock"></i> 08:00 AM</span>
-                                </div>
-                            </div>
-                            <div class="dashboard-booking-actions">
-                                <button class="action-btn">
-                                    <i class="fas fa-phone"></i>
-                                </button>
-                                <button class="action-btn">
-                                    <i class="fas fa-comment"></i>
-                                </button>
-                            </div>
-                        </li>
+                            <h3>No Pending Bookings</h3>
+                            <p>You don’t have any upcoming bookings yet. Check your booking requests to see new
+                                inquiries.</p>
+                            <a href="<?= ROOT ?>/tourGuide/C_bookingRequests" class="booking-requests-btn">Go to Booking
+                                Requests</a>
+                        </div>
+                        <?php else: ?>
+                        <?php foreach($guideBookingData as $booking): ?>
+                        <?php if($count >= 4) break; 
+                            $relatedTourPackage = null;
+                            // show($booking);
+                            foreach($tourPackages as $package) {
+                                if($package->package_id == $booking->package_id) { // Changed to object access
+                                    $relatedTourPackage = $package;
+                                    break;
+                                }
+                            }
 
-                        <li class="dashboard-booking-item">
-                            <div class="dashboard-booking-date">
-                                <div class="day">25</div>
-                                <div class="month">Apr</div>
-                            </div>
-                            <div class="dashboard-booking-info">
-                                <div class="dashboard-booking-title">Sigiriya Adventure</div>
-                                <div class="dashboard-booking-details">
-                                    <span><i class="fas fa-user"></i> 4 Travelers</span>
-                                    <span><i class="fas fa-clock"></i> 07:30 AM</span>
-                                </div>
-                            </div>
-                            <div class="dashboard-booking-actions">
-                                <button class="action-btn">
-                                    <i class="fas fa-phone"></i>
-                                </button>
-                                <button class="action-btn">
-                                    <i class="fas fa-comment"></i>
-                                </button>
-                            </div>
-                        </li>
+                            $relatedTraveler = null;
+                            // show($booking);
+                            foreach($travelers as $traveler) {
+                                if($traveler->traveler_Id == $booking->traveler_Id) { // Changed to object access
+                                    $relatedTraveler = $traveler;
+                                    break;
+                                }
+                            }
 
-                        <li class="dashboard-booking-item">
-                            <div class="dashboard-booking-date">
-                                <div class="day">28</div>
-                                <div class="month">Apr</div>
-                            </div>
-                            <div class="dashboard-booking-info">
-                                <div class="dashboard-booking-title">Beaches of South</div>
-                                <div class="dashboard-booking-details">
-                                    <span><i class="fas fa-user"></i> 2 Travelers</span>
-                                    <span><i class="fas fa-clock"></i> 09:00 AM</span>
+                            $bookingDateTime = new DateTime($booking->tour_date);
+                            $day = $bookingDateTime->format('d');
+                            $month = $bookingDateTime->format('M'); 
+                            $time = $bookingDateTime->format('H:i');
+                            ?>
+                        <a href="<?= ROOT ?>/tourGuide/C_bookingDetails?booking_id=<?= $booking->booking_id ?>" style="color: ; text-decoration: none;">
+                            <li class="dashboard-booking-item">
+                                <div class="dashboard-booking-date">
+                                    <div class="day"><?= $day ?></div>
+                                    <div class="month"><?= $month ?></div>
                                 </div>
-                            </div>
-                            <div class="dashboard-booking-actions">
-                                <button class="action-btn">
-                                    <i class="fas fa-phone"></i>
-                                </button>
-                                <button class="action-btn">
-                                    <i class="fas fa-comment"></i>
-                                </button>
-                            </div>
-                        </li>
-
-                        <li class="dashboard-booking-item">
-                            <div class="dashboard-booking-date">
-                                <div class="day">02</div>
-                                <div class="month">May</div>
-                            </div>
-                            <div class="dashboard-booking-info">
-                                <div class="dashboard-booking-title">Tea Country Experience</div>
-                                <div class="dashboard-booking-details">
-                                    <span><i class="fas fa-user"></i> 3 Travelers</span>
-                                    <span><i class="fas fa-clock"></i> 08:30 AM</span>
+                                <div class="dashboard-booking-info">
+                                    <div class="dashboard-booking-title" style="color: black;"><?= $relatedTourPackage->name ?></div>
+                                    <div class="dashboard-booking-details">
+                                        <span><i class="fas fa-user"></i> <?= $relatedTraveler->fName . ' ' . $relatedTraveler->lName ?></span>
+                                        <span><i class="fas fa-clock"></i> <?= $booking->start_time ?></span>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="dashboard-booking-actions">
-                                <button class="action-btn">
-                                    <i class="fas fa-phone"></i>
-                                </button>
-                                <button class="action-btn">
-                                    <i class="fas fa-comment"></i>
-                                </button>
-                            </div>
-                        </li>
+                                <div class="dashboard-booking-actions">
+                                    <button class="action-btn">
+                                        <i class="fas fa-phone"></i>
+                                    </button>
+                                    <button class="action-btn">
+                                        <i class="fas fa-comment"></i>
+                                    </button>
+                                </div>
+                            </li>
+                        </a>
+                        <?php $count++; ?>
+                        <?php endforeach; ?>
+                        <?php endif; ?>
                     </ul>
                 </div>
 
                 <div class="dashboard-card">
                     <div class="dashboard-card-header">
                         <h2 class="dashboard-card-title">Upcoming Holidays</h2>
-                        <span class="see-all">
+                        <!-- <span class="see-all">
                             See All <i class="fas fa-chevron-right"></i>
-                        </span>
+                        </span> -->
                     </div>
 
                     <ul class="holiday-list">
+                    <?php foreach($holidays as $holiday): ?>
+                    <?php 
+                        $holidayDateTime = new DateTime($holiday['date']);
+                        $holidayDay = $holidayDateTime->format('d');
+                        $holidayMonth = $holidayDateTime->format('M'); 
+                    ?>
                         <li class="holiday-item">
                             <div class="holiday-date">
-                                <div class="day">01</div>
-                                <div class="month">May</div>
+                                <div class="day"><?= $holidayDay ?></div>
+                                <div class="month"><?= $holidayMonth ?></div>
                             </div>
                             <div class="holiday-info">
-                                <div class="holiday-name">May Day</div>
-                                <div class="holiday-details">
+                                <div class="holiday-name"><?= $holiday['name'] ?></div>
+                                <!-- <div class="holiday-details">
                                     National holiday - Countrywide
-                                </div>
+                                </div> -->
                             </div>
-                            <span class="holiday-category">National</span>
+                            <!-- <span class="holiday-category">National</span> -->
                         </li>
-
-                        <li class="holiday-item">
-                            <div class="holiday-date">
-                                <div class="day">15</div>
-                                <div class="month">May</div>
-                            </div>
-                            <div class="holiday-info">
-                                <div class="holiday-name">Vesak Poya</div>
-                                <div class="holiday-details">
-                                    Buddhist festival - Major celebrations in Colombo
-                                </div>
-                            </div>
-                            <span class="holiday-category">Religious</span>
-                        </li>
-
-                        <li class="holiday-item">
-                            <div class="holiday-date">
-                                <div class="day">16</div>
-                                <div class="month">May</div>
-                            </div>
-                            <div class="holiday-info">
-                                <div class="holiday-name">Day after Vesak Poya</div>
-                                <div class="holiday-details">
-                                    Public holiday - Countrywide
-                                </div>
-                            </div>
-                            <span class="holiday-category">Religious</span>
-                        </li>
-
-                        <li class="holiday-item">
-                            <div class="holiday-date">
-                                <div class="day">04</div>
-                                <div class="month">Jun</div>
-                            </div>
-                            <div class="holiday-info">
-                                <div class="holiday-name">Poson Poya</div>
-                                <div class="holiday-details">
-                                    Major Buddhist festival - Anuradhapura celebrations
-                                </div>
-                            </div>
-                            <span class="holiday-category">Cultural</span>
-                        </li>
+                    <?php endforeach; ?>
                     </ul>
                 </div>
             </div>
@@ -285,4 +238,5 @@
         </div>
     </div>
 </body>
+
 </html>

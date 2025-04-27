@@ -20,8 +20,8 @@ class TourGuide_M
 		'password',
 		'licenseNum',
 		'experience',
-		'fieldsOfExpertise',
-		'tourFrequencyPerMonth',
+		'gender',
+		'age',
 		'guideLocation',
 		'guideBio',
 		'profilePhoto',
@@ -35,9 +35,14 @@ class TourGuide_M
 		$this->errors = [];
 
 		// Name validation
-		if(empty($data['name']) || str_word_count($data['name']) < 2)
+		if(empty($data['firstName']))
 		{
-			$this->errors['name'] = "Please enter your full name";
+			$this->errors['firstName'] = "Please enter your first name";
+		}
+
+		if(empty($data['lastName']))
+		{
+			$this->errors['lastName'] = "Please enter your last name";
 		}
 
 		// NIC validation
@@ -74,21 +79,20 @@ class TourGuide_M
 
 		// Fields of Expertise validation
 		$validExpertise = [
-			'Hiking', 
-			'Wild Life', 
-			'Religious Pilgrimages', 
-			'Water Sports and Adventure', 
-			'Tea Plantation and Factory Visits'
+			'Male', 
+			'Female'
 		];
-		if(empty($data['fieldsOfExpertise']) || !in_array($data['fieldsOfExpertise'], $validExpertise))
+		if(empty($data['gender']) || !in_array($data['gender'], $validExpertise))
 		{
-			$this->errors['fieldsOfExpertise'] = "Invalid field of expertise";
+			$this->errors['gender'] = "Invalid gender";
 		}
 
 		// Tour Frequency validation
-		if(!isset($data['tourFrequencyPerMonth']) || $data['tourFrequencyPerMonth'] < 1 || $data['tourFrequencyPerMonth'] > 30)
+		if(!isset($data['age']))
 		{
-			$this->errors['tourFrequencyPerMonth'] = "Invalid number of tours per month";
+			$this->errors['age'] = "Age required";
+		} else if($data['age'] < 18 || $data['age'] > 60) {
+			$this->errors['age'] = "Your age peoples can not sign up in our system";
 		}
 
 		// Username validation
@@ -176,10 +180,10 @@ class TourGuide_M
 			$this->errors['nic'] = "Please enter your NIC number";
 		}
 
-		if(empty($data['tourFrequencyPerMonth']))
-		{
-			$this->errors['tourFrequencyPerMonth'] = "Please enter your tour frequency per month";
-		}
+		// if(empty($data['age']))
+		// {
+		// 	$this->errors['age'] = "Please enter your tour frequency per month";
+		// }
 
 		if(empty($data['experience']))
 		{

@@ -40,23 +40,32 @@ class C_addTour extends Controller {
                     'exclusions' => htmlspecialchars($_POST['exclusions']),
                 ];
 
-                // Insert tour package and get ID
-                $isInserted = $this->tourPackageModel->insert($data);
-                if (!$isInserted) {
-                    throw new Exception("Failed to insert tour package data");
+
+                $validate = $this->tourPackageModel->validate($data);
+                // show($validate);
+                if($validate['is_valid']){
+                    // Insert tour package and get ID
+                    $isInserted = $this->tourPackageModel->insert($data);
+                    if (!$isInserted) {
+                        throw new Exception("Failed to insert tour package data");
+                    }
+                    
+                    $insertedPackageId = $this->tourPackageModel->lastInsertId();
+
+                    // Handle image uploads
+                    $this->processImageUploads($insertedPackageId);
+                    
+                    // Process itinerary data
+                    $this->processItineraryData($insertedPackageId);
+
+                    // Redirect to success page
+                    header("Location: " . ROOT . "/tourGuide/C_tourPackages");
+                    exit();
+                } else {
+                    // $data['errors'] = $validate['errors'] ?? [];
+                    // show($data);
+                    $this->view('tourGuide/addTour', ['errors' => $validate['errors'], 'data' => $data]);
                 }
-                
-                $insertedPackageId = $this->tourPackageModel->lastInsertId();
-
-                // Handle image uploads
-                $this->processImageUploads($insertedPackageId);
-                
-                // Process itinerary data
-                $this->processItineraryData($insertedPackageId);
-
-                // Redirect to success page
-                header("Location: " . ROOT . "/tourGuide/C_tourPackages");
-                exit();
                 
             } catch (Exception $e) {
                 // Log the error and show error page

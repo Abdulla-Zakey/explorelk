@@ -21,7 +21,56 @@
     <link rel="icon" href="<?= IMAGES ?>/logos/logoWhite.svg">
     <script src="https://kit.fontawesome.com/f35c1c7a11.js" crossorigin="anonymous"></script>
     <style>
-    
+    .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(0, 0, 0, 0.5);
+        display: none;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+    }
+
+    .modal {
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        max-width: 400px;
+        width: 100%;
+        text-align: center;
+    }
+
+    .modal-icon {
+        font-size: 48px;
+        margin-bottom: 15px;
+    }
+
+    .modal-buttons {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        margin-top: 20px;
+    }
+
+    .modal-btn {
+        padding: 8px 16px;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    .modal-btn-primary {
+        background-color: #28a745;
+        color: white;
+        border: none;
+    }
+
+    .modal-btn-secondary {
+        background-color: #f8f9fa;
+        border: 1px solid #ddd;
+    }
     </style>
 </head>
 
@@ -148,7 +197,7 @@
                     <button class="action-button contact-button"><i class="fas fa-comment-dots"></i> Contact
                         Tourist</button>
 
-                    <?php if(!($bookingDetails['0']->status == 'completed')): ?>
+                    <?php if($bookingDetails['0']->status != 'completed' && $bookingDetails['0']->status != 'started'): ?>
                     <button class="action-button cancel-button"><i class="fas fa-times-circle"></i> Cancel Tour</button>
                     <?php endif; ?>
 
@@ -213,8 +262,7 @@
 
         // Complete/Start tour button event
         document.querySelector('.complete-button').addEventListener('click', function() {
-            const status = this.textContent.trim().includes('Start') ? 'start' : 'complete';
-
+            const status = '<?= $bookingDetails['0']->status ?>' === 'upcoming' ? 'start' : 'complete';
             if (status === 'start') {
                 showModal(
                     'Start Tour',

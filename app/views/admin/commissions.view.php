@@ -1,7 +1,12 @@
 <?php
     $commission_rates = $data['commission_rates'];
     $tourGuideCommissions = $data['tourGuideCommissions'];
-    // show($tourGuideCommissions);
+    $eventCommissions = $data['eventCommissions'];
+    
+    $completedEvents = $data['completedEvents'];
+    $eventOrganizers = $data['eventOrganizers'];
+    $eventTicketTypes = $data['eventTicketTypes'];
+    // show($eventCommissions);
 ?>
 
 <!DOCTYPE html>
@@ -322,18 +327,6 @@
                                         </td>
                                     </tr>
                                     <?php endforeach; ?>
-                                    <!-- <tr>
-                                        <td class="provider-name">Jungle Safari Experts</td>
-                                        <td>5</td>
-                                        <td>$2,100.00</td>
-                                        <td>$315.00</td>
-                                        <td>$1,785.00</td>
-                                        <td>
-                                            <button class="btn btn-primary btn-sm pay-now"
-                                                data-provider="Jungle Safari Experts" data-amount="$1,785.00">Pay
-                                                Now</button>
-                                        </td>
-                                    </tr> -->
                                 </tbody>
                             </table>
                         </div>
@@ -365,8 +358,7 @@
                                         <td>$787.50</td>
                                         <td>$4,462.50</td>
                                         <td>
-                                            <button class="btn btn-primary btn-sm pay-now"
-                                                data-provider="Luxury Resort Spa" data-amount="$4,462.50">Pay
+                                            <button class="btn btn-primary btn-sm pay-now" data-amount="4462.50">Pay
                                                 Now</button>
                                         </td>
                                     </tr>
@@ -377,8 +369,7 @@
                                         <td>$577.50</td>
                                         <td>$3,272.50</td>
                                         <td>
-                                            <button class="btn btn-primary btn-sm pay-now"
-                                                data-provider="Seaside Boutique Hotel" data-amount="$3,272.50">Pay
+                                            <button class="btn btn-primary btn-sm pay-now" data-amount="3272.50">Pay
                                                 Now</button>
                                         </td>
                                     </tr>
@@ -391,47 +382,91 @@
                 <!-- Event Organizers Tab Content -->
                 <div class="service-type-content" id="event-organizer-content">
                     <div class="commission-card">
-                        <div class="commission-card-header">Event Organizer Pending Payments</div>
+                        <div class="commission-card-header">Event Organizer Payments</div>
+                        <?php if (empty($completedEvents)): ?>
+                        <p style="padding: 20px;">No payments to process for event organizers.</p>
+                        <?php else: ?>
                         <div class="commission-card-body">
                             <table>
                                 <thead>
                                     <tr>
-                                        <th>Provider Name</th>
-                                        <th>Bookings</th>
-                                        <th>Total Amount</th>
-                                        <th>Commission</th>
+                                        <th>Event Name</th>
+                                        <th>Organizer</th>
+                                        <th>Tickets Sold</th>
+                                        <th>Total Revenue</th>
+                                        <th>Commission (%)</th>
                                         <th>Payable Amount</th>
+                                        <th>Event Date</th>
+                                        <th>Status</th>
                                         <th>Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    <?php foreach($completedEvents as $event): ?>
+                                    <?php 
+                                        $eventOrganizerData = [];
+                                        foreach ($eventOrganizers as $eventOrganizer) {
+                                            if($eventOrganizer->organizer_Id == $event->organizer_Id){
+                                                $eventOrganizerData = $eventOrganizer;
+                                            }
+                                        }
+                                        $ticketTypes = [];
+                                        foreach($eventTicketTypes as $eventTicketType) {
+                                            if($eventTicketType->event_Id == $event->event_Id) {
+                                                $ticketTypes[] = $eventTicketType;
+                                            }
+                                        }
+
+                                        $totalSoldTicketsCount = 0;
+                                        $totalSoldTicketAmount = 0;
+                                        foreach($ticketTypes as $ticketType) {
+                                            $soldTicketsCount = $ticketType->totalTickets - $ticketType->availableTickets;
+                                            $soldTicketAmount = $soldTicketsCount * $ticketType->pricePerTicket;
+
+                                            $totalSoldTicketsCount += $soldTicketsCount;
+                                            $totalSoldTicketAmount += $soldTicketAmount;
+                                        }
+
+                                        $eventCommissionData = [];
+                                        foreach($eventCommissions as $eventCommission) {
+                                            if($eventCommission->event_Id == $event->event_Id){
+                                                $eventCommissionData = $eventCommission;
+                                            }
+                                        }
+                                        // show($eventCommissionData);
+                                    ?>
                                     <tr>
-                                        <td class="provider-name">Festival Planners Ltd.</td>
-                                        <td>4</td>
-                                        <td>$6,800.00</td>
-                                        <td>$1,020.00</td>
-                                        <td>$5,780.00</td>
+                                        <td><?= $event->eventName ?></td>
+                                        <td><?= $eventOrganizerData->company_Name ?></td>
+                                        <td><?= $totalSoldTicketsCount ?></td>
+                                        <td><?= $totalSoldTicketAmount ?></td>
+                                        <td>Rs. <?= $totalSoldTicketAmount * 0.15 ?></td>
+                                        <td>Rs. <?= $totalSoldTicketAmount * 0.85 ?></td>
+                                        <td><?= $event->eventDate ?></td>
                                         <td>
-                                            <button class="btn btn-primary btn-sm pay-now"
-                                                data-provider="Festival Planners Ltd." data-amount="$5,780.00">Pay
-                                                Now</button>
+                                            <span class="status-badge ">
+                                                <?= $event->paymentStatus ?>
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <?php if($event->paymentStatus == 'pending'): ?>
+                                            <button class="btn btn-sm btn-primary pay-now"
+                                                data-amount="<?= $totalSoldTicketAmount * 0.85 ?>"
+                                                data-event-id="<?= $event->event_Id ?>">
+                                                Pay Now
+                                            </button>
+                                            <?php elseif($event->paymentStatus == 'paid'): ?>
+                                            <button class="btn btn-sm btn-success view-receipt" data-receipt="<?= ROOT . '/' . $eventCommissionData->receipt_path ?>">
+                                                View Receipt
+                                            </button>
+                                            <?php endif; ?>
                                         </td>
                                     </tr>
-                                    <tr>
-                                        <td class="provider-name">Cultural Events Co.</td>
-                                        <td>3</td>
-                                        <td>$4,200.00</td>
-                                        <td>$630.00</td>
-                                        <td>$3,570.00</td>
-                                        <td>
-                                            <button class="btn btn-primary btn-sm pay-now"
-                                                data-provider="Cultural Events Co." data-amount="$3,570.00">Pay
-                                                Now</button>
-                                        </td>
-                                    </tr>
+                                    <?php endforeach; ?>
                                 </tbody>
                             </table>
                         </div>
+                        <?php endif; ?>
                     </div>
                 </div>
 
@@ -459,8 +494,7 @@
                                         <td>$405.00</td>
                                         <td>$2,295.00</td>
                                         <td>
-                                            <button class="btn btn-primary btn-sm pay-now"
-                                                data-provider="Seaside Dining Experience" data-amount="$2,295.00">Pay
+                                            <button class="btn btn-primary btn-sm pay-now" data-amount="2295.00">Pay
                                                 Now</button>
                                         </td>
                                     </tr>
@@ -471,8 +505,7 @@
                                         <td>$270.00</td>
                                         <td>$1,530.00</td>
                                         <td>
-                                            <button class="btn btn-primary btn-sm pay-now"
-                                                data-provider="Local Flavors Restaurant" data-amount="$1,530.00">Pay
+                                            <button class="btn btn-primary btn-sm pay-now" data-amount="1530.00">Pay
                                                 Now</button>
                                         </td>
                                     </tr>
@@ -519,45 +552,46 @@
             <div class="modal" id="paymentModal">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h3>Process Payment</h3>
+                        <h3>Submit Commission Payment</h3>
                         <span class="close">&times;</span>
                     </div>
                     <div class="modal-body">
-                        <div class="form-group">
-                            <label>Provider</label>
-                            <input type="text" class="form-input" id="providerName" readonly>
-                        </div>
-                        <div class="form-group">
-                            <label>Payment Amount</label>
-                            <input type="text" class="form-input" id="paymentAmount" readonly>
-                        </div>
-                        <div class="form-group">
-                            <label>Payment Method</label>
-                            <select class="form-select" id="paymentMethod">
-                                <option value="">Select Payment Method</option>
-                                <option value="bank">Bank Transfer</option>
-                                <option value="paypal">PayPal</option>
-                                <option value="stripe">Stripe</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>Payment Date</label>
-                            <input type="date" class="form-input" id="paymentDate">
-                        </div>
-                        <div class="form-group">
-                            <label>Reference Number</label>
-                            <input type="text" class="form-input" id="referenceNumber"
-                                placeholder="Enter reference number">
-                        </div>
-                        <div class="form-group">
-                            <label>Notes</label>
-                            <textarea class="form-input" id="paymentNotes" rows="3"
-                                placeholder="Add payment notes"></textarea>
-                        </div>
+                        <form id="commissionPaymentForm" method="post"
+                            action="<?= ROOT ?>/admin/C_commissions/eventPayment" enctype="multipart/form-data">
+                            <input type="hidden" name="event_id" id="particular-event-id" value="">
+                            <div class="form-group">
+                                <label for="payment_amount">Amount to Pay (Rs)</label>
+                                <input type="text" class="form-input" id="payment_amount" name="amount" value="">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="payment_reference">Payment Reference Number</label>
+                                <input type="text" class="form-input" id="payment_reference" name="reference_number"
+                                    placeholder="Enter bank reference/transaction ID">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="payment_date">Payment Date</label>
+                                <input type="date" class="form-input" id="payment_date" name="payment_date" value="">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="payment_receipt">Upload Payment Receipt (Click here)</label>
+                                <input type="file" class="form-input" id="payment_receipt" name="payment_receipt"
+                                    accept="image/jpeg,image/png,application/pdf">
+                                <small>Accepted formats: JPG, PNG, PDF (Max: 2MB)</small>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="payment_notes">Additional Notes (Optional)</label>
+                                <textarea class="form-input" id="payment_notes" name="notes" rows="3"
+                                    placeholder="Any additional information about your payment"></textarea>
+                            </div>
                     </div>
                     <div class="modal-footer">
-                        <button class="btn btn-secondary" id="cancelPayment">Cancel</button>
-                        <button class="btn btn-primary" id="processPayment">Process Payment</button>
+                        <button type="button" class="btn btn-secondary" id="cancelPayment">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Submit Payment</button>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -663,65 +697,39 @@
         alert('This would open a form to add a new service type with commission rate.');
     });
 
-    // Payment functionality
+    // Payment Modal functionality
     const paymentModal = document.getElementById('paymentModal');
-    const payNowButtons = document.querySelectorAll('.pay-now');
 
-    // Modified event listeners for Pay Now buttons
-    payNowButtons.forEach(btn => {
-        btn.addEventListener('click', () => {
-            // Get the provider name and payment amount from data attributes
-            const providerName = btn.getAttribute('data-provider');
-            const paymentAmount = btn.getAttribute('data-amount');
-
-            // Set the values in the payment modal
-            document.getElementById('providerName').value = providerName;
-            document.getElementById('paymentAmount').value = paymentAmount;
-
-            // Set today's date as default
-            const today = new Date();
-            const year = today.getFullYear();
-            const month = String(today.getMonth() + 1).padStart(2, '0');
-            const day = String(today.getDate()).padStart(2, '0');
-            document.getElementById('paymentDate').value = `${year}-${month}-${day}`;
-
-            // Show the payment modal
-            paymentModal.style.display = 'flex';
-        });
+    // Event listener for Pay Now buttons
+    document.querySelectorAll('.pay-now').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        const paymentAmount = btn.getAttribute('data-amount');
+        const eventId = btn.getAttribute('data-event-id'); // Get from button
+        
+        document.getElementById('payment_amount').value = paymentAmount;
+        document.getElementById('particular-event-id').value = eventId;
+        
+        paymentModal.style.display = 'flex';
     });
+});
 
-    // Modified event listener for Cancel Payment button
+    // Close modal when clicking cancel or close button
     document.getElementById('cancelPayment').addEventListener('click', () => {
         paymentModal.style.display = 'none';
     });
 
-    // Close button in payment modal
-    document.querySelectorAll('#paymentModal .close').forEach(closeBtn => {
-        closeBtn.addEventListener('click', () => {
-            paymentModal.style.display = 'none';
-        });
-    });
-
-    document.getElementById('processPayment').addEventListener('click', () => {
-        if (!document.getElementById('paymentMethod').value) {
-            alert('Please select a payment method.');
-            return;
-        }
-        if (!document.getElementById('paymentDate').value) {
-            alert('Please select a payment date.');
-            return;
-        }
-        alert('Payment processed successfully!');
+    document.querySelector('#paymentModal .close').addEventListener('click', () => {
         paymentModal.style.display = 'none';
     });
 
-    // Close modals when clicking outside
+    // Close modal when clicking outside
     window.addEventListener('click', (event) => {
-        if (event.target === editModal) {
-            editModal.style.display = 'none';
-        }
         if (event.target === paymentModal) {
             paymentModal.style.display = 'none';
+        }
+        if (event.target === editModal) {
+            editModal.style.display = 'none';
         }
     });
 
@@ -741,46 +749,46 @@
     });
 
     // At the end of your script, add this code to handle the tab activation on page load
-document.addEventListener('DOMContentLoaded', function() {
-    // Get URL parameters
-    const urlParams = new URLSearchParams(window.location.search);
-    const currentTab = urlParams.get('tab');
-    const serviceTab = urlParams.get('service');
+    document.addEventListener('DOMContentLoaded', function() {
+        // Get URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const currentTab = urlParams.get('tab');
+        const serviceTab = urlParams.get('service');
 
-    // Activate the main tab if specified
-    if (currentTab) {
-        document.querySelectorAll('.main-content > .commission-tabs .commission-tab').forEach(tab => {
-            tab.classList.remove('active');
-            if (tab.getAttribute('data-tab') === currentTab) {
-                tab.classList.add('active');
-            }
-        });
+        // Activate the main tab if specified
+        if (currentTab) {
+            document.querySelectorAll('.main-content > .commission-tabs .commission-tab').forEach(tab => {
+                tab.classList.remove('active');
+                if (tab.getAttribute('data-tab') === currentTab) {
+                    tab.classList.add('active');
+                }
+            });
 
-        document.querySelectorAll('.commission-tab-content').forEach(content => {
-            content.classList.remove('active');
-            if (content.id === currentTab + '-tab') {
-                content.classList.add('active');
-            }
-        });
-    }
+            document.querySelectorAll('.commission-tab-content').forEach(content => {
+                content.classList.remove('active');
+                if (content.id === currentTab + '-tab') {
+                    content.classList.add('active');
+                }
+            });
+        }
 
-    // Activate the service tab if specified
-    if (serviceTab) {
-        document.querySelectorAll('.service-provider-tabs .commission-tab').forEach(tab => {
-            tab.classList.remove('active');
-            if (tab.getAttribute('data-tab') === serviceTab) {
-                tab.classList.add('active');
-            }
-        });
+        // Activate the service tab if specified
+        if (serviceTab) {
+            document.querySelectorAll('.service-provider-tabs .commission-tab').forEach(tab => {
+                tab.classList.remove('active');
+                if (tab.getAttribute('data-tab') === serviceTab) {
+                    tab.classList.add('active');
+                }
+            });
 
-        document.querySelectorAll('.service-type-content').forEach(content => {
-            content.classList.remove('active');
-            if (content.id === serviceTab + '-content') {
-                content.classList.add('active');
-            }
-        });
-    }
-});
+            document.querySelectorAll('.service-type-content').forEach(content => {
+                content.classList.remove('active');
+                if (content.id === serviceTab + '-content') {
+                    content.classList.add('active');
+                }
+            });
+        }
+    });
     </script>
 </body>
 
