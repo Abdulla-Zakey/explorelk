@@ -16,17 +16,20 @@ class Event {
       'eventStartTime',
       'eventEndTime',
       'eventLocation',
-      'eventStatus'
+      'eventStatus',
+      'rejection_reason',
+      'paymentStatus',
+      'paymentAmount'
   ];
 
-  public function insert_event($organizer_Id, $eventWebBannerPath, $eventName, $aboutEvent, $eventType, $eventDate, $eventStartTime, $eventEndTime, $eventLocation, $eventStatus = "pending"){
+  public function insert_event($organizer_Id, $eventWebBannerPath, $eventName, $eventType ,$aboutEvent, $eventDate, $eventStartTime, $eventEndTime, $eventLocation, $eventStatus = "pending"){
     
     return $this->insert([
       'organizer_Id' => $organizer_Id,
       'eventWebBannerPath' => $eventWebBannerPath,
       'eventName' => $eventName,
-      'aboutEvent' => $aboutEvent,
       'eventType' => $eventType,
+      'aboutEvent' => $aboutEvent,
       'eventDate' => $eventDate,
       'eventStartTime' => $eventStartTime,
       'eventEndTime' => $eventEndTime,

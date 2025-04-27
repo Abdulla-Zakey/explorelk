@@ -16,6 +16,10 @@
     </div>
 
     <div class="linkHolder">
+        <a href="<?= ROOT?>/admin/C_events" class="linkItem"><i class="fa-solid fa-bullhorn"></i>Events</a>
+    </div>
+
+    <div class="linkHolder">
         <a href="<?= ROOT?>/admin/C_bookings" id="bookingsLink" class="linkItem">
             <i class="fas fa-calendar-check"></i>Bookings
         </a>

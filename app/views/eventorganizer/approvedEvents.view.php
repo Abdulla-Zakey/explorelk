@@ -882,9 +882,9 @@ function renderTicketTypes($ticketTypes)
                         <h3>No approved events</h3>
                         <p>Events will appear here once they are approved by admin</p>
                         <a href="<?= ROOT ?>/Eventorganizer/Eocreateevent">
-                            <button class="btn btn-primary">
+                            <!-- <button class="btn btn-primary">
                                 <i class="fa-solid fa-plus"></i>Create New Event
-                            </button>
+                            </button> -->
                         </a>
                     </div>
                 <?php endif; ?>

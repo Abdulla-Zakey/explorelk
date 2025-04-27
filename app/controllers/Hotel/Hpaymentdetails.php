@@ -1,199 +1,170 @@
 <?php
-
 class Hpaymentdetails extends Controller {
+    private $hotelModel;
+    public function index($a = '', $b = '', $c = '') {
+        // Get the logged-in hotel ID
+        $hotelId = isset($_SESSION['hotel_id']) ? $_SESSION['hotel_id'] : null;
+        
+        // Load the model
+        $hotelCommissionsModel = new HotelCommissionsModel();
+        $hotelModel = new Hotel();
 
-    private $hotelCommissionsModel;
-    private $bookingsModel;
-    private $hotelsModel;
-    private $usersModel;
+        // Get all commissions for this hotel
+        $commissions = $hotelCommissionsModel->where(['hotel_id' => $_SESSION['hotel_id']]);
+        
+        // Since we can't filter by status in the database, let's do it in PHP
+        // Initialize empty arrays for different status categories
+        $approvedCommissions = $hotelCommissionsModel->where(['hotel_id' => $_SESSION['hotel_id'], 'status' => 'Approved']);
+        $pendingCommissions = $hotelCommissionsModel->where(['hotel_id' => $_SESSION['hotel_id'], 'status' => 'Pending']);
+        $rejectedCommissions = $hotelCommissionsModel->where(['hotel_id' => $_SESSION['hotel_id'], 'status' => 'Denied']);
+        $totalCommission = 0; // Initialize total commission
+        
+        // If there's a field in your commissions that indicates status, you could do:
+        // foreach ($commissions as $commission) {
+        //     if ($commission->some_status_field == 'approved') {
+        //         $approvedCommissions[] = $commission;
+        //         $totalCommission += $commission->commission_amount;
+        //     } else if ($commission->some_status_field == 'pending') {
+        //         $pendingCommissions[] = $commission;
+        //     } else if ($commission->some_status_field == 'rejected') {
+        //         $rejectedCommissions[] = $commission;
+        //     }
+        // }
+        
+        // Get filter parameters
+        $month = isset($_GET['month']) ? $_GET['month'] : date('m');
+        $year = isset($_GET['year']) ? $_GET['year'] : date('Y');
+        // $hi = $this->hotelModel->first(['hotel_Id' => $_SESSION['hotel_id']]);
+        // Get pagination parameters
+        $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+        $perPage = 10;
+        
+        // Get monthly data for chart
+        $monthlyData = $hotelCommissionsModel->getMonthlyData($hotelId, 6);
+        
+        // Get payment summary data
+        $data = [
+            'totalRevenue' => $hotelCommissionsModel->getTotalRevenue($hotelId),
+            'currentMonthRevenue' => $hotelCommissionsModel->getCurrentMonthRevenue($hotelId),
+            'currentMonthCommission' => $hotelCommissionsModel->getCurrentMonthCommission($hotelId),
+            'paymentHistory' => $hotelCommissionsModel->getFilteredPaymentHistory($hotelId, $month, $year),
+            'earningHistory' => $hotelCommissionsModel->getFilteredPaymentHistory($hotelId, $month, $year), // Assuming same data for earning
+            'currentMonth' => $month,
+            'currentYear' => $year,
+            'monthlyData' => $monthlyData,
+            'commissions' => $commissions,
+            'approvedCommissions' => $approvedCommissions,
+            'pendingCommissions' => $pendingCommissions,
+            'rejectedCommissions' => $rejectedCommissions,
+            'totalCommission' => $totalCommission
+        ];
+        
+        // Pass data to the view
+        $this->view('hotel/paymentdetails', $data);
 
-    public function __construct() {
-        // Load all necessary models
-        $this->hotelCommissionsModel = $this->loadModel('HotelCommissionsModel');
-        $this->bookingsModel = $this->loadModel('RoomBookingModel');
-        $this->hotelsModel = $this->loadModel('Hotel');
-        $this->usersModel = $this->loadModel('HotelGuestsModel');
+    }    
+    /**
+     * Get the logged-in hotel ID
+     * @return int
+     */
+    private function getLoggedInHotelId() {
+        if (isset($_SESSION['USER']) && isset($_SESSION['USER']->hotel_Id)) {
+            return $_SESSION['USER']->hotel_Id;
+        }
+        // Redirect to login if no hotel ID
+        redirect('traveler/login');
+        return 0;
     }
-
-    public function index() {
-        // Ensure the user is logged in as a hotel owner
-        $user_id = $_SESSION['user_id'] ?? 0;
-        $hotel_id = $_SESSION['hotel_id'] ?? 0;
-
-        if (!$user_id || !$hotel_id) {
-            redirect("login");
+    
+    /**
+     * View detailed information for a specific booking
+     */
+    public function viewBookingDetails($bookingId) {
+        // Get the logged-in hotel ID
+        $hotelId = $this->getLoggedInHotelId();
+        
+        // Load necessary models
+        $hotelCommissionsModel = new HotelCommissionsModel();
+        $roomBookingsModel = new RoomBookingsFinalModel();
+        
+        // Get booking details
+        $bookingDetails = $hotelCommissionsModel->getBookingDetails($bookingId);
+        
+        // Verify the booking belongs to the logged-in hotel
+        if (!$bookingDetails || $bookingDetails->hotel_Id != $hotelId) {
+            $_SESSION['error'] = "You don't have permission to view this booking or it doesn't exist.";
+            redirect('Hpaymentdetails');
+            return;
         }
-
-        // Get hotel information
-        $hotel = $this->hotelsModel->first(['hotel_Id' => $hotel_id]);
         
-        if (!$hotel) {
-            redirect("login");
-        }
-
-        // Get financial statistics
-        $totalRevenue = $this->getTotalRevenue($hotel_id);
-        $pendingPayments = $this->getPendingPayments($hotel_id);
-        $todaysEarnings = $this->getTodaysEarnings($hotel_id);
-        
-        // Get recent payments with pagination
-        $page = $_GET['page'] ?? 1;
-        $limit = 10;
-        $offset = ($page - 1) * $limit;
-        
-        $recentPayments = $this->getRecentPayments($hotel_id, $limit, $offset);
+        // Fetch additional room booking details
+        $roomBooking = $roomBookingsModel->getRoomBookingByBookingId($bookingId);
         
         // Prepare data for the view
         $data = [
-            'hotel' => $hotel,
-            'hotelBasic' => $hotel,
-            'totalRevenue' => $totalRevenue,
-            'pendingPayments' => $pendingPayments,
-            'todaysEarnings' => $todaysEarnings,
-            'recentPayments' => $recentPayments,
-            'page' => $page
+            'bookingDetails' => $bookingDetails,
+            'roomBooking' => $roomBooking,
+            'totalRevenue' => $hotelCommissionsModel->getTotalRevenue($hotelId),
+            'currentMonthRevenue' => $hotelCommissionsModel->getCurrentMonthRevenue($hotelId),
+            'currentMonthCommission' => $hotelCommissionsModel->getCurrentMonthCommission($hotelId),
+            'paymentHistory' => $hotelCommissionsModel->getFilteredPaymentHistory($hotelId),
+            'earningHistory' => $hotelCommissionsModel->getFilteredPaymentHistory($hotelId),
+            'currentMonth' => date('m'),
+            'currentYear' => date('Y')
         ];
-
-        // Load the view with data
+        
+        // Pass data to the view
         $this->view('hotel/paymentdetails', $data);
     }
-
-    public function details($booking_id = null) {
-        if (!$booking_id) {
-            redirect("hpaymentdetails");
-        }
-
-        $hotel_id = $_SESSION['hotel_id'] ?? 0;
+    
+    /**
+     * Export payment history to CSV
+     */
+    public function exportPaymentHistory() {
+        // Get the logged-in hotel ID
+        $hotelId = $this->getLoggedInHotelId();
         
-        // Get detailed booking information
-        $booking = $this->bookingsModel->first(['roomBooking_Id' => $booking_id]);
+        // Filter parameters
+        $month = isset($_GET['month']) ? $_GET['month'] : null;
+        $year = isset($_GET['year']) ? $_GET['year'] : null;
         
-        if (!$booking || $booking->hotel_Id != $hotel_id) {
-            redirect("hpaymentdetails");
-        }
+        // Load the model
+        $hotelCommissionsModel = new HotelCommissionsModel();
         
-        // Get commission information
-        $commission = $this->hotelCommissionsModel->first(['room_booking_Id' => $booking_id]);
+        // Get data
+        $payments = $hotelCommissionsModel->getFilteredPaymentHistory($hotelId, $month, $year);
         
-        // Get guest information
-        $guest = $this->usersModel->getGuestByBookingId($booking_id);
-
-        $data = [
-            'booking' => $booking,
-            'commission' => $commission,
-            'guest' => $guest
-        ];
-
-        $this->view('hotel/paymentdetails', $data);
-    }
-
-    public function export() {
-        $hotel_id = $_SESSION['hotel_id'] ?? 0;
-        
-        if (!$hotel_id) {
-            redirect("login");
-        }
-        
-        $start_date = $_GET['start_date'] ?? date('Y-m-01');
-        $end_date = $_GET['end_date'] ?? date('Y-m-t');
-        
-        // Get all payments for the specified period
-        $payments = $this->getPaymentsByDateRange($hotel_id, $start_date, $end_date);
-        
-        // Generate CSV
+        // Set headers for CSV download
         header('Content-Type: text/csv');
-        header('Content-Disposition: attachment; filename="payment_report_' . $start_date . '_to_' . $end_date . '.csv"');
+        header('Content-Disposition: attachment; filename="payment_history_' . date('Y-m-d') . '.csv"');
         
+        // Open output stream
         $output = fopen('php://output', 'w');
         
-        // CSV Headers
-        fputcsv($output, ['Booking ID', 'Guest Name', 'Room Number', 'Amount', 'Commission', 'Net Amount', 'Payment Date', 'Status']);
+        // Add CSV headers
+        fputcsv($output, [
+            'Date', 
+            'Booking ID', 
+            'Total Amount', 
+            'Commission Rate', 
+            'Commission Amount', 
+            'Status'
+        ]);
         
-        // CSV Data
+        // Add data rows
         foreach ($payments as $payment) {
             fputcsv($output, [
-                $payment->booking_id,
-                $payment->guest_name,
-                $payment->room_number,
-                $payment->amount,
+                date('Y-m-d', strtotime($payment->created_at)),
+                $payment->room_booking_Id,
+                $payment->total_amount,
+                $payment->commission_rate . '%',
                 $payment->commission_amount,
-                $payment->net_amount,
-                $payment->payment_date,
-                $payment->status
+                $payment->is_applicable_for_commission ? 'Active' : 'Not Applicable'
             ]);
         }
         
+        // Close the file
         fclose($output);
         exit;
-    }
-
-    /* Helper methods for data retrieval using the Database trait */
-
-    private function getTotalRevenue($hotel_id) {
-        $query = "SELECT SUM(total_amount) as total FROM room_booking 
-                 WHERE hotel_Id = :hotel_id AND bookingStatus = 'Confirmed'";
-        
-        $result = $this->bookingsModel->query($query, [':hotel_id' => $hotel_id]);
-        
-        return $result[0]->total ?? 0;
-    }
-
-    private function getPendingPayments($hotel_id) {
-        $query = "SELECT SUM(total_amount) as total FROM room_booking 
-                 WHERE hotel_Id = :hotel_id AND bookingStatus = 'Pending'";
-        
-        $result = $this->bookingsModel->query($query, [':hotel_id' => $hotel_id]);
-        
-        return $result[0]->total ?? 0;
-    }
-
-    private function getTodaysEarnings($hotel_id) {
-        $today = date('Y-m-d');
-        $query = "SELECT SUM(total_amount) as total FROM room_booking 
-                 WHERE hotel_Id = :hotel_id AND DATE(bookedDate) = :today AND bookingStatus = 'Confirmed'";
-        
-        $result = $this->bookingsModel->query($query, [
-            ':hotel_id' => $hotel_id,
-            ':today' => $today
-        ]);
-        
-        return $result[0]->total ?? 0;
-    }
-
-    private function getRecentPayments($hotel_id, $limit, $offset) {
-        $query = "SELECT rb.roomBooking_Id as booking_id, hg.guest_full_name as first_name, '' as last_name, 
-                         rb.room_Id as room_number, rb.total_amount, rb.bookedDate as payment_date, 
-                         rb.bookingStatus as payment_status, hc.commission_amount 
-                  FROM room_booking rb
-                  LEFT JOIN hotel_guests hg ON rb.roomBooking_Id = hg.room_booking_Id
-                  LEFT JOIN hotel_commissions hc ON rb.roomBooking_Id = hc.room_booking_Id
-                  WHERE rb.hotel_Id = :hotel_id
-                  ORDER BY rb.bookedDate DESC
-                  LIMIT :limit OFFSET :offset";
-        
-        return $this->bookingsModel->query($query, [
-            ':hotel_id' => $hotel_id,
-            ':limit' => (int)$limit,
-            ':offset' => (int)$offset
-        ]);
-    }
-
-    private function getPaymentsByDateRange($hotel_id, $start_date, $end_date) {
-        $query = "SELECT rb.roomBooking_Id as booking_id, hg.guest_full_name as guest_name, 
-                         rb.room_Id as room_number, rb.total_amount as amount, hc.commission_amount,
-                         (rb.total_amount - IFNULL(hc.commission_amount, 0)) as net_amount,
-                         rb.bookedDate as payment_date, rb.bookingStatus as status
-                  FROM room_booking rb
-                  LEFT JOIN hotel_guests hg ON rb.roomBooking_Id = hg.room_booking_Id
-                  LEFT JOIN hotel_commissions hc ON rb.roomBooking_Id = hc.room_booking_Id
-                  WHERE rb.hotel_Id = :hotel_id
-                  AND rb.bookedDate BETWEEN :start_date AND :end_date
-                  ORDER BY rb.bookedDate DESC";
-        
-        return $this->bookingsModel->query($query, [
-            ':hotel_id' => $hotel_id,
-            ':start_date' => $start_date,
-            ':end_date' => $end_date . ' 23:59:59'
-        ]);
     }
 }

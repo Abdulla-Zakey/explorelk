@@ -189,11 +189,19 @@
                         </div>
                     </div>
 
-                    <label for="name">Your Name</label>
-                    <input id="name" name="name" type="text" required value="<?= isset($name) ? htmlspecialchars($name) : '' ?>">
-                    <?php if(!empty($errors['name'])):?>
+                    <label for="firstName">First Name</label>
+                    <input id="firstName" name="firstName" type="text" required value="<?= isset($firstName) ? htmlspecialchars($firstName) : '' ?>">
+                    <?php if(!empty($errors['firstName'])):?>
                         <div class="error">
-                            <?=$errors['name']?>
+                            <?=$errors['firstName']?>
+                        </div>
+                    <?php endif;?>
+
+                    <label for="lastName">Last Name</label>
+                    <input id="lastName" name="lastName" type="text" required value="<?= isset($lastName) ? htmlspecialchars($lastName) : '' ?>">
+                    <?php if(!empty($errors['lastName'])):?>
+                        <div class="error">
+                            <?=$errors['lastName']?>
                         </div>
                     <?php endif;?>
 
@@ -249,26 +257,23 @@
                         </div>
                     <?php endif;?>
    
-                    <label for="fieldsOfExpertise">Fields of Expertise</label>
-                    <select id="fieldsOfExpertise" name="fieldsOfExpertise" required>
+                    <label for="gender">Select gender</label>
+                    <select id="gender" name="gender" required>
                         <option value="" disabled selected>Choose an option</option>
-                        <option value="Hiking">Hiking</option>
-                        <option value="Wild Life">Wild Life</option>
-                        <option value="Religious Pilgrimages">Religious Pilgrimages</option>
-                        <option value="Water Sports and Adventure">Water Sports and Adventure</option>
-                        <option value="Tea Plantation and Factory Visits">Tea Plantation and Factory Visits</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
                     </select>
-                    <?php if(!empty($errors['fieldsOfExpertise'])):?>
+                    <?php if(!empty($errors['gender'])):?>
                         <div class="error">
-                            <?=$errors['fieldsOfExpertise']?>
+                            <?=$errors['gender']?>
                         </div>
                     <?php endif;?>
 
-                    <label for="tourFrequencyPerMonth">Tours Conducted per Month</label>
-                    <input id="tourFrequencyPerMonth" name="tourFrequencyPerMonth" type="number" min="1" required value="<?= isset($tourFrequencyPerMonth) ? htmlspecialchars($tourFrequencyPerMonth) : '' ?>">
-                    <?php if(!empty($errors['tourFrequencyPerMonth'])):?>
+                    <label for="age">Age</label>
+                    <input id="age" name="age" type="number" min="1" required value="<?= isset($age) ? htmlspecialchars($age) : '' ?>">
+                    <?php if(!empty($errors['age'])):?>
                         <div class="error">
-                            <?=$errors['tourFrequencyPerMonth']?>
+                            <?=$errors['age']?>
                         </div>
                     <?php endif;?>
                 </div>
@@ -377,17 +382,25 @@
     
             // Step 0 Validation (Personal Information)
             if (isValid && currentStep === 0) {
-                let name = document.getElementById('name');
+                let firstName = document.getElementById('firstName');
+                let lastName = document.getElementById('lastName');
                 let nic = document.getElementById('nic');
                 let mobileNumber = document.getElementById('contact-number');
                 let email = document.getElementById('email');
         
-                // Name validation (at least two words)
-                if (name.value.trim().split(/\s+/).length < 2) {
-                    showPopup("Please enter your full name");
-                    name.focus();
-                    isValid = false;
-                }
+                // // Name validation (at least two words)
+                // if (firstName.value.trim().split(/\s+/).length < 2) {
+                //     showPopup("Please enter your full name");
+                //     firstName.focus();
+                //     isValid = false;
+                // }
+
+                // // Name validation (at least two words)
+                // if (lastName.value.trim().split(/\s+/).length < 2) {
+                //     showPopup("Please enter your full name");
+                //     lastName.focus();
+                //     isValid = false;
+                // }
 
                 // NIC validation (assume 12 digits or 9V format)
                 let nicRegex = /^([0-9]{12}|[0-9]{9}[vV])$/;
@@ -418,8 +431,8 @@
             if (isValid && currentStep === 1) {
                 let licenseNum = document.getElementById('licenseNum');
                 let experience = document.getElementById('experience');
-                let fieldsOfExpertise = document.getElementById('fieldsOfExpertise');
-                let tourFrequency = document.getElementById('tourFrequencyPerMonth');
+                let gender = document.getElementById('gender');
+                let age = document.getElementById('age');
 
                 // License number validation (assuming some basic format)
                 if (licenseNum.value.trim().length < 5) {
@@ -436,16 +449,16 @@
                 }
 
                 // Fields of Expertise validation
-                if (isValid && fieldsOfExpertise.value === "") {
+                if (isValid && gender.value === "") {
                     showPopup("Please select a field of expertise");
-                    fieldsOfExpertise.focus();
+                    gender.focus();
                     isValid = false;
                 }
 
                 // Tour Frequency validation
-                if (isValid && (tourFrequency.value < 1 || tourFrequency.value > 30)) {
-                    showPopup("Please enter a valid number of tours per month");
-                    tourFrequency.focus();
+                if (isValid && (age.value < 18 || age.value > 60)) {
+                    showPopup("Under 18 and over 60 aged peoples can not do signup");
+                    age.focus();
                     isValid = false;
                 }
             }

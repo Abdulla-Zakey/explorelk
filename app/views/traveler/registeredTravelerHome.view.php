@@ -73,7 +73,11 @@
             </div>
 
             <div class="linkHolder">
-                <a href="<?= ROOT ?>/traveler/Restaurant" class="linkItem"><i class="fa-solid fa-bell"></i>Rest</a>
+                <a href="<?= ROOT ?>/traveler/TRestaurant" class="linkItem"><i class="fa-solid fa-bell"></i>Rest</a>
+            </div>
+
+            <div class="linkHolder">
+                <a href="<?= ROOT ?>/traveler/Allrestaurant" class="linkItem"><i class="fa-solid fa-bell"></i>Allrest</a>
             </div>
 
             <div class="linkHolder">

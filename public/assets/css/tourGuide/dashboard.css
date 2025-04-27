@@ -306,3 +306,47 @@ body {
     border-radius: 0.75rem;
     padding: 1% 3%;
 }
+
+.no-bookings-message {
+    text-align: center;
+    padding: 30px;
+    background: #f8f9fa;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    max-width: 400px;
+    margin: 20px auto;
+    border: 1px solid #e9ecef;
+}
+
+.no-bookings-icon {
+    font-size: 50px;
+    color: #6c757d;
+    margin-bottom: 15px;
+}
+
+.no-bookings-message h3 {
+    color: #343a40;
+    margin-bottom: 10px;
+    font-size: 1.4rem;
+}
+
+.no-bookings-message p {
+    color: #6c757d;
+    margin-bottom: 20px;
+    font-size: 1rem;
+}
+
+.booking-requests-btn {
+    display: inline-block;
+    padding: 10px 20px;
+    background: #007bff;
+    color: white;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: background 0.3s ease;
+}
+
+.booking-requests-btn:hover {
+    background: #0056b3;
+}

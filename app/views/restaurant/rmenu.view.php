@@ -1,5 +1,5 @@
 <?php
- include '../app/views/components/rnav.php';
+include '../app/views/components/rnav.php';
 ?>
 
 <!DOCTYPE html>
@@ -216,7 +216,7 @@
             top: 0;
             width: 100%;
             height: 100%;
-            overflow:auto;
+            overflow: auto;
             background-color: rgba(0,0,0,0.4);
         }
 
@@ -323,7 +323,6 @@
     </style>
 </head>
 <body>
-    
     <div class="container">
         <header>
             <h1>Restaurant Menu</h1>
@@ -332,15 +331,9 @@
 
         <div id="menuItems">
             <?php foreach ($data['menuItems'] as $item): ?>
+                
                 <div class="menu-item" data-id="<?php echo $item->id; ?>">
-                    <?php
-                        $imagePath = ROOT . $item->image;
-
-                        // Log the image path to debug
-                        error_log("Rendering image for item {$item->id}: {$imagePath}");
-                    ?>
-                    
-                    <img src="<?php echo htmlspecialchars($imagePath); ?>" alt="<?php echo htmlspecialchars($item->name); ?>" class="menu-item-image" onerror="console.error('Failed to load image: <?php echo htmlspecialchars($imagePath); ?>')">
+                    <img src="<?php echo htmlspecialchars($item->image); ?>" alt="<?php echo htmlspecialchars($item->name); ?>" class="menu-item-image" onerror="this.src='/Uploads/menuItems/default.jpg'; console.error('Failed to load image: <?php echo htmlspecialchars($item->image); ?>')">
                     <div class="menu-item-details">
                         <h3><?php echo htmlspecialchars($item->name); ?></h3>
                         <p><?php echo htmlspecialchars($item->description); ?></p>
@@ -371,8 +364,8 @@
             <span class="close">×</span>
             <h2 id="modalTitle">Add New Menu Item</h2>
             <div id="errorMessage" class="error-message"></div>
-            <form id="itemForm">
-                <input type="hidden" id="itemId">
+            <form id="itemForm" enctype="multipart/form-data">
+                <input type="hidden" id="itemId" name="id">
                 <input type="text" id="itemName" name="name" placeholder="Item Name" required>
                 <textarea id="itemDescription" name="description" placeholder="Description" required></textarea>
                 <input type="number" id="itemPrice" name="price" placeholder="Price" step="0.01" required>
@@ -405,209 +398,203 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const baseUrl = '<?php echo defined("ROOT") ? ROOT : ""; ?>/restaurant/rmenu';
-            console.log('Base URL for AJAX requests:', baseUrl);
-
-            const addItemBtn = document.getElementById('addItemBtn');
+            const baseUrl = '<?php echo defined("ROOT") ? ROOT : ""; ?>/restaurant/Rmenu';
             const itemModal = document.getElementById('itemModal');
+            const addItemBtn = document.getElementById('addItemBtn');
             const closeBtn = itemModal.querySelector('.close');
             const itemForm = document.getElementById('itemForm');
-            const menuItemsContainer = document.getElementById('menuItems');
             const modalTitle = document.getElementById('modalTitle');
             const errorMessage = document.getElementById('errorMessage');
-
             const successPopup = document.getElementById('successPopup');
             const successMessage = document.getElementById('successMessage');
             const successPopupClose = document.getElementById('successPopupClose');
 
-            function showSuccessPopup(message) {
-                successMessage.textContent = message;
-                successPopup.style.display = 'block';
-            }
-
-            successPopupClose.onclick = function() {
-                successPopup.style.display = 'none';
-            }
-
-            window.addEventListener('click', function(event) {
-                if (event.target === successPopup) {
-                    successPopup.style.display = 'none';
-                }
-            });
-
+            // Open modal for new item
             addItemBtn.onclick = function() {
+                resetForm();
                 modalTitle.textContent = 'Add New Menu Item';
-                itemForm.reset();
-                document.getElementById('itemId').value = '';
-                errorMessage.style.display = 'none';
                 itemModal.style.display = 'block';
-            }
+            };
 
+            // Close modal
             closeBtn.onclick = function() {
                 itemModal.style.display = 'none';
-            }
+                resetForm();
+            };
 
+            // Close modal when clicking outside
             window.onclick = function(event) {
                 if (event.target == itemModal) {
                     itemModal.style.display = 'none';
+                    resetForm();
+                } else if (event.target == successPopup) {
+                    successPopup.style.display = 'none';
                 }
+            };
+
+            // Close success popup
+            successPopupClose.onclick = function() {
+                successPopup.style.display = 'none';
+                window.location.reload(); // Refresh to show updated menu
+            };
+
+            // Reset form
+            function resetForm() {
+                itemForm.reset();
+                document.getElementById('itemId').value = '';
+                errorMessage.style.display = 'none';
+                errorMessage.textContent = '';
+                modalTitle.textContent = 'Add New Menu Item';
             }
 
-            itemForm.addEventListener('submit', function(e) {
-                e.preventDefault();
-                const formData = new FormData(itemForm);
-                const itemId = document.getElementById('itemId').value;
-                const url = itemId ? `${baseUrl}/update/${itemId}` : `${baseUrl}/create`;
-                console.log('Submitting to URL:', url);
-                console.log('Form data:', [...formData.entries()]);
+            // Toggle availability
+            document.querySelectorAll('.toggle-availability').forEach(checkbox => {
+                checkbox.addEventListener('change', function() {
+                    const menuItem = this.closest('.menu-item');
+                    const id = menuItem.dataset.id;
+                    const isActive = this.checked;
 
-                fetch(url, {
-                    method: 'POST',
-                    body: formData
-                })
-                .then(response => {
-                    console.log('Create/Update response status:', response.status, response.statusText);
-                    if (!response.ok) {
-                        throw new Error(`Network response was not ok: ${response.status} ${response.statusText}`);
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    console.log('Create/Update response data:', data);
-                    if (data.success) {
-                        itemModal.style.display = 'none';
-                        showSuccessPopup(itemId ? 'Successfully menu is edited' : 'Successfully menu is added');
-                        setTimeout(() => {
-                            location.reload();
-                        }, 1500);
-                    } else {
-                        errorMessage.textContent = data.error || 'An error occurred';
-                        errorMessage.style.display = 'block';
-                    }
-                })
-                .catch(error => {
-                    console.error('Create/Update fetch error:', error);
-                    errorMessage.textContent = `An error occurred: ${error.message}`;
-                    errorMessage.style.display = 'block';
+                    fetch(`${baseUrl}/toggle/${id}`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ is_active: isActive })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (!data.success) {
+                            this.checked = !isActive;
+                            showError(data.error || 'Failed to update availability');
+                        } else {
+                            showSuccess(data.message || 'Availability updated successfully');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        this.checked = !isActive;
+                        showError('Failed to update availability');
+                    });
                 });
             });
 
-            menuItemsContainer.addEventListener('click', function(e) {
-                if (e.target.classList.contains('menu-options-btn')) {
-                    const content = e.target.nextElementSibling;
+            // Options menu toggle
+            document.addEventListener('click', function(event) {
+                if (event.target.matches('.menu-options-btn')) {
+                    const content = event.target.nextElementSibling;
                     content.style.display = content.style.display === 'block' ? 'none' : 'block';
-                } else if (e.target.classList.contains('edit-btn')) {
-                    e.preventDefault();
-                    const menuItem = e.target.closest('.menu-item');
+                } else {
+                    document.querySelectorAll('.menu-options-content').forEach(dropdown => {
+                        dropdown.style.display = 'none';
+                    });
+                }
+            });
+
+            // Edit button
+            document.addEventListener('click', function(event) {
+                if (event.target.matches('.edit-btn')) {
+                    event.preventDefault();
+                    const menuItem = event.target.closest('.menu-item');
                     const id = menuItem.dataset.id;
 
-                    fetch(`${baseUrl}/get/${id}`)
-                        .then(response => {
-                            console.log('Get response status:', response.status, response.statusText);
-                            if (!response.ok) {
-                                throw new Error(`Failed to fetch item: ${response.status} ${response.statusText}`);
-                            }
-                            return response.json();
-                        })
-                        .then(item => {
-                            console.log('Fetched item:', item);
-                            modalTitle.textContent = 'Edit Menu Item';
+                    fetch(`${baseUrl}/get/${id}`, {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            const item = data.data;
                             document.getElementById('itemId').value = item.id;
                             document.getElementById('itemName').value = item.name;
                             document.getElementById('itemDescription').value = item.description;
                             document.getElementById('itemPrice').value = item.price;
                             document.getElementById('itemCategory').value = item.category;
                             document.getElementById('itemAvailability').value = item.availability;
-                            errorMessage.style.display = 'none';
+                            modalTitle.textContent = 'Edit Menu Item';
                             itemModal.style.display = 'block';
-                        })
-                        .catch(error => {
-                            console.error('Get fetch error:', error);
-                            errorMessage.textContent = `Failed to load item: ${error.message}`;
-                            errorMessage.style.display = 'block';
-                        });
-                } else if (e.target.classList.contains('delete-btn')) {
-                    e.preventDefault();
-                    const menuItem = e.target.closest('.menu-item');
-                    const id = menuItem.dataset.id;
-                    console.log('Attempting to delete item with ID:', id);
-                    if (confirm('Are you sure you want to delete this item?')) {
-                        fetch(`${baseUrl}/delete/${id}`, {
-                            method: 'POST'
-                        })
-                        .then(response => {
-                            console.log('Delete response status:', response.status, response.statusText);
-                            if (!response.ok) {
-                                throw new Error(`Failed to delete item: ${response.status} ${response.statusText}`);
-                            }
-                            return response.json();
-                        })
-                        .then(data => {
-                            console.log('Delete response data:', data);
-                            if (data.success) {
-                                menuItem.remove();
-                                showSuccessPopup('Successfully menu is deleted');
-                            } else {
-                                alert(data.error || 'Failed to delete item');
-                            }
-                        })
-                        .catch(error => {
-                            console.error('Delete fetch error:', error);
-                            alert(`Failed to delete item: ${error.message}`);
-                        });
-                    }
-                } else if (e.target.classList.contains('toggle-availability')) {
-                    const menuItem = e.target.closest('.menu-item');
-                    const id = menuItem.dataset.id;
-                    const originalState = e.target.checked;
-                    const is_active = originalState ? "true" : "false";
-
-                    console.log('Toggling availability for ID:', id, 'to:', is_active);
-                    const payload = { is_active };
-                    console.log('Toggle payload:', JSON.stringify(payload));
-                    fetch(`${baseUrl}/toggle/${id}`, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify(payload)
-                    })
-                    .then(response => {
-                        console.log('Toggle response status:', response.status, response.statusText);
-                        if (!response.ok) {
-                            throw new Error(`Failed to toggle availability: ${response.status} ${response.statusText}`);
-                        }
-                        return response.text().then(text => {
-                            console.log('Raw toggle response:', text);
-                            try {
-                                return JSON.parse(text);
-                            } catch (err) {
-                                throw new Error(`Invalid JSON response: ${err.message}`);
-                            }
-                        });
-                    })
-                    .then(data => {
-                        console.log('Toggle response data:', data);
-                        if (!data.success) {
-                            throw new Error(data.error || 'Failed to toggle availability');
+                        } else {
+                            showError(data.error || 'Failed to load menu item');
                         }
                     })
                     .catch(error => {
-                        console.error('Toggle fetch error:', error);
-                        alert(error.message);
-                        e.target.checked = !originalState;
+                        console.error('Error:', error);
+                        showError('Failed to load menu item');
                     });
                 }
             });
 
+            // Delete button
             document.addEventListener('click', function(event) {
-                if (!event.target.matches('.menu-options-btn')) {
-                    const dropdowns = document.getElementsByClassName('menu-options-content');
-                    for (let i = 0; i < dropdowns.length; i++) {
-                        dropdowns[i].style.display = 'none';
+                if (event.target.matches('.delete-btn')) {
+                    event.preventDefault();
+                    const menuItem = event.target.closest('.menu-item');
+                    const id = menuItem.dataset.id;
+
+                    if (confirm('Are you sure you want to delete this menu item?')) {
+                        fetch(`${baseUrl}/delete/${id}`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            }
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                showSuccess(data.message || 'Menu item deleted successfully');
+                                menuItem.remove();
+                            } else {
+                                showError(data.error || 'Failed to delete menu item');
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            showError('Failed to delete menu item');
+                        });
                     }
                 }
             });
+
+            // Form submission
+            itemForm.addEventListener('submit', function(event) {
+                event.preventDefault();
+                const formData = new FormData(itemForm);
+                const itemId = document.getElementById('itemId').value;
+                const url = itemId ? `${baseUrl}/update/${itemId}` : `${baseUrl}/create`;
+                const method = 'POST';
+
+                fetch(url, {
+                    method: method,
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        itemModal.style.display = 'none';
+                        showSuccess(data.message || 'Menu item saved successfully');
+                    } else {
+                        showError(data.error || 'Failed to save menu item');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    showError('Failed to save menu item');
+                });
+            });
+
+            // Show error message
+            function showError(message) {
+                errorMessage.textContent = message;
+                errorMessage.style.display = 'block';
+            }
+
+            // Show success popup
+            function showSuccess(message) {
+                successMessage.textContent = message;
+                successPopup.style.display = 'block';
+            }
         });
     </script>
 </body>
