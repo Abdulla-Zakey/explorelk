@@ -1,0 +1,308 @@
+body {
+    overflow-x: hidden;
+    margin: 0;
+    background-color: #f8f9fa;
+    font-family: 'Poppins', sans-serif;
+}
+
+.main-container {
+    margin: 2% 2% 2% 7.5%;
+    margin-left: 22%;
+    width: 76%;
+}
+
+.page-header {
+    margin-bottom: 2%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.page-header h1 {
+    font-size: 2.25em;
+    color: #333;
+}
+
+/* Dashboard cards */
+.dashboard-overview-cards {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2%;
+    margin-bottom: 3%;
+}
+
+.dashboard-card {
+    background-color: #ffffff;
+    border-radius: 0.5rem;
+    box-shadow: 0 0.125rem 0.625rem rgba(0, 0, 0, 0.05);
+    padding: 5%;
+}
+
+.dashboard-stat-card {
+    display: flex;
+    align-items: center;
+    gap: 5%;
+}
+
+.dashboard-stat-icon {
+    width: 3.125rem;
+    height: 3.125rem;
+    border-radius: 0.625rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+}
+
+.dashboard-stat-icon.dashboard-bookings {
+    background-color: #f1f9f7;
+    color: #09b290;
+}
+
+.dashboard-stat-icon.earnings {
+    background-color: #f7f1f9;
+    color: #9c27b0;
+}
+
+.dashboard-stat-icon.dashboard-reviews {
+    background-color: #f9f7f1;
+    color: #ff9800;
+}
+
+.dashboard-stat-icon.rate {
+    background-color: #f1f7f9;
+    color: #2196f3;
+}
+
+.dashboard-stat-info h3 {
+    font-size: 1.375rem;
+    font-weight: bold;
+    margin-bottom: 2%;
+}
+
+.dashboard-stat-info span {
+    font-size: 0.875rem;
+    color: #7a8999;
+}
+
+/* Two column layout */
+.dashboard-content {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 2%;
+    margin-bottom: 3%;
+}
+
+.dashboard-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 5%;
+}
+
+.dashboard-card-title {
+    font-size: 1.125rem;
+    color: #2c3e50;
+}
+
+.see-all {
+    font-size: 0.875rem;
+    color: #09b290;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 3%;
+}
+
+/* Upcoming bookings */
+.dashboard-booking-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.dashboard-booking-item {
+    display: flex;
+    align-items: center;
+    padding: 3% 0;
+    border-bottom: 1px solid #e7ebf0;
+}
+
+.dashboard-booking-item:last-child {
+    border-bottom: none;
+}
+
+.dashboard-booking-date {
+    background-color: #f1f9f7;
+    color: #09b290;
+    padding: 3%;
+    border-radius: 0.313rem;
+    text-align: center;
+    min-width: 15%;
+    font-weight: bold;
+    font-size: 0.875rem;
+    margin-right: 4%;
+}
+
+.dashboard-booking-date .month {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+}
+
+.dashboard-booking-info {
+    flex: 1;
+}
+
+.dashboard-booking-title {
+    font-weight: bold;
+    margin-bottom: 2%;
+}
+
+.dashboard-booking-details {
+    display: flex;
+    gap: 5%;
+    font-size: 0.813rem;
+    color: #7a8999;
+}
+
+.dashboard-booking-details i {
+    margin-right: 3%;
+}
+
+.dashboard-booking-actions {
+    display: flex;
+    gap: 5%;
+}
+
+.action-btn {
+    padding: 0.375rem;
+    border-radius: 50%;
+    background-color: #f5f7fa;
+    color: #5a6978;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    border: none;
+    font-size: 0.875rem;
+}
+
+.action-btn:hover {
+    background-color: #09b290;
+    color: white;
+}
+
+/* Reviews */
+.dashboard-review-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.dashboard-review-item {
+    padding: 3% 0;
+    border-bottom: 1px solid #e7ebf0;
+}
+
+.dashboard-review-item:last-child {
+    border-bottom: none;
+}
+
+.dashboard-review-header {
+    display: flex;
+    align-items: center;
+    gap: 2%;
+    margin-bottom: 2%;
+}
+
+.dashboard-reviewer-pic {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.dashboard-reviewer-info {
+    flex: 1;
+}
+
+.dashboard-reviewer-name {
+    font-weight: bold;
+    font-size: 0.875rem;
+}
+
+.dashboard-review-date {
+    font-size: 0.75rem;
+    color: #7a8999;
+}
+
+.dashboard-rating {
+    display: flex;
+    gap: 1%;
+    color: #ffc107;
+    font-size: 0.875rem;
+}
+
+.dashboard-review-text {
+    font-size: 0.875rem;
+    line-height: 1.5;
+    color: #5a6978;
+}
+
+/* Upcoming Holidays */
+.holiday-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.holiday-item {
+    display: flex;
+    align-items: center;
+    padding: 3% 0;
+    border-bottom: 1px solid #e7ebf0;
+}
+
+.holiday-item:last-child {
+    border-bottom: none;
+}
+
+.holiday-date {
+    background-color: #f1f7f9;
+    color: #2196f3;
+    padding: 4%;
+    border-radius: 0.313rem;
+    text-align: center;
+    min-width: 15%;
+    font-weight: bold;
+    font-size: 0.875rem;
+    margin-right: 4%;
+}
+
+.holiday-date .month {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+}
+
+.holiday-info {
+    flex: 1;
+}
+
+.holiday-name {
+    font-weight: bold;
+    margin-bottom: 2%;
+}
+
+.holiday-details {
+    font-size: 0.813rem;
+    color: #7a8999;
+}
+
+.holiday-category {
+    background-color: #f9f7f1;
+    color: #ff9800;
+    font-size: 0.75rem;
+    border-radius: 0.75rem;
+    padding: 1% 3%;
+}

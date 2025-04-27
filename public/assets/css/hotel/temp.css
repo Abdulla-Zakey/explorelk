@@ -1,0 +1,475 @@
+/* Base Styles */
+:root {
+    --primary-color: #4f46e5;
+    --primary-hover: #4338ca;
+    --secondary-color: #f97316;
+    --secondary-hover: #ea580c;
+    --success-color: #10b981;
+    --warning-color: #f59e0b;
+    --danger-color: #ef4444;
+    --text-primary: #1e293b;
+    --text-secondary: #64748b;
+    --text-muted: #94a3b8;
+    --bg-primary: #ffffff;
+    --bg-secondary: #f8fafc;
+    --bg-muted: #f1f5f9;
+    --border-color: #e2e8f0;
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    --radius-sm: 0.125rem;
+    --radius: 0.25rem;
+    --radius-md: 0.375rem;
+    --radius-lg: 0.5rem;
+    --sidebar-width: 250px;
+    --header-height: 70px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    width: 110%;
+    max-width: 1125px;
+    margin-left: 280px;
+    /* Fine-tune the alignment */
+    margin-top: 220px;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    color: var(--text-primary);
+    background-color: var(--bg-secondary);
+    /* line-height: 1.5; */
+}
+
+button {
+    cursor: pointer;
+    font-family: inherit;
+}
+
+ul {
+    list-style: none;
+}
+
+/* Layout */
+.dashboard {
+    display: flex;
+    min-height: 100vh;
+}
+
+.main-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+/* Content */
+.content {
+    flex: 1;
+    /* padding: 1.5rem; */
+    overflow-y: auto;
+}
+
+/* Summary Cards */
+.summary-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.card {
+    background-color: var(--bg-primary);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    box-shadow: var(--shadow);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.card-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: var(--radius);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+}
+
+.card-icon.rooms {
+    background-color: var(--primary-color);
+}
+
+.card-icon.bookings {
+    background-color: var(--secondary-color);
+}
+
+.card-icon.earnings {
+    background-color: var(--success-color);
+}
+
+.card-icon.reviews {
+    background-color: var(--warning-color);
+}
+
+.card-content {
+    flex: 1;
+}
+
+.card-content h3 {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    margin-bottom: 0.25rem;
+}
+
+.card-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+}
+
+.card-trend {
+    font-size: 0.75rem;
+    display: flex;
+    align-items: center;
+}
+
+.card-trend.positive {
+    color: var(--success-color);
+}
+
+.card-trend.negative {
+    color: var(--danger-color);
+}
+
+/* Room Management
+.room-management {
+    background-color: var(--bg-primary);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    box-shadow: var(--shadow);
+    margin-bottom: 2rem;
+}
+
+.section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    border-radius: var(--radius);
+    transition: all 0.2s ease;
+    border: none;
+}
+
+.btn-sm {
+    padding: 0.25rem 0.75rem;
+    font-size: 0.75rem;
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: var(--primary-hover);
+}
+
+.btn-secondary {
+    background-color: var(--secondary-color);
+    color: white;
+}
+
+.btn-secondary:hover {
+    background-color: var(--secondary-hover);
+}
+
+.btn-outline {
+    background-color: transparent;
+    border: 1px solid var(--border-color);
+    color: var(--text-secondary);
+}
+
+.btn-outline:hover {
+    background-color: var(--bg-muted);
+}
+
+.room-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+}
+
+.room-card {
+    background-color: var(--bg-primary);
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border-color);
+}
+
+.room-image {
+    position: relative;
+    height: 160px;
+}
+
+.room-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.room-status {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    border-radius: var(--radius);
+    color: white;
+}
+
+.room-status.available {
+    background-color: var(--success-color);
+}
+
+.room-status.booked {
+    background-color: var(--primary-color);
+}
+
+.room-details {
+    padding: 1rem;
+}
+
+.room-details h3 {
+    margin-bottom: 0.5rem;
+}
+
+.room-price {
+    font-weight: 700;
+    color: var(--primary-color);
+    margin-bottom: 0.5rem;
+}
+
+.room-price span {
+    font-weight: 400;
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+}
+
+.room-meta {
+    display: flex;
+    gap: 1rem;
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+} */
+
+/* Dashboard Grid */
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+
+.dashboard-grid > section {
+    background-color: var(--bg-primary);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    box-shadow: var(--shadow);
+}
+
+/* Booking Overview */
+.booking-tabs {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 0.5rem;
+}
+
+.tab {
+    background: none;
+    border: none;
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    border-radius: var(--radius);
+    transition: all 0.2s ease;
+}
+
+.tab:hover {
+    background-color: var(--bg-muted);
+}
+
+.tab.active {
+    background-color: var(--bg-muted);
+    color: var(--primary-color);
+    font-weight: 500;
+}
+
+.booking-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.booking-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 1rem;
+    border-radius: var(--radius);
+    border: 1px solid var(--border-color);
+}
+
+.guest-info {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.guest-info h4 {
+    margin-bottom: 0.25rem;
+}
+
+.guest-info p {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+}
+
+.booking-details {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.booking-date {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+}
+
+.booking-status {
+    font-size: 0.75rem;
+    font-weight: 500;
+    padding: 0.25rem 0.5rem;
+    border-radius: var(--radius);
+}
+
+.booking-status.confirmed {
+    background-color: rgba(16, 185, 129, 0.1);
+    color: var(--success-color);
+}
+
+.booking-status.pending {
+    background-color: rgba(245, 158, 11, 0.1);
+    color: var(--warning-color);
+}
+
+/* Financial Summary */
+.finance-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+}
+
+.finance-card {
+    padding: 1rem;
+    border-radius: var(--radius);
+    border: 1px solid var(--border-color);
+}
+
+.finance-card h3 {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    margin-bottom: 0.5rem;
+}
+
+.finance-value {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.finance-chart {
+    height: 60px;
+    background-color: var(--bg-muted);
+    border-radius: var(--radius);
+}
+
+/* Review Section */
+.review-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.review-item {
+    padding: 1rem;
+    border-radius: var(--radius);
+    border: 1px solid var(--border-color);
+}
+
+.review-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.75rem;
+}
+
+.reviewer-info {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.reviewer-info h4 {
+    margin-bottom: 0.25rem;
+}
+
+.rating {
+    display: flex;
+    gap: 0.125rem;
+}
+
+.star {
+    color: var(--text-muted);
+}
+
+.star.filled {
+    color: var(--warning-color);
+}
+
+.review-date {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+}
+
+.review-text {
+    font-size: 0.875rem;
+    margin-bottom: 0.75rem;
+}
+

@@ -1,33 +1,42 @@
 <?php
-class Hmyrooms extends Controller {
+class Hmyrooms extends Controller
+{
 
+    private $hotelModel;
     private $hotelRoomTypesModel;
     private $commonRoomTypesModel;
     private $commonRoomAmenitiesModel;
     private $hotelRoomTypeAmenitiesModel;
     private $roomsModel;
-    private $data;
-    private $hotelModel;
+    private $roomBookingsFinalModel;
+    private $hotelGuestsModel;
 
-       
 
-    public function __construct(){
+
+
+
+    public function __construct()
+    {
+        $this->hotelModel = new Hotel();
         $this->hotelRoomTypesModel = new HotelRoomTypesModel();
         $this->commonRoomTypesModel = new CommonRoomTypesModel();
         $this->commonRoomAmenitiesModel = new commonRoomAmenitiesModel();
         $this->hotelRoomTypeAmenitiesModel = new HotelRoomTypeAmenitiesModel();
         $this->roomsModel = new RoomsModel();
-        $this->hotelModel = new Hotel();
+        $this->roomBookingsFinalModel = new RoomBookingsFinalModel();
+        $this->hotelGuestsModel = new HotelGuestsModel();
+
     }
 
-    public function index(){
+    public function index()
+    {
 
-        if(!isset($_SESSION['hotel_id'])) {
+        if (!isset($_SESSION['hotel_id'])) {
             // Redirect to login or handle unauthorized access
             redirect('traveler/Login');
             exit;
         }
-    
+
         $data['hotelBasic'] = $this->hotelModel->first(['hotel_Id' => $_SESSION['hotel_id']]);
 
         $data['hotelRoomTypes'] = $this->hotelRoomTypesModel->getHotelRoomTypesByHotelId($_SESSION['hotel_id']);
@@ -37,21 +46,23 @@ class Hmyrooms extends Controller {
         $data['commonRoomAmenities'] = $this->commonRoomAmenitiesModel->getAllAmenities();
 
         $i = 0;
-        foreach( $data['hotelRoomTypes'] as $hotelRoomType){
+        foreach ($data['hotelRoomTypes'] as $hotelRoomType) {
             $data['hotelRoomTypesNames'][$i] = $this->commonRoomTypesModel->getGenericRoomTypeDetailsByTypeId($hotelRoomType->roomType_Id);
             $i++;
         }
 
 
+        // $this->view('hotel/myrooms', $data);
         $this->view('hotel/myrooms', $data);
     }
 
-    public function addRoomType() {
+    public function addRoomType()
+    {
         $hotel_Id = $_SESSION['hotel_id'];
-    
+
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $errors = [];
-    
+
             // Validate required fields
             $requiredFields = ['roomType_Id', 'pricePer_night', 'max_occupancy'];
             foreach ($requiredFields as $field) {
@@ -63,14 +74,14 @@ class Hmyrooms extends Controller {
             if (!isset($_POST['amenities']) || empty($_POST['amenities'])) {
                 $errors[] = "Please select at least one amenity.";
             }
-    
+
             // Handle file upload using new method
             $thumbnailPath = $this->handleRoomTypeImageUpload($hotel_Id);
 
             if (!$thumbnailPath) {
                 $errors[] = "Failed to upload room type image.";
             }
-    
+
             // If no errors, proceed with database insertion
             if (empty($errors)) {
                 $roomTypeData = [
@@ -81,7 +92,7 @@ class Hmyrooms extends Controller {
                     'customized_description' => $_POST['customized_description'] ?? null,
                     'thumbnail_picPath' => $thumbnailPath
                 ];
-    
+
                 $hotelRoomTypeId = $this->hotelRoomTypesModel->insert($roomTypeData);
 
                 if ($hotelRoomTypeId) {
@@ -92,7 +103,7 @@ class Hmyrooms extends Controller {
                             'hotelRoomType_Id' => $hotelRoomTypeId,
                             'amenity_Id' => $amenityId
                         ];
-                        
+
                         if (!$this->hotelRoomTypeAmenitiesModel->insert($amenityData)) {
                             $amenitiesSuccess = false;
                             break;
@@ -101,75 +112,74 @@ class Hmyrooms extends Controller {
 
                     if ($amenitiesSuccess) {
                         $_SESSION['success'] = ["Room type and amenities successfully added."];
-                    } 
-                    else {
+                    } else {
                         // If amenities insertion fails, we should ideally rollback the room type insertion
                         $this->hotelRoomTypeAmenitiesModel->delete($hotelRoomTypeId, 'hotel_roomType_Id');
                         $_SESSION['errors'] = ["Failed to add room amenities."];
                     }
-                } 
-                else {
+                } else {
                     $_SESSION['errors'] = ["Failed to add room type."];
                 }
-            } 
-            else {
+            } else {
                 $_SESSION['errors'] = $errors;
             }
         }
-    
+
         redirect('Hotel/Hmyrooms');
     }
 
-    private function handleRoomTypeImageUpload($hotel_Id) {
+    private function handleRoomTypeImageUpload($hotel_Id)
+    {
         if (isset($_FILES['roomTypeImage']) && $_FILES['roomTypeImage']['error'] === UPLOAD_ERR_OK) {
             // Use absolute server path
             $uploadDir = $_SERVER['DOCUMENT_ROOT'] . '/gitexplorelk/explorelk/public/uploads/hotels/' . $hotel_Id . '/roomTypesImages/';
-            
+
             // Generate a unique filename
             $fileName = uniqid('roomtype_') . '_' . basename($_FILES['roomTypeImage']['name']);
-            
+
             // Full path for the uploaded file
             $uploadPath = $uploadDir . $fileName;
-    
+
             // Ensure upload directory exists
             if (!is_dir($uploadDir)) {
                 mkdir($uploadDir, 0755, true);
             }
-    
+
             // Move uploaded file
             if (move_uploaded_file($_FILES['roomTypeImage']['tmp_name'], $uploadPath)) {
                 // Return relative path for database storage
                 return 'uploads/hotels/' . $hotel_Id . '/roomTypesImages/' . $fileName;
             } else {
                 // Add error logging
-                error_log("File upload failed. Temp path: " . $_FILES['roomTypeImage']['tmp_name'] . ", Destination: " . $uploadPath);
+                error_log("File upload failed. myrooms path: " . $_FILES['roomTypeImage']['tmp_name'] . ", Destination: " . $uploadPath);
             }
         }
-    
+
         // Return null if no upload
         return null;
     }
 
-    public function addRooms() {
+    public function addRooms()
+    {
         if ($_SERVER['REQUEST_METHOD'] != 'POST') {
             redirect('Hotel/Test');
             return;
         }
-    
+
         $errors = [];
         $hotel_roomType_Id = $_POST['hotel_roomType_Id'] ?? null;
         $room_numbers = $_POST['room_numbers'] ?? [];
-    
+
         // Validate hotel_roomType_Id
         if (!$hotel_roomType_Id) {
             $errors[] = "Hotel Room type ID is missing";
         }
-    
+
         // Validate room numbers
         if (empty($room_numbers)) {
             $errors[] = "At least one room number is required.";
         }
-    
+
         // Verify that the hotel_roomType_Id belongs to the current hotel
         if ($hotel_roomType_Id) {
             $roomType = $this->hotelRoomTypesModel->first(['hotel_roomType_Id' => $hotel_roomType_Id]);
@@ -177,11 +187,11 @@ class Hmyrooms extends Controller {
                 $errors[] = "Invalid room type selected.";
             }
         }
-    
+
         // Check for duplicate room numbers within the hotel
         $existingRooms = $this->roomsModel->where(['hotel_roomType_Id' => $hotel_roomType_Id]);
-        
-        if(!empty($existingRooms)){
+
+        if (!empty($existingRooms)) {
             $existingRoomNumbers = array_column($existingRooms, 'room_number');
             $duplicates = array_intersect($room_numbers, $existingRoomNumbers);
 
@@ -189,32 +199,32 @@ class Hmyrooms extends Controller {
                 $errors[] = "Room numbers " . implode(', ', $duplicates) . " already exist.";
             }
         }
-       
+
         if (empty($errors)) {
             $success = true;
-            
+
             foreach ($room_numbers as $room_number) {
                 $roomData = [
                     'hotel_roomType_Id' => $hotel_roomType_Id,
                     'room_number' => $room_number
                 ];
-    
+
                 if (!$this->roomsModel->insert($roomData)) {
                     $success = false;
                     break;
                 }
             }
-            
-    
+
+
             if ($success) {
                 // Update total_rooms count in hotel_room_types table
                 $currentRoomType = $this->hotelRoomTypesModel->first(['hotel_roomType_Id' => $hotel_roomType_Id]);
                 $newTotalRooms = ($currentRoomType->total_rooms ?? 0) + count($room_numbers);
-                
+
                 $updateData = [
                     'total_rooms' => $newTotalRooms
                 ];
-                
+
                 if ($this->hotelRoomTypesModel->update($hotel_roomType_Id, $updateData, 'hotel_roomType_Id')) {
                     $_SESSION['success'] = ["Successfully added " . count($room_numbers) . " room(s)."];
                 } else {
@@ -226,34 +236,35 @@ class Hmyrooms extends Controller {
         } else {
             $_SESSION['errors'] = $errors;
         }
-    
+
         redirect('Hotel/Hmyrooms');
     }
-    
 
-    public function getRoomTypeDetails($hotelRoomTypeId) {
+
+    public function getRoomTypeDetails($hotelRoomTypeId)
+    {
         // Set headers first
         header('Content-Type: application/json');
-        
+
         try {
             // Verify that the room type belongs to the current hotel
             $hotelRoomTypeDetails = $this->hotelRoomTypesModel->getHotelRoomTypeDetailsById($hotelRoomTypeId);
-            
+
             if (!$hotelRoomTypeDetails || $hotelRoomTypeDetails->hotel_Id != $_SESSION['hotel_id']) {
                 throw new Exception('Room type not found or access denied');
             }
-            
+
             $roomTypeDetails = $this->commonRoomTypesModel->getGenericRoomTypeDetailsByTypeId($hotelRoomTypeDetails->roomType_Id);
 
             $amenities = [];
             $i = 0;
-            $tempAmenities = $this->hotelRoomTypeAmenitiesModel->getRoomTypeAmenities($hotelRoomTypeId);
-            foreach($tempAmenities as $amenity) {
+            $myroomsAmenities = $this->hotelRoomTypeAmenitiesModel->getRoomTypeAmenities($hotelRoomTypeId);
+            foreach ($myroomsAmenities as $amenity) {
                 $amenities[$i] = $this->commonRoomAmenitiesModel->getAmenityDetailsById($amenity->amenity_Id);
                 $i++;
             }
             $rooms = $this->roomsModel->getRoomsByType($hotelRoomTypeId);
-            
+
             $response = [
                 'roomType_name' => $roomTypeDetails->roomType_name,
                 'pricePer_night' => floatval($hotelRoomTypeDetails->pricePer_night),
@@ -263,22 +274,22 @@ class Hmyrooms extends Controller {
                 'amenities' => $amenities,
                 'rooms' => $rooms
             ];
-            
+
             echo json_encode($response);
-            
+
         } catch (Exception $e) {
             http_response_code(500);
             echo json_encode(['error' => $e->getMessage()]);
         }
         exit;
     }
-    
+
 
     // New method to handle room type deletion
     // public function deleteRoomType($hotel_roomType_Id) {
     //     Check if the room type belongs to the current hotel
     //     $roomType = $this->hotelRoomTypesModel->first(['hotel_roomType_Id' => $hotel_roomType_Id]);
-        
+
     //     if (!$roomType) {
     //         Room type not found
     //         $_SESSION['errors'] = "Room type not found.";
@@ -294,31 +305,32 @@ class Hmyrooms extends Controller {
     //     } else {
     //         Deletion failed
     //         $_SESSION['errors'] = "Failed to delete room type.";
-            
+
     //     }
 
     //     Redirect back to the room types page
     //     redirect('Hotel/Test');
     // }
 
-    public function deleteRoomType($hotel_roomType_Id) {
+    public function deleteRoomType($hotel_roomType_Id)
+    {
         try {
             // Check if the room type belongs to the current hotel
             $roomType = $this->hotelRoomTypesModel->first(['hotel_roomType_Id' => $hotel_roomType_Id]);
-            
+
             if (!$roomType || $roomType->hotel_Id != $_SESSION['hotel_id']) {
                 $_SESSION['errors'] = "Room type not found or access denied.";
                 redirect('Hotel/Test');
                 return;
             }
-    
+
             // Start with deleting child records
             // 1. Delete associated rooms
             $this->roomsModel->delete($hotel_roomType_Id, 'hotel_roomType_Id');
-            
+
             // 2. Delete associated amenities
             $this->hotelRoomTypeAmenitiesModel->delete($hotel_roomType_Id, 'hotelRoomType_Id');
-    
+
             // 3. Delete the room type image if it exists
             if ($roomType->thumbnail_picPath) {
                 $imagePath = $_SERVER['DOCUMENT_ROOT'] . '/gitexplorelk/explorelk/public/' . $roomType->thumbnail_picPath;
@@ -326,20 +338,116 @@ class Hmyrooms extends Controller {
                     unlink($imagePath);
                 }
             }
-    
+
             // Finally, delete the room type itself
             $result = $this->hotelRoomTypesModel->delete($hotel_roomType_Id, 'hotel_roomType_Id');
-    
+
             if ($result) {
                 $_SESSION['success'] = "Room type and all associated data successfully deleted.";
             } else {
                 throw new Exception("Failed to delete room type.");
             }
-    
+
         } catch (Exception $e) {
             $_SESSION['errors'] = "Error occurred while deleting room type: " . $e->getMessage();
         }
-    
+
         redirect('Hotel/Hmyrooms');
+    }
+
+
+    // Method to record direct booking
+    public function recordDirectBooking()
+    {
+        if ($_SERVER['REQUEST_METHOD'] != 'POST') {
+            redirect('Hotel/Hmyrooms');
+            return;
+        }
+
+        // show($_POST);
+
+        // Get form data
+        $hotelRoomTypeId = $_POST['hotelRoomTypeId'] ?? '';
+        $checkInDate = $_POST['checkInDate'] ?? '';
+        $checkOutDate = $_POST['checkOutDate'] ?? '';
+        $bookedRoomCount = $_POST['bookedRoomCount'] ?? '';
+        $totalAmount = $_POST['totalAmount'] ?? '';
+        $specialRequests = $_POST['specialRequests'] ?? '';
+        $bookingSource = $_POST['bookingSource'] ?? 'manual';  // Default to manual
+        $paymentStatus = $_POST['paymentStatus'] ?? '';
+        $advanceAmount = $_POST['advanceAmount'] ?? 0;
+
+        // Get guest details
+        $guestFullName = $_POST['guestFullName'] ?? '';
+        $guestEmail = $_POST['guestEmail'] ?? '';
+        $guestMobileNum = $_POST['guestMobileNum'] ?? '';
+        $guestNIC = $_POST['guestNIC'] ?? '';
+
+        // Create new booking
+        $roomBooking = new RoomBookingsFinalModel();
+
+        $bookingData = [
+            'hotel_Id' => $_SESSION['hotel_id'], // You'll need a function to get current hotel ID
+            'hotel_roomType_Id' => $hotelRoomTypeId,
+            'check_in' => $checkInDate,
+            'check_out' => $checkOutDate,
+            'total_rooms' => $bookedRoomCount,
+            'special_requests' => $specialRequests,
+            'total_amount' => $totalAmount,
+            'advance_payment_amount' => $advanceAmount,
+            'paid_advance_payment_amount' => in_array($paymentStatus, ['advance-paid', 'fully-paid']) ? $advanceAmount : 0,
+            'advance_payment_status' => in_array($paymentStatus, ['advance-paid', 'fully-paid']) ? 'Paid' : 'Pending',
+            'booking_status' => 'Confirmed', // Manual bookings are confirmed immediately
+            'requested_date' => date('Y-m-d h:i'),
+            'booking_source' => $bookingSource // New field
+        ];
+
+        // show($bookingData);
+        // exit();
+        // Insert booking
+        $bookingId = $roomBooking->insert($bookingData);
+
+        if ($bookingId) {
+
+            // Insert guest details
+            $hotelGuests = new HotelGuestsModel();
+
+            $guestData = [
+                'room_booking_Id' => $bookingId,
+                'guest_full_name' => $guestFullName,
+                'guest_nic' => $guestNIC,
+                'guest_email' => $guestEmail,
+                'guest_mobile_num' => $guestMobileNum
+            ];
+
+            $result = $hotelGuests->insert($guestData);
+            if($result){
+                
+                // Redirect with success message
+                $_SESSION['success'] = "Booking Recorded Successfully!";
+                redirect('Hotel/Hmyrooms?success=Booking added successfully');
+            }
+            else{
+                
+                redirect('Hotel/Hmyrooms?error=failed_to_add_guest_data');
+            }
+
+
+        }
+        else{
+            redirect('Hotel/Hmyrooms?error=failed_to_add_booking');
+        }
+
+
+    }
+
+    // Generate a unique booking reference
+    private function generateBookingReference()
+    {
+        $prefix = 'BK';
+        $timestamp = date('YmdHis');
+        $random = rand(1000, 9999);
+
+        return $prefix . $timestamp . $random;
     }
 }

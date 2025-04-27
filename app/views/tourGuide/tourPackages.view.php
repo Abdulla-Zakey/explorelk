@@ -49,8 +49,9 @@
                 ?>
                 <div class="tour-card">
                     <div class="tourPackage-image">
-                        <img src= "<?= ROOT . $displayImage->image_path ?>" alt="Ella Adventure">
-                        <div class="tour-duration"><i class="far fa-clock"></i> 1 Day</div>
+                        <img src="<?= ROOT . $displayImage->image_path ?>" alt="Ella Adventure">
+                        <div class="tour-duration"><i class="far fa-clock"></i> <?= $tourPackage->duration_days ?>
+                            <?= $tourPackage->duration_days < 2 ? 'Day':'Days' ?></div>
                     </div>
                     <div class="tour-content">
                         <h3><?= $tourPackage->name ?></h3>
@@ -60,8 +61,10 @@
                         </div>
                         <p><?php echo substr($tourPackage->description, 0, 250); ?>&nbsp;. . .</p>
                         <div class="tour-footer">
-                            <div class="tour-price"><?= $tourPackage->package_price ?> LKR <span>for package</span></div>
-                            <button onclick="viewDetails(<?= $tourPackage->package_id ?>)" class="view-btn">View Details</button>
+                            <div class="tour-price"><?= $tourPackage->package_price ?> LKR <span>for package</span>
+                            </div>
+                            <button onclick="viewDetails(<?= $tourPackage->package_id ?>)" class="view-btn">View
+                                Details</button>
                         </div>
                     </div>
                 </div>
@@ -72,9 +75,9 @@
     </div>
 
     <script>
-        function viewDetails(packageId) {
-            window.location.href = "<?= ROOT ?>/tourGuide/C_tourPackageDetails?packageId=" + packageId;
-        }
+    function viewDetails(packageId) {
+        window.location.href = "<?= ROOT ?>/tourGuide/C_tourPackageDetails?packageId=" + packageId;
+    }
     </script>
 </body>
 

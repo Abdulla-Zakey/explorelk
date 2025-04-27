@@ -54,7 +54,7 @@
                     </div>
                     
                     <div class="form-group">
-                        <label for="packagePrice" class="required">Price per person (LKR)</label>
+                        <label for="packagePrice" class="required">Price for the package (LKR)</label>
                         <input type="number" id="packagePrice" name="package_price" class="form-control" min="0" placeholder="E.g., 7500" required>
                     </div>
                     

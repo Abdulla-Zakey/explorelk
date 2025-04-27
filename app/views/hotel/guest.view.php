@@ -1,71 +1,82 @@
 <?php
- include_once APPROOT.'/views/hotel/nav.php';
- include_once APPROOT.'/views/hotel/hotelhead.php';
+include_once APPROOT . '/views/hotel/nav.php';
+include_once APPROOT . '/views/hotel/hotelhead.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="<?= ROOT ?>/assets/css/hotel/guest.css?v=1.0">
+    <link rel="stylesheet" href="<?= CSS ?>/hotel/guest.css?v=1.0">
     <title>Guests</title>
-    
 </head>
-
 <body>
     <div class="registration-wrapper">
         <h1>Registrations</h1>
         <p class="description">See all of your hotel's current registrations</p>
+        
+        <?php if (isset($data['error'])): ?>
+            <div style="background: #fff0f0; padding: 10px; margin-bottom: 20px; border: 1px solid #ffcccc;">
+                <p>Note: <?= $data['error'] ?></p>
+            </div>
+        <?php endif; ?>
+        
+        <?php if (isset($data['debug_structure'])): ?>
+            <div style="background: #f8f8f8; padding: 10px; margin-bottom: 20px; border: 1px solid #ddd;">
+                <h3>Debug: Table Structure</h3>
+                <pre><?php print_r($data['debug_structure']); ?></pre>
+            </div>
+        <?php endif; ?>
+        
         <div class="search-bar">
-            <input type="text" id="search" placeholder="Search by guest, company, or confirmation #">
+            <input type="text" id="search" placeholder="Search by guest, NIC, email">
         </div>
         <table id="registrationTable">
             <thead>
                 <tr>
                     <th>Name</th>
-                    <th>Room</th>
+                    <th>NIC Number</th>
+                    <th>Email</th>
                     <th>Arrival</th>
                     <th>Departure</th>
-                    <th>Actions</th>
+                    <th>Status</th>
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>Samantha Li</td>
-                    <td>S001</td>
-                    <td>10/13/25</td>
-                    <td>10/17/25</td>
-                    <td><a href="#" class="action-link" onclick="showPopup('Samantha Li', 'Room 210', '10/13/22', '10/17/22','Paid')">View</a></td>
-                </tr>
-                <tr>
-                    <td>Mary Johnson</td>
-                    <td>S002</td>
-                    <td>10/13/25</td>
-                    <td>10/17/25</td>
-                    <td><a href="#" class="action-link">View</a></td>
-                </tr>
-                <tr>
-                    <td>David Kim</td>
-                    <td>S003</td>
-                    <td>10/13/25</td>
-                    <td>10/17/25</td>
-                    <td><a href="#" class="action-link" onclick="showPopup('Samantha Li', 'Room 210', '10/13/22', '10/17/22', 'Paid')">View</a></td>
-                </tr>
-                <tr>
-                    <td>Jennifer Smith</td>
-                    <td>S004</td>
-                    <td>10/13/25</td>
-                    <td>10/17/25</td>
-                    <td><a href="#" class="action-link" onclick="showPopup('Samantha Li', 'Room 210', '10/13/22', '10/17/22', 'Paid')">View</a></td>
-                </tr>
-                <tr>
-                    <td>Michael Lee</td>
-                    <td>S005</td>
-                    <td>10/13/25</td>
-                    <td>10/17/25</td>
-                    <td><a href="#" class="action-link" onclick="showPopup('Samantha Li', 'Room 210', '10/13/22', '10/17/22', 'Paid')">View</a></td>
-                </tr>
+                <?php if (!empty($data['guests'])): ?>
+                    <?php foreach ($data['guests'] as $guest): ?>
+                        <tr>
+                            <td><?= esc($guest->guest_full_name) ?></td>
+                            <td><?= esc($guest->guest_nic ?? 'N/A') ?></td>
+                            <td>
+                                <a href="#" class="action-link" onclick="showPopup(
+                                    '<?= esc($guest->guest_full_name) ?>',
+                                    '<?= esc($guest->guest_nic ?? 'N/A') ?>',
+                                    '<?= esc($guest->guest_email ?? 'N/A') ?>',
+                                    <?php if (isset($guest->check_in)): ?>
+                                    '<?= esc(date('Y-m-d', strtotime($guest->check_in))) ?>',
+                                    '<?= esc(date('Y-m-d', strtotime($guest->check_out))) ?>',
+                                    '<?= esc($guest->booking_status ?? 'N/A') ?>',
+                                    // <?php else: ?>
+                                    // // 'N/A',
+                                    // 'N/A',
+                                    // 'N/A',
+                                    // <?php endif; ?>
+                                    '<?= esc($guest->room_booking_Id) ?>',
+                                    '<?= esc($guest->total_rooms ?? 'N/A') ?>',
+                                    '<?= esc($guest->total_amount ?? 'N/A') ?>'
+                                )"><?= esc($guest->guest_email ?? 'N/A') ?></a>
+                            </td>
+                            <td><?= isset($guest->check_in) ? esc(date('Y-m-d', strtotime($guest->check_in))) : 'N/A' ?></td>
+                            <td><?= isset($guest->check_out) ? esc(date('Y-m-d', strtotime($guest->check_out))) : 'N/A' ?></td>
+                            <td><?= esc($guest->booking_status ?? 'N/A') ?></td>
+                        </tr>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <tr>
+                        <td colspan="6">No guest registrations found.</td>
+                    </tr>
+                <?php endif; ?>
             </tbody>
         </table>
 
@@ -79,7 +90,6 @@
                 <button onclick="hidePopup()">Close</button>
             </div>
         </div>
-
     </div>
 
     <script>
@@ -105,15 +115,27 @@
             }
         });
 
-        function showPopup(name, room, arrival, departure, paymentStatus) {
+        function showPopup(name, nic, email, arrival, departure, status, bookingId, totalRooms, totalAmount) {
             const popupContent = document.getElementById('popupContent');
-            popupContent.innerHTML = `
-        <p><strong>Name:</strong> ${name}</p>
-        <p><strong>Room:</strong> ${room}</p>
-        <p><strong>Arrival:</strong> ${arrival}</p>
-        <p><strong>Departure:</strong> ${departure}</p>
-        <p><strong>Payment Status:</strong> ${paymentStatus}</p>
-    `;
+            let content = `
+                <p><strong>Name:</strong> ${name}</p>
+                <p><strong>NIC Number:</strong> ${nic}</p>
+                <p><strong>Email:</strong> ${email}</p>
+                <p><strong>Arrival:</strong> ${arrival}</p>
+                <p><strong>Departure:</strong> ${departure}</p>
+                <p><strong>Booking Status:</strong> ${status}</p>
+                <p><strong>Booking ID:</strong> ${bookingId}</p>
+            `;
+            
+            if (totalRooms !== 'N/A') {
+                content += `<p><strong>Total Rooms:</strong> ${totalRooms}</p>`;
+            }
+            
+            if (totalAmount !== 'N/A') {
+                content += `<p><strong>Total Amount:</strong> ${totalAmount}</p>`;
+            }
+            
+            popupContent.innerHTML = content;
             document.getElementById('popup').style.display = 'block';
             document.getElementById('overlay').style.display = 'block';
         }
@@ -124,5 +146,4 @@
         }
     </script>
 </body>
-
 </html>
