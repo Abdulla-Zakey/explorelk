@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 <?php 
     include_once APPROOT.'/views/hotel/nav.php';
     include_once APPROOT.'/views/hotel/hotelhead.php';
@@ -215,6 +216,8 @@
     </div>
 </body>
 </html>
+=======
+>>>>>>> Stashed changes
 <?php
 include_once APPROOT . '/views/hotel/nav.php';
 include_once APPROOT . '/views/hotel/hotelhead.php';
