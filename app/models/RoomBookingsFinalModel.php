@@ -82,4 +82,13 @@ class RoomBookingsFinalModel {
 
         return $result;
     }
+
+    public function getMonthlyData($hotelId){
+        $query = "SELECT * 
+                    FROM $this->table 
+                    WHERE hotel_Id = :hotel_id";
+
+        $data = $this->query($query, ['hotel_id' => $hotelId]);
+        return $data;
+    }
 }

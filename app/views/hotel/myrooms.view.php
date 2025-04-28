@@ -13,267 +13,267 @@ include_once APPROOT . '/views/hotel/hotelhead.php';
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <link rel="stylesheet" href="<?= ROOT ?>/assets/css/hotel/myrooms.css?v=1.0">
     <style>
-        /* Booking Modal Styles */
-        .details-tabs {
-            display: flex;
-            border-bottom: 1px solid #e0e0e0;
-            margin-bottom: 20px;
-        }
+    /* Booking Modal Styles */
+    .details-tabs {
+        display: flex;
+        border-bottom: 1px solid #e0e0e0;
+        margin-bottom: 20px;
+    }
 
-        .tab-button {
-            padding: 12px 20px;
-            background: none;
-            border: none;
-            border-bottom: 3px solid transparent;
-            font-size: 14px;
-            font-weight: 600;
-            color: #666;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
+    .tab-button {
+        padding: 12px 20px;
+        background: none;
+        border: none;
+        border-bottom: 3px solid transparent;
+        font-size: 14px;
+        font-weight: 600;
+        color: #666;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
 
-        .tab-button.active {
-            color: #4A6FA5;
-            border-bottom: 3px solid #4A6FA5;
-        }
+    .tab-button.active {
+        color: #4A6FA5;
+        border-bottom: 3px solid #4A6FA5;
+    }
 
-        .tab-button:disabled {
-            color: #ccc;
-            cursor: not-allowed;
-        }
+    .tab-button:disabled {
+        color: #ccc;
+        cursor: not-allowed;
+    }
 
-        .tab-button i {
-            font-size: 16px;
-        }
+    .tab-button i {
+        font-size: 16px;
+    }
 
-        .tab-content {
-            display: none;
-            padding: 10px 0;
-        }
+    .tab-content {
+        display: none;
+        padding: 10px 0;
+    }
 
-        .tab-content.active {
-            display: block;
-        }
+    .tab-content.active {
+        display: block;
+    }
 
-        .availability-section {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
+    .availability-section {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
 
-        .filter-section {
-            display: flex;
-            gap: 15px;
-            flex-wrap: wrap;
-            align-items: flex-end;
-        }
+    .filter-section {
+        display: flex;
+        gap: 15px;
+        flex-wrap: wrap;
+        align-items: flex-end;
+    }
 
-        .date-filter {
-            display: flex;
-            flex-direction: column;
-            flex: 1;
-            min-width: 180px;
-        }
+    .date-filter {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+        min-width: 180px;
+    }
 
-        .date-filter label {
-            font-size: 14px;
-            margin-bottom: 5px;
-            color: #555;
-        }
+    .date-filter label {
+        font-size: 14px;
+        margin-bottom: 5px;
+        color: #555;
+    }
 
-        .date-input {
-            padding: 10px 12px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-family: 'Poppins', sans-serif;
-        }
+    .date-input {
+        padding: 10px 12px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-family: 'Poppins', sans-serif;
+    }
 
-        .room-summary {
-            display: flex;
-            gap: 20px;
-            flex-wrap: wrap;
-        }
+    .room-summary {
+        display: flex;
+        gap: 20px;
+        flex-wrap: wrap;
+    }
 
-        .summary-box {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            padding: 15px;
-            background-color: #f8f9fa;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-            flex: 1;
-            min-width: 200px;
-        }
+    .summary-box {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        padding: 15px;
+        background-color: #f8f9fa;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        flex: 1;
+        min-width: 200px;
+    }
 
-        .summary-box i {
-            font-size: 22px;
-            color: #4A6FA5;
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background-color: rgba(74, 111, 165, 0.1);
-            border-radius: 50%;
-        }
+    .summary-box i {
+        font-size: 22px;
+        color: #4A6FA5;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: rgba(74, 111, 165, 0.1);
+        border-radius: 50%;
+    }
 
-        .summary-info {
-            display: flex;
-            flex-direction: column;
-        }
+    .summary-info {
+        display: flex;
+        flex-direction: column;
+    }
 
-        .summary-label {
-            font-size: 13px;
-            color: #666;
-        }
+    .summary-label {
+        font-size: 13px;
+        color: #666;
+    }
 
-        .summary-value {
-            font-size: 16px;
-            font-weight: 600;
-            color: #333;
-        }
+    .summary-value {
+        font-size: 16px;
+        font-weight: 600;
+        color: #333;
+    }
 
-        .room-selection {
-            margin-top: 15px;
-        }
+    .room-selection {
+        margin-top: 15px;
+    }
 
-        .selection-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-        }
+    .selection-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 15px;
+    }
 
-        .selection-header h3 {
-            margin: 0;
-            font-size: 16px;
-            color: #333;
-        }
+    .selection-header h3 {
+        margin: 0;
+        font-size: 16px;
+        color: #333;
+    }
 
-        .room-counter {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
+    .room-counter {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
 
-        .counter-btn {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            border: 1px solid #ddd;
-            background-color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
+    .counter-btn {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        border: 1px solid #ddd;
+        background-color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
 
-        .counter-btn:hover:not(:disabled) {
-            background-color: #f0f0f0;
-        }
+    .counter-btn:hover:not(:disabled) {
+        background-color: #f0f0f0;
+    }
 
-        .counter-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
+    .counter-btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
 
-        #roomCount {
-            font-size: 18px;
-            font-weight: 600;
-            min-width: 30px;
-            text-align: center;
-        }
+    #roomCount {
+        font-size: 18px;
+        font-weight: 600;
+        min-width: 30px;
+        text-align: center;
+    }
 
-        .booking-summary {
-            background-color: #f8f9fa;
-            border-radius: 8px;
-            padding: 20px;
-            margin-top: 20px;
-        }
+    .booking-summary {
+        background-color: #f8f9fa;
+        border-radius: 8px;
+        padding: 20px;
+        margin-top: 20px;
+    }
 
-        .summary-details {
-            margin-bottom: 20px;
-        }
+    .summary-details {
+        margin-bottom: 20px;
+    }
 
-        .summary-row {
-            display: flex;
-            justify-content: space-between;
-            padding: 10px 0;
-            border-bottom: 1px solid #eee;
-        }
+    .summary-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 10px 0;
+        border-bottom: 1px solid #eee;
+    }
 
-        .summary-row.total {
-            font-weight: 600;
-            color: #4A6FA5;
-            border-bottom: none;
-            font-size: 18px;
-        }
+    .summary-row.total {
+        font-weight: 600;
+        color: #4A6FA5;
+        border-bottom: none;
+        font-size: 18px;
+    }
 
-        .guest-information {
-            background-color: #f8f9fa;
-            border-radius: 8px;
-            padding: 20px;
-        }
+    .guest-information {
+        background-color: #f8f9fa;
+        border-radius: 8px;
+        padding: 20px;
+    }
 
-        .guest-info-title {
-            margin-top: 0;
-            margin-bottom: 20px;
-            font-size: 18px;
-            color: #333;
-        }
+    .guest-info-title {
+        margin-top: 0;
+        margin-bottom: 20px;
+        font-size: 18px;
+        color: #333;
+    }
 
+    .guest-form {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+    }
+
+    .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .form-group.full-width {
+        grid-column: span 2;
+    }
+
+    .guest-input {
+        padding: 12px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-family: 'Poppins', sans-serif;
+    }
+
+    .guest-input.error {
+        border-color: #ff5252;
+    }
+
+    .input-required {
+        color: #ff5252;
+    }
+
+    .error-message {
+        color: #ff5252;
+        font-size: 12px;
+        margin-top: 4px;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
         .guest-form {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-        }
-
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
+            grid-template-columns: 1fr;
         }
 
         .form-group.full-width {
-            grid-column: span 2;
+            grid-column: span 1;
         }
-
-        .guest-input {
-            padding: 12px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-family: 'Poppins', sans-serif;
-        }
-
-        .guest-input.error {
-            border-color: #ff5252;
-        }
-
-        .input-required {
-            color: #ff5252;
-        }
-
-        .error-message {
-            color: #ff5252;
-            font-size: 12px;
-            margin-top: 4px;
-        }
-
-        /* Responsive adjustments */
-        @media (max-width: 768px) {
-            .guest-form {
-                grid-template-columns: 1fr;
-            }
-
-            .form-group.full-width {
-                grid-column: span 1;
-            }
-        }
+    }
     </style>
 
 </head>
@@ -285,125 +285,125 @@ include_once APPROOT . '/views/hotel/hotelhead.php';
 
     <div class="container">
         <?php if (empty($data['hotelRoomTypes'])): ?>
-            <div class="empty-state">
-                <div class="empty-state-card">
-                    <div class="icon-circle">
-                        <i class="fas fa-hotel"></i>
-                    </div>
-                    <h2 class="empty-state-title">No Room Types Added Yet</h2>
-                    <p class="empty-state-description">
-                        Start by adding your first room type. This will help you manage your hotel inventory and showcase
-                        your accommodations to guests.
-                    </p>
-                    <button class="enhanced-button" onclick="showAddTypeModal()">
-                        <i class="fas fa-plus-circle"></i>
-                        Add Your First Room Type
-                    </button>
+        <div class="empty-state">
+            <div class="empty-state-card">
+                <div class="icon-circle">
+                    <i class="fas fa-hotel"></i>
                 </div>
+                <h2 class="empty-state-title">No Room Types Added Yet</h2>
+                <p class="empty-state-description">
+                    Start by adding your first room type. This will help you manage your hotel inventory and showcase
+                    your accommodations to guests.
+                </p>
+                <button class="enhanced-button" onclick="showAddTypeModal()">
+                    <i class="fas fa-plus-circle"></i>
+                    Add Your First Room Type
+                </button>
             </div>
+        </div>
         <?php else: ?>
-            <div class="table-container">
-                <div class="table-header">
-                    <h2 class="table-title">Room Types Overview</h2>
-                    <button class="enhanced-button" onclick="showAddTypeModal()">
-                        <i class="fas fa-plus-circle"></i>
-                        Add Room Type
-                    </button>
-                </div>
+        <div class="table-container">
+            <div class="table-header">
+                <h2 class="table-title">Room Types Overview</h2>
+                <button class="enhanced-button" onclick="showAddTypeModal()">
+                    <i class="fas fa-plus-circle"></i>
+                    Add Room Type
+                </button>
+            </div>
 
-                <div class="table-stats">
-                    <div class="stat-card">
-                        <div class="stat-title">Total Room Types</div>
-                        <div class="stat-value"><?= count($data['hotelRoomTypes']) ?></div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-title">Total Rooms</div>
-                        <div class="stat-value"><?php
+            <div class="table-stats">
+                <div class="stat-card">
+                    <div class="stat-title">Total Room Types</div>
+                    <div class="stat-value"><?= count($data['hotelRoomTypes']) ?></div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-title">Total Rooms</div>
+                    <div class="stat-value"><?php
                         $totalRooms = 0;
                         foreach ($data['hotelRoomTypes'] as $hotelRoomType) {
                             $totalRooms += $hotelRoomType->total_rooms;
                         }
                         echo $totalRooms;
                         ?>
-                        </div>
                     </div>
                 </div>
+            </div>
 
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Room Type</th>
-                            <th>Description</th>
-                            <th>Occupancy</th>
-                            <th>Price Per Night</th>
-                            <th>Rooms Count</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php
+            <table>
+                <thead>
+                    <tr>
+                        <th>Room Type</th>
+                        <th>Description</th>
+                        <th>Occupancy</th>
+                        <th>Price Per Night</th>
+                        <th>Rooms Count</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php
                         $i = 0;
                         foreach ($data['hotelRoomTypes'] as $type):
                             ?>
-                            <tr>
-                                <td>
-                                    <div class="room-type-cell">
-                                        <div class="room-type-info">
-                                            <div class="room-type-name"><?= $data['hotelRoomTypesNames'][$i]->roomType_name ?>
-                                            </div>
-                                        </div>
-                                </td>
-                                <td class="description-cell">
-                                    <?= $type->customized_description ?? $type->standard_description ?>
-                                </td>
-                                <td>
-                                    <div class="occupancy-badge">
-                                        <i class="fas fa-user"></i>
-                                        <?= $type->max_occupancy ?> Guests
+                    <tr>
+                        <td>
+                            <div class="room-type-cell">
+                                <div class="room-type-info">
+                                    <div class="room-type-name"><?= $data['hotelRoomTypesNames'][$i]->roomType_name ?>
                                     </div>
-                                </td>
-                                <td>
-                                    <div class="price-badge">
-                                        Rs.<?= number_format($type->pricePer_night, 2) ?>
-                                    </div>
-                                </td>
+                                </div>
+                        </td>
+                        <td class="description-cell">
+                            <?= $type->customized_description ?? $type->standard_description ?>
+                        </td>
+                        <td>
+                            <div class="occupancy-badge">
+                                <i class="fas fa-user"></i>
+                                <?= $type->max_occupancy ?> Guests
+                            </div>
+                        </td>
+                        <td>
+                            <div class="price-badge">
+                                Rs.<?= number_format($type->pricePer_night, 2) ?>
+                            </div>
+                        </td>
 
-                                <td>
-                                    <div class="room-count-cell">
-                                        <div class="room-badge">
-                                            <?= $type->total_rooms ?? 0 ?> Rooms
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="action-buttons">
-                                        <button class="enhanced-button secondary"
-                                            onclick="showAddRoomModal(<?= $type->hotel_roomType_Id ?>)">
-                                            <i class="fas fa-plus"></i>
-                                            Add Rooms
-                                        </button>
+                        <td>
+                            <div class="room-count-cell">
+                                <div class="room-badge">
+                                    <?= $type->total_rooms ?? 0 ?> Rooms
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="action-buttons">
+                                <button class="enhanced-button secondary"
+                                    onclick="showAddRoomModal(<?= $type->hotel_roomType_Id ?>)">
+                                    <i class="fas fa-plus"></i>
+                                    Add Rooms
+                                </button>
 
-                                        <button class="enhanced-button secondary"
-                                            onclick="showBookRoomModal(<?= $type->hotel_roomType_Id ?>)">
-                                            <i class="fas fa-calendar-check"></i>
-                                            Book Room
-                                        </button>
+                                <button class="enhanced-button secondary"
+                                    onclick="showBookRoomModal(<?= $type->hotel_roomType_Id ?>)">
+                                    <i class="fas fa-calendar-check"></i>
+                                    Book Room
+                                </button>
 
-                                        <button class="enhanced-button secondary"
-                                            onclick="confirmDeleteRoomType(<?= $type->hotel_roomType_Id ?>)">
-                                            <i class="fas fa-trash"></i>
-                                            Remove
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <?php
+                                <button class="enhanced-button secondary"
+                                    onclick="confirmDeleteRoomType(<?= $type->hotel_roomType_Id ?>)">
+                                    <i class="fas fa-trash"></i>
+                                    Remove
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    <?php
                             $i++;
                         endforeach;
                         ?>
-                    </tbody>
-                </table>
-            </div>
+                </tbody>
+            </table>
+        </div>
         <?php endif; ?>
     </div>
 
@@ -428,7 +428,7 @@ include_once APPROOT . '/views/hotel/hotelhead.php';
                                 <select name="roomType_Id" class="editable-input" required>
                                     <option value="">Choose a room type...</option>
                                     <?php foreach ($data['commonlyAvailableRoomTypesForAllHotels'] as $type): ?>
-                                        <option value="<?= $type->roomType_Id ?>"><?= $type->roomType_name ?></option>
+                                    <option value="<?= $type->roomType_Id ?>"><?= $type->roomType_name ?></option>
                                     <?php endforeach; ?>
                                 </select>
                                 <span class="input-helper">Select from commonly available room types</span>
@@ -468,11 +468,11 @@ include_once APPROOT . '/views/hotel/hotelhead.php';
 
                                 <div class="amenities-grid">
                                     <?php foreach ($data['commonRoomAmenities'] as $amenity): ?>
-                                        <label class="amenity-checkbox">
-                                            <input type="checkbox" name="amenities[]" value="<?= $amenity->amenity_Id ?>">
-                                            <i class="<?= $amenity->icon_class ?>"></i>
-                                            <?= $amenity->amenity_name ?>
-                                        </label>
+                                    <label class="amenity-checkbox">
+                                        <input type="checkbox" name="amenities[]" value="<?= $amenity->amenity_Id ?>">
+                                        <i class="<?= $amenity->icon_class ?>"></i>
+                                        <?= $amenity->amenity_name ?>
+                                    </label>
                                     <?php endforeach; ?>
                                 </div>
                             </div>
@@ -768,90 +768,90 @@ include_once APPROOT . '/views/hotel/hotelhead.php';
     </div>
 
     <script>
-        function showAlert(message) {
-            const popup = document.getElementById("popupType1");
-            const popupText = document.getElementById("popup-textType1");
+    function showAlert(message) {
+        const popup = document.getElementById("popupType1");
+        const popupText = document.getElementById("popup-textType1");
 
-            popupText.innerHTML = message;
-            popup.style.display = "flex";
+        popupText.innerHTML = message;
+        popup.style.display = "flex";
 
-            const closePopup = document.getElementById("closePopupType1");
-            closePopup.onclick = function () {
-                popup.style.display = "none";
+        const closePopup = document.getElementById("closePopupType1");
+        closePopup.onclick = function() {
+            popup.style.display = "none";
 
-            };
+        };
+    }
+
+    function showSuccessPopupFromURL() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const successMessage = urlParams.get('success');
+
+        if (successMessage) {
+            showAlert(decodeURIComponent(successMessage));
+            history.replaceState(null, '', window.location.pathname);
         }
+    }
 
-        function showSuccessPopupFromURL() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const successMessage = urlParams.get('success');
+    // Call this when the page loads
+    window.onload = showSuccessPopupFromURL;
 
-            if (successMessage) {
-                showAlert(decodeURIComponent(successMessage));
-                history.replaceState(null, '', window.location.pathname);
-            }
+    let currentRoomTypeToDelete = null;
+
+    function confirmDeleteRoomType(roomTypeId) {
+        currentRoomTypeToDelete = roomTypeId;
+        const popup = document.getElementById('popup');
+        const popupText = document.getElementById('popup-text');
+        const confirmButton = document.getElementById('confirmDelete');
+        const cancelButton = document.getElementById('closePopup');
+
+        popupText.textContent = 'Are you sure you want to delete this room type?';
+        popup.style.display = 'flex';
+
+        confirmButton.onclick = function() {
+            popup.style.display = 'none';
+            proceedDeleteRoomType();
+        };
+
+        cancelButton.onclick = function() {
+            popup.style.display = 'none';
+        };
+    }
+
+    function proceedDeleteRoomType() {
+        if (currentRoomTypeToDelete) {
+            window.location.href = `<?= ROOT ?>/Hotel/Hmyrooms/deleteRoomType/${currentRoomTypeToDelete}`;
         }
-
-        // Call this when the page loads
-        window.onload = showSuccessPopupFromURL;
-
-        let currentRoomTypeToDelete = null;
-
-        function confirmDeleteRoomType(roomTypeId) {
-            currentRoomTypeToDelete = roomTypeId;
-            const popup = document.getElementById('popup');
-            const popupText = document.getElementById('popup-text');
-            const confirmButton = document.getElementById('confirmDelete');
-            const cancelButton = document.getElementById('closePopup');
-
-            popupText.textContent = 'Are you sure you want to delete this room type?';
-            popup.style.display = 'flex';
-
-            confirmButton.onclick = function () {
-                popup.style.display = 'none';
-                proceedDeleteRoomType();
-            };
-
-            cancelButton.onclick = function () {
-                popup.style.display = 'none';
-            };
-        }
-
-        function proceedDeleteRoomType() {
-            if (currentRoomTypeToDelete) {
-                window.location.href = `<?= ROOT ?>/Hotel/Hmyrooms/deleteRoomType/${currentRoomTypeToDelete}`;
-            }
-        }
+    }
     </script>
 
     <!-- Add new script for room management -->
     <script>
-        function showAddRoomModal(hotelRoomTypeId) {
-            document.getElementById('hotelRoomTypeId').value = hotelRoomTypeId;
-            document.getElementById('addRoomModal').style.display = 'flex';
-        }
+    function showAddRoomModal(hotelRoomTypeId) {
+        document.getElementById('hotelRoomTypeId').value = hotelRoomTypeId;
+        document.getElementById('addRoomModal').style.display = 'flex';
+    }
 
-        function addRoomNumberInput() {
-            const container = document.getElementById('roomNumbersContainer');
-            const newInput = document.createElement('div');
-            newInput.className = 'room-input-group';
-            newInput.innerHTML = `
+    function addRoomNumberInput() {
+        const container = document.getElementById('roomNumbersContainer');
+        const newInput = document.createElement('div');
+        newInput.className = 'room-input-group';
+        newInput.innerHTML = `
                 <input type="text" name="room_numbers[]" class="room-number-input" placeholder="Room No." required>
                 <button type="button" class="remove-room-btn" onclick="removeRoomInput(this)">×</button>
             `;
-            container.appendChild(newInput);
-        }
+        container.appendChild(newInput);
+    }
 
-        function removeRoomInput(button) {
-            const container = document.getElementById('roomNumbersContainer');
-            if (container.children.length > 1) {
-                button.parentElement.remove();
-            }
+    function removeRoomInput(button) {
+        const container = document.getElementById('roomNumbersContainer');
+        if (container.children.length > 1) {
+            button.parentElement.remove();
         }
+    }
     </script>
 
     <script>
-        <?php
+    <?php
         $messageToShow = '';
         if (isset($_SESSION['errors']) && !empty($_SESSION['errors'])) {
             $messageToShow = implode(', ', $_SESSION['errors']);
@@ -863,395 +863,402 @@ include_once APPROOT . '/views/hotel/hotelhead.php';
         }
         ?>
 
-        const serverMessage = <?= json_encode($messageToShow) ?>;
+    const serverMessage = <?= json_encode($messageToShow) ?>;
 
-        if (serverMessage) {
-            showAlert(serverMessage);
-        }
+    if (serverMessage) {
+        showAlert(serverMessage);
+    }
     </script>
 
     <script>
-        function showAddTypeModal() {
-            document.getElementById('addTypeModal').style.display = 'flex';
-        }
+    function showAddTypeModal() {
+        document.getElementById('addTypeModal').style.display = 'flex';
+    }
 
-        function closeModal(modalId) {
-            document.getElementById(modalId).style.display = 'none';
-        }
+    function closeModal(modalId) {
+        document.getElementById(modalId).style.display = 'none';
+    }
 
-        window.onclick = function (event) {
-            if (event.target.classList.contains('custom-modal')) {
-                event.target.style.display = 'none';
+    window.onclick = function(event) {
+        if (event.target.classList.contains('custom-modal')) {
+            event.target.style.display = 'none';
+        }
+    }
+
+    document.getElementById('roomTypeImage').addEventListener('change', function(e) {
+        const fileName = e.target.files[0]?.name;
+        if (fileName) {
+            const container = document.querySelector('.file-upload-text');
+            container.textContent = `Selected file: ${fileName}`;
+        }
+    });
+    </script>
+
+    <script>
+    // Variables for booking functionality
+    let currentRoomTypeId;
+    let maxAvailableRooms = 0;
+    let currentRoomCount = 0;
+    let numberOfNights = 0;
+    let pricePerNight = 0;
+
+    // Show booking modal with room type information
+    function showBookRoomModal(roomTypeId) {
+        currentRoomTypeId = roomTypeId;
+
+        // Reset modal values
+        document.getElementById('checkIn').value = '';
+        document.getElementById('checkOut').value = '';
+        document.getElementById('availableRoomsCount').textContent = '-';
+        document.getElementById('reservedRoomsCount').textContent = '-';
+        document.getElementById('roomCount').textContent = '0';
+        document.getElementById('selectedRoomCount').textContent = '0 Room';
+        document.getElementById('totalNights').textContent = '0 Nights';
+        document.getElementById('totalAmount').textContent = '0 LKR';
+
+        // Disable buttons initially
+        document.getElementById('decrementBtn').disabled = true;
+        document.getElementById('incrementBtn').disabled = true;
+        document.getElementById('continueToGuestBtn').disabled = true;
+        document.getElementById('guestDetailsTabBtn').disabled = true;
+
+        // Reset room counter
+        currentRoomCount = 0;
+
+        // Find room type information
+        fetch(`<?= ROOT ?>/Hotel/Hmyrooms/getRoomTypeDetails/${roomTypeId}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                document.getElementById('bookRoomTypeName').textContent = data.roomType_name;
+                pricePerNight = parseFloat(data.pricePer_night);
+
+                // Show modal
+                document.getElementById('bookRoomModal').style.display = 'flex';
+
+                // Set active tab
+                switchBookingTab({
+                    currentTarget: document.querySelector('#bookRoomModal .tab-button.active')
+                }, 'roomAvailability');
+
+                // Set date restrictions for the booking
+                initializeDateInputs();
+            })
+            .catch(error => {
+                console.error('Error fetching room details:', error);
+                showAlert('Failed to load room type details. Please try again.');
+            });
+    }
+
+    // Initialize date inputs with restrictions
+    function initializeDateInputs() {
+        const checkInInput = document.getElementById('checkIn');
+        const checkOutInput = document.getElementById('checkOut');
+
+        // Set minimum date as today for check-in
+        const today = new Date();
+        const tomorrow = new Date(today);
+        tomorrow.setDate(tomorrow.getDate() + 1);
+
+        const todayFormatted = today.toISOString().split('T')[0];
+        const tomorrowFormatted = tomorrow.toISOString().split('T')[0];
+
+        checkInInput.min = todayFormatted;
+        checkOutInput.min = tomorrowFormatted;
+
+        // Update check-out minimum date when check-in date changes
+        checkInInput.addEventListener('change', function() {
+            const selectedDate = new Date(this.value);
+            const nextDay = new Date(selectedDate);
+            nextDay.setDate(nextDay.getDate() + 1);
+            checkOutInput.min = nextDay.toISOString().split('T')[0];
+
+            if (checkOutInput.value && new Date(checkOutInput.value) <= new Date(this.value)) {
+                checkOutInput.value = nextDay.toISOString().split('T')[0];
             }
-        }
 
-        document.getElementById('roomTypeImage').addEventListener('change', function (e) {
-            const fileName = e.target.files[0]?.name;
-            if (fileName) {
-                const container = document.querySelector('.file-upload-text');
-                container.textContent = `Selected file: ${fileName}`;
-            }
+            calculateDateDifference();
         });
-    </script>
 
-    <script>
-        // Variables for booking functionality
-        let currentRoomTypeId;
-        let maxAvailableRooms = 0;
-        let currentRoomCount = 0;
-        let numberOfNights = 0;
-        let pricePerNight = 0;
+        // Calculate difference when check-out date changes
+        checkOutInput.addEventListener('change', function() {
+            calculateDateDifference();
+        });
+    }
 
-        // Show booking modal with room type information
-        function showBookRoomModal(roomTypeId) {
-            currentRoomTypeId = roomTypeId;
+    // Calculate date difference
+    function calculateDateDifference() {
+        const checkInInput = document.getElementById('checkIn');
+        const checkOutInput = document.getElementById('checkOut');
 
-            // Reset modal values
-            document.getElementById('checkIn').value = '';
-            document.getElementById('checkOut').value = '';
-            document.getElementById('availableRoomsCount').textContent = '-';
-            document.getElementById('reservedRoomsCount').textContent = '-';
-            document.getElementById('roomCount').textContent = '0';
-            document.getElementById('selectedRoomCount').textContent = '0 Room';
-            document.getElementById('totalNights').textContent = '0 Nights';
-            document.getElementById('totalAmount').textContent = '0 LKR';
+        if (checkInInput.value && checkOutInput.value) {
+            const checkIn = new Date(checkInInput.value);
+            const checkOut = new Date(checkOutInput.value);
 
-            // Disable buttons initially
-            document.getElementById('decrementBtn').disabled = true;
-            document.getElementById('incrementBtn').disabled = true;
-            document.getElementById('continueToGuestBtn').disabled = true;
-            document.getElementById('guestDetailsTabBtn').disabled = true;
+            // Calculate the time difference in milliseconds
+            const timeDifference = checkOut.getTime() - checkIn.getTime();
 
-            // Reset room counter
-            currentRoomCount = 0;
+            // Convert to days
+            numberOfNights = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
 
-            // Find room type information
-            fetch(`<?= ROOT ?>/Hotel/Hmyrooms/getRoomTypeDetails/${roomTypeId}`)
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    document.getElementById('bookRoomTypeName').textContent = data.roomType_name;
-                    pricePerNight = parseFloat(data.pricePer_night);
+            // Update the display
+            const stayDurationDisplay = document.getElementById('totalNights');
+            if (stayDurationDisplay) {
+                stayDurationDisplay.textContent = `${numberOfNights} night${numberOfNights !== 1 ? 's' : ''}`;
+            }
 
-                    // Show modal
-                    document.getElementById('bookRoomModal').style.display = 'flex';
+            calculateTotalAmount();
+        }
+    }
 
-                    // Set active tab
-                    switchBookingTab({ currentTarget: document.querySelector('#bookRoomModal .tab-button.active') }, 'roomAvailability');
+    // Check room availability
+    function checkRoomAvailability() {
+        const checkIn = document.getElementById('checkIn').value;
+        const checkOut = document.getElementById('checkOut').value;
 
-                    // Set date restrictions for the booking
-                    initializeDateInputs();
-                })
-                .catch(error => {
-                    console.error('Error fetching room details:', error);
-                    showAlert('Failed to load room type details. Please try again.');
-                });
+        // Validate inputs
+        if (!checkIn || !checkOut) {
+            showAlert('Please select both check-in and check-out dates');
+            return;
         }
 
-        // Initialize date inputs with restrictions
-        function initializeDateInputs() {
-            const checkInInput = document.getElementById('checkIn');
-            const checkOutInput = document.getElementById('checkOut');
-
-            // Set minimum date as today for check-in
-            const today = new Date();
-            const tomorrow = new Date(today);
-            tomorrow.setDate(tomorrow.getDate() + 1);
-
-            const todayFormatted = today.toISOString().split('T')[0];
-            const tomorrowFormatted = tomorrow.toISOString().split('T')[0];
-
-            checkInInput.min = todayFormatted;
-            checkOutInput.min = tomorrowFormatted;
-
-            // Update check-out minimum date when check-in date changes
-            checkInInput.addEventListener('change', function () {
-                const selectedDate = new Date(this.value);
-                const nextDay = new Date(selectedDate);
-                nextDay.setDate(nextDay.getDate() + 1);
-                checkOutInput.min = nextDay.toISOString().split('T')[0];
-
-                if (checkOutInput.value && new Date(checkOutInput.value) <= new Date(this.value)) {
-                    checkOutInput.value = nextDay.toISOString().split('T')[0];
-                }
-
-                calculateDateDifference();
+        // Make AJAX call to check availability
+        fetch(
+                `<?= ROOT ?>/traveler/RoomBookingController/checkAvailability/${currentRoomTypeId}/${checkIn}/${checkOut}`)
+            // fetch(`<?= ROOT ?>/Hotel/Hmyrooms/checkRoomAvailability/${currentRoomTypeId}/${checkIn}/${checkOut}`)
+            .then(response => response.json())
+            .then(data => {
+                updateAvailabilityUI(data);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showAlert('Failed to check room availability. Please try again.');
             });
+    }
 
-            // Calculate difference when check-out date changes
-            checkOutInput.addEventListener('change', function () {
-                calculateDateDifference();
-            });
-        }
+    // Update UI with availability data
+    function updateAvailabilityUI(data) {
+        // Update available rooms count
+        const availableRoomsElement = document.getElementById('availableRoomsCount');
+        availableRoomsElement.textContent = `${data.available_rooms} of ${data.total_rooms}`;
 
-        // Calculate date difference
-        function calculateDateDifference() {
-            const checkInInput = document.getElementById('checkIn');
-            const checkOutInput = document.getElementById('checkOut');
+        const reservedRoomsElement = document.getElementById('reservedRoomsCount');
+        reservedRoomsElement.textContent = `${data.reserved_rooms} of ${data.total_rooms}`;
 
-            if (checkInInput.value && checkOutInput.value) {
-                const checkIn = new Date(checkInInput.value);
-                const checkOut = new Date(checkOutInput.value);
+        // Update max available rooms for selection
+        maxAvailableRooms = data.available_rooms;
 
-                // Calculate the time difference in milliseconds
-                const timeDifference = checkOut.getTime() - checkIn.getTime();
+        // Enable buttons if rooms are available
+        const decrementBtn = document.getElementById('decrementBtn');
+        const incrementBtn = document.getElementById('incrementBtn');
+        const continueToGuestBtn = document.getElementById('continueToGuestBtn');
 
-                // Convert to days
-                numberOfNights = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+        if (maxAvailableRooms > 0) {
+            incrementBtn.disabled = false;
 
-                // Update the display
-                const stayDurationDisplay = document.getElementById('totalNights');
-                if (stayDurationDisplay) {
-                    stayDurationDisplay.textContent = `${numberOfNights} night${numberOfNights !== 1 ? 's' : ''}`;
-                }
-
-                calculateTotalAmount();
-            }
-        }
-
-        // Check room availability
-        function checkRoomAvailability() {
-            const checkIn = document.getElementById('checkIn').value;
-            const checkOut = document.getElementById('checkOut').value;
-
-            // Validate inputs
-            if (!checkIn || !checkOut) {
-                showAlert('Please select both check-in and check-out dates');
-                return;
-            }
-
-            // Make AJAX call to check availability
-            fetch(`<?= ROOT ?>/traveler/RoomBookingController/checkAvailability/${currentRoomTypeId}/${checkIn}/${checkOut}`)
-                // fetch(`<?= ROOT ?>/Hotel/Hmyrooms/checkRoomAvailability/${currentRoomTypeId}/${checkIn}/${checkOut}`)
-                .then(response => response.json())
-                .then(data => {
-                    updateAvailabilityUI(data);
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    showAlert('Failed to check room availability. Please try again.');
-                });
-        }
-
-        // Update UI with availability data
-        function updateAvailabilityUI(data) {
-            // Update available rooms count
-            const availableRoomsElement = document.getElementById('availableRoomsCount');
-            availableRoomsElement.textContent = `${data.available_rooms} of ${data.total_rooms}`;
-
-            const reservedRoomsElement = document.getElementById('reservedRoomsCount');
-            reservedRoomsElement.textContent = `${data.reserved_rooms} of ${data.total_rooms}`;
-
-            // Update max available rooms for selection
-            maxAvailableRooms = data.available_rooms;
-
-            // Enable buttons if rooms are available
-            const decrementBtn = document.getElementById('decrementBtn');
-            const incrementBtn = document.getElementById('incrementBtn');
-            const continueToGuestBtn = document.getElementById('continueToGuestBtn');
-
-            if (maxAvailableRooms > 0) {
-                incrementBtn.disabled = false;
-
-                // Reset room count
-                currentRoomCount = 1;
-                document.getElementById('roomCount').textContent = currentRoomCount;
-                document.getElementById('selectedRoomCount').textContent = `${currentRoomCount} Room`;
-
-                // Update button states
-                decrementBtn.disabled = currentRoomCount <= 1;
-                incrementBtn.disabled = currentRoomCount >= maxAvailableRooms;
-
-                // Enable continue button
-                continueToGuestBtn.disabled = false;
-
-                calculateTotalAmount();
-            } else {
-                showAlert('No rooms available for the selected dates');
-                decrementBtn.disabled = true;
-                incrementBtn.disabled = true;
-                continueToGuestBtn.disabled = true;
-
-                // Reset room count
-                currentRoomCount = 0;
-                document.getElementById('roomCount').textContent = currentRoomCount;
-                document.getElementById('selectedRoomCount').textContent = `${currentRoomCount} Room`;
-
-                calculateTotalAmount();
-            }
-        }
-
-        // Increment room count
-        function incrementRooms() {
-            if (currentRoomCount < maxAvailableRooms) {
-                currentRoomCount++;
-                updateRoomCount();
-            }
-        }
-
-        // Decrement room count
-        function decrementRooms() {
-            if (currentRoomCount > 1) {
-                currentRoomCount--;
-                updateRoomCount();
-            }
-        }
-
-        // Update room count UI
-        function updateRoomCount() {
-            const roomCountElement = document.getElementById('roomCount');
-            const selectedRoomCountElement = document.getElementById('selectedRoomCount');
-            const decrementBtn = document.getElementById('decrementBtn');
-            const incrementBtn = document.getElementById('incrementBtn');
-
-            roomCountElement.textContent = currentRoomCount;
-            selectedRoomCountElement.textContent = `${currentRoomCount} Room${currentRoomCount !== 1 ? 's' : ''}`;
+            // Reset room count
+            currentRoomCount = 1;
+            document.getElementById('roomCount').textContent = currentRoomCount;
+            document.getElementById('selectedRoomCount').textContent = `${currentRoomCount} Room`;
 
             // Update button states
             decrementBtn.disabled = currentRoomCount <= 1;
             incrementBtn.disabled = currentRoomCount >= maxAvailableRooms;
 
+            // Enable continue button
+            continueToGuestBtn.disabled = false;
+
+            calculateTotalAmount();
+        } else {
+            showAlert('No rooms available for the selected dates');
+            decrementBtn.disabled = true;
+            incrementBtn.disabled = true;
+            continueToGuestBtn.disabled = true;
+
+            // Reset room count
+            currentRoomCount = 0;
+            document.getElementById('roomCount').textContent = currentRoomCount;
+            document.getElementById('selectedRoomCount').textContent = `${currentRoomCount} Room`;
+
             calculateTotalAmount();
         }
+    }
 
-        // Calculate total booking amount
-        function calculateTotalAmount() {
-            const totalPrice = numberOfNights * pricePerNight * currentRoomCount;
-            document.getElementById('totalAmount').textContent = `${totalPrice.toFixed(2)} LKR`;
+    // Increment room count
+    function incrementRooms() {
+        if (currentRoomCount < maxAvailableRooms) {
+            currentRoomCount++;
+            updateRoomCount();
         }
+    }
 
-        // Continue to guest details tab
-        function continueToGuestDetails() {
-            // Enable guest details tab
-            document.getElementById('guestDetailsTabBtn').disabled = false;
-
-            // Switch to guest details tab
-            switchBookingTab({ currentTarget: document.getElementById('guestDetailsTabBtn') }, 'guestDetails');
-
-            // Initialize payment status change event
-            const paymentStatusSelect = document.getElementById('paymentStatus');
-            paymentStatusSelect.addEventListener('change', function () {
-                const advanceAmountGroup = document.getElementById('advanceAmountGroup');
-                if (this.value === 'advance-paid') {
-                    advanceAmountGroup.style.display = 'flex';
-                } else {
-                    advanceAmountGroup.style.display = 'none';
-                }
-            });
+    // Decrement room count
+    function decrementRooms() {
+        if (currentRoomCount > 1) {
+            currentRoomCount--;
+            updateRoomCount();
         }
+    }
 
-        // Switch between tabs in booking modal
-        function switchBookingTab(event, tabId) {
-            // Get all tab buttons and contents
-            const tabButtons = document.querySelectorAll('#bookRoomModal .tab-button');
-            const tabContents = document.querySelectorAll('#bookRoomModal .tab-content');
+    // Update room count UI
+    function updateRoomCount() {
+        const roomCountElement = document.getElementById('roomCount');
+        const selectedRoomCountElement = document.getElementById('selectedRoomCount');
+        const decrementBtn = document.getElementById('decrementBtn');
+        const incrementBtn = document.getElementById('incrementBtn');
 
-            // Remove active class from all buttons and contents
-            tabButtons.forEach(button => {
-                button.classList.remove('active');
-            });
+        roomCountElement.textContent = currentRoomCount;
+        selectedRoomCountElement.textContent = `${currentRoomCount} Room${currentRoomCount !== 1 ? 's' : ''}`;
 
-            tabContents.forEach(content => {
-                content.classList.remove('active');
-            });
+        // Update button states
+        decrementBtn.disabled = currentRoomCount <= 1;
+        incrementBtn.disabled = currentRoomCount >= maxAvailableRooms;
 
-            // Add active class to clicked button and corresponding content
-            event.currentTarget.classList.add('active');
-            document.getElementById(tabId).classList.add('active');
+        calculateTotalAmount();
+    }
 
-            // Adjust confirm button visibility
-            const confirmBookingBtn = document.getElementById('confirmBookingBtn');
-            if (tabId === 'guestDetails') {
-                confirmBookingBtn.style.display = 'inline-flex';
+    // Calculate total booking amount
+    function calculateTotalAmount() {
+        const totalPrice = numberOfNights * pricePerNight * currentRoomCount;
+        document.getElementById('totalAmount').textContent = `${totalPrice.toFixed(2)} LKR`;
+    }
+
+    // Continue to guest details tab
+    function continueToGuestDetails() {
+        // Enable guest details tab
+        document.getElementById('guestDetailsTabBtn').disabled = false;
+
+        // Switch to guest details tab
+        switchBookingTab({
+            currentTarget: document.getElementById('guestDetailsTabBtn')
+        }, 'guestDetails');
+
+        // Initialize payment status change event
+        const paymentStatusSelect = document.getElementById('paymentStatus');
+        paymentStatusSelect.addEventListener('change', function() {
+            const advanceAmountGroup = document.getElementById('advanceAmountGroup');
+            if (this.value === 'advance-paid') {
+                advanceAmountGroup.style.display = 'flex';
             } else {
-                confirmBookingBtn.style.display = 'none';
+                advanceAmountGroup.style.display = 'none';
             }
+        });
+    }
+
+    // Switch between tabs in booking modal
+    function switchBookingTab(event, tabId) {
+        // Get all tab buttons and contents
+        const tabButtons = document.querySelectorAll('#bookRoomModal .tab-button');
+        const tabContents = document.querySelectorAll('#bookRoomModal .tab-content');
+
+        // Remove active class from all buttons and contents
+        tabButtons.forEach(button => {
+            button.classList.remove('active');
+        });
+
+        tabContents.forEach(content => {
+            content.classList.remove('active');
+        });
+
+        // Add active class to clicked button and corresponding content
+        event.currentTarget.classList.add('active');
+        document.getElementById(tabId).classList.add('active');
+
+        // Adjust confirm button visibility
+        const confirmBookingBtn = document.getElementById('confirmBookingBtn');
+        if (tabId === 'guestDetails') {
+            confirmBookingBtn.style.display = 'inline-flex';
+        } else {
+            confirmBookingBtn.style.display = 'none';
         }
+    }
 
-        // Confirm the direct booking
-        function confirmDirectBooking() {
-            // Validate guest information
-            // if (!validateGuestInformation()) {
-            //     return;
-            // }
-
-            // Prepare form data
-            document.getElementById('booking_roomType_id').value = currentRoomTypeId;
-            document.getElementById('booking_checkIn_date').value = document.getElementById('checkIn').value;
-            document.getElementById('booking_checkOut_date').value = document.getElementById('checkOut').value;
-            document.getElementById('booking_room_count').value = currentRoomCount;
-            document.getElementById('booking_total_amount').value = document.getElementById('totalAmount').textContent.replace(' LKR', '');
-
-            document.getElementById('booking_guest_name').value = document.getElementById('guestFullName').value;
-            document.getElementById('booking_guest_email').value = document.getElementById('guestEmail').value;
-            document.getElementById('booking_guest_phone').value = document.getElementById('guestPhone').value;
-            document.getElementById('booking_guest_nic').value = document.getElementById('guestNIC').value;
-            document.getElementById('booking_special_requests').value = document.getElementById('specialRequests').value;
-            document.getElementById('booking_source').value = document.getElementById('bookingSource').value;
-            document.getElementById('booking_payment_status').value = document.getElementById('paymentStatus').value;
-
-            const paymentStatus = document.getElementById('paymentStatus').value;
-            if (paymentStatus === 'advance-paid') {
-                document.getElementById('booking_advance_amount').value = document.getElementById('advanceAmount').value;
-            } else if (paymentStatus === 'fully-paid') {
-                document.getElementById('booking_advance_amount').value = document.getElementById('booking_total_amount').value;
-            } else {
-                document.getElementById('booking_advance_amount').value = '0';
-            }
-
-            // Submit form
-            document.getElementById('directBookingForm').submit();
-        }
-
+    // Confirm the direct booking
+    function confirmDirectBooking() {
         // Validate guest information
-        function validateGuestInformation() {
-            let isValid = true;
+        // if (!validateGuestInformation()) {
+        //     return;
+        // }
 
-            // Clear all previous error messages
-            document.querySelectorAll('.error-message').forEach(element => {
-                element.remove();
-            });
+        // Prepare form data
+        document.getElementById('booking_roomType_id').value = currentRoomTypeId;
+        document.getElementById('booking_checkIn_date').value = document.getElementById('checkIn').value;
+        document.getElementById('booking_checkOut_date').value = document.getElementById('checkOut').value;
+        document.getElementById('booking_room_count').value = currentRoomCount;
+        document.getElementById('booking_total_amount').value = document.getElementById('totalAmount').textContent
+            .replace(' LKR', '');
 
-            // Reset all input borders
-            document.querySelectorAll('.guest-input').forEach(input => {
-                input.classList.remove('error');
-            });
+        document.getElementById('booking_guest_name').value = document.getElementById('guestFullName').value;
+        document.getElementById('booking_guest_email').value = document.getElementById('guestEmail').value;
+        document.getElementById('booking_guest_phone').value = document.getElementById('guestPhone').value;
+        document.getElementById('booking_guest_nic').value = document.getElementById('guestNIC').value;
+        document.getElementById('booking_special_requests').value = document.getElementById('specialRequests').value;
+        document.getElementById('booking_source').value = document.getElementById('bookingSource').value;
+        document.getElementById('booking_payment_status').value = document.getElementById('paymentStatus').value;
 
-            // Validate full name
-            const fullName = document.getElementById('guestFullName');
-            if (!fullName.value.trim()) {
-                showValidationError(fullName, 'Guest full name is required');
-                isValid = false;
-            }
-
-            // Validate email
-            const email = document.getElementById('guestEmail');
-            if (!email.value.trim()) {
-                showValidationError(email, 'Email address is required');
-                isValid = false;
-            } else if (!isValidEmail(email.value)) {
-                showValidationError(email, 'Please enter a valid email address');
-                isValid = false;
-            }
-
-            // Validate phone
-            const phone = document.getElementById('guestPhone');
-            if (!phone.value.trim()) {
-                showValidationError(phone, 'Phone number is required');
-                isValid = false;
-            }
-
-            // Validate NIC/Passport
-            const nic = document.getElementById('guestNIC');
-            if (!nic.value.trim()) {
-                showValidationError(nic, 'NIC or passport number is required');
-                isValid = false;
-            }
+        const paymentStatus = document.getElementById('paymentStatus').value;
+        if (paymentStatus === 'advance-paid') {
+            document.getElementById('booking_advance_amount').value = document.getElementById('advanceAmount').value;
+        } else if (paymentStatus === 'fully-paid') {
+            document.getElementById('booking_advance_amount').value = document.getElementById('booking_total_amount')
+                .value;
+        } else {
+            document.getElementById('booking_advance_amount').value = '0';
         }
+
+        // Submit form
+        document.getElementById('directBookingForm').submit();
+    }
+
+    // Validate guest information
+    function validateGuestInformation() {
+        let isValid = true;
+
+        // Clear all previous error messages
+        document.querySelectorAll('.error-message').forEach(element => {
+            element.remove();
+        });
+
+        // Reset all input borders
+        document.querySelectorAll('.guest-input').forEach(input => {
+            input.classList.remove('error');
+        });
+
+        // Validate full name
+        const fullName = document.getElementById('guestFullName');
+        if (!fullName.value.trim()) {
+            showValidationError(fullName, 'Guest full name is required');
+            isValid = false;
+        }
+
+        // Validate email
+        const email = document.getElementById('guestEmail');
+        if (!email.value.trim()) {
+            showValidationError(email, 'Email address is required');
+            isValid = false;
+        } else if (!isValidEmail(email.value)) {
+            showValidationError(email, 'Please enter a valid email address');
+            isValid = false;
+        }
+
+        // Validate phone
+        const phone = document.getElementById('guestPhone');
+        if (!phone.value.trim()) {
+            showValidationError(phone, 'Phone number is required');
+            isValid = false;
+        }
+
+        // Validate NIC/Passport
+        const nic = document.getElementById('guestNIC');
+        if (!nic.value.trim()) {
+            showValidationError(nic, 'NIC or passport number is required');
+            isValid = false;
+        }
+    }
     </script>
 </body>
 

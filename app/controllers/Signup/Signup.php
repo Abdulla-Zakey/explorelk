@@ -42,21 +42,21 @@ class Signup extends Controller {
 
             // Validate input data
             $data['errors'] = $this->validateSignup($data);
-            show($data['errors']);
+            // show($data['errors']);
             // If no errors, proceed with registration
             if (empty($data['errors'])) {
                 try {
                     // Hash the password
                     $hashedPassword = password_hash($data['password'], PASSWORD_DEFAULT);
                     $data['password'] = $hashedPassword;
-                    
+                    // echo 'ho';
                     // Register based on service type
                     $registrationResult = $this->registerServiceProvider($data);
                     
                     if ($registrationResult) {
                         // Redirect to login or dashboard
                         
-                        header('Location: ' . ROOT . '/Hotel/Hdashboard');
+                        // header('Location: ' . ROOT . '/Hotel/Hdashboard');
                         exit();
                     } else {
                         $data['errors']['registration'] = 'Registration failed. Please try again.';
@@ -198,18 +198,18 @@ class Signup extends Controller {
                     'yearStarted' => $data['yearStarted']
                 ];
 
+                show($insertData);
+                // echo 'hi';
+                // exit();
+
                 $isInserted = $user->insert($insertData);
+
                 if ($isInserted) {
-                    $newUser = $user->first(['restaurantEmail' => $data['email']]);
-                    if (!empty($newUser)) {
-                        redirect('traveler/Login');
-                        exit();
+                    redirect('traveler/Login?success=profile_created');
+                    exit();
                     } else {
-                        throw new Exception('Could not retrieve inserted user');
+                        throw new Exception('Failed to insert dining provider');
                     }
-                } else {
-                    throw new Exception('Failed to insert dining provider');
-                }
                 break;
 
             case 'travel':

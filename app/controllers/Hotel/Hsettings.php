@@ -9,6 +9,11 @@
        
         public function index($a = '', $b = '', $c = ''){
 
+            if (!isset($_SESSION['hotel_id'])) {
+                header("Location: " . ROOT . "/traveler/Login");
+                exit();
+            }
+
             $data['hotelBasic'] = $this->hotelModel->first(['hotel_Id' => $_SESSION['hotel_id']]);
 
             $this->view('hotel/settings', $data);

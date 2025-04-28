@@ -147,3 +147,160 @@ tr:hover {
     background-color: rgba(0, 0, 0, 0.4);
     z-index: 999;
 }
+
+#registrationTable th:nth-child(7),
+#registrationTable td:nth-child(7) {
+    text-align: center;
+    width: 120px; /* Adjust as needed */
+}
+
+.action-link {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.action-link:hover {
+    text-decoration: underline;
+}
+ /* Popup Styling */
+ .overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 999;
+    display: none;
+    transition: opacity 0.3s ease;
+}
+
+.popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+    z-index: 1000;
+    width: 90%;
+    max-width: 550px;
+    display: none;
+    overflow: hidden;
+    animation: popupFadeIn 0.3s ease;
+}
+
+@keyframes popupFadeIn {
+    from { opacity: 0; transform: translate(-50%, -60%); }
+    to { opacity: 1; transform: translate(-50%, -50%); }
+}
+
+.popup-header {
+    background: linear-gradient(135deg, #002D40, #B3D9FF);
+    color: white;
+    padding: 20px;
+    font-size: 1.5em;
+    font-weight: 600;
+    border-radius: 16px 16px 0 0;
+    text-align: center;
+    letter-spacing: 0.5px;
+}
+
+.popup-content {
+    padding: 25px;
+    font-size: 1em;
+    line-height: 1.8;
+    max-height: 450px;
+    overflow-y: auto;
+    background: #f9fafb;
+}
+
+.popup-content p {
+    margin: 12px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 12px;
+    border-radius: 8px;
+    background: #ffffff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s ease;
+}
+
+.popup-content p:hover {
+    transform: translateY(-2px);
+}
+
+.popup-content p strong {
+    color: #1f2937;
+    font-weight: 600;
+    width: 160px;
+    font-size: 0.95em;
+}
+
+.popup-content p span {
+    color: #4b5563;
+    font-weight: 400;
+    flex: 1;
+    text-align: right;
+    font-size: 0.95em;
+}
+
+.popup-actions {
+    padding: 20px;
+    border-top: 1px solid #e5e7eb;
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    background: #ffffff;
+}
+
+.popup-actions button {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.btn-download {
+    background: #002D40;
+    color: #ffffff;
+}
+
+.btn-download:hover {
+    background: #186282;
+    transform: translateY(-1px);
+}
+
+.btn-close {
+    background: #ef4444;
+    color: #ffffff;
+}
+
+.btn-close:hover {
+    background: #dc2626;
+    transform: translateY(-1px);
+}
+
+/* Table Action Link Styling */
+.action-link {
+    color: #002D40;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s ease;
+}
+
+.action-link:hover {
+    color: #012535;
+    text-decoration: underline;
+}
+
+#registrationTable th:nth-child(7),
+#registrationTable td:nth-child(7) {
+    text-align: center;
+    width: 120px;
+}
