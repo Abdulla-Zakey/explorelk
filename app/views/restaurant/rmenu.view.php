@@ -337,7 +337,7 @@ include '../app/views/components/rnav.php';
                     <div class="menu-item-details">
                         <h3><?php echo htmlspecialchars($item->name); ?></h3>
                         <p><?php echo htmlspecialchars($item->description); ?></p>
-                        <p><strong>Price:</strong> $<?php echo number_format($item->price, 2); ?></p>
+                        <p><strong>Price:</strong> Rs<?php echo number_format($item->price, 2); ?></p>
                         <p><strong>Category:</strong> <?php echo htmlspecialchars($item->category); ?></p>
                         <p><strong>Availability:</strong> <?php echo htmlspecialchars($item->availability); ?></p>
                     </div>
@@ -454,7 +454,7 @@ include '../app/views/components/rnav.php';
                     const id = menuItem.dataset.id;
                     const isActive = this.checked;
 
-                    fetch(`${baseUrl}/toggle/${id}`, {
+                    fetch(${baseUrl}/toggle/${id}, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
@@ -497,7 +497,7 @@ include '../app/views/components/rnav.php';
                     const menuItem = event.target.closest('.menu-item');
                     const id = menuItem.dataset.id;
 
-                    fetch(`${baseUrl}/get/${id}`, {
+                    fetch(${baseUrl}/get/${id}, {
                         method: 'GET',
                         headers: {
                             'Content-Type': 'application/json',
@@ -534,7 +534,7 @@ include '../app/views/components/rnav.php';
                     const id = menuItem.dataset.id;
 
                     if (confirm('Are you sure you want to delete this menu item?')) {
-                        fetch(`${baseUrl}/delete/${id}`, {
+                        fetch(${baseUrl}/delete/${id}, {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json',
@@ -562,7 +562,7 @@ include '../app/views/components/rnav.php';
                 event.preventDefault();
                 const formData = new FormData(itemForm);
                 const itemId = document.getElementById('itemId').value;
-                const url = itemId ? `${baseUrl}/update/${itemId}` : `${baseUrl}/create`;
+                const url = itemId ? ${baseUrl}/update/${itemId} : ${baseUrl}/create;
                 const method = 'POST';
 
                 fetch(url, {

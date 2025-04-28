@@ -12,6 +12,11 @@ class Hreviews extends Controller {
         // Get hotel ID from session
         $hotelId = isset($_SESSION['hotel_id']) ? (int)$_SESSION['hotel_id'] : 0;
 
+        if (!isset($_SESSION['hotel_id'])) {
+            header("Location: " . ROOT . "/traveler/Login");
+            exit();
+        }
+
         // Initialize data array
         $data = [
             'reviews' => [],

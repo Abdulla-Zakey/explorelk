@@ -11,8 +11,8 @@ class Hreports extends Controller {
 
     public function index() {
         if (!$this->hotelId) {
-            error_log("HotelReportsController::index - No hotel_id in session");
-            redirect('login');
+            header("Location: " . ROOT . "/traveler/Login");
+            exit();
         }
 
         $data = [

@@ -31,13 +31,11 @@ class CancelAccommodationBooking extends Controller
 
     public function index($roomBookingId)
     {
-        // Check if user is logged in
         if (!isset($_SESSION['traveler_id'])) {
             header("Location: " . ROOT . "/traveler/Login");
             exit();
         }
 
-        // Verify that the booking belongs to the logged-in traveler
         $booking = $this->roomBookingFinalModel->getRoomBookingByBookingId($roomBookingId);
         if (!$booking || $booking->traveler_Id != $_SESSION['traveler_id']) {
             header("Location: " . ROOT . "/traveler/MyBookings?error=unauthorized_access");
@@ -45,7 +43,6 @@ class CancelAccommodationBooking extends Controller
         }
 
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            // Validate required fields
 
             if($_POST['refundAmount'] > 0){
                 

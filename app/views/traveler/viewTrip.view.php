@@ -130,6 +130,11 @@
 
 
 <body>
+    <?php
+        // var_dump($data);
+        // var_dump($data['trip']->foodPereference);
+        // exit();
+    ?>
 
     <header>
         <nav class="navbar">
@@ -249,8 +254,19 @@
                                 <input type="number" name="budgetPerPerson" value="<?= $data['trip']->budgetPerPerson ?? '' ?>" readonly>
                             </div>
                         </div>
+
+                        <div class="rowContainerIn-preferences-Container">
+                            <div>
+                                <label>Food Pereference</label>
+                                <input type="text" name="foodPereference" value="<?= $data['trip']->foodPreference ?? '' ?>" readonly>
+                            </div>
+
+                        </div>
                         
                     </div>
+
+                    
+                   
 
                 </div>
 

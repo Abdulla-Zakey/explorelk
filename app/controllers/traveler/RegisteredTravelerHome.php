@@ -2,13 +2,16 @@
 class RegisteredTravelerHome extends Controller
 {
     private $eventModel;
+    private $tourPackagesModel;
 
     // This model is to get unread notifications 
     private $notificationsModel;
 
     public function __construct(){
         $this->eventModel = new Event();
+        $this->tourPackagesModel = new TourPackages();
         $this->notificationsModel = new NotificationsModel();
+
     }
 
     public function index()

@@ -27,6 +27,10 @@ class Login extends Controller
             redirect('Hotel/Hdashboard');
             exit();
         }
+        elseif (isset($_SESSION['restaurant_id'])) {
+            redirect('Restaurant/Rdashboard');
+            exit();
+        }
 
 
         // Check if the form is submitted
@@ -85,12 +89,13 @@ class Login extends Controller
                     $user = new Hotel;
                     $passwordField = 'hotelPassword';
                     break;
-
-                case 'travelSP':
-                    $data = ['travelagentEmail' => $email];
-                    $user = new TravelAgent();
-                    $passwordField = 'travelagentPassword';
+                
+                case 'diningSP':
+                    $data = ['restaurantEmail' => $email];
+                    $user = new Restaurant;
+                    $passwordField = 'restaurantPassword';
                     break;
+
 
                 default:
                     $this->redirectWithError("Invalid user role");
@@ -110,12 +115,20 @@ class Login extends Controller
             }
 
             if (!empty($result)) {
+
+                // Check if email is verified
+                if ($userRole == 'traveler' && $result->emailVerified != 1) {
+                    // Email not verified
+                    redirect('traveler/VerificationPending');
+                    exit();
+                }
+
                 // Verify password using the correct password field
-                if (password_verify($password, $result[0]->$passwordField)) {
+                if (password_verify($password, $result->$passwordField)) {
                     switch($userRole){
                         case 'traveler':
                             // Set session variables
-                            $_SESSION['traveler_id'] = $result[0]->traveler_Id;
+                            $_SESSION['traveler_id'] = $result->traveler_Id;
 
                             // Redirect to Traveler's dashboard
                             redirect('traveler/RegisteredTravelerHome');
@@ -136,7 +149,7 @@ class Login extends Controller
 
                         case 'tourGuide':
                             // Set session variables
-                            $_SESSION['guide_id'] = $result[0]->guide_Id;
+                            $_SESSION['guide_id'] = $result->guide_Id;
 
                             // Redirect to Tour Guide's dashboard
                             redirect('tourguide/C_dashboard');

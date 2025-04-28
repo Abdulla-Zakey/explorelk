@@ -16,7 +16,8 @@ class Trip
         'departureTime',
         'transportationMode',
         'numberOfTravelers',
-        'budgetPerPerson'
+        'budgetPerPerson',
+        'foodPreference'
     ];
 
     public function validate($data)
@@ -70,6 +71,14 @@ class Trip
             $errors['budgetPerPerson'] = "Budget per person can't be negative.";
         }
 
+        if(!empty($data['foodPreference'])){
+            $isTwoWords = array_filter(array_map('trim', explode(' ', $data['foodPreference'])));
+            // var_dump($isTwoWords);
+            // exit();
+            if(!empty($isTwoWords[1])){
+                $errors['foodPreference'] = "Food Preference cannot be 2 or more words";
+            }
+        }
         // return empty($errors);
         return $errors;
     }

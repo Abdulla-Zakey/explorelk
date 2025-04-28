@@ -228,7 +228,11 @@ class MyTrips extends Controller
             $destination = htmlspecialchars(trim($_POST['destination']));
             $destination = str_replace(", Sri Lanka", "", $destination );
 
+            // var_dump($_POST);
+            // exit();
+
             $data = [
+                
                 'tripName' => htmlspecialchars(trim($_POST['tripName'])),
                 'startingLocation' => $startingLocation,
                 'destination' => $destination,
@@ -237,8 +241,10 @@ class MyTrips extends Controller
                 'departureTime' => $_POST['departureTime'],
                 'transportationMode' => $_POST['transportation'] ?? $trip->transportationMode,
                 'numberOfTravelers' => !empty($_POST['travelersCount']) ? intval($_POST['travelersCount']) : null,
-                'budgetPerPerson' => !empty($_POST['budgetPerPerson']) ? floatval($_POST['budgetPerPerson']) : null
+                'budgetPerPerson' => !empty($_POST['budgetPerPerson']) ? floatval($_POST['budgetPerPerson']) : null,
+                'foodPreference' => htmlspecialchars(trim($_POST['foodPereference']))
             ];
+            
 
             
             // Validate trip data

@@ -533,7 +533,7 @@
         <?php else: ?>
             <!-- Empty State -->
             <div class="empty-state">
-                <img src="<?= IMAGES ?>/illustrations/no_results.svg" alt="No results found">
+                <!-- <img src="<?= IMAGES ?>/illustrations/no_results.svg" alt="No results found"> -->
                 <h2>No Hotels Found</h2>
                 <p>
                     We couldn't find any hotels registered in the selected district. 

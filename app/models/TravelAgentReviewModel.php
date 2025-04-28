@@ -90,7 +90,7 @@ class TravelAgentReviewModel
 
 // In your controller (likely TravelAgentController.php)
 public function reviews() {
-    $agentId = /* get the agent ID from session or request */;
+    $agentId = $_SESSION['travelAgent_id'];
     $reviewModel = new TravelAgentReviewModel();
     $stats = $reviewModel->getReviewStats($agentId);
     $reviews = $reviewModel->getReviewsByTravelAgentId($agentId);
