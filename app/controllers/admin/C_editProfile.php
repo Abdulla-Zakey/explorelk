@@ -1,8 +1,5 @@
 <?php 
 
-/**
- * Edit Profile class
- */
 class C_editProfile extends Controller
 {
 
@@ -21,13 +18,11 @@ class C_editProfile extends Controller
 
     public function updateProfile()
     {
-        // Ensure user is logged in
         if(!isset($_SESSION['admin_id'])) {
             header('Location: ' . ROOT . '/admin/C_adminLogin');
             exit;
         }
 
-        // Handle form submission
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $user = new Admin();
             $id = $_SESSION['admin_id'];
@@ -35,7 +30,6 @@ class C_editProfile extends Controller
             $userData = $user->findUserById($id);
             $uploadedImage = $userData->profile_picture;
 
-            // Prepare data for update
             $data = [
                 'firstName' => $_POST['first-name'] ?? '',
                 'lastName' => $_POST['last-name'] ?? '',
@@ -47,9 +41,9 @@ class C_editProfile extends Controller
                 'phoneNo' => $_POST['contact-no'] ?? '',
                 'address' => $_POST['address'] ?? '',
                 'nic' => $_POST['nic'] ?? '',
+                'work_experience' => $_POST['work_experience'],
             ];
 
-            // Handle profile picture upload first
             if (isset($_FILES['profile-image']) && $_FILES['profile-image']['error'] == 0) {
                 $uploadDir = '../public/assets/images/admin/adminProfilePhotos/';
                 $fileName = uniqid() . '_' . basename($_FILES['profile-image']['name']);
@@ -63,20 +57,16 @@ class C_editProfile extends Controller
             }
 
             if (!$user->validate($data, false)) {
-                // Pass errors to the view
                 $data = [
                     'userData' => $userData,
                     'errors' => $user->errors,
                 ];
     
-                // Render view with errors
                 $this->view('admin/editProfile', $data);
                 exit;
             }
 
-            // Validate without strict email/password checks for profile update
             if ($user->validate($data, false)) {
-                // Handle password update
                 if (!empty($_POST['password'])) {
                     if ($_POST['password'] === $_POST['confirmPassword']) {
                         $data['password'] = password_hash($_POST['password'], PASSWORD_DEFAULT);
@@ -89,7 +79,6 @@ class C_editProfile extends Controller
                     $data['password'] = $userData->password;
                 }
 
-                // Perform update
                 $result = $user->update($id, $data, 'admin_id');
 
                 if ($result) {
@@ -102,7 +91,6 @@ class C_editProfile extends Controller
                     exit;
                 }
             } else {
-                // Store validation errors in session for display
                 $_SESSION['errors'] = $user->errors;
                 header('Location: ' . ROOT . '/admin/C_editProfile');
                 exit;

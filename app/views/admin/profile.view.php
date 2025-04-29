@@ -17,7 +17,6 @@
     <div class="admin-container">
         <?php include_once APPROOT . "/views/inc/adminNavBar.php"; ?>
 
-        <!-- Main Content -->
         <div class="main-content">
             <h1>User Profile</h1>
 
@@ -35,7 +34,6 @@
                     </div>
 
                     <div class="info-sections">
-                        <!-- Personal Information Section -->
                         <div class="info-section">
                             <h3 class="section-title">
                                 <i class="fas fa-user"></i> Personal Information
@@ -80,10 +78,19 @@
                                         <div class="detail-value"><?= $data['city']; ?></div>
                                     </div>
                                 </div>
+
+                                <div class="detail-item">
+                                    <div class="detail-icon">
+                                        <i class="fas fa-city"></i>
+                                    </div>
+                                    <div class="detail-content">
+                                        <div class="detail-label" style="width: fit-content;">Work Experience (In Years)</div>
+                                        <div class="detail-value"><?= $data['work_experience']; ?></div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         
-                        <!-- Contact Information Section -->
                         <div class="info-section">
                             <h3 class="section-title">
                                 <i class="fas fa-address-book"></i> Contact Information

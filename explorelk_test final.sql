@@ -81,7 +81,7 @@ CREATE TABLE IF NOT EXISTS `activity` (
 --
 
 DROP TABLE IF EXISTS `admin`;
-CREATE TABLE IF NOT EXISTS `admin` (
+CREATE TABLE `admin` (
   `admin_id` int(11) NOT NULL,
   `firstName` varchar(255) NOT NULL,
   `lastName` varchar(255) NOT NULL,
@@ -93,8 +93,9 @@ CREATE TABLE IF NOT EXISTS `admin` (
   `city` varchar(255) NOT NULL,
   `phoneNo` int(11) NOT NULL,
   `address` varchar(255) NOT NULL,
-  `nic` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `nic` varchar(255) NOT NULL,
+  `work_experience` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `admin`
