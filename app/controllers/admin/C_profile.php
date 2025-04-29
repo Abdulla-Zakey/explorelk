@@ -1,8 +1,5 @@
 <?php 
 
-/**
- * Profile class
- */
 class C_profile extends Controller
 {
 
@@ -17,7 +14,8 @@ class C_profile extends Controller
 
 		$data = $user->findUserById($id);
 		// var_dump($id);
-
+		// show($data);
+// show(strlen($data->nic));
 		$this->view('admin/profile', $data);
 	}
 
