@@ -185,7 +185,10 @@
     </header>
 
     <main>
+    <?php //show($data['restaurants']); ?>
+
       <div class="restaurant-grid" id="restaurant-grid">
+
         <!-- Restaurant cards will be inserted here by JavaScript -->
       </div>
     </main>
@@ -205,7 +208,8 @@
         : 'https://placehold.co/300x200/e2e8f0/64748b?text=' + encodeURIComponent(restaurant.restaurantName || 'Restaurant');
       
       // Ensure restaurant ID is available (adjust field name as per your data structure)
-      const restaurantId = restaurant.restaurantId || restaurant.id || '';
+      const restaurantId = restaurant.restaurant_id || restaurant.id || '';
+      
 
       return `
         <a href="${ROOT}/traveler/trestaurant?id=${restaurantId}" class="restaurant-card" style="text-decoration: none;">

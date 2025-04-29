@@ -79,7 +79,7 @@
                     </span>
                     <br>
                     <div class = "input-container">
-                        <input type="email" name = "travelerEmail" required>
+                        <input type="text" name = "travelerEmail">
                         <i class = "fa-solid fa-envelope"></i>
                     </div>
                     
@@ -90,14 +90,17 @@
                     </span>
                     <br>
                     <div class = "input-container">
-                        <input type="password" name = "travelerPassword" required>
+                        <input type="password" name = "travelerPassword">
                         <i class="fa-solid fa-lock"></i>
                     </div>
                     
     
                     User Role
+                    <span class="error-message">
+                            <?= isset($error['role']) ? "*" . $error['role'] : ''; ?>
+                    </span>
                     <br>
-                    <select required name = "userRole">
+                    <select name = "userRole">
                         <option value="" disabled selected>Select Your Role</option>
                         <option value="traveler">Traveler</option>
                         <option value="tourGuide">Tour Guide</option>

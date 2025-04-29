@@ -34,7 +34,7 @@ include_once APPROOT . '/views/hotel/hotelhead.php';
                     <?php foreach ($data['reviews'] as $review): ?>
                         <div class="review">
                             <?php if (!empty($review->profilePicture)): ?>
-                                <img class="profile-picture" src="<?= ROOT ?>/assets/images/travelers/<?= htmlspecialchars($review->profilePicture) ?>" alt="Profile Picture">
+                                <img class="profile-picture" src="<?= UPLOADS ?>/travelers/userProfilePics/<?= htmlspecialchars($review->profilePicture) ?>" alt="Profile Picture">
                             <?php else: ?>
                                 <span class="profile-initial"><?= strtoupper(substr($review->fname, 0, 1)) ?></span>
                             <?php endif; ?>

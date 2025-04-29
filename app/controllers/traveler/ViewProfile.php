@@ -10,9 +10,8 @@
         }
 
         public function index() {
-            // Check if user is logged in (assuming you have a session management system)
+            
             if(!isset($_SESSION['traveler_id'])) {
-                // Redirect to login if not logged in
                 redirect('traveler/Login');
             }
     

@@ -99,6 +99,14 @@
         background-color: #c82333;
     }
 
+    .view-receipt-btn {
+        background-color: var(--positive-color);
+    }
+
+    .view-receipt-btn:hover {
+        background-color: #218838;
+    }
+
     .metrics-grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -247,25 +255,30 @@
         font-weight: 600;
     }
 
-    .bank-details-table {
+    .bank-details-table,
+    .event-commissions-table {
         width: 100%;
         border-collapse: collapse;
     }
 
     .bank-details-table th,
-    .bank-details-table td {
+    .bank-details-table td,
+    .event-commissions-table th,
+    .event-commissions-table td {
         padding: 12px;
         text-align: left;
         border-bottom: 1px solid #ddd;
     }
 
-    .bank-details-table th {
+    .bank-details-table th,
+    .event-commissions-table th {
         background-color: var(--primary-color);
         color: #fff;
         font-weight: 600;
     }
 
-    .bank-details-table tr:hover {
+    .bank-details-table tr:hover,
+    .event-commissions-table tr:hover {
         background-color: #f5f5f5;
     }
 
@@ -285,7 +298,9 @@
         }
 
         .bank-details-table th,
-        .bank-details-table td {
+        .bank-details-table td,
+        .event-commissions-table th,
+        .event-commissions-table td {
             padding: 8px;
             font-size: 14px;
         }
@@ -314,7 +329,9 @@
         }
 
         .bank-details-table th,
-        .bank-details-table td {
+        .bank-details-table td,
+        .event-commissions-table th,
+        .event-commissions-table td {
             font-size: 12px;
         }
 
@@ -332,40 +349,6 @@
             <h1>Finance Dashboard</h1>
             <button id="addBankDetailsBtn">Add Bank Details</button>
         </header>
-
-        <!-- <div class="metrics-grid">
-            <div class="metric-card">
-                <h3>Total Earnings</h3>
-                <p class="metric-value">Rs45,231.89</p>
-            </div>
-            <div class="metric-card">
-                <h3>Events Organized</h3>
-                <p class="metric-value">5</p>
-            </div>
-            <div class="metric-card">
-                <h3>Average Event Price</h3>
-                <p class="metric-value">Rs584.00</p>
-            </div>
-            <div class="metric-card">
-                <h3>Current Event Earning</h3>
-                <p class="metric-value">Rs25,000</p>
-            </div>
-        </div> -->
-
-        <!-- <div class="charts-container">
-            <div class="chart-card">
-                <h3>Income Details</h3>
-                <div class="chart-container">
-                    <canvas id="incomeChart">Your browser does not support the canvas element.</canvas>
-                </div>
-            </div>
-            <div class="chart-card">
-                <h3>Earnings Analysis</h3>
-                <div class="chart-container">
-                    <canvas id="earningsChart">Your browser does not support the canvas element.</canvas>
-                </div>
-            </div>
-        </div> -->
 
         <!-- Bank Details Table -->
         <div class="table-container">
@@ -395,6 +378,44 @@
                     <?php else: ?>
                         <tr>
                             <td colspan="4" class="no-data">No bank details available</td>
+                        </tr>
+                    <?php endif; ?>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Event Commissions Table -->
+        <div class="table-container">
+            <h2>Event Commissions</h2>
+            <table class="event-commissions-table">
+                <thead>
+                    <tr>
+                        <th>Event ID</th>
+                        <th>Amount</th>
+                        <th>Reference Number</th>
+                        <th>Payment Date</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="eventCommissionsTableBody">
+                    <?php if (!empty($data['eventCommissions'])): ?>
+                        <?php foreach ($data['eventCommissions'] as $commission): ?>
+                            <?php //show($data['eventCommissions']); ?>
+                            <tr data-id="<?php echo htmlspecialchars($commission->commission_id); ?>">
+                                <td><?php echo htmlspecialchars($commission->event_Id); ?></td>
+                                <td><?php echo htmlspecialchars(number_format($commission->amount, 2)); ?></td>
+                                <td><?php echo htmlspecialchars($commission->reference_number); ?></td>
+                                <td><?php echo htmlspecialchars($commission->payment_date); ?></td>
+                                <td>
+                                    <a href="<?= ROOT . $commission->receipt_path ?>" target="_blank">
+                                        <button class="action-btn view-receipt-btn">View Receipt</button>
+                                    </a>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <tr>
+                            <td colspan="5" class="no-data">No event commissions available</td>
                         </tr>
                     <?php endif; ?>
                 </tbody>
@@ -513,7 +534,7 @@
                     addModal.style.display = "none";
                     addForm.reset();
                     // Refresh the table
-                    location.reload(); // Can be optimized later
+                    location.reload();
                 } else {
                     alert(result.message);
                 }
@@ -559,7 +580,7 @@
                     updateModal.style.display = "none";
                     updateForm.reset();
                     // Refresh the table
-                    location.reload(); // Can be optimized later
+                    location.reload();
                 } else {
                     alert(result.message);
                 }
@@ -589,7 +610,7 @@
                 if (result.success) {
                     alert(result.message);
                     // Remove the row from the table
-                    const row = document.querySelector(`#bankDetailsTableBody tr[data-id="${id}"]`);
+                    const row = document.querySelector(#bankDetailsTableBody tr[data-id="${id}"]);
                     if (row) {
                         row.remove();
                     }
@@ -606,52 +627,6 @@
                 alert("An error occurred while deleting bank details.");
             }
         };
-
-        // Chart functionality
-        function createChart(canvasId, type, labels, data, label, backgroundColor, borderColor) {
-            const ctx = document.getElementById(canvasId).getContext('2d');
-
-            if (window.myCharts && window.myCharts[canvasId]) {
-                window.myCharts[canvasId].destroy();
-            }
-
-            window.myCharts = window.myCharts || {};
-            window.myCharts[canvasId] = new Chart(ctx, {
-                type: type,
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        label: label,
-                        data: data,
-                        backgroundColor: backgroundColor,
-                        borderColor: borderColor,
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        y: {
-                            beginAtZero: true
-                        }
-                    }
-                }
-            });
-        }
-
-        const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'];
-        const incomeData = [12000, 19000, 15000, 22000, 18000, 25000];
-        const earningsData = [3000, 4500, 3800, 5500, 4200, 6000];
-
-        createChart('incomeChart', 'bar', months, incomeData, 'Income', '#002d40', 'rgba(0, 168, 232, 1)');
-        createChart('earningsChart', 'line', months, earningsData, 'Earnings', 'rgba(0, 92, 122, 0.1)', 'rgb(0, 92, 122)');
-
-        window.addEventListener('resize', () => {
-            if (window.myCharts) {
-                Object.values(window.myCharts).forEach(chart => chart.resize());
-            }
-        });
     });
     </script>
 </body>

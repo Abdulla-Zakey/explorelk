@@ -23,7 +23,8 @@ class RoomBookingsFinalModel {
         'booking_status',
         'requested_date',
         'advance_payment_deadline',
-        'is_archived'
+        'is_archived',
+        'booking_source'
     ];
 
     public function getRoomBookingByTravelerId($traveler_id){
@@ -80,5 +81,14 @@ class RoomBookingsFinalModel {
         );
 
         return $result;
+    }
+
+    public function getMonthlyData($hotelId){
+        $query = "SELECT * 
+                    FROM $this->table 
+                    WHERE hotel_Id = :hotel_id";
+
+        $data = $this->query($query, ['hotel_id' => $hotelId]);
+        return $data;
     }
 }

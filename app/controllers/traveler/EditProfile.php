@@ -99,7 +99,8 @@ class EditProfile extends Controller {
     private function handleProfilePicUpload() {
         if (isset($_FILES['profilePicture']) && $_FILES['profilePicture']['error'] === UPLOAD_ERR_OK) {
             // Use absolute server path instead of ROOT constant
-            $uploadDir = $_SERVER['DOCUMENT_ROOT'] . '/gitexplorelk/explorelk/public/assets/images/Travelers/userProfilePics/';
+            // $uploadDir = $_SERVER['DOCUMENT_ROOT'] . '/gitexplorelk/explorelk/public/assets/images/Travelers/userProfilePics/';
+            $uploadDir = $_SERVER['DOCUMENT_ROOT'] . '/gitexplorelk/explorelk/public/uploads/travelers/userProfilePics/';
             
             // Generate a unique filename
             $fileName = uniqid() . '_' . basename($_FILES['profilePicture']['name']);

@@ -1,27 +1,57 @@
-
 <?php
-
 class TRestaurant extends Controller
 {
     protected $tableModel;
     protected $reservationModel;
     protected $menuModel;
+    protected $restaurantModel; // Add Restaurant model
+    protected $restaurantStatusModel; // Add RestaurantStatus model
     protected $restaurant_id;
 
+    
     public function __construct()
     {
         // Initialize models
         $this->tableModel = new Table();
         $this->reservationModel = new Reservation();
         $this->menuModel = new Menu();
-        // Set restaurant_id to 6
-        $this->restaurant_id = 6;
-        // Log timezone
+        $this->restaurantModel = new Restaurant();
+        $this->restaurantStatusModel = new RestaurantStatus();
+
+        // Get restaurant_id from URL parameter
+        $this->restaurant_id = isset($_GET['id']) ? (int)$_GET['id'] : null;
+
+        // Validate restaurant_id
+        if (!$this->restaurant_id || $this->restaurant_id <= 0) {
+            error_log("Invalid or missing restaurant_id in URL");
+            header('Location: ' . ROOT . '/traveler/trestaurant?error=Invalid restaurant ID');
+            exit;
+        }
+
+        // Log timezone and restaurant_id
         error_log("RestaurantController initialized with restaurant_id: {$this->restaurant_id}, Timezone: " . date_default_timezone_get());
     }
 
     public function index()
     {
+        // Fetch restaurant details
+        error_log("Attempting to fetch restaurant details for restaurant_id: {$this->restaurant_id}");
+        $restaurant = $this->restaurantModel->find($this->restaurant_id);
+        if (!$restaurant) {
+            error_log("ERROR: No restaurant found for restaurant_id {$this->restaurant_id}. Check database or query.");
+        } else {
+            error_log("Restaurant details fetched: " . json_encode($restaurant));
+        }
+
+        // Fetch restaurant status (for opening hours, status, etc.)
+        error_log("Attempting to fetch restaurant status for restaurant_id: {$this->restaurant_id}");
+        $restaurantStatus = $this->restaurantStatusModel->getStatus($this->restaurant_id);
+        if (!$restaurantStatus) {
+            error_log("ERROR: No status found for restaurant_id {$this->restaurant_id}.");
+        } else {
+            error_log("Restaurant status fetched: " . json_encode($restaurantStatus));
+        }
+
         // Fetch tables
         error_log("Attempting to fetch tables for restaurant_id: {$this->restaurant_id}");
         $tables = $this->tableModel->getAllTables($this->restaurant_id);
@@ -47,10 +77,10 @@ class TRestaurant extends Controller
 
         // Organize menu items by category
         $menuData = [
-            'starters' => [],
-            'mains' => [],
-            'desserts' => [],
-            'drinks' => []
+            'appetizer' => [],
+            'main_course' => [],
+            'dessert' => [],
+            'beverage' => []
         ];
         foreach ($menuItems as $item) {
             if ($item->is_active) {
@@ -71,6 +101,8 @@ class TRestaurant extends Controller
 
         // Pass data to the view
         $data = [
+            'restaurant' => $restaurant, // Add restaurant details
+            'restaurantStatus' => $restaurantStatus, // Add restaurant status
             'tables' => $tables,
             'reservations' => $reservations,
             'menuData' => $menuData,
@@ -83,12 +115,14 @@ class TRestaurant extends Controller
         $this->view('traveler/trestaurant', $data);
     }
 
+    // ... (rest of the methods like reserve and cancelReservation remain unchanged)
+
     public function reserve()
     {
         error_log("Reserve method called with request method: {$_SERVER['REQUEST_METHOD']}");
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             error_log("Invalid request method for reserve: {$_SERVER['REQUEST_METHOD']}");
-            header('Location: ' . ROOT . '/traveler/restaurant?error=Invalid request method');
+            header('Location: ' . ROOT . '/traveler/trestaurant?error=Invalid request method');
             exit;
         }
 

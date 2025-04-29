@@ -13,8 +13,15 @@ class Hguest extends Controller {
     }
 
     public function index($a = '', $b = '', $c = '') {
+
+        if (!isset($_SESSION['hotel_id'])) {
+            header("Location: " . ROOT . "/traveler/Login");
+            exit();
+        }
         // Fetch hotel basic data
         $data['hotelBasic'] = $this->hotelModel->first(['hotel_Id' => $_SESSION['hotel_id']]);
+        // Explicitly pass hotel name
+        $data['hotel_name'] = $data['hotelBasic']->hotel_name ?? 'Unknown Hotel';
 
         // First, get all guests
         $query = "

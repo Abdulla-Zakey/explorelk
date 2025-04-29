@@ -5,7 +5,8 @@ class Hmessages extends Controller {
     
     public function __construct() {
         if (!isset($_SESSION['hotel_id'])) {
-            redirect('login');
+            header("Location: " . ROOT . "/traveler/Login");
+            exit();
         }
         $this->messagesModel = $this->loadModel('Messages');
     }
@@ -13,6 +14,7 @@ class Hmessages extends Controller {
     public function index() {
         $data['conversations'] = $this->messagesModel->getHotelConversations($_SESSION['hotel_id']);
         $this->view('hotel/messages', $data);
+        
     }
     
     public function api_getConversation() {

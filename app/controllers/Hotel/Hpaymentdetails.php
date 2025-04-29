@@ -1,7 +1,18 @@
 <?php
 class Hpaymentdetails extends Controller {
     private $hotelModel;
+    private $hotelCommissionsModel;
+
     public function index($a = '', $b = '', $c = '') {
+
+        $roomBookingsModel = new RoomBookingsFinalModel();
+
+
+
+        if (!isset($_SESSION['hotel_id'])) {
+            header("Location: " . ROOT . "/traveler/Login");
+            exit();
+        }
         // Get the logged-in hotel ID
         $hotelId = isset($_SESSION['hotel_id']) ? $_SESSION['hotel_id'] : null;
         
@@ -11,6 +22,8 @@ class Hpaymentdetails extends Controller {
 
         // Get all commissions for this hotel
         $commissions = $hotelCommissionsModel->where(['hotel_id' => $_SESSION['hotel_id']]);
+
+        // show($commissions);
         
         // Since we can't filter by status in the database, let's do it in PHP
         // Initialize empty arrays for different status categories
@@ -19,6 +32,22 @@ class Hpaymentdetails extends Controller {
         $rejectedCommissions = $hotelCommissionsModel->where(['hotel_id' => $_SESSION['hotel_id'], 'status' => 'Denied']);
         $totalCommission = 0; // Initialize total commission
         
+        //show($pendingCommissions);
+
+        $rejectamount = 0;
+
+        $totalamounttopaycommision = 0;
+
+        foreach($rejectedCommissions as $money){
+            $rejectamount += $money->commission_amount;
+        }
+
+
+        //show($rejectamount);
+
+
+
+
         // If there's a field in your commissions that indicates status, you could do:
         // foreach ($commissions as $commission) {
         //     if ($commission->some_status_field == 'approved') {
@@ -40,7 +69,9 @@ class Hpaymentdetails extends Controller {
         $perPage = 10;
         
         // Get monthly data for chart
-        $monthlyData = $hotelCommissionsModel->getMonthlyData($hotelId, 6);
+        $earning = $roomBookingsModel ->getMonthlyData($hotelId);
+
+        //show($monthlyData);
         
         // Get payment summary data
         $data = [
@@ -51,12 +82,14 @@ class Hpaymentdetails extends Controller {
             'earningHistory' => $hotelCommissionsModel->getFilteredPaymentHistory($hotelId, $month, $year), // Assuming same data for earning
             'currentMonth' => $month,
             'currentYear' => $year,
-            'monthlyData' => $monthlyData,
+            // 'monthlyData' => $monthlyData,
             'commissions' => $commissions,
             'approvedCommissions' => $approvedCommissions,
             'pendingCommissions' => $pendingCommissions,
             'rejectedCommissions' => $rejectedCommissions,
-            'totalCommission' => $totalCommission
+            'totalCommission' => $totalCommission,
+            'rejectamount' => $rejectamount,
+            'earning' => $earning,
         ];
         
         // Pass data to the view
@@ -101,6 +134,7 @@ class Hpaymentdetails extends Controller {
         $roomBooking = $roomBookingsModel->getRoomBookingByBookingId($bookingId);
         
         // Prepare data for the view
+        //show($roomBooking);
         $data = [
             'bookingDetails' => $bookingDetails,
             'roomBooking' => $roomBooking,

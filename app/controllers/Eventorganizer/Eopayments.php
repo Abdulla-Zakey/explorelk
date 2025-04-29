@@ -1,5 +1,7 @@
 <?php
 class Eopayments extends Controller {
+
+    
     public function index($a = '', $b = '', $c = '') {
         // Start session if not already started
         if (session_status() === PHP_SESSION_NONE) {
@@ -18,10 +20,13 @@ class Eopayments extends Controller {
 
         // Fetch bank details for the logged-in organizer
         $bankDetails = $bankModel->getBankDetailsByOrganizerId($_SESSION['organizer_id']);
-
+        $eventCommissionsModel = new EventCommissions();
+        $eventCommissions = $eventCommissionsModel->selectALL();
+// show($eventCommissions);
         // Pass data to the view
         $data = [
-            'bankDetails' => $bankDetails
+            'bankDetails' => $bankDetails,
+            'eventCommissions' => $eventCommissions,
         ];
 
         $this->view('eventorganizer/eopayments', $data);

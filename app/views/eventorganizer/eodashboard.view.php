@@ -24,9 +24,6 @@ $completedEvents = $eventModel->where([
 ]);
 $completedEventsCount = is_array($completedEvents) ? count($completedEvents) : 0;
 
-// Debugging: Uncomment to inspect Completed Events query result
-// var_dump($completedEvents); exit;
-
 // 2. Events in Processing: Approved events with eventDate >= today
 $eventsInProcessing = $eventModel->where([
     'organizer_Id' => $organizerId,
@@ -41,77 +38,57 @@ $totalRevenue = 0;
 
 foreach ($organizerEvents as $event) {
     $bookings = $eventBookingModel->where(['event_Id' => $event->event_Id]);
-    if (is_array($bookings)) {
+    if (is_array($bookings) && count($bookings) > 0) {
         foreach ($bookings as $booking) {
             $totalRevenue += (float) $booking->totalAmount;
         }
     }
 }
 
-// Debugging: Check if events exist
-// var_dump(array_column($organizerEvents, 'event_Id')); exit;
-
-// 4. Chart Data: Monthly Ticket Sales (using EventTicketPurchasersModel)
-$monthlySales = [];
-$months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-$year = '2024'; // Adjust to match your data (e.g., 2023, 2024)
-
-foreach ($months as $index => $month) {
-    $monthNum = sprintf("%02d", $index + 1);
-    $startDate = "$year-$monthNum-01";
-    $endDate = date('Y-m-d', strtotime("$startDate +1 month"));
-    $ticketCount = 0;
-
-    foreach ($organizerEvents as $event) {
-        $bookings = $eventBookingModel->where(['event_Id' => $event->event_Id]);
-        if (is_array($bookings)) {
-            foreach ($bookings as $booking) {
-                $purchasers = $ticketPurchasersModel->where([
-                    'booking_Id' => $booking->booking_Id,
-                    'created_at>=' => $startDate,
-                    'created_at<' => $endDate
-                ]);
-                if (is_array($purchasers)) {
-                    $ticketCount += count($purchasers);
-                }
-            }
-        }
-    }
-    $monthlySales[] = [
-        'month' => $month,
-        'sales' => $ticketCount
-    ];
-}
-
-// Debugging: Uncomment to inspect Monthly Ticket Sales data
-// var_dump($monthlySales); exit;
-
-// 5. Chart Data: Ticket Sales Progress (using EventTicketPurchasersModel)
-$ticketSalesProgress = [];
-$upcomingEvents = $eventModel->where([
+// 4. Table Data: Pending Events Counts
+$pendingEventsTable = [];
+$pendingEventsData = $eventModel->where([
     'organizer_Id' => $organizerId,
-    'eventStatus' => 'approved',
-    'eventDate>=' => date('Y-m-d')
-], ['limit' => 5]);
+    'eventStatus' => 'pending'
+]);
 
-foreach ($upcomingEvents as $event) {
-    $bookings = $eventBookingModel->where(['event_Id' => $event->event_Id]);
-    $sold = 0;
-    if (is_array($bookings)) {
-        foreach ($bookings as $booking) {
-            $purchasers = $ticketPurchasersModel->where(['booking_Id' => $booking->booking_Id]);
-            if (is_array($purchasers)) {
-                $sold += count($purchasers);
-            }
-        }
+// Collect event names and total count
+$pendingCount = is_array($pendingEventsData) ? count($pendingEventsData) : 0;
+$pendingEventsTable = [
+    'count' => $pendingCount,
+    'events' => []
+];
+
+if (is_array($pendingEventsData) && count($pendingEventsData) > 0) {
+    foreach ($pendingEventsData as $event) {
+        $pendingEventsTable['events'][] = [
+            'name' => $event->eventName ?? 'Unnamed Event'
+        ];
     }
-    $total = isset($event->ticketCount) ? (int) $event->ticketCount : 0;
-    $ticketSalesProgress[] = [
-        'name' => $event->eventName,
-        'sold' => $sold,
-        'total' => $total
-    ];
 }
+
+// 5. Chart Data: Pending Events (Pie Chart)
+$pendingEvents = [
+    'count' => $pendingCount,
+    'byType' => []
+];
+
+// Group by eventType for pie chart
+if (is_array($pendingEventsData) && count($pendingEventsData) > 0) {
+    $eventTypes = array_unique(array_column($pendingEventsData, 'eventType'));
+    foreach ($eventTypes as $type) {
+        $typeCount = count(array_filter($pendingEventsData, function($event) use ($type) {
+            return $event->eventType === $type;
+        }));
+        $pendingEvents['byType'][] = [
+            'type' => $type,
+            'count' => $typeCount
+        ];
+    }
+}
+
+// Debugging: Inspect pendingEvents and pendingEventsTable
+// var_dump($pendingEventsTable, $pendingEvents); exit;
 
 // 6. Chart Data: Revenue by Event Type
 $revenueByEventType = [];
@@ -125,7 +102,7 @@ foreach ($eventTypes as $type) {
     $typeRevenue = 0;
     foreach ($typeEvents as $event) {
         $bookings = $eventBookingModel->where(['event_Id' => $event->event_Id]);
-        if (is_array($bookings)) {
+        if (is_array($bookings) && count($bookings) > 0) {
             foreach ($bookings as $booking) {
                 $typeRevenue += (float) $booking->totalAmount;
             }
@@ -148,6 +125,35 @@ foreach ($eventTypes as $type) {
     <title><?= $title ?></title>
     <script src="https://kit.fontawesome.com/d11f03c652.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .pending-events-table {
+            width: 100%;
+            max-width: 400px;
+            margin: 20px auto;
+            border-collapse: collapse;
+            font-family: 'Poppins', sans-serif;
+        }
+        .pending-events-table th, .pending-events-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        .pending-events-table th {
+            background-color: #002D40;
+            color: white;
+        }
+        .pending-events-table tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        .pending-events-table tr.total {
+            font-weight: bold;
+        }
+        .no-data {
+            text-align: center;
+            font-style: italic;
+            color: #666;
+        }
+    </style>
 </head>
 <body>
 <div class="dashboard">
@@ -168,18 +174,40 @@ foreach ($eventTypes as $type) {
         </div>
         <div class="stat-box">
             <h2>Total Revenue</h2>
-            <p id="totalRevenue">$<?= number_format($totalRevenue, 2) ?></p>
+            <p id="totalRevenue">Rs<?= number_format($totalRevenue, 2) ?></p>
         </div>
     </div>
     <div class="charts-container">
         <div class="chart-box">
-            <h2>Monthly Ticket Sales</h2>
-            <canvas id="monthlySalesChart"></canvas>
+            <h2>Pending Events Counts</h2>
+            <?php if ($pendingEventsTable['count'] > 0): ?>
+                <table class="pending-events-table">
+                    <thead>
+                        <tr>
+                            <th>Event Name</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($pendingEventsTable['events'] as $event): ?>
+                            <tr>
+                                <td><?= htmlspecialchars($event['name']) ?></td>
+                                <td>Pending</td>
+                            </tr>
+                        <?php endforeach; ?>
+                        <tr class="total">
+                            <td>Total</td>
+                            <td><?= $pendingEventsTable['count'] ?></td>
+                        </tr>
+                    </tbody>
+                </table>
+            <?php else: ?>
+                <p class="no-data">No pending events</p>
+            <?php endif; ?>
         </div>
         <div class="chart-box">
-            <h2>Ticket Sales Progress</h2>
-            <canvas id="ticketSalesProgressChart"></canvas>
-            <button class="change-event-btn" onclick="changeEvent()">Change Event</button>
+            <h2>Pending Events</h2>
+            <canvas id="pendingEventsChart"></canvas>
         </div>
         <div class="chart-box">
             <h2>Revenue by Event Type</h2>
@@ -194,74 +222,49 @@ foreach ($eventTypes as $type) {
         completedEvents: <?= $completedEventsCount ?>,
         eventsInProcessing: <?= $eventsInProcessingCount ?>,
         totalRevenue: <?= $totalRevenue ?>,
-        monthlySales: <?= json_encode($monthlySales) ?>,
-        ticketSalesProgress: <?= json_encode($ticketSalesProgress) ?>,
+        pendingEvents: <?= json_encode($pendingEvents) ?>,
         revenueByEventType: <?= json_encode($revenueByEventType) ?>
     };
-
-    let currentEventIndex = 0;
 
     document.addEventListener('DOMContentLoaded', function() {
         updateDashboard(dashboardData);
     });
 
     function updateDashboard(data) {
-        createMonthlySalesChart(data.monthlySales);
-        createTicketSalesProgressChart(data.ticketSalesProgress[currentEventIndex]);
+        createPendingEventsChart(data.pendingEvents);
         createRevenueByEventTypeChart(data.revenueByEventType);
     }
 
-    function createMonthlySalesChart(data) {
-        const ctx = document.getElementById('monthlySalesChart').getContext('2d');
-        new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: data.map(item => item.month),
-                datasets: [{
-                    label: 'Ticket Sales',
-                    data: data.map(item => item.sales),
-                    borderColor: '#002D40',
-                    tension: 0.1
-                }]
-            },
-            options: {
-                responsive: true,
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
-                }
-            }
-        });
-    }
-
-    function createTicketSalesProgressChart(data) {
-        const ctx = document.getElementById('ticketSalesProgressChart').getContext('2d');
-        if (window.ticketSalesChart) {
-            window.ticketSalesChart.destroy();
+    function createPendingEventsChart(data) {
+        const ctx = document.getElementById('pendingEventsChart').getContext('2d');
+        if (!data || data.count === 0) {
+            ctx.canvas.parentNode.innerHTML = '<p>No pending events</p>';
+            return;
         }
-        window.ticketSalesChart = new Chart(ctx, {
-            type: 'doughnut',
+
+        new Chart(ctx, {
+            type: 'pie',
             data: {
-                labels: ['Sold', 'Remaining'],
+                labels: data.byType.length > 0 ? data.byType.map(item => item.type) : ['Pending Events'],
                 datasets: [{
-                    data: [data.sold, data.total - data.sold],
+                    label: 'Number of Pending Events',
+                    data: data.byType.length > 0 ? data.byType.map(item => item.count) : [data.count],
                     backgroundColor: [
-                        '#002D40',
-                        'rgba(189, 195, 199, 0.8)'
-                    ]
+                        '#002D40', // Dark blue
+                        '#005B7F', // Medium blue
+                        '#0088B3', // Light blue
+                        '#4DA8D9', // Sky blue
+                        '#99C7E6'  // Pale blue
+                    ],
+                    borderColor: '#FFFFFF',
+                    borderWidth: 1
                 }]
             },
             options: {
                 responsive: true,
                 plugins: {
-                    legend: {
-                        position: 'bottom',
-                    },
-                    title: {
-                        display: true,
-                        text: data.name
-                    }
+                    legend: { position: 'bottom' },
+                    title: { display: true, text: 'Pending Events by Type' }
                 }
             }
         });
@@ -281,18 +284,9 @@ foreach ($eventTypes as $type) {
             },
             options: {
                 responsive: true,
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
-                }
+                scales: { y: { beginAtZero: true } }
             }
         });
-    }
-
-    function changeEvent() {
-        currentEventIndex = (currentEventIndex + 1) % dashboardData.ticketSalesProgress.length;
-        createTicketSalesProgressChart(dashboardData.ticketSalesProgress[currentEventIndex]);
     }
 </script>
 </body>

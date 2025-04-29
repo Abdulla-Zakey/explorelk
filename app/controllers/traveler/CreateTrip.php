@@ -4,7 +4,7 @@ class CreateTrip extends Controller
 {
     public function index()
     {
-        // Check if user is logged in
+
         if (!isset($_SESSION['traveler_id'])) {
             header("Location: " . ROOT . "/traveler/Login");
             exit();
@@ -12,7 +12,7 @@ class CreateTrip extends Controller
 
         $data = ['errors' => []];
 
-        // Handle form submission
+
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $trip = new Trip();
             $tripDays = new TripDaysModel();
@@ -25,7 +25,7 @@ class CreateTrip extends Controller
             $startingLocation = str_replace(", Sri Lanka", "", $startingLocation);
             $destination = str_replace(", Sri Lanka", "", $destination );
 
-            // Prepare trip data
+            
             $tripData = [
                 'traveler_Id' => $_SESSION['traveler_id'],
                 'tripName' => htmlspecialchars(trim($_POST['tripName'])),
@@ -34,23 +34,25 @@ class CreateTrip extends Controller
                 'startDate' => $_POST['startDate'],
                 'endDate' => $_POST['endDate'],
                 'departureTime' => $_POST['departureTime'],
-                'transportationMode' => $_POST['transportation'],
+                'transportationMode' => isset($_POST['transportation']) ? $_POST['transportation'] : 'Not specified',
                 'numberOfTravelers' => !empty($_POST['travelersCount']) ? intval($_POST['travelersCount']) : null,
                 'budgetPerPerson' => !empty($_POST['budgetPerPerson']) ? floatval($_POST['budgetPerPerson']) : null,
+                'foodPreference' => $_POST['foodPreference'],
                 'errors' => []
             ];
 
-            // Validate trip data
-            if ($trip->validate($tripData)) {
-                // Insert trip and get the ID
+            $validationErrors = $trip->validate($tripData);
+
+            if (!$validationErrors) {
+                
                 $tripId = $trip->insert($tripData);
 
                 if ($tripId) {
-                    // Process itinerary data
+                    
                     $success = $this->processItinerary($tripId, $_POST, $tripDays, $tripPlaces);
 
                     if ($success) {
-                        // Redirect to trips list
+                        
                         header("Location: " . ROOT . "/traveler/MyTrips");
                         exit();
                     } else {
@@ -62,12 +64,12 @@ class CreateTrip extends Controller
                     $this->view('traveler/createTrip', $data);
                 }
             } else {
-                // Validation failed
-                $data['errors'] = $trip->errors;
+                
+                $data['errors'] = $validationErrors;
                 $this->view('traveler/createTrip', $data);
             }
         } else {
-            // Load create trip view
+           
             $this->view('traveler/createTrip', $data);
         }
     }
@@ -128,7 +130,7 @@ class CreateTrip extends Controller
             return true;
 
         } catch (Exception $e) {
-            // Log error if you have error logging
+           
             // error_log($e->getMessage());
             return false;
         }

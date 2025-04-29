@@ -51,9 +51,9 @@ class Eoevents extends Controller {
             } else {
                 $_SESSION['error'] = "Invalid event ID.";
                 error_log("Invalid event ID received");
-            }
+            
             redirect("eventorganizer/Eoevents");
-        } else {
+         
             $_SESSION['error'] = "Invalid request method.";
             error_log("Invalid request method for delete_event");
             redirect("eventorganizer/Eoevents");

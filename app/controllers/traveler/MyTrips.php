@@ -228,7 +228,11 @@ class MyTrips extends Controller
             $destination = htmlspecialchars(trim($_POST['destination']));
             $destination = str_replace(", Sri Lanka", "", $destination );
 
+            // var_dump($_POST);
+            // exit();
+
             $data = [
+                
                 'tripName' => htmlspecialchars(trim($_POST['tripName'])),
                 'startingLocation' => $startingLocation,
                 'destination' => $destination,
@@ -237,13 +241,20 @@ class MyTrips extends Controller
                 'departureTime' => $_POST['departureTime'],
                 'transportationMode' => $_POST['transportation'] ?? $trip->transportationMode,
                 'numberOfTravelers' => !empty($_POST['travelersCount']) ? intval($_POST['travelersCount']) : null,
-                'budgetPerPerson' => !empty($_POST['budgetPerPerson']) ? floatval($_POST['budgetPerPerson']) : null
+                'budgetPerPerson' => !empty($_POST['budgetPerPerson']) ? floatval($_POST['budgetPerPerson']) : null,
+                'foodPreference' => htmlspecialchars(trim($_POST['foodPereference']))
             ];
+            
 
-            if ($tripModel->validate($data)) {
+            
+            // Validate trip data
+            $validationErrors = $tripModel->validate($data);
+
+            if (!$validationErrors) {
                 $result = $tripModel->update($trip_Id, $data, 'trip_Id');
                 
                 if ($result) {
+                    $_SESSION['success'] = [ucfirst($data['tripName']) . ' details updated Successfully'];
                     header("Location: " . ROOT . "/traveler/MyTrips/viewTrip/" . $trip_Id . "?success=Trip Updated Successfully!");
                     exit();
                 } else {
@@ -251,7 +262,7 @@ class MyTrips extends Controller
                     exit();
                 }
             } else {
-                $errors = $tripModel->errors;
+                $errors = $validationErrors;
                 header("Location: " . ROOT . "/traveler/MyTrips/viewTrip/" . $trip_Id . "?error=" . urlencode(implode(', ', $errors)));
                 exit();
             }

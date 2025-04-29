@@ -27,10 +27,37 @@ class Login extends Controller
             redirect('Hotel/Hdashboard');
             exit();
         }
+        elseif (isset($_SESSION['restaurant_id'])) {
+            redirect('Restaurant/Rdashboard');
+            exit();
+        }
 
 
         // Check if the form is submitted
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+
+            if(empty($_POST['travelerEmail']) && empty($_POST['travelerPassword'])) {
+                $error['password'] = "Enter your password";
+                $error['email'] = "Enter your email";
+                    $this->view('traveler/Login', [
+                        'error' => $error
+                    ]);
+            } elseif (empty($_POST['travelerPassword'])) {
+                $error['password'] = "Enter your Password";
+                    $this->view('traveler/Login', [
+                        'error' => $error
+                    ]);
+            } elseif (empty($_POST['travelerEmail'])) {
+                $error['email'] = "Enter your email";
+                    $this->view('traveler/Login', [
+                        'error' => $error
+                    ]);
+            }elseif (!filter_var($_POST['travelerEmail'], FILTER_VALIDATE_EMAIL)) {
+                $error['email'] = "Enter a valid email address";
+                $this->view('traveler/Login', [
+                    'error' => $error
+                ]);
+            }
 
             // Sanitize and get form data
             $email = htmlspecialchars(trim($_POST['travelerEmail']));
@@ -62,12 +89,13 @@ class Login extends Controller
                     $user = new Hotel;
                     $passwordField = 'hotelPassword';
                     break;
-
-                case 'travelSP':
-                    $data = ['travelagentEmail' => $email];
-                    $user = new TravelAgent();
-                    $passwordField = 'travelagentPassword';
+                
+                case 'diningSP':
+                    $data = ['restaurantEmail' => $email];
+                    $user = new Restaurant;
+                    $passwordField = 'restaurantPassword';
                     break;
+
 
                 default:
                     $this->redirectWithError("Invalid user role");
@@ -75,31 +103,45 @@ class Login extends Controller
             }
 
             // Query the database for the user
-            $result = $user->where($data);
+            $result = $user->first($data);
+
+            if(isset($result->approved) && $result->approved == 'no'){
+                $error['email'] = "Your profile is not verified yet";
+                $this->view('traveler/Login', [
+                    'error' => $error
+                ]);
+                exit();
+
+            }
 
             if (!empty($result)) {
+
+                // Check if email is verified
+                if ($userRole == 'traveler' && $result->emailVerified != 1) {
+                    // Email not verified
+                    redirect('traveler/VerificationPending');
+                    exit();
+                }
+
                 // Verify password using the correct password field
-                if (password_verify($password, $result[0]->$passwordField)) {
+                if (password_verify($password, $result->$passwordField)) {
                     switch($userRole){
                         case 'traveler':
                             // Set session variables
-                            $_SESSION['traveler_id'] = $result[0]->traveler_Id;
+                            $_SESSION['traveler_id'] = $result->traveler_Id;
 
                             // Redirect to Traveler's dashboard
                             redirect('traveler/RegisteredTravelerHome');
                             exit();
 
                         case 'eventOrganizer':
-                            // Set session variables
-                            $_SESSION['organizer_id'] = $result[0]->organizer_Id;
-    
                             // Redirect to Event Organizer's dashboard
+                            $_SESSION['organizer_id'] = $result->organizer_Id;
                             redirect('Eventorganizer/Eodashboard');
                             exit();
-
+                           
                         case 'accommodationSP':
-                            $_SESSION['hotel_id'] = $result[0]->hotel_Id;
-
+                            $_SESSION['hotel_id'] = $result->hotel_Id;
                             // Redirect to Accommodation service provider's dashboard
                             redirect('Hotel/Hdashboard');
                             exit();
@@ -107,22 +149,23 @@ class Login extends Controller
 
                         case 'tourGuide':
                             // Set session variables
-                            $_SESSION['guide_id'] = $result[0]->guide_Id;
+                            $_SESSION['guide_id'] = $result->guide_Id;
 
                             // Redirect to Tour Guide's dashboard
-                            $this->view('tourguide/dashboard');
+                            redirect('tourguide/C_dashboard');
                             exit();
-                        
-                        case 'travelSP':
-                            $_SESSION['travelagent_Id'] = $result[0]->travelagent_Id;
-                             // Redirect to Tour Guide's dashboard
-                             $this->view('travelagent/dashboard');
-                             exit();
 
+                        case 'diningSP':
+                            // Set session variables
+                            $_SESSION['restaurant_id'] = $result->restaurant_id;
+
+                            // Redirect to Restaurant service provider's dashboard
+                            redirect('Restaurant/Rdashboard');
+                            exit();
+                            
                     }
                 } else {
                     // Redirect with error message
-                    // $this->redirectWithError("* Incorrect password");
                     $error['password'] = "Incorrect password";
                     $this->view('traveler/Login', [
                         'error' => $error
@@ -130,7 +173,6 @@ class Login extends Controller
                 }
             } else {
                 // Redirect with error message
-                // $this->redirectWithError("* No such email exists");
                 $error['email'] = "No such email exists";
                     $this->view('traveler/Login', [
                         'error' => $error
